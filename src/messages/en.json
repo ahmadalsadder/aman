@@ -37,7 +37,10 @@
     "airport": "AirPort",
     "landport": "Landport",
     "seaport": "SeaPort",
-    "egate": "E-Gate"
+    "egate": "E-Gate",
+    "analyst": "Analyst",
+    "gateSupervisor": "Gate Supervisor",
+    "controlRoom": "Control Room"
   },
   "ModulePage": {
     "verifyingAccess": "Verifying access...",
@@ -130,6 +133,51 @@
     "title": "SeaPort Module",
     "description": "Manage and monitor all seaport operations.",
     "mainPageMessage": "This is the main page for the SeaPort module. From here you can navigate to the different sections of this module.",
+    "goToDashboard": "Go to Dashboard",
+    "goToAnalytics": "Go to Analytics"
+  },
+   "AnalystDashboard": {
+    "title": "Analyst Dashboard",
+    "description": "Manage and monitor all analyst operations.",
+    "successfulEntries": "Successful Entries",
+    "failedAttempts": "Failed Attempts",
+    "biometricVerifications": "Biometric Verifications",
+    "activeGates": "Active Gates"
+  },
+  "AnalystModule": {
+    "title": "Analyst Module",
+    "description": "Manage and monitor all analyst operations.",
+    "mainPageMessage": "This is the main page for the Analyst module. From here you can navigate to the different sections of this module.",
+    "goToDashboard": "Go to Dashboard",
+    "goToAnalytics": "Go to Analytics"
+  },
+  "GateSupervisorDashboard": {
+    "title": "Gate Supervisor Dashboard",
+    "description": "Manage and monitor all gate supervisor operations.",
+    "successfulEntries": "Successful Entries",
+    "failedAttempts": "Failed Attempts",
+    "biometricVerifications": "Biometric Verifications",
+    "activeGates": "Active Gates"
+  },
+  "GateSupervisorModule": {
+    "title": "Gate Supervisor Module",
+    "description": "Manage and monitor all gate supervisor operations.",
+    "mainPageMessage": "This is the main page for the Gate Supervisor module. From here you can navigate to the different sections of this module.",
+    "goToDashboard": "Go to Dashboard",
+    "goToAnalytics": "Go to Analytics"
+  },
+  "ControlRoomDashboard": {
+    "title": "Control Room Dashboard",
+    "description": "Manage and monitor all control room operations.",
+    "successfulEntries": "Successful Entries",
+    "failedAttempts": "Failed Attempts",
+    "biometricVerifications": "Biometric Verifications",
+    "activeGates": "Active Gates"
+  },
+  "ControlRoomModule": {
+    "title": "Control Room Module",
+    "description": "Manage and monitor all control room operations.",
+    "mainPageMessage": "This is the main page for the Control Room module. From here you can navigate to the different sections of this module.",
     "goToDashboard": "Go to Dashboard",
     "goToAnalytics": "Go to Analytics"
   }

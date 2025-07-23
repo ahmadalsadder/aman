@@ -8,7 +8,7 @@ const users: User[] = [
     email: 'admin@example.com', 
     role: 'admin', 
     token: 'fake-admin-token', 
-    modules: ['landport', 'seaport', 'airport', 'egate'],
+    modules: ['landport', 'seaport', 'airport', 'egate', 'analyst', 'gate-supervisor', 'control-room'],
     permissions: ['records:view', 'records:create', 'records:edit', 'records:delete', 'users:manage', 'reports:view']
   },
   { 

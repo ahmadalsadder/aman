@@ -1,5 +1,5 @@
 'use client';
-import { Shield, LayoutDashboard, BarChart3, Users, Settings, Activity, Ship, LandPlot, Plane, DoorOpen } from 'lucide-react';
+import { Shield, LayoutDashboard, BarChart3, Users, Settings, Activity, Ship, LandPlot, Plane, DoorOpen, PieChart, UserCog, RadioTower } from 'lucide-react';
 import type { Role, Module } from '@/types';
 
 export interface NavItem {
@@ -21,6 +21,9 @@ export const getNavItems = (role: Role, modules: Module[], t: any): NavItem[] =>
       landport: { href: '/landport', label: t('landport'), icon: LandPlot },
       seaport: { href: '/seaport', label: t('seaport'), icon: Ship },
       egate: { href: '/egate', label: t('egate'), icon: DoorOpen },
+      analyst: { href: '/analyst', label: t('analyst'), icon: PieChart },
+      'gate-supervisor': { href: '/gate-supervisor', label: t('gateSupervisor'), icon: UserCog },
+      'control-room': { href: '/control-room', label: t('controlRoom'), icon: RadioTower },
   };
 
   let items: NavItem[] = [];

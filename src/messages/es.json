@@ -37,7 +37,10 @@
     "airport": "Aeropuerto",
     "landport": "Puerto terrestre",
     "seaport": "Puerto marítimo",
-    "egate": "Puerta electrónica"
+    "egate": "Puerta electrónica",
+    "analyst": "Analista",
+    "gateSupervisor": "Supervisor de puerta",
+    "controlRoom": "Sala de control"
   },
   "ModulePage": {
     "verifyingAccess": "Verificando acceso...",
@@ -130,6 +133,51 @@
     "title": "Módulo de Puerto Marítimo",
     "description": "Gestionar y monitorear todas las operaciones del puerto marítimo.",
     "mainPageMessage": "Esta es la página principal del módulo de Puerto Marítimo. Desde aquí puede navegar a las diferentes secciones de este módulo.",
+    "goToDashboard": "Ir al Tablero",
+    "goToAnalytics": "Ir a Análisis"
+  },
+  "AnalystDashboard": {
+    "title": "Tablero del Analista",
+    "description": "Gestionar y monitorear todas las operaciones del analista.",
+    "successfulEntries": "Entradas exitosas",
+    "failedAttempts": "Intentos fallidos",
+    "biometricVerifications": "Verificaciones biométricas",
+    "activeGates": "Puertas activas"
+  },
+  "AnalystModule": {
+    "title": "Módulo de Analista",
+    "description": "Gestionar y monitorear todas las operaciones del analista.",
+    "mainPageMessage": "Esta es la página principal del módulo de Analista. Desde aquí puede navegar a las diferentes secciones de este módulo.",
+    "goToDashboard": "Ir al Tablero",
+    "goToAnalytics": "Ir a Análisis"
+  },
+  "GateSupervisorDashboard": {
+    "title": "Tablero del Supervisor de Puerta",
+    "description": "Gestionar y monitorear todas las operaciones del supervisor de puerta.",
+    "successfulEntries": "Entradas exitosas",
+    "failedAttempts": "Intentos fallidos",
+    "biometricVerifications": "Verificaciones biométricas",
+    "activeGates": "Puertas activas"
+  },
+  "GateSupervisorModule": {
+    "title": "Módulo de Supervisor de Puerta",
+    "description": "Gestionar y monitorear todas las operaciones del supervisor de puerta.",
+    "mainPageMessage": "Esta es la página principal del módulo de Supervisor de Puerta. Desde aquí puede navegar a las diferentes secciones de este módulo.",
+    "goToDashboard": "Ir al Tablero",
+    "goToAnalytics": "Ir a Análisis"
+  },
+  "ControlRoomDashboard": {
+    "title": "Tablero de la Sala de Control",
+    "description": "Gestionar y monitorear todas las operaciones de la sala de control.",
+    "successfulEntries": "Entradas exitosas",
+    "failedAttempts": "Intentos fallidos",
+    "biometricVerifications": "Verificaciones biométricas",
+    "activeGates": "Puertas activas"
+  },
+  "ControlRoomModule": {
+    "title": "Módulo de Sala de Control",
+    "description": "Gestionar y monitorear todas las operaciones de la sala de control.",
+    "mainPageMessage": "Esta es la página principal del módulo de Sala de Control. Desde aquí puede navegar a las diferentes secciones de este módulo.",
     "goToDashboard": "Ir al Tablero",
     "goToAnalytics": "Ir a Análisis"
   }

@@ -37,7 +37,10 @@
     "airport": "المطار",
     "landport": "المنفذ البري",
     "seaport": "المنفذ البحري",
-    "egate": "البوابة الإلكترونية"
+    "egate": "البوابة الإلكترونية",
+    "analyst": "محلل",
+    "gateSupervisor": "مشرف البوابة",
+    "controlRoom": "غرفة التحكم"
   },
   "ModulePage": {
     "verifyingAccess": "التحقق من الوصول...",
@@ -130,6 +133,51 @@
     "title": "وحدة المنفذ البحري",
     "description": "إدارة ومراقبة جميع عمليات المنفذ البحري.",
     "mainPageMessage": "هذه هي الصفحة الرئيسية لوحدة المنفذ البحري. من هنا يمكنك الانتقال إلى الأقسام المختلفة لهذه الوحدة.",
+    "goToDashboard": "اذهب إلى لوحة التحكم",
+    "goToAnalytics": "اذهب إلى التحليلات"
+  },
+  "AnalystDashboard": {
+    "title": "لوحة تحكم المحلل",
+    "description": "إدارة ومراقبة جميع عمليات التحليل.",
+    "successfulEntries": "الدخول الناجح",
+    "failedAttempts": "المحاولات الفاشلة",
+    "biometricVerifications": "التحققات البيومترية",
+    "activeGates": "البوابات النشطة"
+  },
+  "AnalystModule": {
+    "title": "وحدة المحلل",
+    "description": "إدارة ومراقبة جميع عمليات التحليل.",
+    "mainPageMessage": "هذه هي الصفحة الرئيسية لوحدة المحلل. من هنا يمكنك الانتقال إلى الأقسام المختلفة لهذه الوحدة.",
+    "goToDashboard": "اذهب إلى لوحة التحكم",
+    "goToAnalytics": "اذهب إلى التحليلات"
+  },
+  "GateSupervisorDashboard": {
+    "title": "لوحة تحكم مشرف البوابة",
+    "description": "إدارة ومراقبة جميع عمليات مشرف البوابة.",
+    "successfulEntries": "الدخول الناجح",
+    "failedAttempts": "المحاولات الفاشلة",
+    "biometricVerifications": "التحققات البيومترية",
+    "activeGates": "البوابات النشطة"
+  },
+  "GateSupervisorModule": {
+    "title": "وحدة مشرف البوابة",
+    "description": "إدارة ومراقبة جميع عمليات مشرف البوابة.",
+    "mainPageMessage": "هذه هي الصفحة الرئيسية لوحدة مشرف البوابة. من هنا يمكنك الانتقال إلى الأقسام المختلفة لهذه الوحدة.",
+    "goToDashboard": "اذهب إلى لوحة التحكم",
+    "goToAnalytics": "اذهب إلى التحليلات"
+  },
+  "ControlRoomDashboard": {
+    "title": "لوحة تحكم غرفة التحكم",
+    "description": "إدارة ومراقبة جميع عمليات غرفة التحكم.",
+    "successfulEntries": "الدخول الناجح",
+    "failedAttempts": "المحاولات الفاشلة",
+    "biometricVerifications": "التحققات البيومترية",
+    "activeGates": "البوابات النشطة"
+  },
+  "ControlRoomModule": {
+    "title": "وحدة غرفة التحكم",
+    "description": "إدارة ومراقبة جميع عمليات غرفة التحكم.",
+    "mainPageMessage": "هذه هي الصفحة الرئيسية لوحدة غرفة التحكم. من هنا يمكنك الانتقال إلى الأقسام المختلفة لهذه الوحدة.",
     "goToDashboard": "اذهب إلى لوحة التحكم",
     "goToAnalytics": "اذهب إلى التحليلات"
   }

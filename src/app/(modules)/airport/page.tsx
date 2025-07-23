@@ -13,6 +13,7 @@ import { RiskRuleTriggerChart } from '@/components/charts/risk-rule-trigger-char
 import { WorldMapChart } from '@/components/charts/world-map-chart';
 import { api } from '@/lib/api';
 import { Skeleton } from '@/components/ui/skeleton';
+import { TransactionOverviewChart } from '@/components/charts/transaction-overview-chart';
 
 export default function AirportDashboardPage() {
   const t = useTranslations('AirportDashboard');
@@ -22,17 +23,19 @@ export default function AirportDashboardPage() {
   React.useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      const [mainResult, airportResult, passengerResult] = await Promise.all([
+      const [mainResult, airportResult, passengerResult, overviewResult] = await Promise.all([
         api.get('/dashboard/main'),
         api.get('/dashboard/airport'),
         api.get('/data/passengers'),
+        api.get('/dashboard/transaction-overview'),
       ]);
       
-      if (mainResult.isSuccess && airportResult.isSuccess && passengerResult.isSuccess) {
+      if (mainResult.isSuccess && airportResult.isSuccess && passengerResult.isSuccess && overviewResult.isSuccess) {
         setData({
           main: mainResult.data,
           airport: airportResult.data,
           passengers: passengerResult.data,
+          overview: overviewResult.data,
         });
       }
       setLoading(false);
@@ -84,6 +87,12 @@ export default function AirportDashboardPage() {
       </div>
       )}
        <div className="mt-8 grid gap-8 grid-cols-1">
+        {loading || !data ? (
+          <Skeleton className="h-[400px] w-full" />
+        ) : (
+          <TransactionOverviewChart data={data.overview} />
+        )}
+
         {loading || !data ? (
           <Skeleton className="h-[400px] w-full" />
         ) : (

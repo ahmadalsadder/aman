@@ -19,7 +19,7 @@ const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF'];
 export default function PassengerTypeChart({ data }: PassengerTypeChartProps) {
   const t = useTranslations('PassengerTypeChart');
 
-  const chartData = data.map(item => ({ name: item.type, value: item.count }));
+  const chartData = data;
 
   return (
     <Card>

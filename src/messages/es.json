@@ -84,8 +84,8 @@
     "goToAnalytics": "Ir a Análisis"
   },
   "PassengerTypeChart": {
-    "title": "Demografía de pasajeros",
-    "description": "Distribución de los tipos de pasajeros procesados.",
+    "title": "Tipos de Pasajeros",
+    "description": "Distribución de las categorías de pasajeros.",
     "passengers": "Pasajeros"
   },
   "EgateDashboard": {

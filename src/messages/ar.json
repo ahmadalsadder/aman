@@ -84,8 +84,8 @@
     "goToAnalytics": "اذهب إلى التحليلات"
   },
   "PassengerTypeChart": {
-    "title": "التركيبة السكانية للركاب",
-    "description": "توزيع أنواع الركاب المعالجين.",
+    "title": "أنواع الركاب",
+    "description": "توزيع فئات الركاب.",
     "passengers": "الركاب"
   },
   "EgateDashboard": {

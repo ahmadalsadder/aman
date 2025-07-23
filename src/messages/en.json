@@ -84,8 +84,8 @@
     "goToAnalytics": "Go to Analytics"
   },
   "PassengerTypeChart": {
-    "title": "Passenger Demographics",
-    "description": "Distribution of passenger types processed.",
+    "title": "Passenger Types",
+    "description": "Distribution of passenger categories.",
     "passengers": "Passengers"
   },
   "EgateDashboard": {

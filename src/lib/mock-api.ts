@@ -162,19 +162,25 @@ const airportDashboardData = {
 
 const passengerData = {
     airport: [
-        { type: 'Business', count: 4500 },
-        { type: 'Tourist', count: 6200 },
-        { type: 'Family', count: 1753 },
+        { name: 'Citizen', value: 4500 },
+        { name: 'Visitor', value: 6200 },
+        { name: 'Resident', value: 1753 },
+        { name: 'Transit', value: 800 },
+        { name: 'VIP', value: 150 },
     ],
     seaport: [
-        { type: 'Cruise', count: 2100 },
-        { type: 'Ferry', count: 3400 },
-        { type: 'Cargo Crew', count: 800 },
+        { name: 'Citizen', value: 1200 },
+        { name: 'Visitor', value: 3400 },
+        { name: 'Resident', value: 800 },
+        { name: 'Transit', value: 300 },
+        { name: 'VIP', value: 50 },
     ],
     landport: [
-        { type: 'Commuter', count: 5600 },
-        { type: 'Tourist', count: 1200 },
-        { type: 'Commercial', count: 323 },
+        { name: 'Citizen', value: 5600 },
+        { name: 'Visitor', value: 1200 },
+        { name: 'Resident', value: 323 },
+        { name: 'Transit', value: 100 },
+        { name: 'VIP', value: 20 },
     ],
 };
 

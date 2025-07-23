@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Plane, UserCheck, BaggageClaim, ShieldCheck } from 'lucide-react';
 import PassengerTypeChart from '@/components/charts/passenger-type-chart';
 import { passengerData } from '@/data/passenger-data';
+import CreateRecordButton from '@/components/create-record-button';
 
 export default function AirportDashboardPage() {
   const StatCard = ({ title, value, icon: Icon }: { title: string; value: string | number; icon: React.ElementType }) => (
@@ -35,10 +36,11 @@ export default function AirportDashboardPage() {
         <PassengerTypeChart data={passengerData.airport} />
         <Card>
           <CardHeader>
-            <CardTitle>Welcome to the AirPort Module</CardTitle>
+            <CardTitle>Actions</CardTitle>
           </CardHeader>
           <CardContent>
-            <p>This is where airport-specific content and features would be displayed.</p>
+            <p className="mb-4">Use the buttons below to perform actions.</p>
+            <CreateRecordButton />
           </CardContent>
         </Card>
        </div>

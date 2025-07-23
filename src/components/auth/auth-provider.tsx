@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import type { User } from '@/types';
+import type { User, Permission } from '@/types';
 import { mockLogin } from '@/lib/auth';
 
 export interface AuthContextType {
@@ -9,6 +9,7 @@ export interface AuthContextType {
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
+  hasPermission: (requiredPermissions: Permission[]) => boolean;
 }
 
 export const AuthContext = React.createContext<AuthContextType | undefined>(undefined);
@@ -43,12 +44,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(null);
     localStorage.removeItem(AUTH_STORAGE_KEY);
   };
+  
+  const hasPermission = (requiredPermissions: Permission[]): boolean => {
+    if (!user) return false;
+    return requiredPermissions.every((perm) => user.permissions.includes(perm));
+  };
 
   const value = React.useMemo(() => ({
     user,
     loading,
     login,
     logout,
+    hasPermission
   }), [user, loading]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

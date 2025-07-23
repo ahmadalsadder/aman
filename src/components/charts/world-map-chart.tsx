@@ -18,7 +18,7 @@ export function WorldMapChart({ data }: WorldMapChartProps) {
     }, [data]);
 
     const colorScale = scaleLinear<string>()
-        .domain([0, 1, maxPassengers])
+        .domain([0, 1, maxPassengers > 0 ? maxPassengers : 1])
         .range(["hsl(var(--muted))", "hsl(var(--primary) / 0.5)", "hsl(var(--primary))"]);
 
     return (

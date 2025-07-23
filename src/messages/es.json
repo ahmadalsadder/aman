@@ -1,0 +1,114 @@
+{
+  "LoginPage": {
+    "title": "Bienvenido a Guardian Gate",
+    "description": "Ingrese sus credenciales para acceder a su cuenta",
+    "emailLabel": "Correo electrónico",
+    "emailPlaceholder": "nombre@ejemplo.com",
+    "passwordLabel": "Contraseña",
+    "passwordPlaceholder": "••••••••",
+    "signInButton": "Iniciar sesión",
+    "signingInButton": "Asegurando su sesión...",
+    "invalidEmailError": "Por favor ingrese una dirección de correo electrónico válida.",
+    "passwordRequiredError": "Se requiere contraseña.",
+    "unknownError": "Ocurrió un error desconocido."
+  },
+  "HomePage": {
+    "initializing": "Inicializando Guardian Gate..."
+  },
+  "ModulesLayout": {
+    "securingSession": "Asegurando su sesión..."
+  },
+  "Header": {
+    "profile": "Perfil",
+    "logout": "Cerrar sesión",
+    "language": "Idioma"
+  },
+  "Navigation": {
+    "title": "Guardian Gate",
+    "dashboard": "Tablero",
+    "userManagement": "Gestión de usuarios",
+    "systemSettings": "Configuración del sistema",
+    "airport": "Aeropuerto",
+    "landport": "Puerto terrestre",
+    "seaport": "Puerto marítimo",
+    "egate": "Puerta electrónica"
+  },
+  "ModulePage": {
+    "verifyingAccess": "Verificando acceso...",
+    "accessDenied": "Acceso denegado",
+    "accessDeniedMessage": "No tienes permiso para acceder al módulo {title}. Comunícate con el administrador de tu sistema si crees que esto es un error."
+  },
+  "CreateRecordButton": {
+    "buttonText": "Crear nuevo registro",
+    "alertMessage": "¡La funcionalidad para crear un nuevo registro estaría aquí!"
+  },
+  "AirportDashboard": {
+    "title": "Tablero del Aeropuerto",
+    "description": "Monitoreo en tiempo real de todas las operaciones del aeropuerto.",
+    "passengersProcessed": "Pasajeros procesados",
+    "bagsScanned": "Maletas escaneadas",
+    "securityAlerts": "Alertas de seguridad",
+    "flightsMonitored": "Vuelos monitoreados",
+    "actions": "Acciones",
+    "actionsDescription": "Utilice los botones a continuación para realizar acciones."
+  },
+  "AirportModule": {
+    "title": "Módulo de Aeropuerto",
+    "description": "Gestionar y monitorear todas las operaciones del aeropuerto.",
+    "mainPageMessage": "Esta es la página principal del módulo de Aeropuerto. Desde aquí puede navegar a las diferentes secciones de este módulo.",
+    "goToDashboard": "Ir al Tablero"
+  },
+  "PassengerTypeChart": {
+    "title": "Demografía de pasajeros",
+    "description": "Distribución de los tipos de pasajeros procesados.",
+    "passengers": "Pasajeros"
+  },
+  "EgateDashboard": {
+    "title": "Tablero de Puerta Electrónica",
+    "description": "Gestionar y monitorear todas las operaciones de la Puerta Electrónica.",
+    "successfulEntries": "Entradas exitosas",
+    "failedAttempts": "Intentos fallidos",
+    "biometricVerifications": "Verificaciones biométricas",
+    "activeGates": "Puertas activas",
+    "welcome": "Bienvenido al Módulo de Puerta Electrónica",
+    "contentPlaceholder": "Aquí se mostrarían el contenido y las funciones específicas de la Puerta Electrónica."
+  },
+  "EgateModule": {
+    "title": "Módulo de Puerta Electrónica",
+    "description": "Gestionar y monitorear todas las operaciones de la Puerta Electrónica.",
+    "mainPageMessage": "Esta es la página principal del módulo de Puerta Electrónica. Desde aquí puede navegar a las diferentes secciones de este módulo.",
+    "goToDashboard": "Ir al Tablero"
+  },
+  "LandportDashboard": {
+    "title": "Tablero del Puerto Terrestre",
+    "description": "Gestionar y monitorear todas las operaciones del puerto terrestre.",
+    "vehiclesProcessed": "Vehículos procesados",
+    "travelersChecked": "Viajeros registrados",
+    "documentsScanned": "Documentos escaneados",
+    "activeLanes": "Carriles activos",
+    "welcome": "Bienvenido al Módulo de Puerto Terrestre",
+    "contentPlaceholder": "Aquí se mostrarían el contenido y las funciones específicas del puerto terrestre."
+  },
+  "LandportModule": {
+    "title": "Módulo de Puerto Terrestre",
+    "description": "Gestionar y monitorear todas las operaciones del puerto terrestre.",
+    "mainPageMessage": "Esta es la página principal del módulo de Puerto Terrestre. Desde aquí puede navegar a las diferentes secciones de este módulo.",
+    "goToDashboard": "Ir al Tablero"
+  },
+  "SeaportDashboard": {
+    "title": "Tablero del Puerto Marítimo",
+    "description": "Gestionar y monitorear todas las operaciones del puerto marítimo.",
+    "vesselsInPort": "Buques en puerto",
+    "containersProcessed": "Contenedores procesados",
+    "cargoThroughput": "Rendimiento de carga (toneladas)",
+    "activeBerths": "Amarres activos",
+    "welcome": "Bienvenido al Módulo de Puerto Marítimo",
+    "contentPlaceholder": "Aquí se mostrarían el contenido y las funciones específicas del puerto marítimo."
+  },
+  "SeaportModule": {
+    "title": "Módulo de Puerto Marítimo",
+    "description": "Gestionar y monitorear todas las operaciones del puerto marítimo.",
+    "mainPageMessage": "Esta es la página principal del módulo de Puerto Marítimo. Desde aquí puede navegar a las diferentes secciones de este módulo.",
+    "goToDashboard": "Ir al Tablero"
+  }
+}

@@ -2,8 +2,10 @@
 import ModulePage from '@/components/module-page';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Ship, Anchor, Warehouse, Container } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 export default function SeaportDashboardPage() {
+    const t = useTranslations('SeaportDashboard');
     const StatCard = ({ title, value, icon: Icon }: { title: string; value: string | number; icon: React.ElementType }) => (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -18,22 +20,22 @@ export default function SeaportDashboardPage() {
   return (
     <ModulePage
       module="seaport"
-      title="SeaPort Dashboard"
-      description="Manage and monitor all seaport operations."
+      title={t('title')}
+      description={t('description')}
       icon={Ship}
     >
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <StatCard title="Vessels in Port" value="23" icon={Anchor} />
-        <StatCard title="Containers Processed" value="2,480" icon={Container} />
-        <StatCard title="Cargo Throughput (Tons)" value="15,600" icon={Warehouse} />
-        <StatCard title="Active Berths" value="6" icon={Ship} />
+        <StatCard title={t('vesselsInPort')} value="23" icon={Anchor} />
+        <StatCard title={t('containersProcessed')} value="2,480" icon={Container} />
+        <StatCard title={t('cargoThroughput')} value="15,600" icon={Warehouse} />
+        <StatCard title={t('activeBerths')} value="6" icon={Ship} />
       </div>
       <Card className="mt-8">
         <CardHeader>
-          <CardTitle>Welcome to the SeaPort Module</CardTitle>
+          <CardTitle>{t('welcome')}</CardTitle>
         </CardHeader>
         <CardContent>
-          <p>This is where seaport-specific content and features would be displayed.</p>
+          <p>{t('contentPlaceholder')}</p>
         </CardContent>
       </Card>
     </ModulePage>

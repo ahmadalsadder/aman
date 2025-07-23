@@ -5,8 +5,11 @@ import { Plane, UserCheck, BaggageClaim, ShieldCheck } from 'lucide-react';
 import PassengerTypeChart from '@/components/charts/passenger-type-chart';
 import { passengerData } from '@/data/passenger-data';
 import CreateRecordButton from '@/components/create-record-button';
+import { useTranslations } from 'next-intl';
 
 export default function AirportDashboardPage() {
+  const t = useTranslations('AirportDashboard');
+
   const StatCard = ({ title, value, icon: Icon }: { title: string; value: string | number; icon: React.ElementType }) => (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -22,24 +25,24 @@ export default function AirportDashboardPage() {
   return (
     <ModulePage
       module="airport"
-      title="AirPort Dashboard"
-      description="Real-time monitoring of all airport operations."
+      title={t('title')}
+      description={t('description')}
       icon={Plane}
     >
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <StatCard title="Passengers Processed" value="12,453" icon={UserCheck} />
-        <StatCard title="Bags Scanned" value="25,832" icon={BaggageClaim} />
-        <StatCard title="Security Alerts" value="3" icon={ShieldCheck} />
-        <StatCard title="Flights Monitored" value="128" icon={Plane} />
+        <StatCard title={t('passengersProcessed')} value="12,453" icon={UserCheck} />
+        <StatCard title={t('bagsScanned')} value="25,832" icon={BaggageClaim} />
+        <StatCard title={t('securityAlerts')} value="3" icon={ShieldCheck} />
+        <StatCard title={t('flightsMonitored')} value="128" icon={Plane} />
       </div>
        <div className="mt-8 grid gap-8">
         <PassengerTypeChart data={passengerData.airport} />
         <Card>
           <CardHeader>
-            <CardTitle>Actions</CardTitle>
+            <CardTitle>{t('actions')}</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="mb-4">Use the buttons below to perform actions.</p>
+            <p className="mb-4">{t('actionsDescription')}</p>
             <CreateRecordButton />
           </CardContent>
         </Card>

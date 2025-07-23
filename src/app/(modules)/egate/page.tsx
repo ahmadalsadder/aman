@@ -3,19 +3,21 @@ import ModulePage from '@/components/module-page';
 import { DoorOpen } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { useTranslations } from 'next-intl';
 
 export default function EgatePage() {
+  const t = useTranslations('EgateModule');
   return (
     <ModulePage
       module="egate"
-      title="E-Gate Module"
-      description="Manage and monitor all E-Gate operations."
+      title={t('title')}
+      description={t('description')}
       icon={DoorOpen}
     >
       <div>
-        <p className="mb-4">This is the main page for the E-Gate module. From here you can navigate to the different sections of this module.</p>
+        <p className="mb-4">{t('mainPageMessage')}</p>
         <Button asChild>
-          <Link href="/egate/dashboard">Go to Dashboard</Link>
+          <Link href="/egate/dashboard">{t('goToDashboard')}</Link>
         </Button>
       </div>
     </ModulePage>

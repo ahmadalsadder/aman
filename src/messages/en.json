@@ -1,0 +1,114 @@
+{
+  "LoginPage": {
+    "title": "Welcome to Guardian Gate",
+    "description": "Enter your credentials to access your account",
+    "emailLabel": "Email",
+    "emailPlaceholder": "name@example.com",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "••••••••",
+    "signInButton": "Sign In",
+    "signingInButton": "Securing your session...",
+    "invalidEmailError": "Please enter a valid email address.",
+    "passwordRequiredError": "Password is required.",
+    "unknownError": "An unknown error occurred."
+  },
+  "HomePage": {
+    "initializing": "Initializing Guardian Gate..."
+  },
+  "ModulesLayout": {
+    "securingSession": "Securing your session..."
+  },
+  "Header": {
+    "profile": "Profile",
+    "logout": "Log out",
+    "language": "Language"
+  },
+  "Navigation": {
+    "title": "Guardian Gate",
+    "dashboard": "Dashboard",
+    "userManagement": "User Management",
+    "systemSettings": "System Settings",
+    "airport": "AirPort",
+    "landport": "Landport",
+    "seaport": "SeaPort",
+    "egate": "E-Gate"
+  },
+  "ModulePage": {
+    "verifyingAccess": "Verifying access...",
+    "accessDenied": "Access Denied",
+    "accessDeniedMessage": "You do not have permission to access the {title} module. Please contact your system administrator if you believe this is an error."
+  },
+  "CreateRecordButton": {
+    "buttonText": "Create New Record",
+    "alertMessage": "Create new record functionality would be here!"
+  },
+  "AirportDashboard": {
+    "title": "AirPort Dashboard",
+    "description": "Real-time monitoring of all airport operations.",
+    "passengersProcessed": "Passengers Processed",
+    "bagsScanned": "Bags Scanned",
+    "securityAlerts": "Security Alerts",
+    "flightsMonitored": "Flights Monitored",
+    "actions": "Actions",
+    "actionsDescription": "Use the buttons below to perform actions."
+  },
+  "AirportModule": {
+    "title": "AirPort Module",
+    "description": "Manage and monitor all airport operations.",
+    "mainPageMessage": "This is the main page for the AirPort module. From here you can navigate to the different sections of this module.",
+    "goToDashboard": "Go to Dashboard"
+  },
+  "PassengerTypeChart": {
+    "title": "Passenger Demographics",
+    "description": "Distribution of passenger types processed.",
+    "passengers": "Passengers"
+  },
+  "EgateDashboard": {
+    "title": "E-Gate Dashboard",
+    "description": "Manage and monitor all E-Gate operations.",
+    "successfulEntries": "Successful Entries",
+    "failedAttempts": "Failed Attempts",
+    "biometricVerifications": "Biometric Verifications",
+    "activeGates": "Active Gates",
+    "welcome": "Welcome to the E-Gate Module",
+    "contentPlaceholder": "This is where E-Gate-specific content and features would be displayed."
+  },
+  "EgateModule": {
+    "title": "E-Gate Module",
+    "description": "Manage and monitor all E-Gate operations.",
+    "mainPageMessage": "This is the main page for the E-Gate module. From here you can navigate to the different sections of this module.",
+    "goToDashboard": "Go to Dashboard"
+  },
+  "LandportDashboard": {
+    "title": "Landport Dashboard",
+    "description": "Manage and monitor all landport operations.",
+    "vehiclesProcessed": "Vehicles Processed",
+    "travelersChecked": "Travelers Checked",
+    "documentsScanned": "Documents Scanned",
+    "activeLanes": "Active Lanes",
+    "welcome": "Welcome to the Landport Module",
+    "contentPlaceholder": "This is where landport-specific content and features would be displayed."
+  },
+  "LandportModule": {
+    "title": "Landport Module",
+    "description": "Manage and monitor all landport operations.",
+    "mainPageMessage": "This is the main page for the Landport module. From here you can navigate to the different sections of this module.",
+    "goToDashboard": "Go to Dashboard"
+  },
+  "SeaportDashboard": {
+    "title": "SeaPort Dashboard",
+    "description": "Manage and monitor all seaport operations.",
+    "vesselsInPort": "Vessels in Port",
+    "containersProcessed": "Containers Processed",
+    "cargoThroughput": "Cargo Throughput (Tons)",
+    "activeBerths": "Active Berths",
+    "welcome": "Welcome to the SeaPort Module",
+    "contentPlaceholder": "This is where seaport-specific content and features would be displayed."
+  },
+  "SeaportModule": {
+    "title": "SeaPort Module",
+    "description": "Manage and monitor all seaport operations.",
+    "mainPageMessage": "This is the main page for the SeaPort module. From here you can navigate to the different sections of this module.",
+    "goToDashboard": "Go to Dashboard"
+  }
+}

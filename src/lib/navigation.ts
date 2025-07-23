@@ -7,25 +7,24 @@ export interface NavItem {
   icon: React.ElementType;
 }
 
-const allNavItems: Record<string, NavItem> = {
-  dashboard: { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  monitoring: { href: '/', label: 'Real-time Monitoring', icon: Activity },
-  analytics: { href: '/', label: 'Security Analytics', icon: BarChart3 },
-  users: { href: '/', label: 'User Management', icon: Users },
-  settings: { href: '/', label: 'System Settings', icon: Settings },
-};
-
-export const moduleNavItems: Record<Module, NavItem> = {
-    airport: { href: '/airport/dashboard', label: 'AirPort', icon: Plane },
-    landport: { href: '/landport/dashboard', label: 'Landport', icon: LandPlot },
-    seaport: { href: '/seaport/dashboard', label: 'SeaPort', icon: Ship },
-    egate: { href: '/egate/dashboard', label: 'E-Gate', icon: DoorOpen },
-};
-
 // Note: For this demo, all extra links point to /.
 // In a real app, they would point to e.g., /monitoring.
 
-export const getNavItems = (role: Role, modules: Module[]): NavItem[] => {
+export const getNavItems = (role: Role, modules: Module[], t: any): NavItem[] => {
+
+  const allNavItems: Record<string, NavItem> = {
+    dashboard: { href: '/dashboard', label: t('dashboard'), icon: LayoutDashboard },
+    users: { href: '/', label: t('userManagement'), icon: Users },
+    settings: { href: '/', label: t('systemSettings'), icon: Settings },
+  };
+
+  const moduleNavItems: Record<Module, NavItem> = {
+      airport: { href: '/airport/dashboard', label: t('airport'), icon: Plane },
+      landport: { href: '/landport/dashboard', label: t('landport'), icon: LandPlot },
+      seaport: { href: '/seaport/dashboard', label: t('seaport'), icon: Ship },
+      egate: { href: '/egate/dashboard', label: t('egate'), icon: DoorOpen },
+  };
+
   let items: NavItem[] = [allNavItems.dashboard];
   
   // Add module-specific nav items

@@ -3,19 +3,21 @@ import ModulePage from '@/components/module-page';
 import { Plane } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { useTranslations } from 'next-intl';
 
 export default function AirportPage() {
+  const t = useTranslations('AirportModule');
   return (
     <ModulePage
       module="airport"
-      title="AirPort Module"
-      description="Manage and monitor all airport operations."
+      title={t('title')}
+      description={t('description')}
       icon={Plane}
     >
         <div>
-            <p className="mb-4">This is the main page for the AirPort module. From here you can navigate to the different sections of this module.</p>
+            <p className="mb-4">{t('mainPageMessage')}</p>
             <Button asChild>
-                <Link href="/airport/dashboard">Go to Dashboard</Link>
+                <Link href="/airport/dashboard">{t('goToDashboard')}</Link>
             </Button>
         </div>
     </ModulePage>

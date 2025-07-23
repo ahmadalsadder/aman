@@ -3,22 +3,24 @@
 import { useAuth } from '@/hooks/use-auth';
 import { Button } from '@/components/ui/button';
 import { PlusCircle } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 export default function CreateRecordButton() {
     const { hasPermission } = useAuth();
+    const t = useTranslations('CreateRecordButton');
 
     if (!hasPermission(['records:create'])) {
         return null;
     }
 
     const handleClick = () => {
-        alert('Create new record functionality would be here!');
+        alert(t('alertMessage'));
     };
 
     return (
         <Button onClick={handleClick}>
-            <PlusCircle className="mr-2 h-4 w-4" />
-            Create New Record
+            <PlusCircle className="me-2 h-4 w-4" />
+            {t('buttonText')}
         </Button>
     );
 }

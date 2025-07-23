@@ -3,6 +3,7 @@ import * as React from 'react';
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from '@/components/ui/chart';
+import { useTranslations } from 'next-intl';
 
 interface PassengerData {
     type: string;
@@ -13,19 +14,21 @@ interface PassengerTypeChartProps {
     data: PassengerData[];
 }
 
-const chartConfig = {
-  count: {
-    label: 'Passengers',
-    color: 'hsl(var(--chart-1))',
-  },
-};
-
 export default function PassengerTypeChart({ data }: PassengerTypeChartProps) {
+  const t = useTranslations('PassengerTypeChart');
+
+  const chartConfig = {
+    count: {
+      label: t('passengers'),
+      color: 'hsl(var(--chart-1))',
+    },
+  };
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Passenger Demographics</CardTitle>
-        <CardDescription>Distribution of passenger types processed.</CardDescription>
+        <CardTitle>{t('title')}</CardTitle>
+        <CardDescription>{t('description')}</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig} className="min-h-[200px] w-full">

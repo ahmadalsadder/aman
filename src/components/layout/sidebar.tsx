@@ -16,11 +16,14 @@ import {
   SidebarSeparator,
 } from '@/components/ui/sidebar';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useTranslations } from 'next-intl';
 
 export default function AppSidebar() {
   const { user } = useAuth();
   const pathname = usePathname();
-  const navItems = user ? getNavItems(user.role, user.modules) : [];
+  const t = useTranslations('Navigation');
+
+  const navItems = user ? getNavItems(user.role, user.modules, t) : [];
 
   const getInitials = (name: string) => {
     return name
@@ -35,7 +38,7 @@ export default function AppSidebar() {
       <SidebarHeader>
         <div className="flex items-center gap-2">
           <Logo />
-          <span className="text-lg font-semibold tracking-tight">Guardian Gate</span>
+          <span className="text-lg font-semibold tracking-tight">{t('title')}</span>
         </div>
       </SidebarHeader>
       <SidebarContent>

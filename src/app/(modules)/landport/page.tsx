@@ -3,19 +3,21 @@ import ModulePage from '@/components/module-page';
 import { LandPlot } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { useTranslations } from 'next-intl';
 
 export default function LandportPage() {
+  const t = useTranslations('LandportModule');
   return (
     <ModulePage
       module="landport"
-      title="Landport Module"
-      description="Manage and monitor all landport operations."
+      title={t('title')}
+      description={t('description')}
       icon={LandPlot}
     >
         <div>
-            <p className="mb-4">This is the main page for the Landport module. From here you can navigate to the different sections of this module.</p>
+            <p className="mb-4">{t('mainPageMessage')}</p>
             <Button asChild>
-                <Link href="/landport/dashboard">Go to Dashboard</Link>
+                <Link href="/landport/dashboard">{t('goToDashboard')}</Link>
             </Button>
         </div>
     </ModulePage>

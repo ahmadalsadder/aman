@@ -2,8 +2,10 @@
 import ModulePage from '@/components/module-page';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { LandPlot, Car, ScanText, UserSquare } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 export default function LandportDashboardPage() {
+    const t = useTranslations('LandportDashboard');
     const StatCard = ({ title, value, icon: Icon }: { title: string; value: string | number; icon: React.ElementType }) => (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -19,22 +21,22 @@ export default function LandportDashboardPage() {
   return (
     <ModulePage
       module="landport"
-      title="Landport Dashboard"
-      description="Manage and monitor all landport operations."
+      title={t('title')}
+      description={t('description')}
       icon={LandPlot}
     >
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <StatCard title="Vehicles Processed" value="4,589" icon={Car} />
-        <StatCard title="Travelers Checked" value="7,123" icon={UserSquare} />
-        <StatCard title="Documents Scanned" value="9,876" icon={ScanText} />
-        <StatCard title="Active Lanes" value="8" icon={LandPlot} />
+        <StatCard title={t('vehiclesProcessed')} value="4,589" icon={Car} />
+        <StatCard title={t('travelersChecked')} value="7,123" icon={UserSquare} />
+        <StatCard title={t('documentsScanned')} value="9,876" icon={ScanText} />
+        <StatCard title={t('activeLanes')} value="8" icon={LandPlot} />
       </div>
       <Card className="mt-8">
         <CardHeader>
-          <CardTitle>Welcome to the Landport Module</CardTitle>
+          <CardTitle>{t('welcome')}</CardTitle>
         </CardHeader>
         <CardContent>
-          <p>This is where landport-specific content and features would be displayed.</p>
+          <p>{t('contentPlaceholder')}</p>
         </CardContent>
       </Card>
     </ModulePage>

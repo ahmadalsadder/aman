@@ -4,11 +4,13 @@ import { useAuth } from '@/hooks/use-auth';
 import type { Module } from '@/types';
 import { useRouter } from 'next/navigation';
 import { Loader2, AlertTriangle } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 export default function ModulePage({ module, children, title, description, icon: Icon }: { module: Module, children: React.ReactNode, title: string, description: string, icon: React.ElementType }) {
   const { user, loading } = useAuth();
   const router = useRouter();
   const [authorized, setAuthorized] = React.useState<boolean | null>(null);
+  const t = useTranslations('ModulePage');
 
   React.useEffect(() => {
     if (!loading && user) {
@@ -24,7 +26,7 @@ export default function ModulePage({ module, children, title, description, icon:
     return (
       <div className="flex h-full w-full flex-col items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <p className="mt-4 text-muted-foreground">Verifying access...</p>
+        <p className="mt-4 text-muted-foreground">{t('verifyingAccess')}</p>
       </div>
     );
   }
@@ -33,9 +35,9 @@ export default function ModulePage({ module, children, title, description, icon:
     return (
       <div className="flex h-full w-full flex-col items-center justify-center gap-4 text-center">
         <AlertTriangle className="h-16 w-16 text-destructive" />
-        <h1 className="text-2xl font-bold">Access Denied</h1>
+        <h1 className="text-2xl font-bold">{t('accessDenied')}</h1>
         <p className="max-w-md text-muted-foreground">
-          You do not have permission to access the {title} module. Please contact your system administrator if you believe this is an error.
+          {t('accessDeniedMessage', { title: title })}
         </p>
       </div>
     );

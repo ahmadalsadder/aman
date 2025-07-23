@@ -3,19 +3,21 @@ import ModulePage from '@/components/module-page';
 import { Ship } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { useTranslations } from 'next-intl';
 
 export default function SeaportPage() {
+  const t = useTranslations('SeaportModule');
   return (
     <ModulePage
       module="seaport"
-      title="SeaPort Module"
-      description="Manage and monitor all seaport operations."
+      title={t('title')}
+      description={t('description')}
       icon={Ship}
     >
         <div>
-            <p className="mb-4">This is the main page for the SeaPort module. From here you can navigate to the different sections of this module.</p>
+            <p className="mb-4">{t('mainPageMessage')}</p>
             <Button asChild>
-                <Link href="/seaport/dashboard">Go to Dashboard</Link>
+                <Link href="/seaport/dashboard">{t('goToDashboard')}</Link>
             </Button>
         </div>
     </ModulePage>

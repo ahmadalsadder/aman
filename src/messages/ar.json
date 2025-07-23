@@ -1,0 +1,114 @@
+{
+  "LoginPage": {
+    "title": "مرحبًا بك في بوابة الحماية",
+    "description": "أدخل بيانات الاعتماد الخاصة بك للوصول إلى حسابك",
+    "emailLabel": "البريد الإلكتروني",
+    "emailPlaceholder": "name@example.com",
+    "passwordLabel": "كلمة المرور",
+    "passwordPlaceholder": "••••••••",
+    "signInButton": "تسجيل الدخول",
+    "signingInButton": "تأمين جلستك...",
+    "invalidEmailError": "الرجاء إدخال عنوان بريد إلكتروني صالح.",
+    "passwordRequiredError": "كلمة المرور مطلوبة.",
+    "unknownError": "حدث خطأ غير معروف."
+  },
+  "HomePage": {
+    "initializing": "جاري تهيئة بوابة الحماية..."
+  },
+  "ModulesLayout": {
+    "securingSession": "تأمين جلستك..."
+  },
+  "Header": {
+    "profile": "الملف الشخصي",
+    "logout": "تسجيل الخروج",
+    "language": "اللغة"
+  },
+  "Navigation": {
+    "title": "بوابة الحماية",
+    "dashboard": "لوحة التحكم",
+    "userManagement": "إدارة المستخدمين",
+    "systemSettings": "إعدادات النظام",
+    "airport": "المطار",
+    "landport": "المنفذ البري",
+    "seaport": "المنفذ البحري",
+    "egate": "البوابة الإلكترونية"
+  },
+  "ModulePage": {
+    "verifyingAccess": "التحقق من الوصول...",
+    "accessDenied": "تم رفض الوصول",
+    "accessDeniedMessage": "ليس لديك إذن للوصول إلى وحدة {title}. يرجى الاتصال بمسؤول النظام إذا كنت تعتقد أن هذا خطأ."
+  },
+  "CreateRecordButton": {
+    "buttonText": "إنشاء سجل جديد",
+    "alertMessage": "ستكون وظيفة إنشاء سجل جديد هنا!"
+  },
+  "AirportDashboard": {
+    "title": "لوحة تحكم المطار",
+    "description": "مراقبة في الوقت الحقيقي لجميع عمليات المطار.",
+    "passengersProcessed": "الركاب المعالجون",
+    "bagsScanned": "الحقائب الممسوحة ضوئيًا",
+    "securityAlerts": "تنبيهات أمنية",
+    "flightsMonitored": "الرحلات المراقبة",
+    "actions": "الإجراءات",
+    "actionsDescription": "استخدم الأزرار أدناه لتنفيذ الإجراءات."
+  },
+  "AirportModule": {
+    "title": "وحدة المطار",
+    "description": "إدارة ومراقبة جميع عمليات المطار.",
+    "mainPageMessage": "هذه هي الصفحة الرئيسية لوحدة المطار. من هنا يمكنك الانتقال إلى الأقسام المختلفة لهذه الوحدة.",
+    "goToDashboard": "اذهب إلى لوحة التحكم"
+  },
+  "PassengerTypeChart": {
+    "title": "التركيبة السكانية للركاب",
+    "description": "توزيع أنواع الركاب المعالجين.",
+    "passengers": "الركاب"
+  },
+  "EgateDashboard": {
+    "title": "لوحة تحكم البوابة الإلكترونية",
+    "description": "إدارة ومراقبة جميع عمليات البوابة الإلكترونية.",
+    "successfulEntries": "الدخول الناجح",
+    "failedAttempts": "المحاولات الفاشلة",
+    "biometricVerifications": "التحققات البيومترية",
+    "activeGates": "البوابات النشطة",
+    "welcome": "مرحبًا بك في وحدة البوابة الإلكترونية",
+    "contentPlaceholder": "هنا سيتم عرض المحتوى والميزات الخاصة بالبوابة الإلكترونية."
+  },
+  "EgateModule": {
+    "title": "وحدة البوابة الإلكترونية",
+    "description": "إدارة ومراقبة جميع عمليات البوابة الإلكترونية.",
+    "mainPageMessage": "هذه هي الصفحة الرئيسية لوحدة البوابة الإلكترونية. من هنا يمكنك الانتقال إلى الأقسام المختلفة لهذه الوحدة.",
+    "goToDashboard": "اذهب إلى لوحة التحكم"
+  },
+  "LandportDashboard": {
+    "title": "لوحة تحكم المنفذ البري",
+    "description": "إدارة ومراقبة جميع عمليات المنفذ البري.",
+    "vehiclesProcessed": "المركبات المعالجة",
+    "travelersChecked": "المسافرون المدققون",
+    "documentsScanned": "المستندات الممسوحة ضوئيًا",
+    "activeLanes": "المسارات النشطة",
+    "welcome": "مرحبًا بك في وحدة المنفذ البري",
+    "contentPlaceholder": "هنا سيتم عرض المحتوى والميزات الخاصة بالمنفذ البري."
+  },
+  "LandportModule": {
+    "title": "وحدة المنفذ البري",
+    "description": "إدارة ومراقبة جميع عمليات المنفذ البري.",
+    "mainPageMessage": "هذه هي الصفحة الرئيسية لوحدة المنفذ البري. من هنا يمكنك الانتقال إلى الأقسام المختلفة لهذه الوحدة.",
+    "goToDashboard": "اذهب إلى لوحة التحكم"
+  },
+  "SeaportDashboard": {
+    "title": "لوحة تحكم المنفذ البحري",
+    "description": "إدارة ومراقبة جميع عمليات المنفذ البحري.",
+    "vesselsInPort": "السفن في الميناء",
+    "containersProcessed": "الحاويات المعالجة",
+    "cargoThroughput": "إنتاجية البضائع (بالطن)",
+    "activeBerths": "الأرصفة النشطة",
+    "welcome": "مرحبًا بك في وحدة المنفذ البحري",
+    "contentPlaceholder": "هنا سيتم عرض المحتوى والميزات الخاصة بالمنفذ البحري."
+  },
+  "SeaportModule": {
+    "title": "وحدة المنفذ البحري",
+    "description": "إدارة ومراقبة جميع عمليات المنفذ البحري.",
+    "mainPageMessage": "هذه هي الصفحة الرئيسية لوحدة المنفذ البحري. من هنا يمكنك الانتقال إلى الأقسام المختلفة لهذه الوحدة.",
+    "goToDashboard": "اذهب إلى لوحة التحكم"
+  }
+}

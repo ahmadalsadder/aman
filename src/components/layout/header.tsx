@@ -1,7 +1,9 @@
 'use client';
 
-import { LogOut, User as UserIcon } from 'lucide-react';
+import { LogOut, User as UserIcon, Globe } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import * as React from 'react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -11,6 +13,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem
 } from '@/components/ui/dropdown-menu';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -19,6 +23,20 @@ import { useAuth } from '@/hooks/use-auth';
 export default function Header() {
   const { user, logout } = useAuth();
   const router = useRouter();
+  const t = useTranslations('Header');
+
+  const [currentLocale, setCurrentLocale] = React.useState('en');
+
+  React.useEffect(() => {
+    const handleLocaleChange = (event: CustomEvent) => {
+      setCurrentLocale(event.detail);
+    };
+    window.addEventListener('locale-changed', handleLocaleChange as EventListener);
+    // Set initial value
+    const storedLocale = localStorage.getItem('locale') || 'en';
+    setCurrentLocale(storedLocale);
+    return () => window.removeEventListener('locale-changed', handleLocaleChange as EventListener);
+  }, []);
 
   const handleLogout = () => {
     logout();
@@ -29,6 +47,11 @@ export default function Header() {
     return name.split(' ').map(n => n[0]).join('').toUpperCase();
   };
 
+  const handleLocaleChange = (locale: string) => {
+    localStorage.setItem('locale', locale);
+    window.location.reload();
+  };
+
   return (
     <header className="sticky top-0 z-10 flex h-16 w-full items-center justify-between border-b bg-card px-4 md:px-6">
       <div className="flex items-center">
@@ -37,6 +60,23 @@ export default function Header() {
         </div>
       </div>
       <div className="flex items-center gap-4">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon">
+              <Globe className="h-5 w-5" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-56" align="end">
+            <DropdownMenuLabel>{t('language')}</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuRadioGroup value={currentLocale} onValueChange={handleLocaleChange}>
+              <DropdownMenuRadioItem value="en">English</DropdownMenuRadioItem>
+              <DropdownMenuRadioItem value="es">Español</DropdownMenuRadioItem>
+              <DropdownMenuRadioItem value="ar">العربية</DropdownMenuRadioItem>
+            </DropdownMenuRadioGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
         {user && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -57,12 +97,12 @@ export default function Header() {
               <DropdownMenuSeparator />
               <DropdownMenuItem>
                 <UserIcon className="mr-2 h-4 w-4" />
-                <span>Profile</span>
+                <span>{t('profile')}</span>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={handleLogout}>
                 <LogOut className="mr-2 h-4 w-4" />
-                <span>Log out</span>
+                <span>{t('logout')}</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

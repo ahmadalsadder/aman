@@ -17,7 +17,7 @@ export function SimplePieChart({ data, title, description }: SimplePieChartProps
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
       </CardHeader>
-      <CardContent className="h-[200px] w-full">
+      <CardContent className="h-[250px] w-full">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
@@ -40,7 +40,17 @@ export function SimplePieChart({ data, title, description }: SimplePieChartProps
                 borderColor: 'hsl(var(--border))',
               }}
             />
-             <Legend iconType="circle" />
+             <Legend 
+                iconType="circle" 
+                layout="vertical" 
+                verticalAlign="middle" 
+                align="right" 
+                wrapperStyle={{
+                    paddingLeft: '20px',
+                    fontSize: '12px',
+                    lineHeight: '20px'
+                }}
+             />
           </PieChart>
         </ResponsiveContainer>
       </CardContent>

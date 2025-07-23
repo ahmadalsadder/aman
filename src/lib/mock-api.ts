@@ -130,13 +130,13 @@ const dashboardStats = {
     },
     analyst: {
         successfulEntries: '8,210',
-        failedAttempts: '14',
+        avgOfficerProcessingTime: '1.8m',
         biometricVerifications: '8,224',
         activeGates: '24',
     },
     shiftsupervisor: {
         successfulEntries: '8,210',
-        failedAttempts: '14',
+        avgOfficerProcessingTime: '2.1m',
         biometricVerifications: '8,224',
         activeGates: '24',
         activeAlerts: '3',

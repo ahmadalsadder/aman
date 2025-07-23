@@ -150,7 +150,8 @@
     "failedAttempts": "Failed Attempts",
     "biometricVerifications": "Biometric Verifications",
     "activeGates": "Active Gates",
-    "avgProcessingTime": "Avg. Processing Time"
+    "avgGateProcessingTime": "Avg. Gate Processing Time",
+    "avgOfficerProcessingTime": "Avg. Officer Processing Time"
   },
   "AnalystModule": {
     "title": "Analyst Module",
@@ -166,7 +167,8 @@
     "failedAttempts": "Failed Attempts",
     "biometricVerifications": "Biometric Verifications",
     "activeGates": "Active Gates",
-    "avgProcessingTime": "Avg. Processing Time",
+    "avgGateProcessingTime": "Avg. Gate Processing Time",
+    "avgOfficerProcessingTime": "Avg. Officer Processing Time",
     "activeAlerts": "Active Alerts"
   },
   "GateSupervisorModule": {

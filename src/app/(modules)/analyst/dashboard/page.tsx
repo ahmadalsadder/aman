@@ -91,10 +91,10 @@ export default function AnalystDashboardPage() {
             {loading ? renderSkeleton() : (
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
                 <StatCard title={t('successfulEntries')} value={data?.stats?.successfulEntries || '...'} icon={CheckCircle} color="text-green-500" />
-                <StatCard title={t('failedAttempts')} value={data?.stats?.failedAttempts || '...'} icon={ShieldAlert} color="text-red-500" />
+                <StatCard title={t('avgOfficerProcessingTime')} value={data?.stats?.avgOfficerProcessingTime || '...'} icon={Clock} color="text-red-500" />
                 <StatCard title={t('biometricVerifications')} value={data?.stats?.biometricVerifications || '...'} icon={Fingerprint} color="text-blue-500" />
                 <StatCard title={t('activeGates')} value={data?.stats?.activeGates || '...'} icon={DoorOpen} color="text-purple-500" />
-                <StatCard title={t('avgProcessingTime')} value={data?.main?.avgProcessingTime?.analyst || '...'} icon={Clock} color="text-orange-500" />
+                <StatCard title={t('avgGateProcessingTime')} value={data?.main?.avgProcessingTime?.analyst || '...'} icon={Clock} color="text-orange-500" />
             </div>
             )}
             

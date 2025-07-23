@@ -150,7 +150,8 @@
     "failedAttempts": "Intentos fallidos",
     "biometricVerifications": "Verificaciones biométricas",
     "activeGates": "Puertas activas",
-    "avgProcessingTime": "Tiempo de procesamiento prom."
+    "avgGateProcessingTime": "Tiempo de procesamiento prom. de la puerta",
+    "avgOfficerProcessingTime": "Tiempo de procesamiento prom. del oficial"
   },
   "AnalystModule": {
     "title": "Módulo de Analista",
@@ -166,7 +167,8 @@
     "failedAttempts": "Intentos fallidos",
     "biometricVerifications": "Verificaciones biométricas",
     "activeGates": "Puertas activas",
-    "avgProcessingTime": "Tiempo de procesamiento prom.",
+    "avgGateProcessingTime": "Tiempo de procesamiento prom. de la puerta",
+    "avgOfficerProcessingTime": "Tiempo de procesamiento prom. del oficial",
     "activeAlerts": "Alertas activas"
   },
   "GateSupervisorModule": {

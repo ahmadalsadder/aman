@@ -1,7 +1,7 @@
 
 'use client';
 
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, CartesianGrid } from 'recharts';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 
 interface GateRejectionReasonsChartProps {
@@ -19,33 +19,35 @@ export function GateRejectionReasonsChart({ data }: GateRejectionReasonsChartPro
       </CardHeader>
       <CardContent className="h-[300px] w-full">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={data} layout="vertical" margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-            <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-            <XAxis type="number" stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} />
-            <YAxis 
-                dataKey="name" 
-                type="category" 
-                stroke="hsl(var(--muted-foreground))"
-                fontSize={12}
-                tickLine={false}
-                axisLine={false}
-                width={120}
-                tickFormatter={(value) => (value.length > 15 ? `${value.substring(0, 15)}...` : value)}
-            />
+          <PieChart>
+            <Pie
+              data={data}
+              cx="50%"
+              cy="50%"
+              labelLine={false}
+              outerRadius={80}
+              fill="#8884d8"
+              dataKey="value"
+              nameKey="name"
+            >
+              {data.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+              ))}
+            </Pie>
             <Tooltip
-              cursor={{ fill: 'hsl(var(--muted))', opacity: 0.3 }}
               contentStyle={{
                 backgroundColor: 'hsl(var(--background))',
                 borderColor: 'hsl(var(--border))',
               }}
-              formatter={(value: number, name: string) => [`${value}%`, name]}
+              formatter={(value: number) => `${value}%`}
             />
-            <Bar dataKey="value" name="Rejection Reason" barSize={20} radius={[0, 4, 4, 0]}>
-                 {data.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                ))}
-            </Bar>
-          </BarChart>
+             <Legend iconType="circle" layout="vertical" verticalAlign="middle" align="right" 
+                wrapperStyle={{
+                    fontSize: '12px',
+                    lineHeight: '20px'
+                }}
+             />
+          </PieChart>
         </ResponsiveContainer>
       </CardContent>
     </Card>

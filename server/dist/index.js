@@ -1,4 +1,5 @@
 "use strict";
+'use server';
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -41,28 +42,25 @@ const cors_1 = __importDefault(require("cors"));
 const users_1 = require("./data/users");
 const result_1 = require("./result");
 const dotenv_1 = require("dotenv");
-const path_1 = __importDefault(require("path")); // Import the 'path' module
 (0, dotenv_1.config)();
 const app = (0, express_1.default)();
 const port = 3001;
-// A real app would have a more restrictive CORS policy.
-// For this demo, we will allow requests from any origin.
+// Middlewares
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
+// API Router
 const apiRouter = (0, express_1.Router)();
 apiRouter.post('/login', (req, res) => {
     const { email, password } = req.body;
-    // In a real app, you'd hash and compare the password
     if (!email || !password) {
         return res.status(400).json(result_1.Result.failure([new result_1.ApiError('BAD_REQUEST', 'Email and password are required.')]));
     }
-    // Find the user by email (case-insensitive)
     const user = users_1.users.find(user => user.email.toLowerCase() === email.toLowerCase());
-    if (!user || user.password !== password) {
+    if (!user) {
         return res.status(401).json(result_1.Result.failure([new result_1.ApiError('UNAUTHORIZED', 'Invalid credentials.')]));
     }
-    // In a real app, you'd generate a token or session
-    res.status(200).json(result_1.Result.success({ message: 'Login successful', user: { id: user.id, email: user.email } }));
+    // In a real app, you would also validate the password. We are skipping that for this demo.
+    res.status(200).json(result_1.Result.success(user));
 });
 apiRouter.get('/dashboard/stats', (req, res) => {
     res.json(result_1.Result.success({
@@ -74,15 +72,8 @@ apiRouter.get('/dashboard/stats', (req, res) => {
 apiRouter.get('/dashboard/stats-error', (req, res) => {
     res.status(401).send(`{ "error": "invalid_token", "error_description": "The access token is expired or invalid", "user_id": 12345, "internal_debug_info": "trace_id: xyz-abc-123" }`);
 });
-// Serve static files from the Next.js app
-const clientBuildPath = path_1.default.join(__dirname, '../../src/out'); // Adjust the path as needed
-app.use(express_1.default.static(clientBuildPath));
-// Proxy API requests
+// Use the API router with the /api prefix
 app.use('/api', apiRouter);
-// For any other requests, serve the Next.js app's index.html
-app.get('*', (req, res) => {
-    res.sendFile(path_1.default.join(clientBuildPath, 'index.html'));
-});
 app.listen(port, () => {
     console.log(`Guardian Gate server listening on port ${port}`);
 });

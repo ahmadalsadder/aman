@@ -97,7 +97,8 @@
     "activeGates": "البوابات النشطة",
     "welcome": "مرحبًا بك في وحدة البوابة الإلكترونية",
     "contentPlaceholder": "هنا سيتم عرض المحتوى والميزات الخاصة بالبوابة الإلكترونية.",
-    "avgProcessingTime": "متوسط وقت المعالجة"
+    "avgProcessingTime": "متوسط وقت المعالجة",
+    "activeAlerts": "التنبيهات النشطة"
   },
   "EgateModule": {
     "title": "وحدة البوابة الإلكترونية",
@@ -165,7 +166,8 @@
     "failedAttempts": "المحاولات الفاشلة",
     "biometricVerifications": "التحققات البيومترية",
     "activeGates": "البوابات النشطة",
-    "avgProcessingTime": "متوسط وقت المعالجة"
+    "avgProcessingTime": "متوسط وقت المعالجة",
+    "activeAlerts": "التنبيهات النشطة"
   },
   "GateSupervisorModule": {
     "title": "وحدة مشرف الوردية",
@@ -181,7 +183,8 @@
     "failedAttempts": "المحاولات الفاشلة",
     "biometricVerifications": "التحققات البيومترية",
     "activeGates": "البوابات النشطة",
-    "avgProcessingTime": "متوسط وقت المعالجة"
+    "avgProcessingTime": "متوسط وقت المعالجة",
+    "activeAlerts": "التنبيهات النشطة"
   },
   "ControlRoomModule": {
     "title": "وحدة غرفة التحكم",

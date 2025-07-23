@@ -97,7 +97,8 @@
     "activeGates": "Active Gates",
     "welcome": "Welcome to the E-Gate Module",
     "contentPlaceholder": "This is where E-Gate-specific content and features would be displayed.",
-    "avgProcessingTime": "Avg. Processing Time"
+    "avgProcessingTime": "Avg. Processing Time",
+    "activeAlerts": "Active Alerts"
   },
   "EgateModule": {
     "title": "E-Gate Module",
@@ -165,7 +166,8 @@
     "failedAttempts": "Failed Attempts",
     "biometricVerifications": "Biometric Verifications",
     "activeGates": "Active Gates",
-    "avgProcessingTime": "Avg. Processing Time"
+    "avgProcessingTime": "Avg. Processing Time",
+    "activeAlerts": "Active Alerts"
   },
   "GateSupervisorModule": {
     "title": "Shift Supervisor Module",
@@ -181,7 +183,8 @@
     "failedAttempts": "Failed Attempts",
     "biometricVerifications": "Biometric Verifications",
     "activeGates": "Active Gates",
-    "avgProcessingTime": "Avg. Processing Time"
+    "avgProcessingTime": "Avg. Processing Time",
+    "activeAlerts": "Active Alerts"
   },
   "ControlRoomModule": {
     "title": "Control Room Module",

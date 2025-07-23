@@ -97,7 +97,8 @@
     "activeGates": "Puertas activas",
     "welcome": "Bienvenido al Módulo de Puerta Electrónica",
     "contentPlaceholder": "Aquí se mostrarían el contenido y las funciones específicas de la Puerta Electrónica.",
-    "avgProcessingTime": "Tiempo de procesamiento prom."
+    "avgProcessingTime": "Tiempo de procesamiento prom.",
+    "activeAlerts": "Alertas activas"
   },
   "EgateModule": {
     "title": "Módulo de Puerta Electrónica",
@@ -165,7 +166,8 @@
     "failedAttempts": "Intentos fallidos",
     "biometricVerifications": "Verificaciones biométricas",
     "activeGates": "Puertas activas",
-    "avgProcessingTime": "Tiempo de procesamiento prom."
+    "avgProcessingTime": "Tiempo de procesamiento prom.",
+    "activeAlerts": "Alertas activas"
   },
   "GateSupervisorModule": {
     "title": "Módulo de Supervisor de Turno",
@@ -181,7 +183,8 @@
     "failedAttempts": "Intentos fallidos",
     "biometricVerifications": "Verificaciones biométricas",
     "activeGates": "Puertas activas",
-    "avgProcessingTime": "Tiempo de procesamiento prom."
+    "avgProcessingTime": "Tiempo de procesamiento prom.",
+    "activeAlerts": "Alertas activas"
   },
   "ControlRoomModule": {
     "title": "Módulo de Sala de Control",

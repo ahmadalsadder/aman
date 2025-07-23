@@ -55,8 +55,8 @@ export default function ControlRoomDashboardPage() {
       );
   
   const renderSkeleton = () => (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
-        {Array.from({ length: 5 }).map((_, i) => (
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {Array.from({ length: 6 }).map((_, i) => (
           <Card key={i}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <Skeleton className="h-4 w-2/3" />
@@ -96,11 +96,12 @@ export default function ControlRoomDashboardPage() {
       />
         <div className="flex flex-col gap-8">
             {loading ? renderSkeleton() : (
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+            <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-6">
                 <StatCard title={t('successfulEntries')} value="8,210" icon={CheckCircle} color="text-green-500" />
                 <StatCard title={t('failedAttempts')} value="14" icon={ShieldAlert} color="text-red-500" />
                 <StatCard title={t('biometricVerifications')} value="8,224" icon={Fingerprint} color="text-blue-500" />
                 <StatCard title={t('activeGates')} value="24" icon={DoorOpen} color="text-purple-500" />
+                <StatCard title={t('activeAlerts')} value="5" icon={ShieldAlert} color="text-yellow-500" />
                 <StatCard title={t('avgProcessingTime')} value={data?.main?.avgProcessingTime?.['control-room'] || '...'} icon={Clock} color="text-orange-500" />
             </div>
             )}

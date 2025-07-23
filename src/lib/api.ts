@@ -64,6 +64,14 @@ export async function api<T>(endpoint: string, options: RequestInit = {}): Promi
     }
   }
 
+  if (!result.isSuccess && result.errors) {
+    toast({
+        variant: 'destructive',
+        title: 'API Error',
+        description: result.errors[0].message,
+    });
+  }
+
 
   // Anomaly detection with GenAI
   try {

@@ -66,7 +66,7 @@ export default function SeaportDashboardPage() {
     </div>
   );
 
-  const isSupervisorOrAdmin = user?.role === 'gate-supervisor' || user?.role === 'admin';
+  const isSupervisorOrAdmin = user?.role === 'shiftsupervisor' || user?.role === 'admin';
 
   return (
     <ModulePage

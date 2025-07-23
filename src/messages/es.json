@@ -40,7 +40,7 @@
     "seaport": "Puerto marítimo",
     "egate": "Puerta electrónica",
     "analyst": "Analista",
-    "gate-supervisor": "Supervisor de puerta",
+    "shiftsupervisor": "Supervisor de Turno",
     "control-room": "Sala de control",
     "backToPortals": "Volver a los portales"
   },
@@ -159,8 +159,8 @@
     "goToAnalytics": "Ir a Análisis"
   },
   "GateSupervisorDashboard": {
-    "title": "Tablero del Supervisor de Puerta",
-    "description": "Gestionar y monitorear todas las operaciones del supervisor de puerta.",
+    "title": "Tablero del Supervisor de Turno",
+    "description": "Gestionar y monitorear todas las operaciones del supervisor de turno.",
     "successfulEntries": "Entradas exitosas",
     "failedAttempts": "Intentos fallidos",
     "biometricVerifications": "Verificaciones biométricas",
@@ -168,9 +168,9 @@
     "avgProcessingTime": "Tiempo de procesamiento prom."
   },
   "GateSupervisorModule": {
-    "title": "Módulo de Supervisor de Puerta",
-    "description": "Gestionar y monitorear todas las operaciones del supervisor de puerta.",
-    "mainPageMessage": "Esta es la página principal del módulo de Supervisor de Puerta. Desde aquí puede navegar a las diferentes secciones de este módulo.",
+    "title": "Módulo de Supervisor de Turno",
+    "description": "Gestionar y monitorear todas las operaciones del supervisor de turno.",
+    "mainPageMessage": "Esta es la página principal del módulo de Supervisor de Turno. Desde aquí puede navegar a las diferentes secciones de este módulo.",
     "goToDashboard": "Ir al Tablero",
     "goToAnalytics": "Ir a Análisis"
   },

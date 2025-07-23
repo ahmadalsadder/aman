@@ -40,7 +40,7 @@
     "seaport": "SeaPort",
     "egate": "E-Gate",
     "analyst": "Analyst",
-    "gate-supervisor": "Gate Supervisor",
+    "shiftsupervisor": "Shift Supervisor",
     "control-room": "Control Room",
     "backToPortals": "Back to Portals"
   },
@@ -159,8 +159,8 @@
     "goToAnalytics": "Go to Analytics"
   },
   "GateSupervisorDashboard": {
-    "title": "Gate Supervisor Dashboard",
-    "description": "Manage and monitor all gate supervisor operations.",
+    "title": "Shift Supervisor Dashboard",
+    "description": "Manage and monitor all shift supervisor operations.",
     "successfulEntries": "Successful Entries",
     "failedAttempts": "Failed Attempts",
     "biometricVerifications": "Biometric Verifications",
@@ -168,9 +168,9 @@
     "avgProcessingTime": "Avg. Processing Time"
   },
   "GateSupervisorModule": {
-    "title": "Gate Supervisor Module",
-    "description": "Manage and monitor all gate supervisor operations.",
-    "mainPageMessage": "This is the main page for the Gate Supervisor module. From here you can navigate to the different sections of this module.",
+    "title": "Shift Supervisor Module",
+    "description": "Manage and monitor all shift supervisor operations.",
+    "mainPageMessage": "This is the main page for the Shift Supervisor module. From here you can navigate to the different sections of this module.",
     "goToDashboard": "Go to Dashboard",
     "goToAnalytics": "Go to Analytics"
   },

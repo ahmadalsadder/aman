@@ -17,7 +17,7 @@ const allModules: Record<Module, Omit<NavItem, 'label'>> = {
   seaport: { href: '/seaport/dashboard', icon: Ship },
   egate: { href: '/egate/dashboard', icon: DoorOpen },
   analyst: { href: '/analyst/dashboard', icon: PieChart },
-  'gate-supervisor': { href: '/gate-supervisor/dashboard', icon: UserCog },
+  'shiftsupervisor': { href: '/gate-supervisor/dashboard', icon: UserCog },
   'control-room': { href: '/control-room/dashboard', icon: RadioTower },
 };
 

@@ -7,7 +7,7 @@ export const users: User[] = [
     email: 'admin@example.com', 
     role: 'admin', 
     token: 'fake-admin-token', 
-    modules: ['dashboard', 'landport', 'seaport', 'airport', 'egate', 'analyst', 'gate-supervisor', 'control-room', 'users', 'settings'],
+    modules: ['dashboard', 'landport', 'seaport', 'airport', 'egate', 'analyst', 'shiftsupervisor', 'control-room', 'users', 'settings'],
     permissions: ['records:view', 'records:create', 'records:edit', 'records:delete', 'users:manage', 'reports:view']
   },
   { 

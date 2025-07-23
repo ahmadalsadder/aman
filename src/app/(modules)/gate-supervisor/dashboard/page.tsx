@@ -65,7 +65,7 @@ export default function GateSupervisorDashboardPage() {
 
   return (
     <ModulePage
-      module="gate-supervisor"
+      module="shiftsupervisor"
       title={t('title')}
       description={t('description')}
       icon={UserCog}
@@ -77,7 +77,7 @@ export default function GateSupervisorDashboardPage() {
                 <StatCard title={t('failedAttempts')} value="14" icon={ShieldAlert} />
                 <StatCard title={t('biometricVerifications')} value="8,224" icon={Fingerprint} />
                 <StatCard title={t('activeGates')} value="24" icon={DoorOpen} />
-                <StatCard title={t('avgProcessingTime')} value={data?.main?.avgProcessingTime?.['gate-supervisor'] || '...'} icon={Clock} />
+                <StatCard title={t('avgProcessingTime')} value={data?.main?.avgProcessingTime?.['shiftsupervisor'] || '...'} icon={Clock} />
             </div>
             )}
             

@@ -135,6 +135,12 @@ export default function SeaportDashboardPage() {
             {loading || !data ? (
                 <Skeleton className="h-[400px] w-full" />
             ) : (
+                <PassengerTypeChart data={data.passengers.seaport} />
+            )}
+
+            {loading || !data ? (
+                <Skeleton className="h-[400px] w-full" />
+            ) : (
             <div className="grid grid-cols-1 gap-8 lg:grid-cols-5">
                 <div className="lg:col-span-3">
                     <ThroughputChart data={data.main.throughput} />
@@ -145,12 +151,6 @@ export default function SeaportDashboardPage() {
             </div>
             )}
             
-            {loading || !data ? (
-                <Skeleton className="h-[400px] w-full" />
-            ) : (
-                <PassengerTypeChart data={data.passengers.seaport} />
-            )}
-
             {loading || !data ? (
                 <Skeleton className="h-[400px] w-full" />
             ) : (

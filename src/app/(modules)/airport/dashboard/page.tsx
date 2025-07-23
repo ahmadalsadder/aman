@@ -137,6 +137,18 @@ export default function AirportDashboardPage() {
         )}
 
         {loading || !data ? (
+          <div className="grid gap-8 md:grid-cols-2">
+            <Skeleton className="h-[400px] w-full" />
+            <Skeleton className="h-[400px] w-full" />
+          </div>
+        ) : (
+        <div className="grid gap-8 md:grid-cols-2">
+            <PassengerTypeChart data={data.passengers.airport} />
+            <AgeDistributionChart data={data.airport.ageDistribution} />
+        </div>
+        )}
+        
+        {loading || !data ? (
           <Skeleton className="h-[400px] w-full" />
         ) : (
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-5">
@@ -149,18 +161,6 @@ export default function AirportDashboardPage() {
         </div>
         )}
 
-        {loading || !data ? (
-          <div className="grid gap-8 md:grid-cols-2">
-            <Skeleton className="h-[400px] w-full" />
-            <Skeleton className="h-[400px] w-full" />
-          </div>
-        ) : (
-        <div className="grid gap-8 md:grid-cols-2">
-            <PassengerTypeChart data={data.passengers.airport} />
-            <AgeDistributionChart data={data.airport.ageDistribution} />
-        </div>
-        )}
-        
         {loading || !data ? (
           <Skeleton className="h-[400px] w-full" />
         ) : (

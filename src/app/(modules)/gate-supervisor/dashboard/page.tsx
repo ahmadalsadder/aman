@@ -103,19 +103,6 @@ export default function GateSupervisorDashboardPage() {
                 <TransactionOverviewChart data={data.overview} />
             )}
 
-            {loading || !data ? (
-                <Skeleton className="h-[400px] w-full" />
-            ) : (
-            <div className="grid grid-cols-1 gap-8 lg:grid-cols-5">
-                <div className="lg:col-span-3">
-                    <ThroughputChart data={data.main.throughput} />
-                </div>
-                <div className="lg:col-span-2">
-                    <RiskRuleTriggerChart data={data.main.riskRules} />
-                </div>
-            </div>
-            )}
-
             <div className="grid gap-8 md:grid-cols-2">
               {loading || !data ? (
                   <>
@@ -129,6 +116,19 @@ export default function GateSupervisorDashboardPage() {
                 </>
               )}
             </div>
+
+            {loading || !data ? (
+                <Skeleton className="h-[400px] w-full" />
+            ) : (
+            <div className="grid grid-cols-1 gap-8 lg:grid-cols-5">
+                <div className="lg:col-span-3">
+                    <ThroughputChart data={data.main.throughput} />
+                </div>
+                <div className="lg:col-span-2">
+                    <RiskRuleTriggerChart data={data.main.riskRules} />
+                </div>
+            </div>
+            )}
 
             {loading || !data ? (
                 <Skeleton className="h-[400px] w-full" />

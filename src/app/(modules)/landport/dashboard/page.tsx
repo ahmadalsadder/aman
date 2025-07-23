@@ -133,6 +133,12 @@ export default function LandportDashboardPage() {
         )}
 
         {loading || !data ? (
+            <Skeleton className="h-[400px] w-full" />
+        ) : (
+            <PassengerTypeChart data={data.passengers.landport} />
+        )}
+
+        {loading || !data ? (
           <Skeleton className="h-[400px] w-full" />
         ) : (
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-5">
@@ -143,12 +149,6 @@ export default function LandportDashboardPage() {
                 <RiskRuleTriggerChart data={data.main.riskRules} />
             </div>
         </div>
-        )}
-
-        {loading || !data ? (
-            <Skeleton className="h-[400px] w-full" />
-        ) : (
-            <PassengerTypeChart data={data.passengers.landport} />
         )}
 
         {loading || !data ? (

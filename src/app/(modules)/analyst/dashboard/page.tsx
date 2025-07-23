@@ -102,6 +102,12 @@ export default function AnalystDashboardPage() {
             {loading || !data ? (
                 <Skeleton className="h-[400px] w-full" />
             ) : (
+               <PassengerTypeChart data={data.passengers.airport} />
+            )}
+
+            {loading || !data ? (
+                <Skeleton className="h-[400px] w-full" />
+            ) : (
             <div className="grid grid-cols-1 gap-8 lg:grid-cols-5">
                 <div className="lg:col-span-3">
                     <ThroughputChart data={data.main.throughput} />
@@ -110,12 +116,6 @@ export default function AnalystDashboardPage() {
                     <RiskRuleTriggerChart data={data.main.riskRules} />
                 </div>
             </div>
-            )}
-
-            {loading || !data ? (
-                <Skeleton className="h-[400px] w-full" />
-            ) : (
-               <PassengerTypeChart data={data.passengers.airport} />
             )}
 
             {loading || !data ? (

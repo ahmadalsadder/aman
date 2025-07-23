@@ -1,14 +1,17 @@
 'use client';
 import ModulePage from '@/components/module-page';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Plane, UserCheck, BaggageClaim, ShieldCheck } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Plane, UserCheck, BaggageClaim, ShieldCheck, Globe } from 'lucide-react';
 import PassengerTypeChart from '@/components/charts/passenger-type-chart';
 import { passengerData } from '@/data/passenger-data';
 import CreateRecordButton from '@/components/create-record-button';
 import { useTranslations } from 'next-intl';
 import { AgeDistributionChart } from '@/components/charts/age-distribution-chart';
 import { NationalityDistributionChart } from '@/components/charts/nationality-distribution-chart';
-import { airportDashboardData } from '@/data/dashboard-data';
+import { airportDashboardData, mainDashboardData } from '@/data/dashboard-data';
+import { ThroughputChart } from '@/components/charts/throughput-chart';
+import { RiskRuleTriggerChart } from '@/components/charts/risk-rule-trigger-chart';
+import { WorldMapChart } from '@/components/charts/world-map-chart';
 
 export default function AirportDashboardPage() {
   const t = useTranslations('AirportDashboard');
@@ -38,10 +41,38 @@ export default function AirportDashboardPage() {
         <StatCard title={t('securityAlerts')} value="3" icon={ShieldCheck} />
         <StatCard title={t('flightsMonitored')} value="128" icon={Plane} />
       </div>
-       <div className="mt-8 grid gap-8 md:grid-cols-2">
-        <PassengerTypeChart data={passengerData.airport} />
-        <AgeDistributionChart data={airportDashboardData.ageDistribution} />
+       <div className="mt-8 grid gap-8 grid-cols-1">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-5">
+            <div className="lg:col-span-3">
+                <ThroughputChart data={mainDashboardData.throughput} />
+            </div>
+            <div className="lg:col-span-2">
+                <RiskRuleTriggerChart data={mainDashboardData.riskRules} />
+            </div>
+        </div>
+
+        <div className="grid gap-8 md:grid-cols-2">
+            <PassengerTypeChart data={passengerData.airport} />
+            <AgeDistributionChart data={airportDashboardData.ageDistribution} />
+        </div>
+        
         <NationalityDistributionChart data={airportDashboardData.nationalityDistribution} />
+
+        <Card>
+            <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                    <Globe className="h-5 w-5" />
+                    Passenger Volume by Nationality
+                </CardTitle>
+                <CardDescription>
+                    A global overview of passenger traffic origins.
+                </CardDescription>
+            </CardHeader>
+            <CardContent>
+                <WorldMapChart data={mainDashboardData.nationalityDistribution} />
+            </CardContent>
+        </Card>
+
          <Card>
           <CardHeader>
             <CardTitle>{t('actions')}</CardTitle>

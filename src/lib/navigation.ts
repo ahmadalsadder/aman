@@ -14,7 +14,6 @@ export interface NavItem {
 export const getNavItems = (role: Role, modules: Module[], t: any): NavItem[] => {
 
   const allNavItems: Record<string, NavItem> = {
-    dashboard: { href: '/dashboard', label: t('dashboard'), icon: LayoutDashboard },
     users: { href: '/', label: t('userManagement'), icon: Users },
     settings: { href: '/', label: t('systemSettings'), icon: Settings },
   };
@@ -26,7 +25,7 @@ export const getNavItems = (role: Role, modules: Module[], t: any): NavItem[] =>
       egate: { href: '/egate', label: t('egate'), icon: DoorOpen },
   };
 
-  let items: NavItem[] = [allNavItems.dashboard];
+  let items: NavItem[] = [];
   
   // Add module-specific nav items
   const sortedModules = modules.sort();

@@ -40,6 +40,7 @@ export async function api<T>(endpoint: string, options: RequestInit = {}): Promi
 
 
   // Anomaly detection with GenAI can still run on the mock responses
+  /*
   try {
     const anomalyResult = await flagEdgeCaseResponse({
       apiEndpoint: endpoint,
@@ -58,6 +59,7 @@ export async function api<T>(endpoint: string, options: RequestInit = {}): Promi
   } catch (e) {
     console.error('Error during anomaly detection:', e);
   }
+  */
       
   return result;
 }

@@ -138,10 +138,10 @@ export default function ControlRoomDashboardPage() {
             ) : (
             <div className="grid grid-cols-1 gap-8 lg:grid-cols-5">
                 <div className="lg:col-span-3">
-                    <ThroughputChart data={data.main.throughput} />
+                    <ThroughputChart data={data.main.throughput} className="h-full" />
                 </div>
                 <div className="lg:col-span-2">
-                    <RiskRuleTriggerChart data={data.main.riskRules} />
+                    <RiskRuleTriggerChart data={data.main.riskRules} className="h-full" />
                 </div>
             </div>
             )}

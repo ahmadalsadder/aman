@@ -7,7 +7,6 @@ import PassengerTypeChart from '@/components/charts/passenger-type-chart';
 import CreateRecordButton from '@/components/create-record-button';
 import { useTranslations } from 'next-intl';
 import { AgeDistributionChart } from '@/components/charts/age-distribution-chart';
-import { NationalityDistributionChart } from '@/components/charts/nationality-distribution-chart';
 import { ThroughputChart } from '@/components/charts/throughput-chart';
 import { RiskRuleTriggerChart } from '@/components/charts/risk-rule-trigger-chart';
 import { WorldMapChart } from '@/components/charts/world-map-chart';
@@ -153,10 +152,10 @@ export default function AirportDashboardPage() {
         ) : (
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-5">
             <div className="lg:col-span-3">
-                <ThroughputChart data={data.main.throughput} />
+                <ThroughputChart data={data.main.throughput} className="h-full" />
             </div>
             <div className="lg:col-span-2">
-                <RiskRuleTriggerChart data={data.main.riskRules} />
+                <RiskRuleTriggerChart data={data.main.riskRules} className="h-full" />
             </div>
         </div>
         )}

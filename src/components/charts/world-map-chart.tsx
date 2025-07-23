@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useMemo } from 'react';
@@ -11,33 +12,38 @@ interface WorldMapChartProps {
 }
 
 export function WorldMapChart({ data }: WorldMapChartProps) {
-    const maxPassengers = useMemo(() => Math.max(...Object.values(data), 0), [data]);
+    const maxPassengers = useMemo(() => {
+        const values = Object.values(data);
+        return values.length > 0 ? Math.max(...values) : 0;
+    }, [data]);
 
     const colorScale = scaleLinear<string>()
         .domain([0, 1, maxPassengers])
-        .range(["#E0E7FF", "#6366F1", "#3730A3"]);
+        .range(["hsl(var(--muted))", "hsl(var(--primary) / 0.5)", "hsl(var(--primary))"]);
 
     return (
-        <div className="w-full h-[400px] border rounded-lg bg-muted/50 overflow-hidden">
+        <div className="w-full h-[400px] border rounded-lg bg-background overflow-hidden">
             <ComposableMap projectionConfig={{ scale: 147 }} style={{ width: "100%", height: "100%" }}>
                 <ZoomableGroup center={[0, 0]} zoom={1}>
                     <Geographies geography={geoUrl}>
                         {({ geographies }) =>
                             geographies.map((geo) => {
+                                // world-atlas uses 'ISO_A3' and sometimes 'A3' for the 3-letter country code
                                 const countryCode = geo.properties.ISO_A3 || geo.properties.A3;
                                 const passengerCount = data[countryCode] || 0;
-
+                                const fillColor = passengerCount > 0 ? colorScale(passengerCount) : "hsl(var(--muted-foreground) / 0.2)";
+                                
                                 return (
                                     <Geography
                                         key={geo.rsmKey}
                                         geography={geo}
-                                        fill={passengerCount > 0 ? colorScale(passengerCount) : "#D1D5DB"}
-                                        stroke="#FFFFFF"
+                                        fill={fillColor}
+                                        stroke="hsl(var(--card))"
                                         strokeWidth={0.5}
                                         style={{
                                             default: { outline: 'none' },
-                                            hover: { outline: 'none', fill: '#4f46e5' },
-                                            pressed: { outline: 'none' },
+                                            hover: { outline: 'none', fill: 'hsl(var(--primary) / 0.8)' },
+                                            pressed: { outline: 'none', fill: 'hsl(var(--primary))'},
                                         }}
                                     >
                                         <title>

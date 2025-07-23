@@ -6,6 +6,7 @@ import { Result, ApiError } from '@/types/api/result';
 import type { User } from '@/types';
 import { LoaderContext } from '@/components/loader-provider';
 import { useContext } from 'react';
+import { mockApi } from './mock-api';
 
 // A bit of a hack to get the loader context outside of a component
 // This relies on the fact that the context provider is in the root layout
@@ -16,9 +17,11 @@ let hideLoaderGlobally = () => {};
 // We can't use the hook directly, but we can make a tiny component
 // to snatch the context functions.
 function ApiContextSnatcher() {
-    const { showLoader, hideLoader } = useContext(LoaderContext)!;
-    showLoaderGlobally = showLoader;
-    hideLoaderGlobally = hideLoader;
+    const loaderContext = useContext(LoaderContext);
+    if (loaderContext) {
+        showLoaderGlobally = loaderContext.showLoader;
+        hideLoaderGlobally = loaderContext.hideLoader;
+    }
     return null;
 }
 // This helper component needs to be rendered once in the app.
@@ -42,54 +45,6 @@ const getAuthInfo = (): Partial<User> => {
   }
   return {};
 };
-
-// This is a stand-in for a real API client.
-async function mockApi<T>(endpoint: string, options: RequestInit = {}): Promise<Result<T>> {
-    const { method = 'GET' } = options;
-    const url = `/api${endpoint}`;
-    
-    console.log(`[API] ${method} ${url}`);
-    
-    try {
-        const response = await fetch(url, {
-            ...options,
-            headers: {
-                'Content-Type': 'application/json',
-                ...options.headers,
-            },
-        });
-
-        if (!response.ok) {
-            let errorPayload;
-            try {
-                // Try to parse the error response from the server
-                errorPayload = await response.json();
-            } catch (e) {
-                // If the body is not JSON or empty, create a generic error
-                return Result.failure([new ApiError(`HTTP_${response.status}`, `Request failed with status: ${response.status}`)]);
-            }
-
-            // If the server sent a Result object, use its errors
-            if (errorPayload && errorPayload.isSuccess === false && errorPayload.errors) {
-                 return new Result<T>(null, errorPayload.errors, false, errorPayload.warnings, errorPayload.info);
-            }
-            
-            // Otherwise, create a generic error from the payload
-            const errorMessage = typeof errorPayload === 'string' ? errorPayload : JSON.stringify(errorPayload);
-            return Result.failure([new ApiError(`HTTP_${response.status}`, errorMessage)]);
-        }
-
-        const data = await response.json();
-        return data as Result<T>;
-
-    } catch (error) {
-        console.error("API Fetch Error:", error);
-        if (error instanceof Error) {
-            return Result.failure([new ApiError('NETWORK_ERROR', error.message)]);
-        }
-        return Result.failure([new ApiError('UNKNOWN_ERROR', 'An unknown network error occurred.')]);
-    }
-}
 
 
 export async function api<T>(endpoint: string, options: RequestInit = {}): Promise<Result<T>> {

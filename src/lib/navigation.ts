@@ -8,7 +8,7 @@ export interface NavItem {
 }
 
 const allNavItems: Record<string, NavItem> = {
-  dashboard: { href: '/', label: 'Dashboard', icon: LayoutDashboard },
+  dashboard: { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   monitoring: { href: '/', label: 'Real-time Monitoring', icon: Activity },
   analytics: { href: '/', label: 'Security Analytics', icon: BarChart3 },
   users: { href: '/', label: 'User Management', icon: Users },

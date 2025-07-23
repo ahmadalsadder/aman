@@ -13,6 +13,7 @@ import { TransactionOverviewChart } from '@/components/charts/transaction-overvi
 import { DashboardHeader } from '@/components/layout/dashboard-header';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList } from '@/components/ui/breadcrumb';
 import PassengerTypeChart from '@/components/charts/passenger-type-chart';
+import { GateRejectionReasonsChart } from '@/components/charts/gate-rejection-reasons-chart';
 
 export default function EgateDashboardPage() {
     const t = useTranslations('EgateDashboard');
@@ -22,19 +23,21 @@ export default function EgateDashboardPage() {
     React.useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
-            const [mainResult, overviewResult, statsResult, passengerResult] = await Promise.all([
+            const [mainResult, overviewResult, statsResult, passengerResult, rejectionResult] = await Promise.all([
               api.get('/dashboard/main'),
               api.get('/dashboard/transaction-overview'),
               api.get('/dashboard/stats?module=egate'),
               api.get('/data/passengers'),
+              api.get('/dashboard/gate-rejection-reasons'),
             ]);
             
-            if (mainResult.isSuccess && overviewResult.isSuccess && statsResult.isSuccess && passengerResult.isSuccess) {
+            if (mainResult.isSuccess && overviewResult.isSuccess && statsResult.isSuccess && passengerResult.isSuccess && rejectionResult.isSuccess) {
                 setData({ 
                     main: mainResult.data,
                     overview: overviewResult.data,
                     stats: statsResult.data,
                     passengers: passengerResult.data,
+                    reasons: rejectionResult.data,
                 });
             }
             setLoading(false);
@@ -113,11 +116,19 @@ export default function EgateDashboardPage() {
             </div>
             )}
 
-            {loading || !data ? (
-                <Skeleton className="h-[400px] w-full" />
-            ) : (
-                <PassengerTypeChart data={data.passengers.airport} />
-            )}
+            <div className="grid gap-8 md:grid-cols-2">
+              {loading || !data ? (
+                  <>
+                    <Skeleton className="h-[400px] w-full" />
+                    <Skeleton className="h-[400px] w-full" />
+                  </>
+              ) : (
+                <>
+                  <PassengerTypeChart data={data.passengers.airport} />
+                  <GateRejectionReasonsChart data={data.reasons} />
+                </>
+              )}
+            </div>
 
             {loading || !data ? (
                 <Skeleton className="h-[400px] w-full" />

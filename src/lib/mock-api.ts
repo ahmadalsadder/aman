@@ -277,6 +277,14 @@ const forecastData = {
   }
 };
 
+const gateRejectionReasonsData = [
+    { name: 'Biometric Mismatch', value: 45 },
+    { name: 'Expired Passport', value: 30 },
+    { name: 'Watchlist Flag', value: 15 },
+    { name: 'Invalid Visa', value: 8 },
+    { name: 'Other', value: 2 },
+];
+
 
 const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 
@@ -339,6 +347,10 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
             return Result.success(forecastData[module]) as Result<T>;
         }
         return Result.failure([new ApiError('NOT_FOUND', `Forecast data for module '${module}' not found.`)]) as Result<T>;
+    }
+
+    if (method === 'GET' && url.pathname === '/dashboard/gate-rejection-reasons') {
+        return Result.success(gateRejectionReasonsData) as Result<T>;
     }
     
     if (method === 'GET' && url.pathname === '/dashboard/stats-error') {

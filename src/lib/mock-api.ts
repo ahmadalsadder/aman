@@ -111,6 +111,16 @@ const passengerData = {
     ],
 };
 
+const transactionOverviewData = [
+    { name: 'Day 1', entry: 4210, exit: 2390 },
+    { name: 'Day 2', entry: 3800, exit: 2100 },
+    { name: 'Day 3', entry: 4500, exit: 2500 },
+    { name: 'Day 4', entry: 4890, exit: 2800 },
+    { name: 'Day 5', entry: 5100, exit: 2900 },
+    { name: 'Day 6', entry: 5300, exit: 3100 },
+    { name: 'Day 7', entry: 5520, exit: 3300 },
+];
+
 
 const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 
@@ -155,6 +165,9 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
         return Result.success(passengerData) as Result<T>;
     }
 
+    if (method === 'GET' && url.pathname === '/dashboard/transaction-overview') {
+        return Result.success(transactionOverviewData) as Result<T>;
+    }
 
     if (method === 'GET' && url.pathname === '/dashboard/stats') {
         return Result.success({

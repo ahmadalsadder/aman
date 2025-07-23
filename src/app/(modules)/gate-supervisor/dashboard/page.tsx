@@ -9,6 +9,7 @@ import { RiskRuleTriggerChart } from '@/components/charts/risk-rule-trigger-char
 import { WorldMapChart } from '@/components/charts/world-map-chart';
 import { api } from '@/lib/api';
 import { Skeleton } from '@/components/ui/skeleton';
+import { TransactionOverviewChart } from '@/components/charts/transaction-overview-chart';
 
 export default function GateSupervisorDashboardPage() {
     const t = useTranslations('GateSupervisorDashboard');
@@ -18,9 +19,16 @@ export default function GateSupervisorDashboardPage() {
     React.useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
-            const result = await api.get('/dashboard/main');
-            if (result.isSuccess) {
-                setData(result.data);
+            const [mainResult, overviewResult] = await Promise.all([
+                api.get('/dashboard/main'),
+                api.get('/dashboard/transaction-overview')
+            ]);
+            
+            if (mainResult.isSuccess && overviewResult.isSuccess) {
+                setData({ 
+                    main: mainResult.data,
+                    overview: overviewResult.data
+                });
             }
             setLoading(false);
         };
@@ -74,12 +82,18 @@ export default function GateSupervisorDashboardPage() {
             {loading || !data ? (
                 <Skeleton className="h-[400px] w-full" />
             ) : (
+                <TransactionOverviewChart data={data.overview} />
+            )}
+
+            {loading || !data ? (
+                <Skeleton className="h-[400px] w-full" />
+            ) : (
             <div className="grid grid-cols-1 gap-8 lg:grid-cols-5">
                 <div className="lg:col-span-3">
-                    <ThroughputChart data={data.throughput} />
+                    <ThroughputChart data={data.main.throughput} />
                 </div>
                 <div className="lg:col-span-2">
-                    <RiskRuleTriggerChart data={data.riskRules} />
+                    <RiskRuleTriggerChart data={data.main.riskRules} />
                 </div>
             </div>
             )}
@@ -98,7 +112,7 @@ export default function GateSupervisorDashboardPage() {
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <WorldMapChart data={data.nationalityDistribution} />
+                    <WorldMapChart data={data.main.nationalityDistribution} />
                 </CardContent>
             </Card>
             )}

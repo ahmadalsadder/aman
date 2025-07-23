@@ -37,14 +37,15 @@ export default function AppSidebar() {
   };
 
   const shouldShowPortalsLink = user && user.modules && user.modules.length > 1;
+  const moduleDashboardHref = currentModule ? `/${currentModule}` : '/';
 
   return (
     <Sidebar variant="inset" collapsible="icon">
       <SidebarHeader>
-        <div className="flex items-center gap-2">
+        <Link href={moduleDashboardHref} className="flex items-center gap-2">
           <Logo />
           <span className="text-lg font-semibold tracking-tight">{t('title')}</span>
-        </div>
+        </Link>
       </SidebarHeader>
       <SidebarContent>
         <SidebarMenu>

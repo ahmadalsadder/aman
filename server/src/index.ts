@@ -1,3 +1,4 @@
+'use server';
 import express, { type Request, type Response, Router } from 'express';
 import cors from 'cors';
 import { users } from './data/users';

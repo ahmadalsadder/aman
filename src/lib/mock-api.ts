@@ -45,10 +45,6 @@ const users: User[] = [
 // Mock data for the main dashboard
 const mainDashboardData = {
     throughput: [
-        { name: '00:00', transactions: 110 },
-        { name: '02:00', transactions: 180 },
-        { name: '04:00', transactions: 250 },
-        { name: '06:00', transactions: 450 },
         { name: '08:00', transactions: 230 },
         { name: '10:00', transactions: 290 },
         { name: '12:00', transactions: 220 },

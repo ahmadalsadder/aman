@@ -122,11 +122,9 @@ export default function AnalystDashboardPage() {
                 <Skeleton className="h-[400px] w-full" />
               </div>
             ) : (
-            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-2">
+            <div className="grid gap-8 md:grid-cols-2">
                <PassengerTypeChart data={data.passengers.airport} />
-                <div className="lg:col-span-1">
-                    <RiskRuleTriggerChart data={data.main.riskRules} className="h-full"/>
-                </div>
+               <RiskRuleTriggerChart data={data.main.riskRules} className="h-full"/>
             </div>
             )}
 

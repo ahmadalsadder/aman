@@ -162,12 +162,6 @@ export default function AirportDashboardPage() {
         )}
         
         {loading || !data ? (
-            <Skeleton className="h-[400px] w-full" />
-        ) : (
-            <NationalityDistributionChart data={data.airport.nationalityDistribution} />
-        )}
-        
-        {loading || !data ? (
           <Skeleton className="h-[400px] w-full" />
         ) : (
         <Card>

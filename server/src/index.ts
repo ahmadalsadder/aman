@@ -1,5 +1,5 @@
 'use server';
-import express from 'express';
+import express, { type Request, type Response } from 'express';
 import cors from 'cors';
 import { users } from './data/users';
 import type { User } from './types';
@@ -22,7 +22,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-app.post('/api/login', (req, res) => {
+app.post('/api/login', (req: Request, res: Response) => {
   const { email, password } = req.body;
   
   // In a real app, you'd hash and compare the password
@@ -41,7 +41,7 @@ app.post('/api/login', (req, res) => {
   }
 });
 
-app.get('/api/dashboard/stats', (req, res) => {
+app.get('/api/dashboard/stats', (req: Request, res: Response) => {
   res.json(Result.success({
     totalAnomalies: 12,
     monitoredEndpoints: 42,
@@ -49,7 +49,7 @@ app.get('/api/dashboard/stats', (req, res) => {
   }));
 });
 
-app.get('/api/dashboard/stats-error', (req, res) => {
+app.get('/api/dashboard/stats-error', (req: Request, res: Response) => {
     res.status(401).send(`{ "error": "invalid_token", "error_description": "The access token is expired or invalid", "user_id": 12345, "internal_debug_info": "trace_id: xyz-abc-123" }`);
 });
 

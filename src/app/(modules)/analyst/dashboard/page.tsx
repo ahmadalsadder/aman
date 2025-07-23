@@ -12,6 +12,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { TransactionOverviewChart } from '@/components/charts/transaction-overview-chart';
 import { DashboardHeader } from '@/components/layout/dashboard-header';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList } from '@/components/ui/breadcrumb';
+import PassengerTypeChart from '@/components/charts/passenger-type-chart';
 
 export default function AnalystDashboardPage() {
     const t = useTranslations('AnalystDashboard');
@@ -21,17 +22,19 @@ export default function AnalystDashboardPage() {
     React.useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
-            const [mainResult, overviewResult, statsResult] = await Promise.all([
+            const [mainResult, overviewResult, statsResult, passengerResult] = await Promise.all([
               api.get('/dashboard/main'),
               api.get('/dashboard/transaction-overview'),
               api.get('/dashboard/stats?module=analyst'),
+              api.get('/data/passengers'),
             ]);
             
-            if (mainResult.isSuccess && overviewResult.isSuccess && statsResult.isSuccess) {
+            if (mainResult.isSuccess && overviewResult.isSuccess && statsResult.isSuccess && passengerResult.isSuccess) {
                 setData({ 
                     main: mainResult.data,
                     overview: overviewResult.data,
                     stats: statsResult.data,
+                    passengers: passengerResult.data,
                 });
             }
             setLoading(false);
@@ -107,6 +110,12 @@ export default function AnalystDashboardPage() {
                     <RiskRuleTriggerChart data={data.main.riskRules} />
                 </div>
             </div>
+            )}
+
+            {loading || !data ? (
+                <Skeleton className="h-[400px] w-full" />
+            ) : (
+               <PassengerTypeChart data={data.passengers.airport} />
             )}
 
             {loading || !data ? (

@@ -14,6 +14,7 @@ import { useAuth } from '@/hooks/use-auth';
 import { ForecastCard } from '@/components/forecast-card';
 import { DashboardHeader } from '@/components/layout/dashboard-header';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
+import PassengerTypeChart from '@/components/charts/passenger-type-chart';
 
 export default function LandportDashboardPage() {
     const t = useTranslations('LandportDashboard');
@@ -24,19 +25,21 @@ export default function LandportDashboardPage() {
     React.useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
-            const [mainResult, overviewResult, forecastResult, statsResult] = await Promise.all([
+            const [mainResult, overviewResult, forecastResult, statsResult, passengerResult] = await Promise.all([
               api.get('/dashboard/main'),
               api.get('/dashboard/transaction-overview'),
               api.get('/dashboard/forecasts?module=landport'),
               api.get('/dashboard/stats?module=landport'),
+              api.get('/data/passengers'),
             ]);
             
-            if (mainResult.isSuccess && overviewResult.isSuccess && forecastResult.isSuccess && statsResult.isSuccess) {
+            if (mainResult.isSuccess && overviewResult.isSuccess && forecastResult.isSuccess && statsResult.isSuccess && passengerResult.isSuccess) {
                 setData({ 
                     main: mainResult.data,
                     overview: overviewResult.data,
                     forecasts: forecastResult.data,
                     stats: statsResult.data,
+                    passengers: passengerResult.data,
                 });
             }
             setLoading(false);
@@ -140,6 +143,12 @@ export default function LandportDashboardPage() {
                 <RiskRuleTriggerChart data={data.main.riskRules} />
             </div>
         </div>
+        )}
+
+        {loading || !data ? (
+            <Skeleton className="h-[400px] w-full" />
+        ) : (
+            <PassengerTypeChart data={data.passengers.landport} />
         )}
 
         {loading || !data ? (

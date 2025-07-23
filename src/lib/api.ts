@@ -4,8 +4,7 @@ import { flagEdgeCaseResponse } from '@/ai/flows/flag-edge-case-responses';
 import { toast } from '@/hooks/use-toast';
 import { Result, ApiError } from '@/types/api/result';
 import type { User } from '@/types';
-
-const API_BASE_URL = '/api';
+import { mockApi } from './mock-api';
 
 const getAuthInfo = (): Partial<User> => {
   try {
@@ -25,42 +24,10 @@ const getAuthInfo = (): Partial<User> => {
 };
 
 export async function api<T>(endpoint: string, options: RequestInit = {}): Promise<Result<T>> {
-  const { token, role } = getAuthInfo();
-
-  const config: RequestInit = {
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
-      ...options.headers,
-    },
-  };
+  // All requests will now go to the mock API
+  const result = await mockApi<T>(endpoint, options);
   
-  let response: Response | undefined;
-  let responseText: string = '';
-  let result: Result<T>;
-
-  try {
-    response = await fetch(`${API_BASE_URL}${endpoint}`, config);
-    responseText = await response.text();
-    const parsedJson = JSON.parse(responseText);
-
-    if (!response.ok) {
-        console.error(`API Error: ${response.status} ${response.statusText}`, responseText);
-        result = new Result<T>(parsedJson.data, parsedJson.errors, parsedJson.isSuccess, parsedJson.warnings, parsedJson.info);
-    } else {
-        result = new Result<T>(parsedJson.data, parsedJson.errors, parsedJson.isSuccess, parsedJson.warnings, parsedJson.info);
-    }
-  } catch (error: any) {
-    console.error('Network or fetch error:', error);
-    if (error instanceof SyntaxError && error.message.includes('JSON')) { // JSON parsing error
-        result = Result.failure([new ApiError(String(response?.status ?? 500), "Invalid response from server.")]);
-        responseText = `Invalid JSON Response: ${responseText}`;
-    } else { // Network error or other exceptions
-        result = Result.failure([new ApiError("NETWORK_ERROR", "Could not connect to the server.")]);
-        responseText = error.message || "Failed to fetch";
-    }
-  }
+  const { role } = getAuthInfo();
 
   if (!result.isSuccess && result.errors) {
     toast({
@@ -72,11 +39,11 @@ export async function api<T>(endpoint: string, options: RequestInit = {}): Promi
   }
 
 
-  // Anomaly detection with GenAI
+  // Anomaly detection with GenAI can still run on the mock responses
   try {
     const anomalyResult = await flagEdgeCaseResponse({
       apiEndpoint: endpoint,
-      apiResponse: responseText,
+      apiResponse: JSON.stringify(result),
       userRole: role || 'viewer',
     });
 

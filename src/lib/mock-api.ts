@@ -36,8 +36,26 @@ const users: User[] = [
     email: 'supervisor@example.com',
     role: 'shiftsupervisor',
     token: 'fake-supervisor-token',
-    modules: ['airport', 'landport', 'seaport', 'control-room'],
+    modules: ['airport', 'landport', 'seaport', 'control-room', 'shiftsupervisor'],
     permissions: ['records:view', 'records:edit', 'reports:view']
+  },
+  {
+    id: '5',
+    name: 'Analyst User',
+    email: 'analyst@example.com',
+    role: 'analyst',
+    token: 'fake-analyst-token',
+    modules: ['analyst'],
+    permissions: ['records:view', 'reports:view']
+  },
+  {
+    id: '6',
+    name: 'Control Room User',
+    email: 'controlroom@example.com',
+    role: 'control-room',
+    token: 'fake-control-room-token',
+    modules: ['control-room'],
+    permissions: ['records:view', 'reports:view']
   }
 ];
 
@@ -141,18 +159,6 @@ const airportDashboardData = {
         { name: '35-44', value: 2876 },
         { name: '45-59', value: 1987 },
         { name: '60+', value: 872 },
-    ],
-    nationalityDistribution: [
-        { name: 'USA', value: 1021 },
-        { name: 'UK', value: 843 },
-        { name: 'India', value: 765 },
-        { name: 'Germany', value: 654 },
-        { name: 'China', value: 543 },
-        { name: 'Canada', value: 432 },
-        { name: 'Australia', value: 321 },
-        { name: 'France', value: 210 },
-        { name: 'UAE', value: 198 },
-        { name: 'Nigeria', value: 154 },
     ]
 };
 
@@ -296,6 +302,24 @@ const transactionListData = {
   ]
 };
 
+const transactionBreakdownData = {
+    gate: [
+        { name: 'Success', value: 2200, fill: 'hsl(var(--chart-1))' },
+        { name: 'Rejected', value: 150, fill: 'hsl(var(--chart-2))' },
+        { name: 'Cancelled', value: 50, fill: 'hsl(var(--chart-4))' },
+    ],
+    counter: [
+        { name: 'Success', value: 1800, fill: 'hsl(var(--chart-1))' },
+        { name: 'Rejected', value: 250, fill: 'hsl(var(--chart-2))' },
+        { name: 'Cancelled', value: 100, fill: 'hsl(var(--chart-4))' },
+    ],
+    total: [
+        { name: 'Success', value: 4000, fill: 'hsl(var(--chart-1))' },
+        { name: 'Rejected', value: 400, fill: 'hsl(var(--chart-2))' },
+        { name: 'Cancelled', value: 150, fill: 'hsl(var(--chart-4))' },
+    ]
+};
+
 
 const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 
@@ -368,6 +392,10 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
         return Result.success(transactionListData) as Result<T>;
     }
     
+    if (method === 'GET' && url.pathname === '/dashboard/transaction-breakdown') {
+        return Result.success(transactionBreakdownData) as Result<T>;
+    }
+
     if (method === 'GET' && url.pathname === '/dashboard/stats-error') {
         const errorResponse = { "error": "invalid_token", "error_description": "The access token is expired or invalid", "user_id": 12345, "internal_debug_info": "trace_id: xyz-abc-123" };
         return Result.failure([new ApiError("INVALID_TOKEN", JSON.stringify(errorResponse))]) as Result<T>;

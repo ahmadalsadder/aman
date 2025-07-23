@@ -15,6 +15,7 @@ import { ForecastCard } from '@/components/forecast-card';
 import { DashboardHeader } from '@/components/layout/dashboard-header';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList } from '@/components/ui/breadcrumb';
 import { GateRejectionReasonsChart } from '@/components/charts/gate-rejection-reasons-chart';
+import { SimplePieChart } from '@/components/charts/simple-pie-chart';
 
 export default function ControlRoomDashboardPage() {
     const t = useTranslations('ControlRoomDashboard');
@@ -25,21 +26,23 @@ export default function ControlRoomDashboardPage() {
     React.useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
-            const [mainResult, overviewResult, forecastResult, statsResult, rejectionResult] = await Promise.all([
+            const [mainResult, overviewResult, forecastResult, statsResult, rejectionResult, transactionBreakdownResult] = await Promise.all([
                 api.get('/dashboard/main'),
                 api.get('/dashboard/transaction-overview'),
                 api.get('/dashboard/forecasts?module=control-room'),
                 api.get('/dashboard/stats?module=control-room'),
                 api.get('/dashboard/gate-rejection-reasons'),
+                api.get('/dashboard/transaction-breakdown'),
             ]);
             
-            if (mainResult.isSuccess && overviewResult.isSuccess && forecastResult.isSuccess && statsResult.isSuccess && rejectionResult.isSuccess) {
+            if (mainResult.isSuccess && overviewResult.isSuccess && forecastResult.isSuccess && statsResult.isSuccess && rejectionResult.isSuccess && transactionBreakdownResult.isSuccess) {
                 setData({ 
                     main: mainResult.data,
                     overview: overviewResult.data,
                     forecasts: forecastResult.data,
                     stats: statsResult.data,
                     reasons: rejectionResult.data,
+                    transactionBreakdown: transactionBreakdownResult.data,
                 });
             }
             setLoading(false);
@@ -125,6 +128,20 @@ export default function ControlRoomDashboardPage() {
                     </>
                 )}
               </div>
+            )}
+
+            {loading || !data ? (
+                 <div className="grid gap-8 md:grid-cols-3">
+                    <Skeleton className="h-[250px] w-full" />
+                    <Skeleton className="h-[250px] w-full" />
+                    <Skeleton className="h-[250px] w-full" />
+                </div>
+            ) : (
+                <div className="grid gap-8 md:grid-cols-3">
+                    <SimplePieChart data={data.transactionBreakdown.gate} title="Gate Transactions" description="Success, rejected, cancelled." />
+                    <SimplePieChart data={data.transactionBreakdown.counter} title="Counter Transactions" description="Success, rejected, cancelled." />
+                    <SimplePieChart data={data.transactionBreakdown.total} title="Total Transactions" description="Success, rejected, cancelled." />
+                </div>
             )}
 
             {loading || !data ? (

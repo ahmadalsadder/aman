@@ -24,23 +24,25 @@ export default function GateSupervisorDashboardPage() {
     React.useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
-            const [mainResult, overviewResult, statsResult, passengerResult, rejectionResult, transactionListResult] = await Promise.all([
+            const [mainResult, overviewResult, statsResult, passengerResult, rejectionResult, transactionListResult, transactionBreakdownResult] = await Promise.all([
                 api.get('/dashboard/main'),
                 api.get('/dashboard/transaction-overview'),
                 api.get('/dashboard/stats?module=shiftsupervisor'),
                 api.get('/data/passengers'),
                 api.get('/dashboard/gate-rejection-reasons'),
                 api.get('/dashboard/transaction-lists'),
+                api.get('/dashboard/transaction-breakdown'),
             ]);
             
-            if (mainResult.isSuccess && overviewResult.isSuccess && statsResult.isSuccess && passengerResult.isSuccess && rejectionResult.isSuccess && transactionListResult.isSuccess) {
+            if (mainResult.isSuccess && overviewResult.isSuccess && statsResult.isSuccess && passengerResult.isSuccess && rejectionResult.isSuccess && transactionListResult.isSuccess && transactionBreakdownResult.isSuccess) {
                 setData({ 
                     main: mainResult.data,
                     overview: overviewResult.data,
                     stats: statsResult.data,
                     passengers: passengerResult.data,
                     reasons: rejectionResult.data,
-                    transactionLists: transactionListResult.data
+                    transactionLists: transactionListResult.data,
+                    transactionBreakdown: transactionBreakdownResult.data,
                 });
             }
             setLoading(false);
@@ -111,6 +113,20 @@ export default function GateSupervisorDashboardPage() {
                     <SimplePieChart data={data.transactionLists.whitelisted} title="Whitelisted Transactions" description="Whitelisted vs. non-whitelisted." />
                     <SimplePieChart data={data.transactionLists.blacklisted} title="Blacklisted Transactions" description="Blacklisted vs. non-blacklisted." />
                     <SimplePieChart data={data.transactionLists.risky} title="Risky Transactions" description="Risky vs. non-risky." />
+                </div>
+            )}
+
+            {loading || !data ? (
+                 <div className="grid gap-8 md:grid-cols-3">
+                    <Skeleton className="h-[250px] w-full" />
+                    <Skeleton className="h-[250px] w-full" />
+                    <Skeleton className="h-[250px] w-full" />
+                </div>
+            ) : (
+                <div className="grid gap-8 md:grid-cols-3">
+                    <SimplePieChart data={data.transactionBreakdown.gate} title="Gate Transactions" description="Success, rejected, cancelled." />
+                    <SimplePieChart data={data.transactionBreakdown.counter} title="Counter Transactions" description="Success, rejected, cancelled." />
+                    <SimplePieChart data={data.transactionBreakdown.total} title="Total Transactions" description="Success, rejected, cancelled." />
                 </div>
             )}
 

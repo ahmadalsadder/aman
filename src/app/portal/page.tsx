@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { getPortalNavItems } from '@/lib/navigation';
 import { useTranslations } from 'next-intl';
 import Logo from '@/components/logo';
+import { Background } from '@/components/background';
 
 export default function PortalSelectionPage() {
   const { user, loading } = useAuth();
@@ -32,21 +33,22 @@ export default function PortalSelectionPage() {
   const availableModules = getPortalNavItems(user.role, user.modules, tNav);
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-muted/40 p-4">
-       <div className="mb-8 text-center">
+    <div className="relative flex min-h-screen flex-col items-center justify-center p-4">
+       <Background />
+       <div className="z-10 mb-8 text-center">
             <div className="mx-auto mb-4 inline-block">
                 <Logo className="h-16 w-16" />
             </div>
             <h1 className="text-4xl font-bold tracking-tight">{t('title')}</h1>
             <p className="text-lg text-muted-foreground mt-2">{t('description', { name: user.name.split(' ')[0] })}</p>
         </div>
-      <div className="grid w-full max-w-4xl gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="z-10 grid w-full max-w-4xl gap-4 md:grid-cols-2 lg:grid-cols-3">
         {availableModules.map((item) => {
           const Icon = item.icon;
           return (
             <Card 
                 key={item.href} 
-                className="group cursor-pointer transition-all hover:shadow-lg hover:-translate-y-1"
+                className="group cursor-pointer transition-all hover:shadow-lg hover:-translate-y-1 bg-card/80 backdrop-blur-sm"
                 onClick={() => router.push(item.href)}
             >
               <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -64,7 +66,7 @@ export default function PortalSelectionPage() {
           );
         })}
       </div>
-       <div className="mt-8 text-center text-sm text-muted-foreground">
+       <div className="z-10 mt-8 text-center text-sm text-muted-foreground">
         <p>{t('notYourPortals')}</p>
       </div>
     </div>

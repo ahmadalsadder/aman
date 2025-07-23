@@ -120,9 +120,10 @@ export default function GateSupervisorDashboardPage() {
                 <TransactionOverviewChart data={data.overview} />
             )}
 
-            <div className="grid gap-8 md:grid-cols-2">
+            <div className="grid gap-8 md:grid-cols-3">
               {loading || !data ? (
                   <>
+                    <Skeleton className="h-[400px] w-full" />
                     <Skeleton className="h-[400px] w-full" />
                     <Skeleton className="h-[400px] w-full" />
                   </>
@@ -130,24 +131,15 @@ export default function GateSupervisorDashboardPage() {
                 <>
                   <PassengerTypeChart data={data.passengers.airport} />
                   <GateRejectionReasonsChart data={data.reasons} />
+                  <RiskRuleTriggerChart data={data.main.riskRules} className="h-full" />
                 </>
               )}
             </div>
 
             {loading || !data ? (
-                <div className="grid grid-cols-1 gap-8 lg:grid-cols-5">
-                    <Skeleton className="h-[400px] w-full lg:col-span-3" />
-                    <Skeleton className="h-[400px] w-full lg:col-span-2" />
-                </div>
+                 <Skeleton className="h-[400px] w-full" />
             ) : (
-            <div className="grid grid-cols-1 gap-8 lg:grid-cols-5">
-                <div className="lg:col-span-3">
-                    <ThroughputChart data={data.main.throughput} className="h-full" />
-                </div>
-                <div className="lg:col-span-2">
-                    <RiskRuleTriggerChart data={data.main.riskRules} className="h-full" />
-                </div>
-            </div>
+                <ThroughputChart data={data.main.throughput} className="h-full" />
             )}
 
             {loading || !data ? (

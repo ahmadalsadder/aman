@@ -1,4 +1,3 @@
-'use server';
 import express, { type Request, type Response, Router } from 'express';
 import cors from 'cors';
 import { users } from './data/users';
@@ -31,7 +30,6 @@ apiRouter.post('/login', (req: Request, res: Response) => {
 
   if (user && password === 'password') {
     // In a real app, generate a real JWT
-    const { permissions, ...userWithoutPermissions } = user;
     res.json(Result.success(user));
   } else {
     res.status(401).json(Result.failure([new ApiError('UNAUTHORIZED', 'Invalid email or password.')]));

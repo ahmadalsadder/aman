@@ -1,6 +1,8 @@
 'use client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Plane, UserCheck, BaggageClaim, ShieldCheck } from 'lucide-react';
+import PassengerTypeChart from '@/components/charts/passenger-type-chart';
+import { passengerData } from '@/data/passenger-data';
 
 export default function AirportDashboard() {
   const StatCard = ({ title, value, icon: Icon }: { title: string; value: string | number; icon: React.ElementType }) => (
@@ -23,14 +25,17 @@ export default function AirportDashboard() {
         <StatCard title="Security Alerts" value="3" icon={ShieldCheck} />
         <StatCard title="Flights Monitored" value="128" icon={Plane} />
       </div>
-       <Card className="mt-8">
-        <CardHeader>
-          <CardTitle>Welcome to the AirPort Module</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p>This is where airport-specific content and features would be displayed.</p>
-        </CardContent>
-      </Card>
+       <div className="mt-8 grid gap-8">
+        <PassengerTypeChart data={passengerData.airport} />
+        <Card>
+          <CardHeader>
+            <CardTitle>Welcome to the AirPort Module</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p>This is where airport-specific content and features would be displayed.</p>
+          </CardContent>
+        </Card>
+       </div>
     </>
   );
 }

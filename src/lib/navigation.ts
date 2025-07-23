@@ -16,10 +16,10 @@ const allNavItems: Record<string, NavItem> = {
 };
 
 export const moduleNavItems: Record<Module, NavItem> = {
-    airport: { href: '/airport', label: 'AirPort', icon: Plane },
-    landport: { href: '/landport', label: 'Landport', icon: LandPlot },
-    seaport: { href: '/seaport', label: 'SeaPort', icon: Ship },
-    egate: { href: '/egate', label: 'E-Gate', icon: DoorOpen },
+    airport: { href: '/airport/dashboard', label: 'AirPort', icon: Plane },
+    landport: { href: '/landport/dashboard', label: 'Landport', icon: LandPlot },
+    seaport: { href: '/seaport/dashboard', label: 'SeaPort', icon: Ship },
+    egate: { href: '/egate/dashboard', label: 'E-Gate', icon: DoorOpen },
 };
 
 // Note: For this demo, all extra links point to /.

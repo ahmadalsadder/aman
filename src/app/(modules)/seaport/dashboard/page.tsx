@@ -77,7 +77,7 @@ export default function SeaportDashboardPage() {
     if (!forecastData) return forecastData;
     const metricsWithIcons = forecastData.metrics.map((metric: any, index: number) => ({
       ...metric,
-      icon: index === 0 ? ArrowRight : ArrowLeftRight,
+      icon: ArrowRight,
     }));
     return { ...forecastData, metrics: metricsWithIcons };
   };

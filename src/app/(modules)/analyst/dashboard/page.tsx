@@ -13,6 +13,7 @@ import { TransactionOverviewChart } from '@/components/charts/transaction-overvi
 import { DashboardHeader } from '@/components/layout/dashboard-header';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList } from '@/components/ui/breadcrumb';
 import PassengerTypeChart from '@/components/charts/passenger-type-chart';
+import { SimplePieChart } from '@/components/charts/simple-pie-chart';
 
 export default function AnalystDashboardPage() {
     const t = useTranslations('AnalystDashboard');
@@ -22,19 +23,21 @@ export default function AnalystDashboardPage() {
     React.useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
-            const [mainResult, overviewResult, statsResult, passengerResult] = await Promise.all([
+            const [mainResult, overviewResult, statsResult, passengerResult, transactionListResult] = await Promise.all([
               api.get('/dashboard/main'),
               api.get('/dashboard/transaction-overview'),
               api.get('/dashboard/stats?module=analyst'),
               api.get('/data/passengers'),
+              api.get('/dashboard/transaction-lists'),
             ]);
             
-            if (mainResult.isSuccess && overviewResult.isSuccess && statsResult.isSuccess && passengerResult.isSuccess) {
+            if (mainResult.isSuccess && overviewResult.isSuccess && statsResult.isSuccess && passengerResult.isSuccess && transactionListResult.isSuccess) {
                 setData({ 
                     main: mainResult.data,
                     overview: overviewResult.data,
                     stats: statsResult.data,
                     passengers: passengerResult.data,
+                    transactionLists: transactionListResult.data
                 });
             }
             setLoading(false);
@@ -94,29 +97,45 @@ export default function AnalystDashboardPage() {
             )}
             
             {loading || !data ? (
+                <div className="grid gap-8 md:grid-cols-3">
+                    <Skeleton className="h-[250px] w-full" />
+                    <Skeleton className="h-[250px] w-full" />
+                    <Skeleton className="h-[250px] w-full" />
+                </div>
+            ) : (
+                <div className="grid gap-8 md:grid-cols-3">
+                    <SimplePieChart data={data.transactionLists.whitelisted} title="Whitelisted Transactions" description="Whitelisted vs. non-whitelisted." />
+                    <SimplePieChart data={data.transactionLists.blacklisted} title="Blacklisted Transactions" description="Blacklisted vs. non-blacklisted." />
+                    <SimplePieChart data={data.transactionLists.risky} title="Risky Transactions" description="Risky vs. non-risky." />
+                </div>
+            )}
+
+            {loading || !data ? (
                 <Skeleton className="h-[400px] w-full" />
             ) : (
                 <TransactionOverviewChart data={data.overview} />
             )}
 
             {loading || !data ? (
+              <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-2">
                 <Skeleton className="h-[400px] w-full" />
+                <Skeleton className="h-[400px] w-full" />
+              </div>
             ) : (
+            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-2">
                <PassengerTypeChart data={data.passengers.airport} />
+                <div className="lg:col-span-1">
+                    <RiskRuleTriggerChart data={data.main.riskRules} className="h-full"/>
+                </div>
+            </div>
             )}
 
             {loading || !data ? (
                 <Skeleton className="h-[400px] w-full" />
             ) : (
-            <div className="grid grid-cols-1 gap-8 lg:grid-cols-5">
-                <div className="lg:col-span-3">
-                    <ThroughputChart data={data.main.throughput} className="h-full"/>
-                </div>
-                <div className="lg:col-span-2">
-                    <RiskRuleTriggerChart data={data.main.riskRules} className="h-full"/>
-                </div>
-            </div>
+                <ThroughputChart data={data.main.throughput} className="h-full"/>
             )}
+
 
             {loading || !data ? (
                 <Skeleton className="h-[400px] w-full" />

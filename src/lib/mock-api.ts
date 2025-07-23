@@ -285,6 +285,21 @@ const gateRejectionReasonsData = [
     { name: 'Other', value: 2 },
 ];
 
+const transactionListData = {
+  whitelisted: [
+    { name: 'Whitelisted', value: 75, fill: 'hsl(var(--chart-1))' },
+    { name: 'Not Whitelisted', value: 25, fill: 'hsl(var(--chart-2))' },
+  ],
+  blacklisted: [
+    { name: 'Not Blacklisted', value: 98, fill: 'hsl(var(--chart-1))' },
+    { name: 'Blacklisted', value: 2, fill: 'hsl(var(--destructive))' },
+  ],
+  risky: [
+    { name: 'Non-Risky', value: 95, fill: 'hsl(var(--chart-1))' },
+    { name: 'Risky', value: 5, fill: 'hsl(var(--chart-4))' },
+  ]
+};
+
 
 const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 
@@ -351,6 +366,10 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
 
     if (method === 'GET' && url.pathname === '/dashboard/gate-rejection-reasons') {
         return Result.success(gateRejectionReasonsData) as Result<T>;
+    }
+
+    if (method === 'GET' && url.pathname === '/dashboard/transaction-lists') {
+        return Result.success(transactionListData) as Result<T>;
     }
     
     if (method === 'GET' && url.pathname === '/dashboard/stats-error') {

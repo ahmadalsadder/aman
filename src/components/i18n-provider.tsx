@@ -10,7 +10,7 @@ async function getMessages(locale: Locale) {
   return (await import(`@/messages/${locale}.json`)).default;
 }
 
-export function I18nProvider({ children }: { children: (locale: Locale, direction: Direction) => ReactNode }) {
+export function I18nProvider({ children }: { children: ReactNode }) {
   const [locale, setLocale] = useState<Locale>('en');
   const [direction, setDirection] = useState<Direction>('ltr');
   const [messages, setMessages] = useState(null);
@@ -19,6 +19,8 @@ export function I18nProvider({ children }: { children: (locale: Locale, directio
     const storedLocale = (localStorage.getItem('locale') as Locale) || 'en';
     setLocale(storedLocale);
     setDirection(storedLocale === 'ar' ? 'rtl' : 'ltr');
+    document.documentElement.lang = storedLocale;
+    document.documentElement.dir = storedLocale === 'ar' ? 'rtl' : 'ltr';
   }, []);
 
   useEffect(() => {
@@ -27,7 +29,6 @@ export function I18nProvider({ children }: { children: (locale: Locale, directio
     }
   }, [locale]);
   
-  // This effect runs on the client and sets the language switcher state
   useEffect(() => {
     const event = new CustomEvent('locale-changed', { detail: locale });
     window.dispatchEvent(event);
@@ -47,7 +48,19 @@ export function I18nProvider({ children }: { children: (locale: Locale, directio
 
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
-      {children(locale, direction)}
+        <html lang={locale} dir={direction} suppressHydrationWarning>
+          <head>
+            <link rel="preconnect" href="https://fonts.googleapis.com" />
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+            <link
+              href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+              rel="stylesheet"
+            />
+          </head>
+          <body className="font-body antialiased">
+            {children}
+          </body>
+        </html>
     </NextIntlClientProvider>
   );
 }

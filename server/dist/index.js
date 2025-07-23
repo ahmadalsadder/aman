@@ -1,4 +1,5 @@
 "use strict";
+'use server';
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -16,13 +17,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
-const body_parser_1 = __importDefault(require("body-parser"));
 const users_1 = require("./data/users");
 const result_1 = require("./result");
+const dotenv_1 = require("dotenv");
+(0, dotenv_1.config)();
 const app = (0, express_1.default)();
 const port = 3001;
-app.use((0, cors_1.default)());
-app.use(body_parser_1.default.json());
+// A real app would have a more restrictive CORS policy.
+// For this demo, we will allow requests from the Next.js dev server.
+const corsOptions = {
+    origin: 'http://localhost:9002',
+    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+app.use((0, cors_1.default)(corsOptions));
+app.use(express_1.default.json());
 app.post('/api/login', (req, res) => {
     const { email, password } = req.body;
     // In a real app, you'd hash and compare the password

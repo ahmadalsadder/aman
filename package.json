@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "npm run build:server && concurrently \"npm:dev:next\" \"npm:dev:server\"",
+    "dev": "concurrently \"npm:dev:next\" \"npm:dev:server\"",
     "dev:next": "next dev --turbopack -p 9002",
     "dev:server": "cd server && npm run dev",
     "build:server": "cd server && npm run build",

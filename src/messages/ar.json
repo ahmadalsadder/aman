@@ -1,3 +1,4 @@
+
 {
   "LoginPage": {
     "title": "مرحبًا بك في بوابة الحماية",
@@ -72,7 +73,8 @@
     "securityAlerts": "تنبيهات أمنية",
     "flightsMonitored": "الرحلات المراقبة",
     "actions": "الإجراءات",
-    "actionsDescription": "استخدم الأزرار أدناه لتنفيذ الإجراءات."
+    "actionsDescription": "استخدم الأزرار أدناه لتنفيذ الإجراءات.",
+    "avgProcessingTime": "متوسط وقت المعالجة"
   },
   "AirportModule": {
     "title": "وحدة المطار",
@@ -94,7 +96,8 @@
     "biometricVerifications": "التحققات البيومترية",
     "activeGates": "البوابات النشطة",
     "welcome": "مرحبًا بك في وحدة البوابة الإلكترونية",
-    "contentPlaceholder": "هنا سيتم عرض المحتوى والميزات الخاصة بالبوابة الإلكترونية."
+    "contentPlaceholder": "هنا سيتم عرض المحتوى والميزات الخاصة بالبوابة الإلكترونية.",
+    "avgProcessingTime": "متوسط وقت المعالجة"
   },
   "EgateModule": {
     "title": "وحدة البوابة الإلكترونية",
@@ -111,7 +114,8 @@
     "documentsScanned": "المستندات الممسوحة ضوئيًا",
     "activeLanes": "المسارات النشطة",
     "welcome": "مرحبًا بك في وحدة المنفذ البري",
-    "contentPlaceholder": "هنا سيتم عرض المحتوى والميزات الخاصة بالمنفذ البري."
+    "contentPlaceholder": "هنا سيتم عرض المحتوى والميزات الخاصة بالمنفذ البري.",
+    "avgProcessingTime": "متوسط وقت المعالجة"
   },
   "LandportModule": {
     "title": "وحدة المنفذ البري",
@@ -128,7 +132,8 @@
     "cargoThroughput": "إنتاجية البضائع (بالطن)",
     "activeBerths": "الأرصفة النشطة",
     "welcome": "مرحبًا بك في وحدة المنفذ البحري",
-    "contentPlaceholder": "هنا سيتم عرض المحتوى والميزات الخاصة بالمنفذ البحري."
+    "contentPlaceholder": "هنا سيتم عرض المحتوى والميزات الخاصة بالمنفذ البحري.",
+    "avgProcessingTime": "متوسط وقت المعالجة"
   },
   "SeaportModule": {
     "title": "وحدة المنفذ البحري",
@@ -143,7 +148,8 @@
     "successfulEntries": "الدخول الناجح",
     "failedAttempts": "المحاولات الفاشلة",
     "biometricVerifications": "التحققات البيومترية",
-    "activeGates": "البوابات النشطة"
+    "activeGates": "البوابات النشطة",
+    "avgProcessingTime": "متوسط وقت المعالجة"
   },
   "AnalystModule": {
     "title": "وحدة المحلل",
@@ -158,7 +164,8 @@
     "successfulEntries": "الدخول الناجح",
     "failedAttempts": "المحاولات الفاشلة",
     "biometricVerifications": "التحققات البيومترية",
-    "activeGates": "البوابات النشطة"
+    "activeGates": "البوابات النشطة",
+    "avgProcessingTime": "متوسط وقت المعالجة"
   },
   "GateSupervisorModule": {
     "title": "وحدة مشرف البوابة",
@@ -173,7 +180,8 @@
     "successfulEntries": "الدخول الناجح",
     "failedAttempts": "المحاولات الفاشلة",
     "biometricVerifications": "التحققات البيومترية",
-    "activeGates": "البوابات النشطة"
+    "activeGates": "البوابات النشطة",
+    "avgProcessingTime": "متوسط وقت المعالجة"
   },
   "ControlRoomModule": {
     "title": "وحدة غرفة التحكم",

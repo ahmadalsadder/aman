@@ -1,8 +1,9 @@
+
 'use client';
 import * as React from 'react';
 import ModulePage from '@/components/module-page';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { DoorOpen, Fingerprint, ShieldAlert, CheckCircle, Globe, UserCog } from 'lucide-react';
+import { DoorOpen, Fingerprint, ShieldAlert, CheckCircle, Globe, UserCog, Clock } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { ThroughputChart } from '@/components/charts/throughput-chart';
 import { RiskRuleTriggerChart } from '@/components/charts/risk-rule-trigger-chart';
@@ -48,8 +49,8 @@ export default function GateSupervisorDashboardPage() {
   );
   
   const renderSkeleton = () => (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {Array.from({ length: 4 }).map((_, i) => (
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+        {Array.from({ length: 5 }).map((_, i) => (
           <Card key={i}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <Skeleton className="h-4 w-2/3" />
@@ -71,11 +72,12 @@ export default function GateSupervisorDashboardPage() {
     >
         <div className="flex flex-col gap-8">
             {loading ? renderSkeleton() : (
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
                 <StatCard title={t('successfulEntries')} value="8,210" icon={CheckCircle} />
                 <StatCard title={t('failedAttempts')} value="14" icon={ShieldAlert} />
                 <StatCard title={t('biometricVerifications')} value="8,224" icon={Fingerprint} />
                 <StatCard title={t('activeGates')} value="24" icon={DoorOpen} />
+                <StatCard title={t('avgProcessingTime')} value="1.2m" icon={Clock} />
             </div>
             )}
             

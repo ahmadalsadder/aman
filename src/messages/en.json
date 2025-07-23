@@ -1,3 +1,4 @@
+
 {
   "LoginPage": {
     "title": "Welcome to Guardian Gate",
@@ -72,7 +73,8 @@
     "securityAlerts": "Security Alerts",
     "flightsMonitored": "Flights Monitored",
     "actions": "Actions",
-    "actionsDescription": "Use the buttons below to perform actions."
+    "actionsDescription": "Use the buttons below to perform actions.",
+    "avgProcessingTime": "Avg. Processing Time"
   },
   "AirportModule": {
     "title": "AirPort Module",
@@ -94,7 +96,8 @@
     "biometricVerifications": "Biometric Verifications",
     "activeGates": "Active Gates",
     "welcome": "Welcome to the E-Gate Module",
-    "contentPlaceholder": "This is where E-Gate-specific content and features would be displayed."
+    "contentPlaceholder": "This is where E-Gate-specific content and features would be displayed.",
+    "avgProcessingTime": "Avg. Processing Time"
   },
   "EgateModule": {
     "title": "E-Gate Module",
@@ -111,7 +114,8 @@
     "documentsScanned": "Documents Scanned",
     "activeLanes": "Active Lanes",
     "welcome": "Welcome to the Landport Module",
-    "contentPlaceholder": "This is where landport-specific content and features would be displayed."
+    "contentPlaceholder": "This is where landport-specific content and features would be displayed.",
+    "avgProcessingTime": "Avg. Processing Time"
   },
   "LandportModule": {
     "title": "Landport Module",
@@ -128,7 +132,8 @@
     "cargoThroughput": "Cargo Throughput (Tons)",
     "activeBerths": "Active Berths",
     "welcome": "Welcome to the SeaPort Module",
-    "contentPlaceholder": "This is where seaport-specific content and features would be displayed."
+    "contentPlaceholder": "This is where seaport-specific content and features would be displayed.",
+    "avgProcessingTime": "Avg. Processing Time"
   },
   "SeaportModule": {
     "title": "SeaPort Module",
@@ -143,7 +148,8 @@
     "successfulEntries": "Successful Entries",
     "failedAttempts": "Failed Attempts",
     "biometricVerifications": "Biometric Verifications",
-    "activeGates": "Active Gates"
+    "activeGates": "Active Gates",
+    "avgProcessingTime": "Avg. Processing Time"
   },
   "AnalystModule": {
     "title": "Analyst Module",
@@ -158,7 +164,8 @@
     "successfulEntries": "Successful Entries",
     "failedAttempts": "Failed Attempts",
     "biometricVerifications": "Biometric Verifications",
-    "activeGates": "Active Gates"
+    "activeGates": "Active Gates",
+    "avgProcessingTime": "Avg. Processing Time"
   },
   "GateSupervisorModule": {
     "title": "Gate Supervisor Module",
@@ -173,7 +180,8 @@
     "successfulEntries": "Successful Entries",
     "failedAttempts": "Failed Attempts",
     "biometricVerifications": "Biometric Verifications",
-    "activeGates": "Active Gates"
+    "activeGates": "Active Gates",
+    "avgProcessingTime": "Avg. Processing Time"
   },
   "ControlRoomModule": {
     "title": "Control Room Module",

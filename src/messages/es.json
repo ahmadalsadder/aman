@@ -1,3 +1,4 @@
+
 {
   "LoginPage": {
     "title": "Bienvenido a Guardian Gate",
@@ -72,7 +73,8 @@
     "securityAlerts": "Alertas de seguridad",
     "flightsMonitored": "Vuelos monitoreados",
     "actions": "Acciones",
-    "actionsDescription": "Utilice los botones a continuación para realizar acciones."
+    "actionsDescription": "Utilice los botones a continuación para realizar acciones.",
+    "avgProcessingTime": "Tiempo de procesamiento prom."
   },
   "AirportModule": {
     "title": "Módulo de Aeropuerto",
@@ -94,7 +96,8 @@
     "biometricVerifications": "Verificaciones biométricas",
     "activeGates": "Puertas activas",
     "welcome": "Bienvenido al Módulo de Puerta Electrónica",
-    "contentPlaceholder": "Aquí se mostrarían el contenido y las funciones específicas de la Puerta Electrónica."
+    "contentPlaceholder": "Aquí se mostrarían el contenido y las funciones específicas de la Puerta Electrónica.",
+    "avgProcessingTime": "Tiempo de procesamiento prom."
   },
   "EgateModule": {
     "title": "Módulo de Puerta Electrónica",
@@ -111,7 +114,8 @@
     "documentsScanned": "Documentos escaneados",
     "activeLanes": "Carriles activos",
     "welcome": "Bienvenido al Módulo de Puerto Terrestre",
-    "contentPlaceholder": "Aquí se mostrarían el contenido y las funciones específicas del puerto terrestre."
+    "contentPlaceholder": "Aquí se mostrarían el contenido y las funciones específicas del puerto terrestre.",
+    "avgProcessingTime": "Tiempo de procesamiento prom."
   },
   "LandportModule": {
     "title": "Módulo de Puerto Terrestre",
@@ -128,7 +132,8 @@
     "cargoThroughput": "Rendimiento de carga (toneladas)",
     "activeBerths": "Amarres activos",
     "welcome": "Bienvenido al Módulo de Puerto Marítimo",
-    "contentPlaceholder": "Aquí se mostrarían el contenido y las funciones específicas del puerto marítimo."
+    "contentPlaceholder": "Aquí se mostrarían el contenido y las funciones específicas del puerto marítimo.",
+    "avgProcessingTime": "Tiempo de procesamiento prom."
   },
   "SeaportModule": {
     "title": "Módulo de Puerto Marítimo",
@@ -143,7 +148,8 @@
     "successfulEntries": "Entradas exitosas",
     "failedAttempts": "Intentos fallidos",
     "biometricVerifications": "Verificaciones biométricas",
-    "activeGates": "Puertas activas"
+    "activeGates": "Puertas activas",
+    "avgProcessingTime": "Tiempo de procesamiento prom."
   },
   "AnalystModule": {
     "title": "Módulo de Analista",
@@ -158,7 +164,8 @@
     "successfulEntries": "Entradas exitosas",
     "failedAttempts": "Intentos fallidos",
     "biometricVerifications": "Verificaciones biométricas",
-    "activeGates": "Puertas activas"
+    "activeGates": "Puertas activas",
+    "avgProcessingTime": "Tiempo de procesamiento prom."
   },
   "GateSupervisorModule": {
     "title": "Módulo de Supervisor de Puerta",
@@ -173,7 +180,8 @@
     "successfulEntries": "Entradas exitosas",
     "failedAttempts": "Intentos fallidos",
     "biometricVerifications": "Verificaciones biométricas",
-    "activeGates": "Puertas activas"
+    "activeGates": "Puertas activas",
+    "avgProcessingTime": "Tiempo de procesamiento prom."
   },
   "ControlRoomModule": {
     "title": "Módulo de Sala de Control",

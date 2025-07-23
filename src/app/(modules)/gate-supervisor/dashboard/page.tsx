@@ -2,7 +2,7 @@
 'use client';
 import * as React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { DoorOpen, Fingerprint, ShieldAlert, CheckCircle, Globe, Clock, Users } from 'lucide-react';
+import { DoorOpen, Fingerprint, ShieldAlert, CheckCircle, Globe, Clock, Users, ArrowRight, ArrowLeft } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { ThroughputChart } from '@/components/charts/throughput-chart';
 import { RiskRuleTriggerChart } from '@/components/charts/risk-rule-trigger-chart';
@@ -19,6 +19,7 @@ import { GatePerformanceTable } from '@/components/charts/gate-performance-table
 import { OfficerStatsCards } from '@/components/charts/officer-stats-cards';
 import { OfficerProcessingTimeChart } from '@/components/charts/officer-processing-time-chart';
 import { OfficerDecisionChart } from '@/components/charts/officer-decision-chart';
+import { ForecastCard } from '@/components/forecast-card';
 
 export default function GateSupervisorDashboardPage() {
     const t = useTranslations('GateSupervisorDashboard');
@@ -28,7 +29,7 @@ export default function GateSupervisorDashboardPage() {
     React.useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
-            const [mainResult, overviewResult, statsResult, passengerResult, rejectionResult, transactionListResult, transactionBreakdownResult, gatePerformanceResult, officerPerformanceResult] = await Promise.all([
+            const [mainResult, overviewResult, statsResult, passengerResult, rejectionResult, transactionListResult, transactionBreakdownResult, gatePerformanceResult, officerPerformanceResult, forecastResult] = await Promise.all([
                 api.get('/dashboard/main'),
                 api.get('/dashboard/transaction-overview'),
                 api.get('/dashboard/stats?module=shiftsupervisor'),
@@ -38,9 +39,10 @@ export default function GateSupervisorDashboardPage() {
                 api.get('/dashboard/transaction-breakdown'),
                 api.get('/dashboard/gate-performance'),
                 api.get('/dashboard/officer-performance'),
+                api.get('/dashboard/forecasts?module=shiftsupervisor'),
             ]);
             
-            if (mainResult.isSuccess && overviewResult.isSuccess && statsResult.isSuccess && passengerResult.isSuccess && rejectionResult.isSuccess && transactionListResult.isSuccess && transactionBreakdownResult.isSuccess && gatePerformanceResult.isSuccess && officerPerformanceResult.isSuccess) {
+            if (mainResult.isSuccess && overviewResult.isSuccess && statsResult.isSuccess && passengerResult.isSuccess && rejectionResult.isSuccess && transactionListResult.isSuccess && transactionBreakdownResult.isSuccess && gatePerformanceResult.isSuccess && officerPerformanceResult.isSuccess && forecastResult.isSuccess) {
                 setData({ 
                     main: mainResult.data,
                     overview: overviewResult.data,
@@ -51,6 +53,7 @@ export default function GateSupervisorDashboardPage() {
                     transactionBreakdown: transactionBreakdownResult.data,
                     gatePerformance: gatePerformanceResult.data,
                     officerPerformance: officerPerformanceResult.data,
+                    forecasts: forecastResult.data,
                 });
             }
             setLoading(false);
@@ -84,6 +87,15 @@ export default function GateSupervisorDashboardPage() {
         ))}
     </div>
   );
+  
+  const getForecastWithIcons = (forecastData: any) => {
+    if (!forecastData) return forecastData;
+    const metricsWithIcons = forecastData.metrics.map((metric: any, index: number) => ({
+      ...metric,
+      icon: index === 0 ? Users : Clock,
+    }));
+    return { ...forecastData, metrics: metricsWithIcons };
+  };
 
   return (
     <div className="flex flex-col gap-8">
@@ -110,6 +122,20 @@ export default function GateSupervisorDashboardPage() {
             </div>
             )}
             
+            <div className="grid gap-8 md:grid-cols-2">
+              {loading || !data ? (
+                  <>
+                      <Skeleton className="h-[250px] w-full" />
+                      <Skeleton className="h-[250px] w-full" />
+                  </>
+              ) : (
+                  <>
+                      <ForecastCard forecast={getForecastWithIcons(data.forecasts.current)} />
+                      <ForecastCard forecast={getForecastWithIcons(data.forecasts.next)} />
+                  </>
+              )}
+            </div>
+
              {loading || !data ? (
                 <div className="grid gap-8 md:grid-cols-3">
                     <Skeleton className="h-[250px] w-full" />

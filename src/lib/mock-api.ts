@@ -276,6 +276,26 @@ const forecastData = {
             { title: 'Potential Alerts', value: '3-5', description: 'Predicted security/risk alerts' },
         ],
     }
+  },
+  shiftsupervisor: {
+    current: {
+        title: "Current Shift Forecast",
+        description: "Predicted traffic and staffing for the current shift (08:00 - 16:00).",
+        recommendedStaff: 12,
+        metrics: [
+            { title: 'Total Transactions', value: '8,500', description: 'Predicted entries & exits' },
+            { title: 'Peak Hour', value: '14:00-15:00', description: 'Highest traffic expected' },
+        ],
+    },
+    next: {
+        title: "Next Shift Forecast",
+        description: "Predicted traffic and staffing for the next shift (16:00 - 00:00).",
+        recommendedStaff: 10,
+        metrics: [
+            { title: 'Total Transactions', value: '6,200', description: 'Predicted entries & exits' },
+            { title: 'Peak Hour', value: '18:00-19:00', description: 'Highest traffic expected' },
+        ],
+    }
   }
 };
 

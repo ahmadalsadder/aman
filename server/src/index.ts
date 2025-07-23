@@ -3,7 +3,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import { users } from './data/users';
 import type { User } from './types';
-import { Result, ApiError } from './api-contracts';
+import { Result, ApiError } from './result';
 
 
 const app = express();

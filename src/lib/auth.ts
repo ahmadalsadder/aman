@@ -1,5 +1,5 @@
 import type { User } from '@/types';
-import { Result } from '@/types/api/contracts';
+import { Result } from '@/types/api/result';
 import { api } from './api';
 
 export async function mockLogin(email: string, password: string): Promise<User> {

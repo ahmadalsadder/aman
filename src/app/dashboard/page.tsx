@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { BarChart3, ShieldAlert, Wifi, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { api } from '@/lib/api';
-import type { Result } from '@/types/api/contracts';
+import type { Result } from '@/types/api/result';
 
 interface DashboardStats {
   totalAnomalies: number;

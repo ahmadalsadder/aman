@@ -28,8 +28,7 @@ export function WorldMapChart({ data }: WorldMapChartProps) {
                     <Geographies geography={geoUrl}>
                         {({ geographies }) =>
                             geographies.map((geo) => {
-                                // world-atlas uses 'ISO_A3' and sometimes 'A3' for the 3-letter country code
-                                const countryCode = geo.properties.ISO_A3 || geo.properties.A3;
+                                const countryCode = geo.properties.ISO_A3;
                                 const passengerCount = data[countryCode] || 0;
                                 const fillColor = passengerCount > 0 ? colorScale(passengerCount) : "hsl(var(--muted-foreground) / 0.2)";
                                 
@@ -47,7 +46,7 @@ export function WorldMapChart({ data }: WorldMapChartProps) {
                                         }}
                                     >
                                         <title>
-                                            {`${geo.properties.name}: ${passengerCount.toLocaleString()} passenger(s)`}
+                                            {`${geo.properties.NAME}: ${passengerCount.toLocaleString()} passenger(s)`}
                                         </title>
                                     </Geography>
                                 );

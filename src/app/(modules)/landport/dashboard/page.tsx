@@ -1,7 +1,6 @@
 
 'use client';
 import * as React from 'react';
-import ModulePage from '@/components/module-page';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { LandPlot, Car, ScanText, UserSquare, Globe, Clock, Users, ArrowUp, ArrowDown } from 'lucide-react';
 import { useTranslations } from 'next-intl';
@@ -13,6 +12,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { TransactionOverviewChart } from '@/components/charts/transaction-overview-chart';
 import { useAuth } from '@/hooks/use-auth';
 import { ForecastCard } from '@/components/forecast-card';
+import { DashboardHeader } from '@/components/layout/dashboard-header';
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 
 export default function LandportDashboardPage() {
     const t = useTranslations('LandportDashboard');
@@ -98,12 +99,18 @@ export default function LandportDashboardPage() {
   };
 
   return (
-    <ModulePage
-      module="landport"
-      title={t('title')}
-      description={t('description')}
-      icon={LandPlot}
-    >
+    <div className="flex flex-col gap-8">
+       <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/landport/dashboard">Dashboard</BreadcrumbLink>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+      <DashboardHeader 
+        title="Dashboard"
+        description={t('welcome')}
+      />
       <div className="flex flex-col gap-8">
         {loading ? renderSkeleton() : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
@@ -169,6 +176,6 @@ export default function LandportDashboardPage() {
         </Card>
         )}
       </div>
-    </ModulePage>
+    </div>
   );
 }

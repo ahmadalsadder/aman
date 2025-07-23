@@ -39,8 +39,9 @@
     "seaport": "Puerto marítimo",
     "egate": "Puerta electrónica",
     "analyst": "Analista",
-    "gateSupervisor": "Supervisor de puerta",
-    "controlRoom": "Sala de control"
+    "gate-supervisor": "Supervisor de puerta",
+    "control-room": "Sala de control",
+    "backToPortals": "Volver a los portales"
   },
   "ModulePage": {
     "verifyingAccess": "Verificando acceso...",

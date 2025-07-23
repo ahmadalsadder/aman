@@ -4,7 +4,7 @@ import * as React from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/use-auth';
-import { getNavItems, type NavItem } from '@/lib/navigation';
+import { getModuleNavItems, getPortalNavItems, type NavItem } from '@/lib/navigation';
 import Logo from '@/components/logo';
 import {
   Sidebar,
@@ -18,13 +18,15 @@ import {
 } from '@/components/ui/sidebar';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useTranslations } from 'next-intl';
+import { ArrowLeft } from 'lucide-react';
 
 export default function AppSidebar() {
   const { user } = useAuth();
   const pathname = usePathname();
   const t = useTranslations('Navigation');
 
-  const navItems = user ? getNavItems(user.role, user.modules, t) : [];
+  const currentModule = pathname.split('/')[1] as any;
+  const navItems = user ? getModuleNavItems(currentModule, user.role, t) : [];
 
   const getInitials = (name: string) => {
     return name
@@ -33,6 +35,8 @@ export default function AppSidebar() {
       .join('')
       .toUpperCase();
   };
+
+  const shouldShowPortalsLink = user && user.modules && user.modules.length > 1;
 
   return (
     <Sidebar variant="inset" collapsible="icon">
@@ -48,7 +52,7 @@ export default function AppSidebar() {
             <SidebarMenuItem key={item.label}>
               <SidebarMenuButton
                 asChild
-                isActive={pathname.startsWith(item.href) && (item.href !== '/' || pathname === '/')}
+                isActive={pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href))}
                 tooltip={{ children: item.label }}
               >
                 <Link href={item.href}>
@@ -61,6 +65,21 @@ export default function AppSidebar() {
         </SidebarMenu>
       </SidebarContent>
       <SidebarSeparator />
+      {shouldShowPortalsLink && (
+        <>
+            <SidebarMenu>
+                <SidebarMenuItem>
+                    <SidebarMenuButton asChild tooltip={{ children: t('backToPortals') }}>
+                        <Link href="/portal">
+                            <ArrowLeft />
+                            <span>{t('backToPortals')}</span>
+                        </Link>
+                    </SidebarMenuButton>
+                </SidebarMenuItem>
+            </SidebarMenu>
+            <SidebarSeparator />
+        </>
+      )}
       <SidebarFooter>
         {user && (
           <div className="flex items-center gap-2 p-2">

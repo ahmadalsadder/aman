@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/use-auth';
 import { Loader2, ArrowRight } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { getNavItems } from '@/lib/navigation';
+import { getPortalNavItems } from '@/lib/navigation';
 import { useTranslations } from 'next-intl';
 import Logo from '@/components/logo';
 
@@ -29,8 +29,7 @@ export default function PortalSelectionPage() {
     );
   }
 
-  const availableModules = getNavItems(user.role, user.modules, tNav)
-    .filter(item => item.href !== '/dashboard' && item.href !== '/users' && item.href !== '/settings');
+  const availableModules = getPortalNavItems(user.role, user.modules, tNav);
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-muted/40 p-4">

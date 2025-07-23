@@ -39,8 +39,9 @@
     "seaport": "المنفذ البحري",
     "egate": "البوابة الإلكترونية",
     "analyst": "محلل",
-    "gateSupervisor": "مشرف البوابة",
-    "controlRoom": "غرفة التحكم"
+    "gate-supervisor": "مشرف البوابة",
+    "control-room": "غرفة التحكم",
+    "backToPortals": "العودة إلى البوابات"
   },
   "ModulePage": {
     "verifyingAccess": "التحقق من الوصول...",

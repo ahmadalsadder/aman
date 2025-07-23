@@ -39,8 +39,9 @@
     "seaport": "SeaPort",
     "egate": "E-Gate",
     "analyst": "Analyst",
-    "gateSupervisor": "Gate Supervisor",
-    "controlRoom": "Control Room"
+    "gate-supervisor": "Gate Supervisor",
+    "control-room": "Control Room",
+    "backToPortals": "Back to Portals"
   },
   "ModulePage": {
     "verifyingAccess": "Verifying access...",

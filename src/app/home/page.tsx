@@ -19,7 +19,10 @@ export default function Home() {
         } else if (user.modules && user.modules.length === 1) {
           router.replace(`/${user.modules[0]}`);
         } else {
-          router.replace('/login'); // Or a 'no modules assigned' page
+           // This case can be for users with no modules, e.g. system admins
+           // or a fallback to a default page.
+           // For now, redirecting to login if no modules are assigned.
+          router.replace('/login');
         }
       } else {
         router.replace('/login');

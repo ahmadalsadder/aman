@@ -1,8 +1,9 @@
+
 'use client';
 import * as React from 'react';
 import ModulePage from '@/components/module-page';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Plane, UserCheck, BaggageClaim, ShieldCheck, Globe } from 'lucide-react';
+import { Plane, UserCheck, BaggageClaim, ShieldCheck, Globe, Clock } from 'lucide-react';
 import PassengerTypeChart from '@/components/charts/passenger-type-chart';
 import CreateRecordButton from '@/components/create-record-button';
 import { useTranslations } from 'next-intl';
@@ -57,8 +58,8 @@ export default function AirportDashboardPage() {
   );
 
   const renderSkeleton = () => (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {Array.from({ length: 4 }).map((_, i) => (
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+        {Array.from({ length: 5 }).map((_, i) => (
           <Card key={i}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <Skeleton className="h-4 w-2/3" />
@@ -79,11 +80,12 @@ export default function AirportDashboardPage() {
       icon={Plane}
     >
       {loading ? renderSkeleton() : (
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
         <StatCard title={t('passengersProcessed')} value="12,453" icon={UserCheck} />
         <StatCard title={t('bagsScanned')} value="25,832" icon={BaggageClaim} />
         <StatCard title={t('securityAlerts')} value="3" icon={ShieldCheck} />
         <StatCard title={t('flightsMonitored')} value="128" icon={Plane} />
+        <StatCard title={t('avgProcessingTime')} value="2.5m" icon={Clock} />
       </div>
       )}
        <div className="mt-8 grid gap-8 grid-cols-1">

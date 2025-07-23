@@ -1,8 +1,9 @@
+
 'use client';
 import * as React from 'react';
 import ModulePage from '@/components/module-page';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Ship, Anchor, Warehouse, Container, Globe } from 'lucide-react';
+import { Ship, Anchor, Warehouse, Container, Globe, Clock } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { ThroughputChart } from '@/components/charts/throughput-chart';
 import { RiskRuleTriggerChart } from '@/components/charts/risk-rule-trigger-chart';
@@ -49,8 +50,8 @@ export default function SeaportDashboardPage() {
   );
 
   const renderSkeleton = () => (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {Array.from({ length: 4 }).map((_, i) => (
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+        {Array.from({ length: 5 }).map((_, i) => (
           <Card key={i}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <Skeleton className="h-4 w-2/3" />
@@ -72,11 +73,12 @@ export default function SeaportDashboardPage() {
     >
         <div className="flex flex-col gap-8">
             {loading ? renderSkeleton() : (
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
                 <StatCard title={t('vesselsInPort')} value="23" icon={Anchor} />
                 <StatCard title={t('containersProcessed')} value="2,480" icon={Container} />
                 <StatCard title={t('cargoThroughput')} value="15,600" icon={Warehouse} />
                 <StatCard title={t('activeBerths')} value="6" icon={Ship} />
+                <StatCard title={t('avgProcessingTime')} value="12.5m" icon={Clock} />
             </div>
             )}
             

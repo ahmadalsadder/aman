@@ -12,8 +12,8 @@ export const getNavItems = (role: Role, modules: Module[], t: any): NavItem[] =>
 
   const allNavItems: Record<string, NavItem> = {
     dashboard: { href: '/dashboard', label: t('dashboard'), icon: LayoutDashboard },
-    users: { href: '/dashboard', label: t('userManagement'), icon: Users },
-    settings: { href: '/dashboard', label: t('systemSettings'), icon: Settings },
+    users: { href: '/users', label: t('userManagement'), icon: Users },
+    settings: { href: '/settings', label: t('systemSettings'), icon: Settings },
   };
 
   const moduleNavItems: Record<Module, NavItem> = {

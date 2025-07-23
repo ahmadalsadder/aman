@@ -1,4 +1,5 @@
 export type Role = 'admin' | 'auditor' | 'viewer';
+export type Module = 'landport' | 'seaport' | 'airport' | 'egate';
 
 export interface User {
   id: string;
@@ -6,4 +7,5 @@ export interface User {
   email: string;
   role: Role;
   token: string;
+  modules: Module[];
 }

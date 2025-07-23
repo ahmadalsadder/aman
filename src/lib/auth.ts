@@ -1,9 +1,9 @@
-import type { User, Role } from '@/types';
+import type { User } from '@/types';
 
 const MOCK_USERS: User[] = [
-  { id: '1', name: 'Admin User', email: 'admin@example.com', role: 'admin', token: 'fake-admin-token' },
-  { id: '2', name: 'Auditor User', email: 'auditor@example.com', role: 'auditor', token: 'fake-auditor-token' },
-  { id: '3', name: 'Viewer User', email: 'viewer@example.com', role: 'viewer', token: 'fake-viewer-token' },
+  { id: '1', name: 'Admin User', email: 'admin@example.com', role: 'admin', token: 'fake-admin-token', modules: ['landport', 'seaport', 'airport', 'egate'] },
+  { id: '2', name: 'Auditor User', email: 'auditor@example.com', role: 'auditor', token: 'fake-auditor-token', modules: ['landport', 'seaport'] },
+  { id: '3', name: 'Viewer User', email: 'viewer@example.com', role: 'viewer', token: 'fake-viewer-token', modules: ['airport'] },
 ];
 
 export async function mockLogin(email: string, password: string): Promise<User> {

@@ -20,7 +20,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 export default function AppSidebar() {
   const { user } = useAuth();
   const pathname = usePathname();
-  const navItems = user ? getNavItems(user.role) : [];
+  const navItems = user ? getNavItems(user.role, user.modules) : [];
 
   const getInitials = (name: string) => {
     return name

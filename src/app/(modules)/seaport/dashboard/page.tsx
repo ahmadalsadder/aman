@@ -24,17 +24,19 @@ export default function SeaportDashboardPage() {
     React.useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
-            const [mainResult, overviewResult, forecastResult] = await Promise.all([
+            const [mainResult, overviewResult, forecastResult, statsResult] = await Promise.all([
                 api.get('/dashboard/main'),
                 api.get('/dashboard/transaction-overview'),
-                api.get('/dashboard/forecasts?module=seaport')
+                api.get('/dashboard/forecasts?module=seaport'),
+                api.get('/dashboard/stats?module=seaport'),
             ]);
             
-            if (mainResult.isSuccess && overviewResult.isSuccess && forecastResult.isSuccess) {
+            if (mainResult.isSuccess && overviewResult.isSuccess && forecastResult.isSuccess && statsResult.isSuccess) {
                 setData({ 
                     main: mainResult.data,
                     overview: overviewResult.data,
-                    forecasts: forecastResult.data
+                    forecasts: forecastResult.data,
+                    stats: statsResult.data,
                 });
             }
             setLoading(false);
@@ -97,10 +99,10 @@ export default function SeaportDashboardPage() {
         <div className="flex flex-col gap-8">
             {loading ? renderSkeleton() : (
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
-                <StatCard title={t('vesselsInPort')} value="23" icon={Anchor} color="text-cyan-500" />
-                <StatCard title={t('cruisePassengers')} value="2,480" icon={CruisePassengers} color="text-teal-500" />
-                <StatCard title={t('passengersProcessed')} value="1,250" icon={UserCheck} color="text-green-500" />
-                <StatCard title={t('activeBerths')} value="6" icon={Ship} color="text-blue-500" />
+                <StatCard title={t('vesselsInPort')} value={data?.stats?.vesselsInPort || '...'} icon={Anchor} color="text-cyan-500" />
+                <StatCard title={t('cruisePassengers')} value={data?.stats?.cruisePassengers || '...'} icon={CruisePassengers} color="text-teal-500" />
+                <StatCard title={t('passengersProcessed')} value={data?.stats?.passengersProcessed || '...'} icon={UserCheck} color="text-green-500" />
+                <StatCard title={t('activeBerths')} value={data?.stats?.activeBerths || '...'} icon={Ship} color="text-blue-500" />
                 <StatCard title={t('avgProcessingTime')} value={data?.main?.avgProcessingTime?.seaport || '...'} icon={Clock} color="text-orange-500" />
             </div>
             )}

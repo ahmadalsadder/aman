@@ -88,6 +88,54 @@ const mainDashboardData = {
     }
 };
 
+const dashboardStats = {
+    airport: {
+        passengersProcessed: '12,453',
+        bagsScanned: '25,832',
+        securityAlerts: '3',
+        flightsMonitored: '128',
+    },
+    landport: {
+        vehiclesProcessed: '4,589',
+        travelersChecked: '7,123',
+        documentsScanned: '9,876',
+        activeLanes: '8',
+    },
+    seaport: {
+        vesselsInPort: '23',
+        cruisePassengers: '2,480',
+        passengersProcessed: '1,250',
+        activeBerths: '6',
+    },
+    egate: {
+        successfulEntries: '8,210',
+        failedAttempts: '14',
+        biometricVerifications: '8,224',
+        activeGates: '24',
+        activeAlerts: '2',
+    },
+    analyst: {
+        successfulEntries: '8,210',
+        failedAttempts: '14',
+        biometricVerifications: '8,224',
+        activeGates: '24',
+    },
+    shiftsupervisor: {
+        successfulEntries: '8,210',
+        failedAttempts: '14',
+        biometricVerifications: '8,224',
+        activeGates: '24',
+        activeAlerts: '3',
+    },
+    'control-room': {
+        successfulEntries: '8,210',
+        failedAttempts: '14',
+        biometricVerifications: '8,224',
+        activeGates: '24',
+        activeAlerts: '5',
+    }
+}
+
 // Mock data for the airport-specific dashboard
 const airportDashboardData = {
     ageDistribution: [
@@ -259,6 +307,14 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
         return Result.success(mainDashboardData) as Result<T>;
     }
 
+    if (method === 'GET' && url.pathname === '/dashboard/stats') {
+        const module = url.searchParams.get('module') as keyof typeof dashboardStats;
+        if (module && dashboardStats[module]) {
+            return Result.success(dashboardStats[module]) as Result<T>;
+        }
+        return Result.failure([new ApiError('NOT_FOUND', `Stats for module '${module}' not found.`)]) as Result<T>;
+    }
+
     if (method === 'GET' && url.pathname === '/dashboard/airport') {
         return Result.success(airportDashboardData) as Result<T>;
     }
@@ -277,14 +333,6 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
             return Result.success(forecastData[module]) as Result<T>;
         }
         return Result.failure([new ApiError('NOT_FOUND', `Forecast data for module '${module}' not found.`)]) as Result<T>;
-    }
-
-    if (method === 'GET' && url.pathname === '/dashboard/stats') {
-        return Result.success({
-            totalAnomalies: 12,
-            monitoredEndpoints: 42,
-            uptimePercentage: 99.9,
-        }) as Result<T>;
     }
     
     if (method === 'GET' && url.pathname === '/dashboard/stats-error') {

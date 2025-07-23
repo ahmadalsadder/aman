@@ -28,21 +28,23 @@ export default function AirportDashboardPage() {
   React.useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      const [mainResult, airportResult, passengerResult, overviewResult, forecastResult] = await Promise.all([
+      const [mainResult, airportResult, passengerResult, overviewResult, forecastResult, statsResult] = await Promise.all([
         api.get('/dashboard/main'),
         api.get('/dashboard/airport'),
         api.get('/data/passengers'),
         api.get('/dashboard/transaction-overview'),
         api.get('/dashboard/forecasts?module=airport'),
+        api.get('/dashboard/stats?module=airport'),
       ]);
       
-      if (mainResult.isSuccess && airportResult.isSuccess && passengerResult.isSuccess && overviewResult.isSuccess && forecastResult.isSuccess) {
+      if (mainResult.isSuccess && airportResult.isSuccess && passengerResult.isSuccess && overviewResult.isSuccess && forecastResult.isSuccess && statsResult.isSuccess) {
         setData({
           main: mainResult.data,
           airport: airportResult.data,
           passengers: passengerResult.data,
           overview: overviewResult.data,
           forecasts: forecastResult.data,
+          stats: statsResult.data,
         });
       }
       setLoading(false);
@@ -104,10 +106,10 @@ export default function AirportDashboardPage() {
       />
       {loading ? renderSkeleton() : (
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
-        <StatCard title={t('passengersProcessed')} value="12,453" icon={UserCheck} color="text-green-500" />
-        <StatCard title={t('bagsScanned')} value="25,832" icon={BaggageClaim} color="text-blue-500" />
-        <StatCard title={t('securityAlerts')} value="3" icon={ShieldCheck} color="text-red-500" />
-        <StatCard title={t('flightsMonitored')} value="128" icon={Plane} color="text-purple-500" />
+        <StatCard title={t('passengersProcessed')} value={data?.stats?.passengersProcessed || '...'} icon={UserCheck} color="text-green-500" />
+        <StatCard title={t('bagsScanned')} value={data?.stats?.bagsScanned || '...'} icon={BaggageClaim} color="text-blue-500" />
+        <StatCard title={t('securityAlerts')} value={data?.stats?.securityAlerts || '...'} icon={ShieldCheck} color="text-red-500" />
+        <StatCard title={t('flightsMonitored')} value={data?.stats?.flightsMonitored || '...'} icon={Plane} color="text-purple-500" />
         <StatCard title={t('avgProcessingTime')} value={data?.main?.avgProcessingTime?.airport || '...'} icon={Clock} color="text-orange-500" />
       </div>
       )}

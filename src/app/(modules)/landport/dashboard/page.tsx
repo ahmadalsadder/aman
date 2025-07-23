@@ -24,17 +24,19 @@ export default function LandportDashboardPage() {
     React.useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
-            const [mainResult, overviewResult, forecastResult] = await Promise.all([
+            const [mainResult, overviewResult, forecastResult, statsResult] = await Promise.all([
               api.get('/dashboard/main'),
               api.get('/dashboard/transaction-overview'),
-              api.get('/dashboard/forecasts?module=landport')
+              api.get('/dashboard/forecasts?module=landport'),
+              api.get('/dashboard/stats?module=landport'),
             ]);
             
-            if (mainResult.isSuccess && overviewResult.isSuccess && forecastResult.isSuccess) {
+            if (mainResult.isSuccess && overviewResult.isSuccess && forecastResult.isSuccess && statsResult.isSuccess) {
                 setData({ 
                     main: mainResult.data,
                     overview: overviewResult.data,
-                    forecasts: forecastResult.data
+                    forecasts: forecastResult.data,
+                    stats: statsResult.data,
                 });
             }
             setLoading(false);
@@ -97,10 +99,10 @@ export default function LandportDashboardPage() {
       <div className="flex flex-col gap-8">
         {loading ? renderSkeleton() : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
-            <StatCard title={t('vehiclesProcessed')} value="4,589" icon={Car} color="text-blue-500" />
-            <StatCard title={t('travelersChecked')} value="7,123" icon={UserSquare} color="text-green-500" />
-            <StatCard title={t('documentsScanned')} value="9,876" icon={ScanText} color="text-purple-500" />
-            <StatCard title={t('activeLanes')} value="8" icon={LandPlot} color="text-yellow-500" />
+            <StatCard title={t('vehiclesProcessed')} value={data?.stats?.vehiclesProcessed || '...'} icon={Car} color="text-blue-500" />
+            <StatCard title={t('travelersChecked')} value={data?.stats?.travelersChecked || '...'} icon={UserSquare} color="text-green-500" />
+            <StatCard title={t('documentsScanned')} value={data?.stats?.documentsScanned || '...'} icon={ScanText} color="text-purple-500" />
+            <StatCard title={t('activeLanes')} value={data?.stats?.activeLanes || '...'} icon={LandPlot} color="text-yellow-500" />
             <StatCard title={t('avgProcessingTime')} value={data?.main?.avgProcessingTime?.landport || '...'} icon={Clock} color="text-orange-500" />
         </div>
         )}

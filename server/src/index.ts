@@ -1,9 +1,10 @@
+'use server';
+
 import express, { type Request, type Response, Router } from 'express';
 import cors from 'cors';
 import { users } from './data/users';
 import { Result, ApiError } from './result';
 import { config } from 'dotenv';
-import path from 'path';
 
 config();
 
@@ -50,17 +51,6 @@ apiRouter.get('/dashboard/stats-error', (req: Request, res: Response) => {
 
 // Use the API router with the /api prefix
 app.use('/api', apiRouter);
-
-
-// Serve static files from the Next.js app
-const clientBuildPath = path.join(__dirname, '../../src/out');
-app.use(express.static(clientBuildPath));
-
-// For any other requests, serve the Next.js app's index.html
-app.get('*', (req: Request, res: Response) => {
-  res.sendFile(path.join(clientBuildPath, 'index.html'));
-});
-
 
 app.listen(port, () => {
   console.log(`Guardian Gate server listening on port ${port}`);

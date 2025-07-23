@@ -4,7 +4,7 @@
   "main": "dist/index.js",
   "scripts": {
     "start": "npm run build && node dist/index.js",
-    "dev": "nodemon",
+    "dev": "nodemon dist/index.js",
     "build": "tsc"
   },
   "dependencies": {

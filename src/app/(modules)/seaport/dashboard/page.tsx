@@ -136,28 +136,23 @@ export default function SeaportDashboardPage() {
             )}
 
             {loading || !data ? (
-                <div className="grid gap-8 md:grid-cols-2">
+                <div className="grid gap-8 md:grid-cols-3">
+                    <Skeleton className="h-[400px] w-full" />
                     <Skeleton className="h-[400px] w-full" />
                     <Skeleton className="h-[400px] w-full" />
                 </div>
             ) : (
-              <div className="grid gap-8 md:grid-cols-2">
+              <div className="grid gap-8 md:grid-cols-3">
                 <PassengerTypeChart data={data.passengers.seaport} />
                 <TravelerCategoryChart data={data.travelerCategories} />
+                <RiskRuleTriggerChart data={data.main.riskRules} className="h-full" />
               </div>
             )}
 
             {loading || !data ? (
                 <Skeleton className="h-[400px] w-full" />
             ) : (
-            <div className="grid grid-cols-1 gap-8 lg:grid-cols-5">
-                <div className="lg:col-span-3">
-                    <ThroughputChart data={data.main.throughput} className="h-full" />
-                </div>
-                <div className="lg:col-span-2">
-                    <RiskRuleTriggerChart data={data.main.riskRules} className="h-full" />
-                </div>
-            </div>
+                <ThroughputChart data={data.main.throughput} className="h-full" />
             )}
             
             {loading || !data ? (

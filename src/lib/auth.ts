@@ -3,10 +3,7 @@ import { Result } from '@/types/api/result';
 import { api } from './api';
 
 export async function mockLogin(email: string, password: string): Promise<User> {
-  const result: Result<User> = await api('/login', {
-    method: 'POST',
-    body: JSON.stringify({ email, password }),
-  });
+  const result: Result<User> = await api.post('/login', { email, password });
 
   if (result.isSuccess && result.data) {
     return result.data;

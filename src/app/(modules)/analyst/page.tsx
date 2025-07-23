@@ -1,11 +1,108 @@
 'use client';
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import * as React from 'react';
+import ModulePage from '@/components/module-page';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { DoorOpen, Fingerprint, ShieldAlert, CheckCircle, Globe, PieChart } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { ThroughputChart } from '@/components/charts/throughput-chart';
+import { RiskRuleTriggerChart } from '@/components/charts/risk-rule-trigger-chart';
+import { WorldMapChart } from '@/components/charts/world-map-chart';
+import { api } from '@/lib/api';
+import { Skeleton } from '@/components/ui/skeleton';
 
-export default function AnalystPage() {
-    const router = useRouter();
-    useEffect(() => {
-        router.replace('/analyst/dashboard');
-    }, [router]);
-    return null;
+export default function AnalystDashboardPage() {
+    const t = useTranslations('AnalystDashboard');
+    const [data, setData] = React.useState<any>(null);
+    const [loading, setLoading] = React.useState(true);
+
+    React.useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            const result = await api.get('/dashboard/main');
+            if (result.isSuccess) {
+                setData(result.data);
+            }
+            setLoading(false);
+        };
+        fetchData();
+    }, []);
+
+    const StatCard = ({ title, value, icon: Icon }: { title: string; value: string | number; icon: React.ElementType }) => (
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <CardTitle className="text-sm font-medium">{title}</CardTitle>
+        <Icon className="h-4 w-4 text-muted-foreground" />
+      </CardHeader>
+      <CardContent>
+        <div className="text-2xl font-bold">{value}</div>
+      </CardContent>
+    </Card>
+  );
+
+  const renderSkeleton = () => (
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <Card key={i}>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <Skeleton className="h-4 w-2/3" />
+            </CardHeader>
+            <CardContent>
+              <Skeleton className="h-8 w-1/3" />
+            </CardContent>
+          </Card>
+        ))}
+    </div>
+  );
+
+  return (
+    <ModulePage
+      module="analyst"
+      title={t('title')}
+      description={t('description')}
+      icon={PieChart}
+    >
+        <div className="flex flex-col gap-8">
+            {loading ? renderSkeleton() : (
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                <StatCard title={t('successfulEntries')} value="8,210" icon={CheckCircle} />
+                <StatCard title={t('failedAttempts')} value="14" icon={ShieldAlert} />
+                <StatCard title={t('biometricVerifications')} value="8,224" icon={Fingerprint} />
+                <StatCard title={t('activeGates')} value="24" icon={DoorOpen} />
+            </div>
+            )}
+            
+            {loading || !data ? (
+                <Skeleton className="h-[400px] w-full" />
+            ) : (
+            <div className="grid grid-cols-1 gap-8 lg:grid-cols-5">
+                <div className="lg:col-span-3">
+                    <ThroughputChart data={data.throughput} />
+                </div>
+                <div className="lg:col-span-2">
+                    <RiskRuleTriggerChart data={data.riskRules} />
+                </div>
+            </div>
+            )}
+
+            {loading || !data ? (
+                <Skeleton className="h-[400px] w-full" />
+            ) : (
+            <Card>
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                        <Globe className="h-5 w-5" />
+                        Traffic Volume by Nationality
+                    </CardTitle>
+                    <CardDescription>
+                        A global overview of traffic origins.
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <WorldMapChart data={data.nationalityDistribution} />
+                </CardContent>
+            </Card>
+            )}
+        </div>
+    </ModulePage>
+  );
 }

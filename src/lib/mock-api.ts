@@ -31,10 +31,91 @@ const users: User[] = [
   },
 ];
 
+
+// Mock data for the main dashboard
+const mainDashboardData = {
+    throughput: [
+        { name: '00:00', transactions: 110 },
+        { name: '02:00', transactions: 180 },
+        { name: '04:00', transactions: 250 },
+        { name: '06:00', transactions: 450 },
+        { name: '08:00', transactions: 730 },
+        { name: '10:00', transactions: 890 },
+        { name: '12:00', transactions: 820 },
+        { name: '14:00', transactions: 950 },
+        { name: '16:00', transactions: 1120 },
+        { name: '18:00', transactions: 980 },
+        { name: '20:00', transactions: 750 },
+        { name: '22:00', transactions: 350 },
+    ],
+    riskRules: [
+        { name: 'Watchlist Match', value: 12 },
+        { name: 'Irregular Travel Pattern', value: 8 },
+        { name: 'Expired Document', value: 5 },
+        { name: 'Invalid Visa', value: 3 },
+        { name: 'Baggage Anomaly', value: 2 },
+    ],
+    nationalityDistribution: {
+        'USA': 1250,
+        'IND': 980,
+        'CHN': 750,
+        'GBR': 680,
+        'DEU': 550,
+        'FRA': 490,
+        'CAN': 450,
+        'AUS': 380,
+        'JPN': 320,
+        'BRA': 280,
+    }
+};
+
+// Mock data for the airport-specific dashboard
+const airportDashboardData = {
+    ageDistribution: [
+        { name: '0-17', value: 1254 },
+        { name: '18-24', value: 2341 },
+        { name: '25-34', value: 3123 },
+        { name: '35-44', value: 2876 },
+        { name: '45-59', value: 1987 },
+        { name: '60+', value: 872 },
+    ],
+    nationalityDistribution: [
+        { name: 'USA', value: 1021 },
+        { name: 'UK', value: 843 },
+        { name: 'India', value: 765 },
+        { name: 'Germany', value: 654 },
+        { name: 'China', value: 543 },
+        { name: 'Canada', value: 432 },
+        { name: 'Australia', value: 321 },
+        { name: 'France', value: 210 },
+        { name: 'UAE', value: 198 },
+        { name: 'Nigeria', value: 154 },
+    ]
+};
+
+const passengerData = {
+    airport: [
+        { type: 'Business', count: 4500 },
+        { type: 'Tourist', count: 6200 },
+        { type: 'Family', count: 1753 },
+    ],
+    seaport: [
+        { type: 'Cruise', count: 2100 },
+        { type: 'Ferry', count: 3400 },
+        { type: 'Cargo Crew', count: 800 },
+    ],
+    landport: [
+        { type: 'Commuter', count: 5600 },
+        { type: 'Tourist', count: 1200 },
+        { type: 'Commercial', count: 323 },
+    ],
+};
+
+
 const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 
 export async function mockApi<T>(endpoint: string, options: RequestInit = {}): Promise<Result<T>> {
-    await delay(1500); // Simulate network latency
+    await delay(500); // Simulate network latency
 
     const { method = 'GET', body } = options;
     const url = new URL(endpoint, 'http://mock.com'); // Base URL doesn't matter, just for parsing
@@ -61,6 +142,19 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
         
         return Result.success(user) as Result<T>;
     }
+    
+    if (method === 'GET' && url.pathname === '/dashboard/main') {
+        return Result.success(mainDashboardData) as Result<T>;
+    }
+
+    if (method === 'GET' && url.pathname === '/dashboard/airport') {
+        return Result.success(airportDashboardData) as Result<T>;
+    }
+
+    if (method === 'GET' && url.pathname === '/data/passengers') {
+        return Result.success(passengerData) as Result<T>;
+    }
+
 
     if (method === 'GET' && url.pathname === '/dashboard/stats') {
         return Result.success({

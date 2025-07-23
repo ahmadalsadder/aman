@@ -47,7 +47,7 @@ const getAuthInfo = (): Partial<User> => {
 };
 
 
-export async function api<T>(endpoint: string, options: RequestInit = {}): Promise<Result<T>> {
+async function performApiCall<T>(endpoint: string, options: RequestInit = {}): Promise<Result<T>> {
   showLoaderGlobally();
   try {
     const result = await mockApi<T>(endpoint, options);
@@ -91,3 +91,11 @@ export async function api<T>(endpoint: string, options: RequestInit = {}): Promi
     hideLoaderGlobally();
   }
 }
+
+export const api = {
+    get: <T>(endpoint: string, options: Omit<RequestInit, 'method' | 'body'> = {}) => 
+        performApiCall<T>(endpoint, { ...options, method: 'GET' }),
+    post: <T>(endpoint: string, body: any, options: Omit<RequestInit, 'method' | 'body'> = {}) => 
+        performApiCall<T>(endpoint, { ...options, method: 'POST', body: JSON.stringify(body) }),
+    // Add other methods like put, delete if needed
+};

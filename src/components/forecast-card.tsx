@@ -2,7 +2,7 @@
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
+import { UserCheck } from 'lucide-react';
 
 interface ForecastItem {
     icon: React.ElementType;
@@ -11,16 +11,27 @@ interface ForecastItem {
     trend: React.ReactNode;
 }
 
-interface ForecastCardProps {
+interface Forecast {
     title: string;
     description: string;
     items: ForecastItem[];
+    recommendedStaff: number;
 }
 
-export function ForecastCard({ title, description, items }: ForecastCardProps) {
+interface ForecastCardProps {
+    forecast: Forecast;
+}
+
+export function ForecastCard({ forecast }: ForecastCardProps) {
+    if (!forecast) {
+        return null;
+    }
+
+    const { title, description, items, recommendedStaff } = forecast;
+
     return (
-        <Card>
-            <CardHeader>
+        <Card className="relative overflow-hidden">
+            <CardHeader className="pb-4">
                 <CardTitle>{title}</CardTitle>
                 <CardDescription>{description}</CardDescription>
             </CardHeader>
@@ -40,6 +51,12 @@ export function ForecastCard({ title, description, items }: ForecastCardProps) {
                     ))}
                 </ul>
             </CardContent>
+             <div className="absolute top-4 right-4">
+                <div className="flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-sm font-semibold text-primary">
+                    <UserCheck className="h-4 w-4" />
+                    <span>{recommendedStaff} Officers</span>
+                </div>
+            </div>
         </Card>
     );
 }

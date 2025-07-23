@@ -23,15 +23,17 @@ export default function ControlRoomDashboardPage() {
     React.useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
-            const [mainResult, overviewResult] = await Promise.all([
+            const [mainResult, overviewResult, forecastResult] = await Promise.all([
                 api.get('/dashboard/main'),
-                api.get('/dashboard/transaction-overview')
+                api.get('/dashboard/transaction-overview'),
+                api.get('/dashboard/forecasts?module=control-room'),
             ]);
             
-            if (mainResult.isSuccess && overviewResult.isSuccess) {
+            if (mainResult.isSuccess && overviewResult.isSuccess && forecastResult.isSuccess) {
                 setData({ 
                     main: mainResult.data,
-                    overview: overviewResult.data
+                    overview: overviewResult.data,
+                    forecasts: forecastResult.data,
                 });
             }
             setLoading(false);
@@ -67,6 +69,34 @@ export default function ControlRoomDashboardPage() {
   );
 
   const isSupervisorOrAdmin = user?.role === 'shiftsupervisor' || user?.role === 'admin';
+  
+  const renderForecastTrend = (trend: { direction: 'up' | 'down' | 'same', percentage?: number, text: string }) => {
+    let colorClass = 'text-gray-500';
+    if(trend.direction === 'up' && trend.text.toLowerCase().includes('high')) colorClass = 'text-red-600';
+    else if (trend.direction === 'up') colorClass = 'text-green-600';
+    else if (trend.direction === 'down') colorClass = 'text-red-600';
+
+    if (trend.text.toLowerCase().includes('medium')) colorClass = 'text-yellow-600';
+    if (trend.text.toLowerCase().includes('low')) colorClass = 'text-green-600';
+    if (trend.text.toLowerCase().includes('normal')) colorClass = 'text-yellow-600';
+
+    return (
+        <span className={`flex items-center ${colorClass}`}>
+            {trend.direction === 'up' && <ArrowUp className="h-4 w-4" />}
+            {trend.direction === 'down' && <ArrowDown className="h-4 w-4" />}
+            {trend.percentage !== undefined ? `${trend.percentage}%` : trend.text}
+        </span>
+    );
+  };
+  
+  const getForecastItems = (forecastData: any) => {
+    if(!forecastData) return [];
+    return forecastData.items.map((item: any) => ({
+      ...item,
+      icon: item.label.includes('Traffic') ? Users : ShieldAlert,
+      trend: renderForecastTrend(item.trend)
+    }));
+  };
 
   return (
     <ModulePage
@@ -88,24 +118,17 @@ export default function ControlRoomDashboardPage() {
             
             {isSupervisorOrAdmin && (
               <div className="grid gap-8 md:grid-cols-2">
-                <ForecastCard
-                  title="Current Shift Forecast"
-                  description="Expected system-wide traffic and resource needs for the current shift (08:00 - 16:00)."
-                  items={[
-                    { icon: Users, label: "Expected Traffic", value: "15,000", trend: <span className="flex items-center text-green-600"><ArrowUp className="h-4 w-4" /> 7%</span> },
-                    { icon: ShieldAlert, label: "Potential Alerts", value: "5-8", trend: <span className="flex items-center text-yellow-600">Normal</span> },
-                    { icon: Clock, label: "Peak Hours", value: "11:00 - 14:00", trend: <span className="flex items-center text-red-600"><ArrowUp className="h-4 w-4" /> High Activity</span> },
-                  ]}
-                />
-                <ForecastCard
-                  title="Next Shift Forecast"
-                  description="Expected system-wide traffic and resource needs for the next shift (16:00 - 00:00)."
-                  items={[
-                    { icon: Users, label: "Expected Traffic", value: "11,500", trend: <span className="flex items-center text-red-600"><ArrowDown className="h-4 w-4" /> 15%</span> },
-                    { icon: ShieldAlert, label: "Potential Alerts", value: "3-5", trend: <span className="flex items-center text-green-600">Low</span> },
-                    { icon: Clock, label: "Peak Hours", value: "17:00 - 19:00", trend: <span className="flex items-center text-yellow-600">Medium Activity</span> },
-                  ]}
-                />
+                 {loading || !data ? (
+                    <>
+                        <Skeleton className="h-[250px] w-full" />
+                        <Skeleton className="h-[250px] w-full" />
+                    </>
+                ) : (
+                    <>
+                        <ForecastCard forecast={{ ...data.forecasts.current, items: getForecastItems(data.forecasts.current) }} />
+                        <ForecastCard forecast={{ ...data.forecasts.next, items: getForecastItems(data.forecasts.next) }} />
+                    </>
+                )}
               </div>
             )}
 

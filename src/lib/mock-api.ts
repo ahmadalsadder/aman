@@ -9,7 +9,7 @@ const users: User[] = [
     email: 'admin@example.com', 
     role: 'admin', 
     token: 'fake-admin-token', 
-    modules: ['dashboard', 'landport', 'seaport', 'airport', 'egate', 'analyst', 'gate-supervisor', 'control-room', 'users', 'settings'],
+    modules: ['dashboard', 'landport', 'seaport', 'airport', 'egate', 'analyst', 'shiftsupervisor', 'control-room', 'users', 'settings'],
     permissions: ['records:view', 'records:create', 'records:edit', 'records:delete', 'users:manage', 'reports:view']
   },
   { 
@@ -30,6 +30,15 @@ const users: User[] = [
     modules: ['airport'],
     permissions: ['records:view']
   },
+  {
+    id: '4',
+    name: 'Shift Supervisor User',
+    email: 'supervisor@example.com',
+    role: 'shiftsupervisor',
+    token: 'fake-supervisor-token',
+    modules: ['airport', 'landport', 'seaport', 'control-room'],
+    permissions: ['records:view', 'records:edit', 'reports:view']
+  }
 ];
 
 
@@ -74,7 +83,7 @@ const mainDashboardData = {
         landport: '3.1m',
         egate: '1.2m',
         analyst: '1.2m',
-        'gate-supervisor': '1.2m',
+        'shiftsupervisor': '1.2m',
         'control-room': '1.2m',
     }
 };
@@ -131,6 +140,93 @@ const transactionOverviewData = [
     { name: 'Day 7', entry: 5520, exit: 3300 },
 ];
 
+const forecastData = {
+  airport: {
+    current: {
+      title: "Current Shift Forecast",
+      description: "Expected passenger traffic and resource allocation for the current shift (08:00 - 16:00).",
+      recommendedStaff: 45,
+      items: [
+        { label: "Expected Passengers", value: "6,200", trend: { direction: 'up', percentage: 5, text: 'vs last shift' } },
+        { label: "Peak Hours", value: "10:00 - 12:00", trend: { direction: 'up', text: 'High Traffic' } },
+      ],
+    },
+    next: {
+      title: "Next Shift Forecast",
+      description: "Expected passenger traffic and resource allocation for the next shift (16:00 - 00:00).",
+      recommendedStaff: 38,
+      items: [
+        { label: "Expected Passengers", value: "4,800", trend: { direction: 'down', percentage: 12, text: 'vs current shift' } },
+        { label: "Peak Hours", value: "18:00 - 20:00", trend: { direction: 'same', text: 'Medium Traffic' } },
+      ],
+    },
+  },
+  landport: {
+    current: {
+        title: "Current Shift Forecast",
+        description: "Expected vehicle and traveler traffic for the current shift (07:00 - 15:00).",
+        recommendedStaff: 12,
+        items: [
+          { label: "Expected Vehicles", value: "2,100", trend: { direction: 'down', percentage: 3, text: 'vs last shift' } },
+          { label: "Peak Hours", value: "08:00 - 10:00", trend: { direction: 'same', text: 'Medium Traffic' } },
+        ],
+    },
+    next: {
+        title: "Next Shift Forecast",
+        description: "Expected vehicle and traveler traffic for the next shift (15:00 - 23:00).",
+        recommendedStaff: 15,
+        items: [
+          { label: "Expected Vehicles", value: "2,500", trend: { direction: 'up', percentage: 8, text: 'vs current shift' } },
+          { label: "Peak Hours", value: "17:00 - 19:00", trend: { direction: 'up', text: 'High Traffic' } },
+        ],
+    }
+  },
+  seaport: {
+      current: {
+          title: "Current Shift Forecast",
+          description: "Expected vessel arrivals and container traffic for the current shift (06:00 - 18:00).",
+          recommendedStaff: 25,
+          items: [
+            { label: "Expected Vessel Arrivals", value: "4", trend: { direction: 'same', text: 'Normal' } },
+            { label: "Expected Passengers", value: "850", trend: { direction: 'up', percentage: 10, text: 'vs last shift' } },
+            { label: "Peak Activity", value: "10:00 - 14:00", trend: { direction: 'up', text: 'High Congestion' } },
+          ],
+      },
+      next: {
+          title: "Next Shift Forecast",
+          description: "Expected vessel arrivals and container traffic for the next shift (18:00 - 06:00).",
+          recommendedStaff: 18,
+          items: [
+            { label: "Expected Vessel Arrivals", value: "2", trend: { direction: 'down', percentage: 50, text: 'vs current shift' } },
+            { label: "Expected Passengers", value: "400", trend: { direction: 'down', percentage: 25, text: 'vs current shift' } },
+            { label: "Peak Activity", value: "20:00 - 22:00", trend: { direction: 'same', text: 'Low Congestion' } },
+          ],
+      }
+  },
+  'control-room': {
+    current: {
+        title: "Current Shift Forecast",
+        description: "Expected system-wide traffic and resource needs for the current shift (08:00 - 16:00).",
+        recommendedStaff: 8,
+        items: [
+          { label: "Expected Traffic", value: "15,000", trend: { direction: 'up', percentage: 7, text: 'vs last shift' } },
+          { label: "Potential Alerts", value: "5-8", trend: { direction: 'same', text: 'Normal' } },
+          { label: "Peak Hours", value: "11:00 - 14:00", trend: { direction: 'up', text: 'High Activity' } },
+        ],
+    },
+    next: {
+        title: "Next Shift Forecast",
+        description: "Expected system-wide traffic and resource needs for the next shift (16:00 - 00:00).",
+        recommendedStaff: 6,
+        items: [
+          { label: "Expected Traffic", value: "11,500", trend: { direction: 'down', percentage: 15, text: 'vs current shift' } },
+          { label: "Potential Alerts", value: "3-5", trend: { direction: 'down', text: 'Low' } },
+          { label: "Peak Hours", value: "17:00 - 19:00", trend: { direction: 'same', text: 'Medium Activity' } },
+        ],
+    }
+  }
+};
+
 
 const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 
@@ -177,6 +273,14 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
 
     if (method === 'GET' && url.pathname === '/dashboard/transaction-overview') {
         return Result.success(transactionOverviewData) as Result<T>;
+    }
+
+    if (method === 'GET' && url.pathname === '/dashboard/forecasts') {
+        const module = url.searchParams.get('module') as keyof typeof forecastData;
+        if (module && forecastData[module]) {
+            return Result.success(forecastData[module]) as Result<T>;
+        }
+        return Result.failure([new ApiError('NOT_FOUND', `Forecast data for module '${module}' not found.`)]) as Result<T>;
     }
 
     if (method === 'GET' && url.pathname === '/dashboard/stats') {

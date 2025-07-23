@@ -3,7 +3,7 @@
 import * as React from 'react';
 import ModulePage from '@/components/module-page';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { UserCheck, BaggageClaim, ShieldCheck, Globe, Clock, Users, ArrowUp, ArrowDown } from 'lucide-react';
+import { UserCheck, BaggageClaim, ShieldCheck, Clock } from 'lucide-react';
 import PassengerTypeChart from '@/components/charts/passenger-type-chart';
 import CreateRecordButton from '@/components/create-record-button';
 import { useTranslations } from 'next-intl';
@@ -18,6 +18,7 @@ import { TransactionOverviewChart } from '@/components/charts/transaction-overvi
 import PlaneIcon from '@/components/icons/plane-icon';
 import { useAuth } from '@/hooks/use-auth';
 import { ForecastCard } from '@/components/forecast-card';
+import { ArrowUp, ArrowDown, Globe } from 'lucide-react';
 
 export default function AirportDashboardPage() {
   const t = useTranslations('AirportDashboard');
@@ -28,19 +29,21 @@ export default function AirportDashboardPage() {
   React.useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      const [mainResult, airportResult, passengerResult, overviewResult] = await Promise.all([
+      const [mainResult, airportResult, passengerResult, overviewResult, forecastResult] = await Promise.all([
         api.get('/dashboard/main'),
         api.get('/dashboard/airport'),
         api.get('/data/passengers'),
         api.get('/dashboard/transaction-overview'),
+        api.get('/dashboard/forecasts?module=airport'),
       ]);
       
-      if (mainResult.isSuccess && airportResult.isSuccess && passengerResult.isSuccess && overviewResult.isSuccess) {
+      if (mainResult.isSuccess && airportResult.isSuccess && passengerResult.isSuccess && overviewResult.isSuccess && forecastResult.isSuccess) {
         setData({
           main: mainResult.data,
           airport: airportResult.data,
           passengers: passengerResult.data,
           overview: overviewResult.data,
+          forecasts: forecastResult.data,
         });
       }
       setLoading(false);
@@ -78,6 +81,33 @@ export default function AirportDashboardPage() {
 
   const isSupervisorOrAdmin = user?.role === 'shiftsupervisor' || user?.role === 'admin';
 
+  const renderForecastTrend = (trend: { direction: 'up' | 'down' | 'same', percentage?: number, text: string }) => {
+    let colorClass = 'text-gray-500';
+    if(trend.direction === 'up' && trend.text.toLowerCase().includes('high')) colorClass = 'text-red-600';
+    else if (trend.direction === 'up') colorClass = 'text-green-600';
+    else if (trend.direction === 'down') colorClass = 'text-red-600';
+
+    if (trend.text.toLowerCase().includes('medium')) colorClass = 'text-yellow-600';
+    if (trend.text.toLowerCase().includes('low')) colorClass = 'text-green-600';
+
+    return (
+        <span className={`flex items-center ${colorClass}`}>
+            {trend.direction === 'up' && <ArrowUp className="h-4 w-4" />}
+            {trend.direction === 'down' && <ArrowDown className="h-4 w-4" />}
+            {trend.percentage !== undefined ? `${trend.percentage}%` : trend.text}
+        </span>
+    );
+  };
+  
+  const getForecastItems = (forecastData: any) => {
+    if(!forecastData) return [];
+    return forecastData.items.map((item: any) => ({
+      ...item,
+      icon: PlaneIcon, // Replace with dynamic icons if available
+      trend: renderForecastTrend(item.trend)
+    }));
+  };
+
   return (
     <ModulePage
       module="airport"
@@ -97,24 +127,17 @@ export default function AirportDashboardPage() {
        <div className="mt-8 grid gap-8 grid-cols-1">
         {isSupervisorOrAdmin && (
           <div className="grid gap-8 md:grid-cols-2">
-            <ForecastCard
-              title="Current Shift Forecast"
-              description="Expected passenger traffic and resource allocation for the current shift (08:00 - 16:00)."
-              items={[
-                { icon: Users, label: "Expected Passengers", value: "6,200", trend: <span className="flex items-center text-green-600"><ArrowUp className="h-4 w-4" /> 5%</span> },
-                { icon: UserCheck, label: "Recommended Staff", value: "45 Officers", trend: <span className="flex items-center text-gray-500">-</span> },
-                { icon: Clock, label: "Peak Hours", value: "10:00 - 12:00", trend: <span className="flex items-center text-red-600"><ArrowUp className="h-4 w-4" /> High Traffic</span> },
-              ]}
-            />
-            <ForecastCard
-              title="Next Shift Forecast"
-              description="Expected passenger traffic and resource allocation for the next shift (16:00 - 00:00)."
-              items={[
-                { icon: Users, label: "Expected Passengers", value: "4,800", trend: <span className="flex items-center text-red-600"><ArrowDown className="h-4 w-4" /> 12%</span> },
-                { icon: UserCheck, label: "Recommended Staff", value: "38 Officers", trend: <span className="flex items-center text-gray-500">-</span> },
-                { icon: Clock, label: "Peak Hours", value: "18:00 - 20:00", trend: <span className="flex items-center text-yellow-600">Medium Traffic</span> },
-              ]}
-            />
+           {loading || !data ? (
+                <>
+                    <Skeleton className="h-[250px] w-full" />
+                    <Skeleton className="h-[250px] w-full" />
+                </>
+            ) : (
+                <>
+                    <ForecastCard forecast={{ ...data.forecasts.current, items: getForecastItems(data.forecasts.current) }} />
+                    <ForecastCard forecast={{ ...data.forecasts.next, items: getForecastItems(data.forecasts.next) }} />
+                </>
+            )}
           </div>
         )}
 

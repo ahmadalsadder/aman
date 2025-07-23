@@ -23,15 +23,17 @@ export default function SeaportDashboardPage() {
     React.useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
-            const [mainResult, overviewResult] = await Promise.all([
+            const [mainResult, overviewResult, forecastResult] = await Promise.all([
                 api.get('/dashboard/main'),
-                api.get('/dashboard/transaction-overview')
+                api.get('/dashboard/transaction-overview'),
+                api.get('/dashboard/forecasts?module=seaport')
             ]);
             
-            if (mainResult.isSuccess && overviewResult.isSuccess) {
+            if (mainResult.isSuccess && overviewResult.isSuccess && forecastResult.isSuccess) {
                 setData({ 
                     main: mainResult.data,
-                    overview: overviewResult.data
+                    overview: overviewResult.data,
+                    forecasts: forecastResult.data
                 });
             }
             setLoading(false);
@@ -68,6 +70,33 @@ export default function SeaportDashboardPage() {
 
   const isSupervisorOrAdmin = user?.role === 'shiftsupervisor' || user?.role === 'admin';
 
+  const renderForecastTrend = (trend: { direction: 'up' | 'down' | 'same', percentage?: number, text: string }) => {
+    let colorClass = 'text-gray-500';
+    if(trend.direction === 'up' && trend.text.toLowerCase().includes('high')) colorClass = 'text-red-600';
+    else if (trend.direction === 'up') colorClass = 'text-green-600';
+    else if (trend.direction === 'down') colorClass = 'text-red-600';
+    
+    if (trend.text.toLowerCase().includes('medium')) colorClass = 'text-yellow-600';
+    if (trend.text.toLowerCase().includes('low')) colorClass = 'text-green-600';
+
+    return (
+        <span className={`flex items-center ${colorClass}`}>
+            {trend.direction === 'up' && <ArrowUp className="h-4 w-4" />}
+            {trend.direction === 'down' && <ArrowDown className="h-4 w-4" />}
+            {trend.percentage !== undefined ? `${trend.percentage}%` : trend.text}
+        </span>
+    );
+  };
+
+  const getForecastItems = (forecastData: any) => {
+    if(!forecastData) return [];
+    return forecastData.items.map((item: any) => ({
+      ...item,
+      icon: item.label.includes('Vessel') ? Ship : (item.label.includes('Passengers') ? Users : Clock),
+      trend: renderForecastTrend(item.trend)
+    }));
+  };
+
   return (
     <ModulePage
       module="seaport"
@@ -88,24 +117,17 @@ export default function SeaportDashboardPage() {
 
             {isSupervisorOrAdmin && (
               <div className="grid gap-8 md:grid-cols-2">
-                <ForecastCard
-                  title="Current Shift Forecast"
-                  description="Expected vessel arrivals and container traffic for the current shift (06:00 - 18:00)."
-                  items={[
-                    { icon: Ship, label: "Expected Vessel Arrivals", value: "4", trend: <span className="flex items-center text-gray-500">-</span> },
-                    { icon: Users, label: "Expected Passengers", value: "850", trend: <span className="flex items-center text-green-600"><ArrowUp className="h-4 w-4" /> 10%</span> },
-                    { icon: Clock, label: "Peak Activity", value: "10:00 - 14:00", trend: <span className="flex items-center text-red-600"><ArrowUp className="h-4 w-4" /> High Congestion</span> },
-                  ]}
-                />
-                <ForecastCard
-                  title="Next Shift Forecast"
-                  description="Expected vessel arrivals and container traffic for the next shift (18:00 - 06:00)."
-                  items={[
-                    { icon: Ship, label: "Expected Vessel Arrivals", value: "2", trend: <span className="flex items-center text-red-600"><ArrowDown className="h-4 w-4" /> 50%</span> },
-                    { icon: Users, label: "Expected Passengers", value: "400", trend: <span className="flex items-center text-red-600"><ArrowDown className="h-4 w-4" /> 25%</span> },
-                    { icon: Clock, label: "Peak Activity", value: "20:00 - 22:00", trend: <span className="flex items-center text-green-600">Low Congestion</span> },
-                  ]}
-                />
+                {loading || !data ? (
+                    <>
+                        <Skeleton className="h-[250px] w-full" />
+                        <Skeleton className="h-[250px] w-full" />
+                    </>
+                ) : (
+                    <>
+                        <ForecastCard forecast={{ ...data.forecasts.current, items: getForecastItems(data.forecasts.current) }} />
+                        <ForecastCard forecast={{ ...data.forecasts.next, items: getForecastItems(data.forecasts.next) }} />
+                    </>
+                )}
               </div>
             )}
             

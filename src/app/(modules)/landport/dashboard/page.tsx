@@ -23,15 +23,17 @@ export default function LandportDashboardPage() {
     React.useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
-            const [mainResult, overviewResult] = await Promise.all([
+            const [mainResult, overviewResult, forecastResult] = await Promise.all([
               api.get('/dashboard/main'),
-              api.get('/dashboard/transaction-overview')
+              api.get('/dashboard/transaction-overview'),
+              api.get('/dashboard/forecasts?module=landport')
             ]);
             
-            if (mainResult.isSuccess && overviewResult.isSuccess) {
+            if (mainResult.isSuccess && overviewResult.isSuccess && forecastResult.isSuccess) {
                 setData({ 
                     main: mainResult.data,
-                    overview: overviewResult.data
+                    overview: overviewResult.data,
+                    forecasts: forecastResult.data
                 });
             }
             setLoading(false);
@@ -68,6 +70,33 @@ export default function LandportDashboardPage() {
 
   const isSupervisorOrAdmin = user?.role === 'shiftsupervisor' || user?.role === 'admin';
 
+  const renderForecastTrend = (trend: { direction: 'up' | 'down' | 'same', percentage?: number, text: string }) => {
+    let colorClass = 'text-gray-500';
+    if(trend.direction === 'up' && trend.text.toLowerCase().includes('high')) colorClass = 'text-red-600';
+    else if (trend.direction === 'up') colorClass = 'text-green-600';
+    else if (trend.direction === 'down') colorClass = 'text-red-600';
+
+    if (trend.text.toLowerCase().includes('medium')) colorClass = 'text-yellow-600';
+    if (trend.text.toLowerCase().includes('low')) colorClass = 'text-green-600';
+    
+    return (
+        <span className={`flex items-center ${colorClass}`}>
+            {trend.direction === 'up' && <ArrowUp className="h-4 w-4" />}
+            {trend.direction === 'down' && <ArrowDown className="h-4 w-4" />}
+            {trend.percentage !== undefined ? `${trend.percentage}%` : trend.text}
+        </span>
+    );
+  };
+  
+  const getForecastItems = (forecastData: any) => {
+    if(!forecastData) return [];
+    return forecastData.items.map((item: any) => ({
+      ...item,
+      icon: item.label.includes('Vehicles') ? Car : Clock,
+      trend: renderForecastTrend(item.trend)
+    }));
+  };
+
   return (
     <ModulePage
       module="landport"
@@ -88,24 +117,17 @@ export default function LandportDashboardPage() {
 
         {isSupervisorOrAdmin && (
           <div className="grid gap-8 md:grid-cols-2">
-            <ForecastCard
-              title="Current Shift Forecast"
-              description="Expected vehicle and traveler traffic for the current shift (07:00 - 15:00)."
-              items={[
-                { icon: Car, label: "Expected Vehicles", value: "2,100", trend: <span className="flex items-center text-red-600"><ArrowDown className="h-4 w-4" /> 3%</span> },
-                { icon: UserSquare, label: "Recommended Officers", value: "12 Officers", trend: <span className="flex items-center text-gray-500">-</span> },
-                { icon: Clock, label: "Peak Hours", value: "08:00 - 10:00", trend: <span className="flex items-center text-yellow-600">Medium Traffic</span> },
-              ]}
-            />
-            <ForecastCard
-              title="Next Shift Forecast"
-              description="Expected vehicle and traveler traffic for the next shift (15:00 - 23:00)."
-              items={[
-                { icon: Car, label: "Expected Vehicles", value: "2,500", trend: <span className="flex items-center text-green-600"><ArrowUp className="h-4 w-4" /> 8%</span> },
-                { icon: UserSquare, label: "Recommended Officers", value: "15 Officers", trend: <span className="flex items-center text-gray-500">-</span> },
-                { icon: Clock, label: "Peak Hours", value: "17:00 - 19:00", trend: <span className="flex items-center text-red-600"><ArrowUp className="h-4 w-4" /> High Traffic</span> },
-              ]}
-            />
+            {loading || !data ? (
+                <>
+                    <Skeleton className="h-[250px] w-full" />
+                    <Skeleton className="h-[250px] w-full" />
+                </>
+            ) : (
+                <>
+                    <ForecastCard forecast={{ ...data.forecasts.current, items: getForecastItems(data.forecasts.current) }} />
+                    <ForecastCard forecast={{ ...data.forecasts.next, items: getForecastItems(data.forecasts.next) }} />
+                </>
+            )}
           </div>
         )}
 

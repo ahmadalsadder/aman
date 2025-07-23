@@ -180,5 +180,12 @@
     "mainPageMessage": "Esta es la página principal del módulo de Sala de Control. Desde aquí puede navegar a las diferentes secciones de este módulo.",
     "goToDashboard": "Ir al Tablero",
     "goToAnalytics": "Ir a Análisis"
+  },
+  "PortalPage": {
+    "title": "Seleccione un Portal",
+    "description": "Bienvenido, {name}. Por favor, elija un módulo para continuar.",
+    "cardDescription": "Acceda al tablero y las herramientas de {module}.",
+    "openModule": "Abrir Módulo",
+    "notYourPortals": "¿No ve el portal que está buscando? Contacte a su administrador."
   }
 }

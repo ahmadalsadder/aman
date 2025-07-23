@@ -180,5 +180,12 @@
     "mainPageMessage": "This is the main page for the Control Room module. From here you can navigate to the different sections of this module.",
     "goToDashboard": "Go to Dashboard",
     "goToAnalytics": "Go to Analytics"
+  },
+  "PortalPage": {
+    "title": "Select a Portal",
+    "description": "Welcome, {name}. Please choose a module to continue.",
+    "cardDescription": "Access the {module} dashboard and tools.",
+    "openModule": "Open Module",
+    "notYourPortals": "Don't see the portal you're looking for? Contact your administrator."
   }
 }

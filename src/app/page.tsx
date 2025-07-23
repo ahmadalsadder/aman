@@ -14,7 +14,9 @@ export default function Home() {
   useEffect(() => {
     if (!loading) {
       if (user) {
-        if (user.modules && user.modules.length > 0) {
+         if (user.modules && user.modules.length > 1) {
+          router.replace('/portal');
+        } else if (user.modules && user.modules.length === 1) {
           router.replace(`/${user.modules[0]}`);
         } else {
           router.replace('/login'); // Or a 'no modules assigned' page

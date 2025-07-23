@@ -1,4 +1,4 @@
-import express, { type Request, type Response } from 'express';
+import express, { type Request, type Response, Router } from 'express';
 import cors from 'cors';
 import { users } from './data/users';
 import type { User } from './types';
@@ -16,7 +16,9 @@ const port = 3001;
 app.use(cors());
 app.use(express.json());
 
-app.post('/api/login', (req: Request, res: Response) => {
+const apiRouter = Router();
+
+apiRouter.post('/login', (req: Request, res: Response) => {
   const { email, password } = req.body;
   
   // In a real app, you'd hash and compare the password
@@ -35,7 +37,7 @@ app.post('/api/login', (req: Request, res: Response) => {
   }
 });
 
-app.get('/api/dashboard/stats', (req: Request, res: Response) => {
+apiRouter.get('/dashboard/stats', (req: Request, res: Response) => {
   res.json(Result.success({
     totalAnomalies: 12,
     monitoredEndpoints: 42,
@@ -43,10 +45,11 @@ app.get('/api/dashboard/stats', (req: Request, res: Response) => {
   }));
 });
 
-app.get('/api/dashboard/stats-error', (req: Request, res: Response) => {
+apiRouter.get('/dashboard/stats-error', (req: Request, res: Response) => {
     res.status(401).send(`{ "error": "invalid_token", "error_description": "The access token is expired or invalid", "user_id": 12345, "internal_debug_info": "trace_id: xyz-abc-123" }`);
 });
 
+app.use('/api', apiRouter);
 
 app.listen(port, () => {
   console.log(`Guardian Gate server listening on port ${port}`);

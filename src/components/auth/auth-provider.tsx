@@ -3,6 +3,7 @@
 import * as React from 'react';
 import type { User, Permission } from '@/types';
 import { mockLogin } from '@/lib/auth';
+import { ApiContextSnatcher } from '@/lib/api';
 
 export interface AuthContextType {
   user: User | null;
@@ -85,5 +86,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     hasPermission
   }), [user, loading]);
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={value}>
+        <ApiContextSnatcher />
+        {children}
+    </AuthContext.Provider>
+  );
 }

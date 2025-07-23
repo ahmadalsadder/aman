@@ -3,6 +3,8 @@ import './globals.css';
 import { AuthProvider } from '@/components/auth/auth-provider';
 import { Toaster } from '@/components/ui/toaster';
 import { I18nProvider } from '@/components/i18n-provider';
+import { LoaderProvider } from '@/components/loader-provider';
+import { GlobalLoader } from '@/components/global-loader';
 
 export const metadata: Metadata = {
   title: 'Guardian Gate Unified',
@@ -27,8 +29,11 @@ export default function RootLayout({
       <body className="font-body antialiased">
         <I18nProvider>
           <AuthProvider>
-            {children}
-            <Toaster />
+            <LoaderProvider>
+              <GlobalLoader />
+              {children}
+              <Toaster />
+            </LoaderProvider>
           </AuthProvider>
         </I18nProvider>
       </body>

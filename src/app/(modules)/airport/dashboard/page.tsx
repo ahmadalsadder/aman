@@ -3,7 +3,7 @@
 import * as React from 'react';
 import ModulePage from '@/components/module-page';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Plane, UserCheck, BaggageClaim, ShieldCheck, Globe, Clock } from 'lucide-react';
+import { UserCheck, BaggageClaim, ShieldCheck, Globe, Clock } from 'lucide-react';
 import PassengerTypeChart from '@/components/charts/passenger-type-chart';
 import CreateRecordButton from '@/components/create-record-button';
 import { useTranslations } from 'next-intl';
@@ -15,6 +15,7 @@ import { WorldMapChart } from '@/components/charts/world-map-chart';
 import { api } from '@/lib/api';
 import { Skeleton } from '@/components/ui/skeleton';
 import { TransactionOverviewChart } from '@/components/charts/transaction-overview-chart';
+import PlaneIcon from '@/components/icons/plane-icon';
 
 export default function AirportDashboardPage() {
   const t = useTranslations('AirportDashboard');
@@ -77,14 +78,14 @@ export default function AirportDashboardPage() {
       module="airport"
       title={t('title')}
       description={t('description')}
-      icon={Plane}
+      icon={PlaneIcon}
     >
       {loading ? renderSkeleton() : (
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
         <StatCard title={t('passengersProcessed')} value="12,453" icon={UserCheck} />
         <StatCard title={t('bagsScanned')} value="25,832" icon={BaggageClaim} />
         <StatCard title={t('securityAlerts')} value="3" icon={ShieldCheck} />
-        <StatCard title={t('flightsMonitored')} value="128" icon={Plane} />
+        <StatCard title={t('flightsMonitored')} value="128" icon={PlaneIcon} />
         <StatCard title={t('avgProcessingTime')} value={data?.main?.avgProcessingTime?.airport || '...'} icon={Clock} />
       </div>
       )}

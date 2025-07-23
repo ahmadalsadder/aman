@@ -16,6 +16,7 @@ import { DashboardHeader } from '@/components/layout/dashboard-header';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList } from '@/components/ui/breadcrumb';
 import { GateRejectionReasonsChart } from '@/components/charts/gate-rejection-reasons-chart';
 import { SimplePieChart } from '@/components/charts/simple-pie-chart';
+import { GatePerformanceTable } from '@/components/charts/gate-performance-table';
 
 export default function ControlRoomDashboardPage() {
     const t = useTranslations('ControlRoomDashboard');
@@ -26,16 +27,17 @@ export default function ControlRoomDashboardPage() {
     React.useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
-            const [mainResult, overviewResult, forecastResult, statsResult, rejectionResult, transactionBreakdownResult] = await Promise.all([
+            const [mainResult, overviewResult, forecastResult, statsResult, rejectionResult, transactionBreakdownResult, gatePerformanceResult] = await Promise.all([
                 api.get('/dashboard/main'),
                 api.get('/dashboard/transaction-overview'),
                 api.get('/dashboard/forecasts?module=control-room'),
                 api.get('/dashboard/stats?module=control-room'),
                 api.get('/dashboard/gate-rejection-reasons'),
                 api.get('/dashboard/transaction-breakdown'),
+                api.get('/dashboard/gate-performance'),
             ]);
             
-            if (mainResult.isSuccess && overviewResult.isSuccess && forecastResult.isSuccess && statsResult.isSuccess && rejectionResult.isSuccess && transactionBreakdownResult.isSuccess) {
+            if (mainResult.isSuccess && overviewResult.isSuccess && forecastResult.isSuccess && statsResult.isSuccess && rejectionResult.isSuccess && transactionBreakdownResult.isSuccess && gatePerformanceResult.isSuccess) {
                 setData({ 
                     main: mainResult.data,
                     overview: overviewResult.data,
@@ -43,6 +45,7 @@ export default function ControlRoomDashboardPage() {
                     stats: statsResult.data,
                     reasons: rejectionResult.data,
                     transactionBreakdown: transactionBreakdownResult.data,
+                    gatePerformance: gatePerformanceResult.data,
                 });
             }
             setLoading(false);
@@ -149,6 +152,8 @@ export default function ControlRoomDashboardPage() {
             ) : (
                 <TransactionOverviewChart data={data.overview} />
             )}
+
+            {loading || !data ? <Skeleton className="h-[400px] w-full" /> : <GatePerformanceTable data={data.gatePerformance} /> }
 
             {loading || !data ? (
                 <Skeleton className="h-[400px] w-full" />

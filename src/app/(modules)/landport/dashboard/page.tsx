@@ -15,6 +15,7 @@ import { ForecastCard } from '@/components/forecast-card';
 import { DashboardHeader } from '@/components/layout/dashboard-header';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList } from '@/components/ui/breadcrumb';
 import PassengerTypeChart from '@/components/charts/passenger-type-chart';
+import { ProcessingTimeDistributionChart } from '@/components/charts/processing-time-distribution-chart';
 
 export default function LandportDashboardPage() {
     const t = useTranslations('LandportDashboard');
@@ -25,21 +26,23 @@ export default function LandportDashboardPage() {
     React.useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
-            const [mainResult, overviewResult, forecastResult, statsResult, passengerResult] = await Promise.all([
+            const [mainResult, overviewResult, forecastResult, statsResult, passengerResult, timeDistResult] = await Promise.all([
               api.get('/dashboard/main'),
               api.get('/dashboard/transaction-overview'),
               api.get('/dashboard/forecasts?module=landport'),
               api.get('/dashboard/stats?module=landport'),
               api.get('/data/passengers'),
+              api.get('/dashboard/processing-time-distribution'),
             ]);
             
-            if (mainResult.isSuccess && overviewResult.isSuccess && forecastResult.isSuccess && statsResult.isSuccess && passengerResult.isSuccess) {
+            if (mainResult.isSuccess && overviewResult.isSuccess && forecastResult.isSuccess && statsResult.isSuccess && passengerResult.isSuccess && timeDistResult.isSuccess) {
                 setData({ 
                     main: mainResult.data,
                     overview: overviewResult.data,
                     forecasts: forecastResult.data,
                     stats: statsResult.data,
                     passengers: passengerResult.data,
+                    timeDistribution: timeDistResult.data,
                 });
             }
             setLoading(false);
@@ -131,12 +134,19 @@ export default function LandportDashboardPage() {
         ) : (
           <TransactionOverviewChart data={data.overview} />
         )}
-
+        
         {loading || !data ? (
-            <Skeleton className="h-[400px] w-full" />
+            <div className="grid gap-8 md:grid-cols-2">
+                <Skeleton className="h-[400px] w-full" />
+                <Skeleton className="h-[400px] w-full" />
+            </div>
         ) : (
-            <PassengerTypeChart data={data.passengers.landport} />
+            <div className="grid gap-8 md:grid-cols-2">
+                <PassengerTypeChart data={data.passengers.landport} />
+                <ProcessingTimeDistributionChart data={data.timeDistribution} />
+            </div>
         )}
+
 
         {loading || !data ? (
           <Skeleton className="h-[400px] w-full" />

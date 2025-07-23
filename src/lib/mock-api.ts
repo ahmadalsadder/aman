@@ -365,6 +365,13 @@ const officerPerformanceData = {
     ],
 };
 
+const processingTimeDistributionData = [
+    { name: '< 1m', value: 1200 },
+    { name: '1-3m', value: 3400 },
+    { name: '3-5m', value: 2100 },
+    { name: '> 5m', value: 800 },
+];
+
 
 const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 
@@ -452,6 +459,10 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
     
     if (method === 'GET' && url.pathname === '/dashboard/officer-performance') {
         return Result.success(officerPerformanceData) as Result<T>;
+    }
+
+    if (method === 'GET' && url.pathname === '/dashboard/processing-time-distribution') {
+        return Result.success(processingTimeDistributionData) as Result<T>;
     }
 
     return Result.failure([new ApiError('NOT_FOUND', `Mock endpoint ${method} ${endpoint} not found.`)]) as Result<T>;

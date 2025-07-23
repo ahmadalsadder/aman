@@ -16,32 +16,43 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const storedLocale = (localStorage.getItem('locale') as Locale) || 'en';
     setLocale(storedLocale);
-
-    const newDirection = storedLocale === 'ar' ? 'rtl' : 'ltr';
-    document.documentElement.lang = storedLocale;
-    document.documentElement.dir = newDirection;
-
-    const event = new CustomEvent('locale-changed', { detail: storedLocale });
-    window.dispatchEvent(event);
   }, []);
 
   useEffect(() => {
     if (locale) {
+      const newDirection = locale === 'ar' ? 'rtl' : 'ltr';
+      document.documentElement.lang = locale;
+      document.documentElement.dir = newDirection;
       getMessages(locale).then(setMessages);
+      
+      const event = new CustomEvent('locale-changed', { detail: locale });
+      window.dispatchEvent(event);
     }
   }, [locale]);
 
   if (!messages) {
     return (
-      <div className="flex h-screen w-full flex-col items-center justify-center bg-background">
-        <Loader2 className="h-12 w-12 animate-spin text-primary" />
-      </div>
+      <html lang="en">
+        <body>
+          <div className="flex h-screen w-full flex-col items-center justify-center bg-background">
+            <Loader2 className="h-12 w-12 animate-spin text-primary" />
+          </div>
+        </body>
+      </html>
     );
   }
+  
+  const I18nRoot = ({ children }: { children: React.ReactNode }) => (
+    <html lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'} suppressHydrationWarning>
+      {children}
+    </html>
+  );
 
   return (
-    <NextIntlClientProvider locale={locale} messages={messages}>
-      {children}
-    </NextIntlClientProvider>
+    <I18nRoot>
+      <NextIntlClientProvider locale={locale} messages={messages}>
+        {children}
+      </NextIntlClientProvider>
+    </I18nRoot>
   );
 }

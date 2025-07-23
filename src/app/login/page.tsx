@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { useRouter } from 'next/navigation';
-import { Eye, EyeOff, Loader2, Fingerprint } from 'lucide-react';
+import { Loader2, Fingerprint, Info } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/button';
@@ -23,6 +23,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import Logo from '@/components/logo';
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Background } from '@/components/background';
+
 
 export default function LoginPage() {
   const router = useRouter();
@@ -31,13 +34,12 @@ export default function LoginPage() {
   const t = useTranslations('LoginPage');
   
   const formSchema = z.object({
-    email: z.string().email({ message: t('invalidEmailError') }),
+    email: z.string().min(1, { message: t('usernameRequiredError') }),
     password: z.string().min(1, { message: t('passwordRequiredError') }),
   });
 
   const [error, setError] = React.useState<string | null>(null);
   const [loading, setLoading] = React.useState(false);
-  const [showPassword, setShowPassword] = React.useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -80,13 +82,14 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="flex min-h-screen w-full items-center justify-center bg-background p-4">
-      <Card className="w-full max-w-md shadow-2xl">
+    <main className="relative flex min-h-screen w-full items-center justify-center bg-background p-4">
+      <Background />
+      <Card className="z-10 w-full max-w-md shadow-2xl">
         <CardHeader className="text-center">
           <div className="mx-auto mb-4">
             <Logo className="h-16 w-16" />
           </div>
-          <CardTitle className="text-2xl font-bold tracking-tight">{t('title')}</CardTitle>
+          <CardTitle className="text-3xl font-bold">{t('titleAman')}</CardTitle>
           <CardDescription>{t('description')}</CardDescription>
         </CardHeader>
         <CardContent>
@@ -97,10 +100,10 @@ export default function LoginPage() {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('emailLabel')}</FormLabel>
+                    <FormLabel>{t('usernameLabel')}</FormLabel>
                     <FormControl>
                       <Input 
-                        placeholder={t('emailPlaceholder')} 
+                        placeholder="officer.jones" 
                         {...field} 
                         status={getFieldStatus('email')}
                       />
@@ -121,28 +124,24 @@ export default function LoginPage() {
                         </a>
                     </div>
                     <FormControl>
-                      <div className="relative">
-                        <Input
-                          type={showPassword ? 'text' : 'password'}
-                          placeholder={t('passwordPlaceholder')}
-                          {...field}
-                          status={getFieldStatus('password')}
-                        />
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="icon"
-                          className="absolute inset-y-0 end-0 h-full px-3 text-muted-foreground"
-                          onClick={() => setShowPassword(!showPassword)}
-                        >
-                          {showPassword ? <EyeOff /> : <Eye />}
-                        </Button>
-                      </div>
+                      <Input
+                        type='password'
+                        placeholder="••••••••"
+                        {...field}
+                        status={getFieldStatus('password')}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+               <Alert variant="destructive">
+                <Info className="h-4 w-4" />
+                <AlertTitle>{t('demoCredentials')}</AlertTitle>
+                <AlertDescription>
+                  {t('demoCredentialsMessage')}
+                </AlertDescription>
+              </Alert>
               {error && <p className="text-sm font-medium text-destructive">{error}</p>}
               <Button type="submit" className="w-full" disabled={loading}>
                 {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}

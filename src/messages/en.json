@@ -1,18 +1,22 @@
 {
   "LoginPage": {
     "title": "Welcome to Guardian Gate",
-    "description": "Enter your credentials to access your account",
-    "emailLabel": "Email",
+    "titleAman": "Aman",
+    "description": "Securely access the border control system.",
+    "usernameLabel": "Username or Email",
     "emailPlaceholder": "name@example.com",
     "passwordLabel": "Password",
     "passwordPlaceholder": "••••••••",
     "signInButton": "Sign In",
     "signingInButton": "Securing your session...",
+    "usernameRequiredError": "Username or Email is required",
     "invalidEmailError": "Please enter a valid email address.",
     "passwordRequiredError": "Password is required.",
     "unknownError": "An unknown error occurred.",
     "forgotPassword": "Forgot password?",
-    "biometricLogin": "Login with Biometrics"
+    "biometricLogin": "Login with Biometrics",
+    "demoCredentials": "Demo Credentials",
+    "demoCredentialsMessage": "Use any mock username (e.g., `admin`, `officer.jones`) with the password: `password`."
   },
   "HomePage": {
     "initializing": "Initializing Guardian Gate..."

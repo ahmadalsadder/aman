@@ -1,18 +1,22 @@
 {
   "LoginPage": {
     "title": "مرحبًا بك في بوابة الحماية",
-    "description": "أدخل بيانات الاعتماد الخاصة بك للوصول إلى حسابك",
-    "emailLabel": "البريد الإلكتروني",
+    "titleAman": "أمان",
+    "description": "الوصول الآمن إلى نظام مراقبة الحدود.",
+    "usernameLabel": "اسم المستخدم أو البريد الإلكتروني",
     "emailPlaceholder": "name@example.com",
     "passwordLabel": "كلمة المرور",
     "passwordPlaceholder": "••••••••",
     "signInButton": "تسجيل الدخول",
     "signingInButton": "تأمين جلستك...",
+    "usernameRequiredError": "اسم المستخدم أو البريد الإلكتروني مطلوب",
     "invalidEmailError": "الرجاء إدخال عنوان بريد إلكتروني صالح.",
     "passwordRequiredError": "كلمة المرور مطلوبة.",
     "unknownError": "حدث خطأ غير معروف.",
     "forgotPassword": "هل نسيت كلمة المرور؟",
-    "biometricLogin": "تسجيل الدخول بالبصمة"
+    "biometricLogin": "تسجيل الدخول بالبصمة",
+    "demoCredentials": "بيانات اعتماد تجريبية",
+    "demoCredentialsMessage": "استخدم أي اسم مستخدم وهمي (مثل `admin`, `officer.jones`) مع كلمة المرور: `password`."
   },
   "HomePage": {
     "initializing": "جاري تهيئة بوابة الحماية..."

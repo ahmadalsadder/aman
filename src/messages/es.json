@@ -1,18 +1,22 @@
 {
   "LoginPage": {
     "title": "Bienvenido a Guardian Gate",
-    "description": "Ingrese sus credenciales para acceder a su cuenta",
-    "emailLabel": "Correo electrónico",
+    "titleAman": "Aman",
+    "description": "Acceda de forma segura al sistema de control de fronteras.",
+    "usernameLabel": "Nombre de usuario o correo electrónico",
     "emailPlaceholder": "nombre@ejemplo.com",
     "passwordLabel": "Contraseña",
     "passwordPlaceholder": "••••••••",
     "signInButton": "Iniciar sesión",
     "signingInButton": "Asegurando su sesión...",
+    "usernameRequiredError": "Se requiere nombre de usuario o correo electrónico",
     "invalidEmailError": "Por favor ingrese una dirección de correo electrónico válida.",
     "passwordRequiredError": "Se requiere contraseña.",
     "unknownError": "Ocurrió un error desconocido.",
     "forgotPassword": "¿Olvidaste tu contraseña?",
-    "biometricLogin": "Iniciar sesión con Biometría"
+    "biometricLogin": "Iniciar sesión con Biometría",
+    "demoCredentials": "Credenciales de demostración",
+    "demoCredentialsMessage": "Utilice cualquier nombre de usuario simulado (p. ej., `admin`, `officer.jones`) con la contraseña: `password`."
   },
   "HomePage": {
     "initializing": "Inicializando Guardian Gate..."

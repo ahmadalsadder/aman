@@ -43,9 +43,9 @@ export function ForecastCard({ forecast }: ForecastCardProps) {
                                 <item.icon className="h-5 w-5 text-muted-foreground" />
                                 <span className="font-medium">{item.label}</span>
                             </div>
-                            <div className="text-right">
+                            <div className="flex items-center gap-2">
                                 <p className="font-semibold text-lg">{item.value}</p>
-                                <p className="text-xs text-muted-foreground">{item.trend}</p>
+                                <div className="text-xs text-muted-foreground">{item.trend}</div>
                             </div>
                         </li>
                     ))}

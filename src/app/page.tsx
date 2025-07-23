@@ -17,7 +17,7 @@ export default function Home() {
          if (user.modules && user.modules.length > 1) {
           router.replace('/portal');
         } else if (user.modules && user.modules.length === 1) {
-          router.replace(`/${user.modules[0]}`);
+          router.replace(`/${user.modules[0]}/dashboard`);
         } else {
           router.replace('/login'); // Or a 'no modules assigned' page
         }

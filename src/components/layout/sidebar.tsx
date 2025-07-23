@@ -37,7 +37,7 @@ export default function AppSidebar() {
   };
 
   const shouldShowPortalsLink = user && user.modules && user.modules.length > 1;
-  const moduleDashboardHref = currentModule ? `/${currentModule}` : '/';
+  const moduleDashboardHref = currentModule ? `/${currentModule}/dashboard` : '/';
 
   return (
     <Sidebar variant="inset" collapsible="icon">

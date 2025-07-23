@@ -11,13 +11,13 @@ export interface NavItem {
 
 const allModules: Record<Module, Omit<NavItem, 'label'>> = {
   dashboard: { href: '/dashboard', icon: LayoutDashboard },
-  airport: { href: '/airport', icon: Plane },
-  landport: { href: '/landport', icon: LandPlot },
-  seaport: { href: '/seaport', icon: Ship },
-  egate: { href: '/egate', icon: DoorOpen },
-  analyst: { href: '/analyst', icon: PieChart },
-  'gate-supervisor': { href: '/gate-supervisor', icon: UserCog },
-  'control-room': { href: '/control-room', icon: RadioTower },
+  airport: { href: '/airport/dashboard', icon: Plane },
+  landport: { href: '/landport/dashboard', icon: LandPlot },
+  seaport: { href: '/seaport/dashboard', icon: Ship },
+  egate: { href: '/egate/dashboard', icon: DoorOpen },
+  analyst: { href: '/analyst/dashboard', icon: PieChart },
+  'gate-supervisor': { href: '/gate-supervisor/dashboard', icon: UserCog },
+  'control-room': { href: '/control-room/dashboard', icon: RadioTower },
 };
 
 const adminNavItems: Record<string, Omit<NavItem, 'label'>> = {
@@ -36,29 +36,22 @@ export const getPortalNavItems = (role: Role, modules: Module[], t: any): NavIte
 
 export const getModuleNavItems = (module: Module, role: Role, t: any): NavItem[] => {
     const baseNav: NavItem[] = [];
+    const moduleBaseUrl = `/${module}`;
 
     // All modules get a dashboard
-    if (allModules[module]) {
-        baseNav.push({
-            href: `${allModules[module].href}/dashboard`,
-            label: t('dashboard'),
-            icon: LayoutDashboard,
-        });
-    }
-
-    // Future logic to add more module-specific items can go here.
-    // For example:
-    // if (module === 'airport') {
-    //   baseNav.push({ href: '/airport/flights', label: 'Flights', icon: Plane });
-    // }
+    baseNav.push({
+        href: `${moduleBaseUrl}/dashboard`,
+        label: t('dashboard'),
+        icon: LayoutDashboard,
+    });
     
     // Add admin-specific items if the role is admin
     if (role === 'admin') {
          if (adminNavItems.users) {
-            baseNav.push({ ...adminNavItems.users, label: t('userManagement') });
+            baseNav.push({ ...adminNavItems.users, href: `${moduleBaseUrl}${adminNavItems.users.href}`, label: t('userManagement') });
          }
          if (adminNavItems.settings) {
-            baseNav.push({ ...adminNavItems.settings, label: t('systemSettings') });
+            baseNav.push({ ...adminNavItems.settings, href: `${moduleBaseUrl}${adminNavItems.settings.href}`, label: t('systemSettings') });
          }
     }
 

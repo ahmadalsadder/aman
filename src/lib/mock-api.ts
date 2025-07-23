@@ -146,6 +146,7 @@ const dashboardStats = {
         failedAttempts: '14',
         biometricVerifications: '8,224',
         activeGates: '24',
+        totalGates: 30,
         activeAlerts: '5',
     }
 }

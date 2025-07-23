@@ -111,7 +111,7 @@ export default function ControlRoomDashboardPage() {
                 <StatCard title={t('successfulEntries')} value={data?.stats?.successfulEntries || '...'} icon={CheckCircle} color="text-green-500" />
                 <StatCard title={t('failedAttempts')} value={data?.stats?.failedAttempts || '...'} icon={ShieldAlert} color="text-red-500" />
                 <StatCard title={t('biometricVerifications')} value={data?.stats?.biometricVerifications || '...'} icon={Fingerprint} color="text-blue-500" />
-                <StatCard title={t('activeGates')} value={data?.stats?.activeGates || '...'} icon={DoorOpen} color="text-purple-500" />
+                <StatCard title={t('activeGates')} value={data?.stats ? `${data.stats.activeGates}/${data.stats.totalGates}` : '...'} icon={DoorOpen} color="text-purple-500" />
                 <StatCard title={t('activeAlerts')} value={data?.stats?.activeAlerts || '...'} icon={ShieldAlert} color="text-yellow-500" />
                 <StatCard title={t('avgProcessingTime')} value={data?.main?.avgProcessingTime?.['control-room'] || '...'} icon={Clock} color="text-orange-500" />
             </div>

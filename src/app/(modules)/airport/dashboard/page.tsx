@@ -3,7 +3,7 @@
 import * as React from 'react';
 import ModulePage from '@/components/module-page';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { UserCheck, BaggageClaim, ShieldCheck, Globe, Clock } from 'lucide-react';
+import { UserCheck, BaggageClaim, ShieldCheck, Globe, Clock, Users, ArrowUp, ArrowDown } from 'lucide-react';
 import PassengerTypeChart from '@/components/charts/passenger-type-chart';
 import CreateRecordButton from '@/components/create-record-button';
 import { useTranslations } from 'next-intl';
@@ -16,9 +16,12 @@ import { api } from '@/lib/api';
 import { Skeleton } from '@/components/ui/skeleton';
 import { TransactionOverviewChart } from '@/components/charts/transaction-overview-chart';
 import PlaneIcon from '@/components/icons/plane-icon';
+import { useAuth } from '@/hooks/use-auth';
+import { ForecastCard } from '@/components/forecast-card';
 
 export default function AirportDashboardPage() {
   const t = useTranslations('AirportDashboard');
+  const { user } = useAuth();
   const [data, setData] = React.useState<any>(null);
   const [loading, setLoading] = React.useState(true);
 
@@ -73,6 +76,8 @@ export default function AirportDashboardPage() {
     </div>
   );
 
+  const isSupervisor = user?.role === 'gate-supervisor';
+
   return (
     <ModulePage
       module="airport"
@@ -90,6 +95,29 @@ export default function AirportDashboardPage() {
       </div>
       )}
        <div className="mt-8 grid gap-8 grid-cols-1">
+        {isSupervisor && (
+          <div className="grid gap-8 md:grid-cols-2">
+            <ForecastCard
+              title="Current Shift Forecast"
+              description="Expected passenger traffic and resource allocation for the current shift (08:00 - 16:00)."
+              items={[
+                { icon: Users, label: "Expected Passengers", value: "6,200", trend: <span className="flex items-center text-green-600"><ArrowUp className="h-4 w-4" /> 5%</span> },
+                { icon: UserCheck, label: "Recommended Staff", value: "45 Officers", trend: <span className="flex items-center text-gray-500">-</span> },
+                { icon: Clock, label: "Peak Hours", value: "10:00 - 12:00", trend: <span className="flex items-center text-red-600"><ArrowUp className="h-4 w-4" /> High Traffic</span> },
+              ]}
+            />
+            <ForecastCard
+              title="Next Shift Forecast"
+              description="Expected passenger traffic and resource allocation for the next shift (16:00 - 00:00)."
+              items={[
+                { icon: Users, label: "Expected Passengers", value: "4,800", trend: <span className="flex items-center text-red-600"><ArrowDown className="h-4 w-4" /> 12%</span> },
+                { icon: UserCheck, label: "Recommended Staff", value: "38 Officers", trend: <span className="flex items-center text-gray-500">-</span> },
+                { icon: Clock, label: "Peak Hours", value: "18:00 - 20:00", trend: <span className="flex items-center text-yellow-600">Medium Traffic</span> },
+              ]}
+            />
+          </div>
+        )}
+
         {loading || !data ? (
           <Skeleton className="h-[400px] w-full" />
         ) : (

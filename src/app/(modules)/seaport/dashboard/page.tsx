@@ -3,7 +3,7 @@
 import * as React from 'react';
 import ModulePage from '@/components/module-page';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Ship, Anchor, Warehouse, Container, Globe, Clock } from 'lucide-react';
+import { Ship, Anchor, Warehouse, Container, Globe, Clock, Users, ArrowUp, ArrowDown } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { ThroughputChart } from '@/components/charts/throughput-chart';
 import { RiskRuleTriggerChart } from '@/components/charts/risk-rule-trigger-chart';
@@ -11,10 +11,12 @@ import { WorldMapChart } from '@/components/charts/world-map-chart';
 import { api } from '@/lib/api';
 import { Skeleton } from '@/components/ui/skeleton';
 import { TransactionOverviewChart } from '@/components/charts/transaction-overview-chart';
-
+import { useAuth } from '@/hooks/use-auth';
+import { ForecastCard } from '@/components/forecast-card';
 
 export default function SeaportDashboardPage() {
     const t = useTranslations('SeaportDashboard');
+    const { user } = useAuth();
     const [data, setData] = React.useState<any>(null);
     const [loading, setLoading] = React.useState(true);
 
@@ -64,6 +66,8 @@ export default function SeaportDashboardPage() {
     </div>
   );
 
+  const isSupervisor = user?.role === 'gate-supervisor';
+
   return (
     <ModulePage
       module="seaport"
@@ -80,6 +84,29 @@ export default function SeaportDashboardPage() {
                 <StatCard title={t('activeBerths')} value="6" icon={Ship} />
                 <StatCard title={t('avgProcessingTime')} value={data?.main?.avgProcessingTime?.seaport || '...'} icon={Clock} />
             </div>
+            )}
+
+            {isSupervisor && (
+              <div className="grid gap-8 md:grid-cols-2">
+                <ForecastCard
+                  title="Current Shift Forecast"
+                  description="Expected vessel arrivals and container traffic for the current shift (06:00 - 18:00)."
+                  items={[
+                    { icon: Ship, label: "Expected Vessel Arrivals", value: "4", trend: <span className="flex items-center text-gray-500">-</span> },
+                    { icon: Container, label: "Expected Containers", value: "850 TEU", trend: <span className="flex items-center text-green-600"><ArrowUp className="h-4 w-4" /> 10%</span> },
+                    { icon: Clock, label: "Peak Activity", value: "10:00 - 14:00", trend: <span className="flex items-center text-red-600"><ArrowUp className="h-4 w-4" /> High Congestion</span> },
+                  ]}
+                />
+                <ForecastCard
+                  title="Next Shift Forecast"
+                  description="Expected vessel arrivals and container traffic for the next shift (18:00 - 06:00)."
+                  items={[
+                    { icon: Ship, label: "Expected Vessel Arrivals", value: "2", trend: <span className="flex items-center text-red-600"><ArrowDown className="h-4 w-4" /> 50%</span> },
+                    { icon: Container, label: "Expected Containers", value: "400 TEU", trend: <span className="flex items-center text-red-600"><ArrowDown className="h-4 w-4" /> 25%</span> },
+                    { icon: Clock, label: "Peak Activity", value: "20:00 - 22:00", trend: <span className="flex items-center text-green-600">Low Congestion</span> },
+                  ]}
+                />
+              </div>
             )}
             
             {loading || !data ? (

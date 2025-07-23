@@ -3,7 +3,7 @@
 import * as React from 'react';
 import ModulePage from '@/components/module-page';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { DoorOpen, Fingerprint, ShieldAlert, CheckCircle, Globe, RadioTower, Clock } from 'lucide-react';
+import { DoorOpen, Fingerprint, ShieldAlert, CheckCircle, Globe, RadioTower, Clock, Users, ArrowUp, ArrowDown } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { ThroughputChart } from '@/components/charts/throughput-chart';
 import { RiskRuleTriggerChart } from '@/components/charts/risk-rule-trigger-chart';
@@ -11,9 +11,12 @@ import { WorldMapChart } from '@/components/charts/world-map-chart';
 import { api } from '@/lib/api';
 import { Skeleton } from '@/components/ui/skeleton';
 import { TransactionOverviewChart } from '@/components/charts/transaction-overview-chart';
+import { useAuth } from '@/hooks/use-auth';
+import { ForecastCard } from '@/components/forecast-card';
 
 export default function ControlRoomDashboardPage() {
     const t = useTranslations('ControlRoomDashboard');
+    const { user } = useAuth();
     const [data, setData] = React.useState<any>(null);
     const [loading, setLoading] = React.useState(true);
 
@@ -63,6 +66,8 @@ export default function ControlRoomDashboardPage() {
     </div>
   );
 
+  const isSupervisor = user?.role === 'gate-supervisor';
+
   return (
     <ModulePage
       module="control-room"
@@ -81,6 +86,29 @@ export default function ControlRoomDashboardPage() {
             </div>
             )}
             
+            {isSupervisor && (
+              <div className="grid gap-8 md:grid-cols-2">
+                <ForecastCard
+                  title="Current Shift Forecast"
+                  description="Expected system-wide traffic and resource needs for the current shift (08:00 - 16:00)."
+                  items={[
+                    { icon: Users, label: "Expected Traffic", value: "15,000", trend: <span className="flex items-center text-green-600"><ArrowUp className="h-4 w-4" /> 7%</span> },
+                    { icon: ShieldAlert, label: "Potential Alerts", value: "5-8", trend: <span className="flex items-center text-yellow-600">Normal</span> },
+                    { icon: Clock, label: "Peak Hours", value: "11:00 - 14:00", trend: <span className="flex items-center text-red-600"><ArrowUp className="h-4 w-4" /> High Activity</span> },
+                  ]}
+                />
+                <ForecastCard
+                  title="Next Shift Forecast"
+                  description="Expected system-wide traffic and resource needs for the next shift (16:00 - 00:00)."
+                  items={[
+                    { icon: Users, label: "Expected Traffic", value: "11,500", trend: <span className="flex items-center text-red-600"><ArrowDown className="h-4 w-4" /> 15%</span> },
+                    { icon: ShieldAlert, label: "Potential Alerts", value: "3-5", trend: <span className="flex items-center text-green-600">Low</span> },
+                    { icon: Clock, label: "Peak Hours", value: "17:00 - 19:00", trend: <span className="flex items-center text-yellow-600">Medium Activity</span> },
+                  ]}
+                />
+              </div>
+            )}
+
             {loading || !data ? (
                 <Skeleton className="h-[400px] w-full" />
             ) : (

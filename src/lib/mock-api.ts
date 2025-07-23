@@ -144,20 +144,20 @@ const forecastData = {
   airport: {
     current: {
       title: "Current Shift Forecast",
-      description: "Expected passenger traffic and resource allocation for the current shift (08:00 - 16:00).",
+      description: "Predicted passenger volume for the current shift (08:00 - 16:00).",
       recommendedStaff: 45,
-      items: [
-        { label: "Expected Passengers", value: "6,200", trend: { direction: 'up', percentage: 5, text: 'vs last shift' } },
-        { label: "Peak Hours", value: "10:00 - 12:00", trend: { direction: 'up', text: 'High Traffic' } },
+      metrics: [
+        { title: 'Incoming Pax', value: '6,200', description: 'Predicted arrivals' },
+        { title: 'Outgoing Pax', value: '5,800', description: 'Predicted departures' },
       ],
     },
     next: {
       title: "Next Shift Forecast",
-      description: "Expected passenger traffic and resource allocation for the next shift (16:00 - 00:00).",
+      description: "Predicted passenger volume for the next shift (16:00 - 00:00).",
       recommendedStaff: 38,
-      items: [
-        { label: "Expected Passengers", value: "4,800", trend: { direction: 'down', percentage: 12, text: 'vs current shift' } },
-        { label: "Peak Hours", value: "18:00 - 20:00", trend: { direction: 'same', text: 'Medium Traffic' } },
+      metrics: [
+        { title: 'Incoming Pax', value: '4,800', description: 'Predicted arrivals' },
+        { title: 'Outgoing Pax', value: '4,500', description: 'Predicted departures' },
       ],
     },
   },
@@ -166,40 +166,38 @@ const forecastData = {
         title: "Current Shift Forecast",
         description: "Expected vehicle and traveler traffic for the current shift (07:00 - 15:00).",
         recommendedStaff: 12,
-        items: [
-          { label: "Expected Vehicles", value: "2,100", trend: { direction: 'down', percentage: 3, text: 'vs last shift' } },
-          { label: "Peak Hours", value: "08:00 - 10:00", trend: { direction: 'same', text: 'Medium Traffic' } },
+        metrics: [
+            { title: 'Inbound Vehicles', value: '2,100', description: 'Predicted entries' },
+            { title: 'Outbound Vehicles', value: '1,950', description: 'Predicted exits' },
         ],
     },
     next: {
         title: "Next Shift Forecast",
         description: "Expected vehicle and traveler traffic for the next shift (15:00 - 23:00).",
         recommendedStaff: 15,
-        items: [
-          { label: "Expected Vehicles", value: "2,500", trend: { direction: 'up', percentage: 8, text: 'vs current shift' } },
-          { label: "Peak Hours", value: "17:00 - 19:00", trend: { direction: 'up', text: 'High Traffic' } },
+        metrics: [
+            { title: 'Inbound Vehicles', value: '2,500', description: 'Predicted entries' },
+            { title: 'Outbound Vehicles', value: '2,600', description: 'Predicted exits' },
         ],
     }
   },
   seaport: {
       current: {
           title: "Current Shift Forecast",
-          description: "Expected vessel arrivals and container traffic for the current shift (06:00 - 18:00).",
+          description: "Expected passenger and vessel traffic for the current shift (06:00 - 18:00).",
           recommendedStaff: 25,
-          items: [
-            { label: "Expected Vessel Arrivals", value: "4", trend: { direction: 'same', text: 'Normal' } },
-            { label: "Expected Passengers", value: "850", trend: { direction: 'up', percentage: 10, text: 'vs last shift' } },
-            { label: "Peak Activity", value: "10:00 - 14:00", trend: { direction: 'up', text: 'High Congestion' } },
+          metrics: [
+            { title: 'Passenger Arrivals', value: '850', description: 'Predicted arrivals' },
+            { title: 'Passenger Departures', value: '700', description: 'Predicted departures' },
           ],
       },
       next: {
           title: "Next Shift Forecast",
-          description: "Expected vessel arrivals and container traffic for the next shift (18:00 - 06:00).",
+          description: "Expected passenger and vessel traffic for the next shift (18:00 - 06:00).",
           recommendedStaff: 18,
-          items: [
-            { label: "Expected Vessel Arrivals", value: "2", trend: { direction: 'down', percentage: 50, text: 'vs current shift' } },
-            { label: "Expected Passengers", value: "400", trend: { direction: 'down', percentage: 25, text: 'vs current shift' } },
-            { label: "Peak Activity", value: "20:00 - 22:00", trend: { direction: 'same', text: 'Low Congestion' } },
+          metrics: [
+            { title: 'Passenger Arrivals', value: '400', description: 'Predicted arrivals' },
+            { title: 'Passenger Departures', value: '350', description: 'Predicted departures' },
           ],
       }
   },
@@ -208,20 +206,18 @@ const forecastData = {
         title: "Current Shift Forecast",
         description: "Expected system-wide traffic and resource needs for the current shift (08:00 - 16:00).",
         recommendedStaff: 8,
-        items: [
-          { label: "Expected Traffic", value: "15,000", trend: { direction: 'up', percentage: 7, text: 'vs last shift' } },
-          { label: "Potential Alerts", value: "5-8", trend: { direction: 'same', text: 'Normal' } },
-          { label: "Peak Hours", value: "11:00 - 14:00", trend: { direction: 'up', text: 'High Activity' } },
+        metrics: [
+            { title: 'Total Entries', value: '15,000', description: 'Predicted system-wide entries' },
+            { title: 'Potential Alerts', value: '5-8', description: 'Predicted security/risk alerts' },
         ],
     },
     next: {
         title: "Next Shift Forecast",
         description: "Expected system-wide traffic and resource needs for the next shift (16:00 - 00:00).",
         recommendedStaff: 6,
-        items: [
-          { label: "Expected Traffic", value: "11,500", trend: { direction: 'down', percentage: 15, text: 'vs current shift' } },
-          { label: "Potential Alerts", value: "3-5", trend: { direction: 'down', text: 'Low' } },
-          { label: "Peak Hours", value: "17:00 - 19:00", trend: { direction: 'same', text: 'Medium Activity' } },
+        metrics: [
+            { title: 'Total Entries', value: '11,500', description: 'Predicted system-wide entries' },
+            { title: 'Potential Alerts', value: '3-5', description: 'Predicted security/risk alerts' },
         ],
     }
   }

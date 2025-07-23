@@ -2,19 +2,20 @@
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { UserCheck } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { ArrowRight, ArrowLeftRight, UserCheck } from 'lucide-react';
 
-interface ForecastItem {
-    icon: React.ElementType;
-    label: string;
+interface ForecastMetric {
+    title: string;
     value: string;
-    trend: React.ReactNode;
+    description: string;
+    icon: React.ElementType;
 }
 
 interface Forecast {
     title: string;
     description: string;
-    items: ForecastItem[];
+    metrics: ForecastMetric[];
     recommendedStaff: number;
 }
 
@@ -23,40 +24,38 @@ interface ForecastCardProps {
 }
 
 export function ForecastCard({ forecast }: ForecastCardProps) {
-    if (!forecast) {
+    if (!forecast || !forecast.metrics || forecast.metrics.length === 0) {
         return null;
     }
 
-    const { title, description, items, recommendedStaff } = forecast;
+    const { title, description, metrics, recommendedStaff } = forecast;
 
     return (
-        <Card className="relative overflow-hidden">
-            <CardHeader className="pb-4">
+        <Card className="h-full">
+            <CardHeader>
                 <CardTitle>{title}</CardTitle>
                 <CardDescription>{description}</CardDescription>
             </CardHeader>
-            <CardContent>
-                <ul className="space-y-4">
-                    {items.map((item, index) => (
-                        <li key={index} className="flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                                <item.icon className="h-5 w-5 text-muted-foreground" />
-                                <span className="font-medium">{item.label}</span>
+            <CardContent className="grid gap-4 md:grid-cols-2">
+                {metrics.map((metric, index) => (
+                    <Card key={index} className="relative flex flex-col justify-between p-4">
+                        <div>
+                            <div className="flex justify-between items-center mb-2">
+                                <h4 className="font-semibold">{metric.title}</h4>
+                                <metric.icon className="h-4 w-4 text-muted-foreground" />
                             </div>
-                            <div className="flex items-center gap-2">
-                                <p className="font-semibold text-lg">{item.value}</p>
-                                <div className="text-xs text-muted-foreground">{item.trend}</div>
-                            </div>
-                        </li>
-                    ))}
-                </ul>
+                            <p className="text-3xl font-bold">{metric.value}</p>
+                            <p className="text-sm text-muted-foreground">{metric.description}</p>
+                        </div>
+                        <div className="flex justify-end mt-4">
+                            <Badge variant="secondary" className="flex items-center gap-1">
+                                <UserCheck className="h-3 w-3" />
+                                {recommendedStaff} Officers
+                            </Badge>
+                        </div>
+                    </Card>
+                ))}
             </CardContent>
-             <div className="absolute top-4 right-4">
-                <div className="flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-sm font-semibold text-primary">
-                    <UserCheck className="h-4 w-4" />
-                    <span>{recommendedStaff} Officers</span>
-                </div>
-            </div>
         </Card>
     );
 }

@@ -3,7 +3,7 @@
 import * as React from 'react';
 import ModulePage from '@/components/module-page';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Ship, Anchor, UserCheck, Users as CruisePassengers, Globe, Clock, Users, ArrowUp, ArrowDown } from 'lucide-react';
+import { Ship, Anchor, UserCheck, Users as CruisePassengers, Globe, Clock, Users, ArrowUp, ArrowDown, ArrowRight, ArrowLeftRight } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { ThroughputChart } from '@/components/charts/throughput-chart';
 import { RiskRuleTriggerChart } from '@/components/charts/risk-rule-trigger-chart';
@@ -69,33 +69,16 @@ export default function SeaportDashboardPage() {
   );
 
   const isSupervisorOrAdmin = user?.role === 'shiftsupervisor' || user?.role === 'admin';
-
-  const renderForecastTrend = (trend: { direction: 'up' | 'down' | 'same', percentage?: number, text: string }) => {
-    let colorClass = 'text-gray-500';
-    if(trend.direction === 'up' && trend.text.toLowerCase().includes('high')) colorClass = 'text-red-600';
-    else if (trend.direction === 'up') colorClass = 'text-green-600';
-    else if (trend.direction === 'down') colorClass = 'text-red-600';
-    
-    if (trend.text.toLowerCase().includes('medium')) colorClass = 'text-yellow-600';
-    if (trend.text.toLowerCase().includes('low')) colorClass = 'text-green-600';
-
-    return (
-        <span className={`flex items-center ${colorClass}`}>
-            {trend.direction === 'up' && <ArrowUp className="h-4 w-4" />}
-            {trend.direction === 'down' && <ArrowDown className="h-4 w-4" />}
-            {trend.percentage !== undefined ? `${trend.percentage}%` : trend.text}
-        </span>
-    );
-  };
-
-  const getForecastItems = (forecastData: any) => {
-    if(!forecastData) return [];
-    return forecastData.items.map((item: any) => ({
-      ...item,
-      icon: item.label.includes('Vessel') ? Ship : (item.label.includes('Passengers') ? Users : Clock),
-      trend: renderForecastTrend(item.trend)
+  
+  const getForecastWithIcons = (forecastData: any) => {
+    if (!forecastData) return forecastData;
+    const metricsWithIcons = forecastData.metrics.map((metric: any, index: number) => ({
+      ...metric,
+      icon: index === 0 ? ArrowRight : ArrowLeftRight,
     }));
+    return { ...forecastData, metrics: metricsWithIcons };
   };
+
 
   return (
     <ModulePage
@@ -124,8 +107,8 @@ export default function SeaportDashboardPage() {
                     </>
                 ) : (
                     <>
-                        <ForecastCard forecast={{ ...data.forecasts.current, items: getForecastItems(data.forecasts.current) }} />
-                        <ForecastCard forecast={{ ...data.forecasts.next, items: getForecastItems(data.forecasts.next) }} />
+                        <ForecastCard forecast={getForecastWithIcons(data.forecasts.current)} />
+                        <ForecastCard forecast={getForecastWithIcons(data.forecasts.next)} />
                     </>
                 )}
               </div>

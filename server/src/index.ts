@@ -4,6 +4,9 @@ import bodyParser from 'body-parser';
 import { users } from './data/users';
 import type { User } from './types';
 import { Result, ApiError } from './result';
+import { config } from 'dotenv';
+
+config();
 
 
 const app = express();

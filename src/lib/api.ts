@@ -46,12 +46,12 @@ const getAuthInfo = (): Partial<User> => {
 // This is a stand-in for a real API client.
 async function mockApi<T>(endpoint: string, options: RequestInit = {}): Promise<Result<T>> {
     const { method = 'GET' } = options;
-    const url = new URL(`http://localhost:3001/api${endpoint}`);
+    const url = `/api${endpoint}`;
     
-    console.log(`[API] ${method} ${url.pathname}`);
+    console.log(`[API] ${method} ${url}`);
     
     try {
-        const response = await fetch(url.toString(), {
+        const response = await fetch(url, {
             ...options,
             headers: {
                 'Content-Type': 'application/json',

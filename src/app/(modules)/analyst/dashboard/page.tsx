@@ -99,6 +99,24 @@ export default function AnalystDashboardPage() {
             )}
             
             {loading || !data ? (
+                <div className="grid gap-8 md:grid-cols-2">
+                    <Skeleton className="h-[400px] w-full" />
+                    <Skeleton className="h-[400px] w-full" />
+                </div>
+            ) : (
+                <div className="grid gap-8 md:grid-cols-2">
+                    <PassengerTypeChart data={data.passengers.airport} />
+                    <RiskRuleTriggerChart data={data.main.riskRules} className="h-full" />
+                </div>
+            )}
+
+            {loading || !data ? (
+                <Skeleton className="h-[400px] w-full" />
+            ) : (
+                <TransactionOverviewChart data={data.overview} />
+            )}
+            
+            {loading || !data ? (
                 <div className="grid gap-8 md:grid-cols-3">
                     <Skeleton className="h-[250px] w-full" />
                     <Skeleton className="h-[250px] w-full" />
@@ -124,24 +142,6 @@ export default function AnalystDashboardPage() {
                     <SimplePieChart data={data.transactionBreakdown.counter} title="Counter Transactions" description="Success, rejected, cancelled." />
                     <SimplePieChart data={data.transactionBreakdown.total} title="Total Transactions" description="Success, rejected, cancelled." />
                 </div>
-            )}
-
-            {loading || !data ? (
-                <Skeleton className="h-[400px] w-full" />
-            ) : (
-                <TransactionOverviewChart data={data.overview} />
-            )}
-
-            {loading || !data ? (
-              <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-2">
-                <Skeleton className="h-[400px] w-full" />
-                <Skeleton className="h-[400px] w-full" />
-              </div>
-            ) : (
-            <div className="grid gap-8 md:grid-cols-2">
-               <PassengerTypeChart data={data.passengers.airport} />
-               <RiskRuleTriggerChart data={data.main.riskRules} className="h-full"/>
-            </div>
             )}
 
             {loading || !data ? (

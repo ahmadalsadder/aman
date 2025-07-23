@@ -13,7 +13,7 @@ import { TransactionOverviewChart } from '@/components/charts/transaction-overvi
 import { DashboardHeader } from '@/components/layout/dashboard-header';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList } from '@/components/ui/breadcrumb';
 import PassengerTypeChart from '@/components/charts/passenger-type-chart';
-import { SimplePieChart } from '@/components/charts/simple-pie-chart';
+import { TransactionAnalysisTabs } from '@/components/charts/transaction-analysis-tabs';
 
 export default function AnalystDashboardPage() {
     const t = useTranslations('AnalystDashboard');
@@ -117,31 +117,12 @@ export default function AnalystDashboardPage() {
             )}
             
             {loading || !data ? (
-                <div className="grid gap-8 md:grid-cols-3">
-                    <Skeleton className="h-[250px] w-full" />
-                    <Skeleton className="h-[250px] w-full" />
-                    <Skeleton className="h-[250px] w-full" />
-                </div>
+                <Skeleton className="h-[400px] w-full" />
             ) : (
-                <div className="grid gap-8 md:grid-cols-3">
-                    <SimplePieChart data={data.transactionLists.whitelisted} title="Whitelisted Transactions" description="Whitelisted vs. non-whitelisted." />
-                    <SimplePieChart data={data.transactionLists.blacklisted} title="Blacklisted Transactions" description="Blacklisted vs. non-blacklisted." />
-                    <SimplePieChart data={data.transactionLists.risky} title="Risky Transactions" description="Risky vs. non-risky." />
-                </div>
-            )}
-
-            {loading || !data ? (
-                 <div className="grid gap-8 md:grid-cols-3">
-                    <Skeleton className="h-[250px] w-full" />
-                    <Skeleton className="h-[250px] w-full" />
-                    <Skeleton className="h-[250px] w-full" />
-                </div>
-            ) : (
-                <div className="grid gap-8 md:grid-cols-3">
-                    <SimplePieChart data={data.transactionBreakdown.gate} title="Gate Transactions" description="Success, rejected, cancelled." />
-                    <SimplePieChart data={data.transactionBreakdown.counter} title="Counter Transactions" description="Success, rejected, cancelled." />
-                    <SimplePieChart data={data.transactionBreakdown.total} title="Total Transactions" description="Success, rejected, cancelled." />
-                </div>
+                <TransactionAnalysisTabs
+                    listsData={data.transactionLists}
+                    breakdownData={data.transactionBreakdown}
+                />
             )}
 
             {loading || !data ? (

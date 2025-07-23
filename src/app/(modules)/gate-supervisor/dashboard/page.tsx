@@ -2,7 +2,7 @@
 'use client';
 import * as React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { DoorOpen, Fingerprint, ShieldAlert, CheckCircle, Globe, Clock } from 'lucide-react';
+import { DoorOpen, Fingerprint, ShieldAlert, CheckCircle, Globe, Clock, Users } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { ThroughputChart } from '@/components/charts/throughput-chart';
 import { RiskRuleTriggerChart } from '@/components/charts/risk-rule-trigger-chart';
@@ -15,6 +15,10 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList } from '@/co
 import PassengerTypeChart from '@/components/charts/passenger-type-chart';
 import { GateRejectionReasonsChart } from '@/components/charts/gate-rejection-reasons-chart';
 import { SimplePieChart } from '@/components/charts/simple-pie-chart';
+import { GatePerformanceTable } from '@/components/charts/gate-performance-table';
+import { OfficerStatsCards } from '@/components/charts/officer-stats-cards';
+import { OfficerProcessingTimeChart } from '@/components/charts/officer-processing-time-chart';
+import { OfficerDecisionChart } from '@/components/charts/officer-decision-chart';
 
 export default function GateSupervisorDashboardPage() {
     const t = useTranslations('GateSupervisorDashboard');
@@ -24,7 +28,7 @@ export default function GateSupervisorDashboardPage() {
     React.useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
-            const [mainResult, overviewResult, statsResult, passengerResult, rejectionResult, transactionListResult, transactionBreakdownResult] = await Promise.all([
+            const [mainResult, overviewResult, statsResult, passengerResult, rejectionResult, transactionListResult, transactionBreakdownResult, gatePerformanceResult, officerPerformanceResult] = await Promise.all([
                 api.get('/dashboard/main'),
                 api.get('/dashboard/transaction-overview'),
                 api.get('/dashboard/stats?module=shiftsupervisor'),
@@ -32,9 +36,11 @@ export default function GateSupervisorDashboardPage() {
                 api.get('/dashboard/gate-rejection-reasons'),
                 api.get('/dashboard/transaction-lists'),
                 api.get('/dashboard/transaction-breakdown'),
+                api.get('/dashboard/gate-performance'),
+                api.get('/dashboard/officer-performance'),
             ]);
             
-            if (mainResult.isSuccess && overviewResult.isSuccess && statsResult.isSuccess && passengerResult.isSuccess && rejectionResult.isSuccess && transactionListResult.isSuccess && transactionBreakdownResult.isSuccess) {
+            if (mainResult.isSuccess && overviewResult.isSuccess && statsResult.isSuccess && passengerResult.isSuccess && rejectionResult.isSuccess && transactionListResult.isSuccess && transactionBreakdownResult.isSuccess && gatePerformanceResult.isSuccess && officerPerformanceResult.isSuccess) {
                 setData({ 
                     main: mainResult.data,
                     overview: overviewResult.data,
@@ -43,6 +49,8 @@ export default function GateSupervisorDashboardPage() {
                     reasons: rejectionResult.data,
                     transactionLists: transactionListResult.data,
                     transactionBreakdown: transactionBreakdownResult.data,
+                    gatePerformance: gatePerformanceResult.data,
+                    officerPerformance: officerPerformanceResult.data,
                 });
             }
             setLoading(false);
@@ -135,6 +143,28 @@ export default function GateSupervisorDashboardPage() {
             ) : (
                 <TransactionOverviewChart data={data.overview} />
             )}
+
+             <Card>
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                        <Users className="h-5 w-5" />
+                        Officer Performance
+                    </CardTitle>
+                    <CardDescription>
+                        Key metrics for officer activity and efficiency.
+                    </CardDescription>
+                </CardHeader>
+                <CardContent className="flex flex-col gap-8">
+                    {loading || !data ? <Skeleton className="h-24 w-full" /> : <OfficerStatsCards data={data.officerPerformance.officers} /> }
+                    <div className="grid gap-8 md:grid-cols-2">
+                        {loading || !data ? <Skeleton className="h-[300px] w-full" /> : <OfficerProcessingTimeChart data={data.officerPerformance.officers} /> }
+                        {loading || !data ? <Skeleton className="h-[300px] w-full" /> : <OfficerDecisionChart data={data.officerPerformance.decisionBreakdown} /> }
+                    </div>
+                </CardContent>
+            </Card>
+
+            {loading || !data ? <Skeleton className="h-[400px] w-full" /> : <GatePerformanceTable data={data.gatePerformance} /> }
+
 
             <div className="grid gap-8 md:grid-cols-3">
               {loading || !data ? (

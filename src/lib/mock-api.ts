@@ -320,6 +320,31 @@ const transactionBreakdownData = {
     ]
 };
 
+const gatePerformanceData = [
+    { id: 'G-01', name: 'Gate 01', type: 'E-Gate', status: 'Active', totalTransactions: 1254, avgProcessingTime: '1.2m' },
+    { id: 'G-02', name: 'Gate 02', type: 'E-Gate', status: 'Active', totalTransactions: 1302, avgProcessingTime: '1.1m' },
+    { id: 'G-03', name: 'Gate 03', type: 'E-Gate', status: 'Maintenance', totalTransactions: 56, avgProcessingTime: '1.5m' },
+    { id: 'D-01', name: 'Desk 01', type: 'Officer Desk', status: 'Active', totalTransactions: 432, avgProcessingTime: '2.8m' },
+    { id: 'D-02', name: 'Desk 02', type: 'Officer Desk', status: 'Offline', totalTransactions: 0, avgProcessingTime: 'N/A' },
+    { id: 'D-03', name: 'Desk 03', type: 'Officer Desk', status: 'Active', totalTransactions: 512, avgProcessingTime: '2.5m' },
+];
+
+const officerPerformanceData = {
+    officers: [
+        { id: 'O-01', name: 'John Smith', totalTransactions: 432, avgProcessingTime: 2.8, decisions: { approved: 420, rejected: 12 }, approvalRate: 97.2 },
+        { id: 'O-02', name: 'Jane Doe', totalTransactions: 512, avgProcessingTime: 2.5, decisions: { approved: 500, rejected: 12 }, approvalRate: 97.6 },
+        { id: 'O-03', name: 'Peter Jones', totalTransactions: 380, avgProcessingTime: 3.1, decisions: { approved: 370, rejected: 10 }, approvalRate: 97.4 },
+        { id: 'O-04', name: 'Emily White', totalTransactions: 620, avgProcessingTime: 2.2, decisions: { approved: 610, rejected: 10 }, approvalRate: 98.4 },
+        { id: 'O-05', name: 'David Green', totalTransactions: 450, avgProcessingTime: 2.6, decisions: { approved: 445, rejected: 5 }, approvalRate: 98.9 },
+        { id: 'O-06', name: 'Susan Black', totalTransactions: 210, avgProcessingTime: 3.5, decisions: { approved: 200, rejected: 10 }, approvalRate: 95.2 },
+    ],
+    decisionBreakdown: [
+        { name: 'Approved', value: 2545, fill: 'hsl(var(--chart-2))' },
+        { name: 'Rejected', value: 59, fill: 'hsl(var(--destructive))' },
+        { name: 'Escalated', value: 20, fill: 'hsl(var(--chart-4))' },
+    ],
+};
+
 
 const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 
@@ -399,6 +424,14 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
     if (method === 'GET' && url.pathname === '/dashboard/stats-error') {
         const errorResponse = { "error": "invalid_token", "error_description": "The access token is expired or invalid", "user_id": 12345, "internal_debug_info": "trace_id: xyz-abc-123" };
         return Result.failure([new ApiError("INVALID_TOKEN", JSON.stringify(errorResponse))]) as Result<T>;
+    }
+
+    if (method === 'GET' && url.pathname === '/dashboard/gate-performance') {
+        return Result.success(gatePerformanceData) as Result<T>;
+    }
+    
+    if (method === 'GET' && url.pathname === '/dashboard/officer-performance') {
+        return Result.success(officerPerformanceData) as Result<T>;
     }
 
     return Result.failure([new ApiError('NOT_FOUND', `Mock endpoint ${method} ${endpoint} not found.`)]) as Result<T>;

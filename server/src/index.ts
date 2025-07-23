@@ -1,6 +1,6 @@
+'use server';
 import express from 'express';
 import cors from 'cors';
-import bodyParser from 'body-parser';
 import { users } from './data/users';
 import type { User } from './types';
 import { Result, ApiError } from './result';
@@ -13,7 +13,7 @@ const app = express();
 const port = 3001;
 
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
 
 app.post('/api/login', (req, res) => {
   const { email, password } = req.body;

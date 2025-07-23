@@ -11,7 +11,7 @@ async function getMessages(locale: Locale) {
 
 export function I18nProvider({ children }: { children: ReactNode }) {
   const [locale, setLocale] = useState<Locale>('en');
-  const [messages, setMessages] = useState(null);
+  const [messages, setMessages] = useState<any>(null);
 
   useEffect(() => {
     const storedLocale = (localStorage.getItem('locale') as Locale) || 'en';
@@ -24,35 +24,24 @@ export function I18nProvider({ children }: { children: ReactNode }) {
       document.documentElement.lang = locale;
       document.documentElement.dir = newDirection;
       getMessages(locale).then(setMessages);
-      
       const event = new CustomEvent('locale-changed', { detail: locale });
       window.dispatchEvent(event);
     }
   }, [locale]);
 
   if (!messages) {
+    // Only render a loading spinner (NO <html> or <body> here)
     return (
-      <html lang="en">
-        <body>
-          <div className="flex h-screen w-full flex-col items-center justify-center bg-background">
-            <Loader2 className="h-12 w-12 animate-spin text-primary" />
-          </div>
-        </body>
-      </html>
+      <div className="flex h-screen w-full flex-col items-center justify-center bg-background">
+        <Loader2 className="h-12 w-12 animate-spin text-primary" />
+      </div>
     );
   }
-  
-  const I18nRoot = ({ children }: { children: React.ReactNode }) => (
-    <html lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'} suppressHydrationWarning>
-      {children}
-    </html>
-  );
 
+  // No <html> or <body> in client component!
   return (
-    <I18nRoot>
-      <NextIntlClientProvider locale={locale} messages={messages}>
-        {children}
-      </NextIntlClientProvider>
-    </I18nRoot>
+    <NextIntlClientProvider locale={locale} messages={messages}>
+      {children}
+    </NextIntlClientProvider>
   );
 }

@@ -42,7 +42,10 @@ export default function LoginPage() {
       email: '',
       password: '',
     },
+    mode: 'onTouched',
   });
+
+  const { formState } = form;
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true);
@@ -58,6 +61,12 @@ export default function LoginPage() {
       }
       setLoading(false);
     }
+  }
+
+  const getFieldStatus = (fieldName: 'email' | 'password') => {
+    if (formState.errors[fieldName]) return 'error';
+    if (formState.touchedFields[fieldName] && !formState.errors[fieldName]) return 'success';
+    return 'default';
   }
 
   return (
@@ -80,7 +89,11 @@ export default function LoginPage() {
                   <FormItem>
                     <FormLabel>{t('emailLabel')}</FormLabel>
                     <FormControl>
-                      <Input placeholder={t('emailPlaceholder')} {...field} />
+                      <Input 
+                        placeholder={t('emailPlaceholder')} 
+                        {...field} 
+                        status={getFieldStatus('email')}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -98,6 +111,7 @@ export default function LoginPage() {
                           type={showPassword ? 'text' : 'password'}
                           placeholder={t('passwordPlaceholder')}
                           {...field}
+                          status={getFieldStatus('password')}
                         />
                         <Button
                           type="button"

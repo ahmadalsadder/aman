@@ -42,17 +42,17 @@ export default function SeaportDashboardPage() {
         fetchData();
     }, []);
 
-    const StatCard = ({ title, value, icon: Icon }: { title: string; value: string | number; icon: React.ElementType }) => (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">{title}</CardTitle>
-        <Icon className="h-4 w-4 text-muted-foreground" />
-      </CardHeader>
-      <CardContent>
-        <div className="text-2xl font-bold">{value}</div>
-      </CardContent>
-    </Card>
-  );
+    const StatCard = ({ title, value, icon: Icon, color }: { title: string; value: string | number; icon: React.ElementType, color?: string }) => (
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">{title}</CardTitle>
+            <Icon className={`h-4 w-4 text-muted-foreground ${color}`} />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{value}</div>
+          </CardContent>
+        </Card>
+      );
 
   const renderSkeleton = () => (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
@@ -97,11 +97,11 @@ export default function SeaportDashboardPage() {
         <div className="flex flex-col gap-8">
             {loading ? renderSkeleton() : (
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
-                <StatCard title={t('vesselsInPort')} value="23" icon={Anchor} />
-                <StatCard title={t('cruisePassengers')} value="2,480" icon={CruisePassengers} />
-                <StatCard title={t('passengersProcessed')} value="1,250" icon={UserCheck} />
-                <StatCard title={t('activeBerths')} value="6" icon={Ship} />
-                <StatCard title={t('avgProcessingTime')} value={data?.main?.avgProcessingTime?.seaport || '...'} icon={Clock} />
+                <StatCard title={t('vesselsInPort')} value="23" icon={Anchor} color="text-cyan-500" />
+                <StatCard title={t('cruisePassengers')} value="2,480" icon={CruisePassengers} color="text-teal-500" />
+                <StatCard title={t('passengersProcessed')} value="1,250" icon={UserCheck} color="text-green-500" />
+                <StatCard title={t('activeBerths')} value="6" icon={Ship} color="text-blue-500" />
+                <StatCard title={t('avgProcessingTime')} value={data?.main?.avgProcessingTime?.seaport || '...'} icon={Clock} color="text-orange-500" />
             </div>
             )}
 

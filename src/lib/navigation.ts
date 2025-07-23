@@ -1,7 +1,7 @@
+
 'use client';
-import { Shield, LayoutDashboard, BarChart3, Users, Settings, Activity, Ship, LandPlot, DoorOpen, PieChart, UserCog, RadioTower, Home } from 'lucide-react';
+import { Shield, LayoutDashboard, BarChart3, Users, Settings, Activity, Ship, LandPlot, DoorOpen, PieChart, UserCog, RadioTower, Home, Plane } from 'lucide-react';
 import type { Role, Module } from '@/types';
-import PlaneIcon from '@/components/icons/plane-icon';
 
 export interface NavItem {
   href: string;
@@ -12,7 +12,7 @@ export interface NavItem {
 
 const allModules: Record<Module, Omit<NavItem, 'label'>> = {
   dashboard: { href: '/dashboard', icon: LayoutDashboard },
-  airport: { href: '/airport/dashboard', icon: PlaneIcon },
+  airport: { href: '/airport/dashboard', icon: Plane },
   landport: { href: '/landport/dashboard', icon: LandPlot },
   seaport: { href: '/seaport/dashboard', icon: Ship },
   egate: { href: '/egate/dashboard', icon: DoorOpen },

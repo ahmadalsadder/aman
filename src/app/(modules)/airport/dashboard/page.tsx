@@ -2,7 +2,7 @@
 'use client';
 import * as React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { UserCheck, BaggageClaim, ShieldCheck, Clock, ArrowRight, ArrowLeftRight } from 'lucide-react';
+import { UserCheck, BaggageClaim, ShieldCheck, Clock, ArrowRight, ArrowLeftRight, Plane, ArrowUp, ArrowDown, Globe } from 'lucide-react';
 import PassengerTypeChart from '@/components/charts/passenger-type-chart';
 import CreateRecordButton from '@/components/create-record-button';
 import { useTranslations } from 'next-intl';
@@ -14,10 +14,8 @@ import { WorldMapChart } from '@/components/charts/world-map-chart';
 import { api } from '@/lib/api';
 import { Skeleton } from '@/components/ui/skeleton';
 import { TransactionOverviewChart } from '@/components/charts/transaction-overview-chart';
-import PlaneIcon from '@/components/icons/plane-icon';
 import { useAuth } from '@/hooks/use-auth';
 import { ForecastCard } from '@/components/forecast-card';
-import { ArrowUp, ArrowDown, Globe } from 'lucide-react';
 import { DashboardHeader } from '@/components/layout/dashboard-header';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList } from '@/components/ui/breadcrumb';
 
@@ -53,11 +51,11 @@ export default function AirportDashboardPage() {
   }, []);
 
 
-  const StatCard = ({ title, value, icon: Icon }: { title: string; value: string | number; icon: React.ElementType }) => (
+  const StatCard = ({ title, value, icon: Icon, color }: { title: string; value: string | number; icon: React.ElementType, color?: string }) => (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">{title}</CardTitle>
-        <Icon className="h-4 w-4 text-muted-foreground" />
+        <Icon className={`h-4 w-4 text-muted-foreground ${color}`} />
       </CardHeader>
       <CardContent>
         <div className="text-2xl font-bold">{value}</div>
@@ -106,11 +104,11 @@ export default function AirportDashboardPage() {
       />
       {loading ? renderSkeleton() : (
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
-        <StatCard title={t('passengersProcessed')} value="12,453" icon={UserCheck} />
-        <StatCard title={t('bagsScanned')} value="25,832" icon={BaggageClaim} />
-        <StatCard title={t('securityAlerts')} value="3" icon={ShieldCheck} />
-        <StatCard title={t('flightsMonitored')} value="128" icon={PlaneIcon} />
-        <StatCard title={t('avgProcessingTime')} value={data?.main?.avgProcessingTime?.airport || '...'} icon={Clock} />
+        <StatCard title={t('passengersProcessed')} value="12,453" icon={UserCheck} color="text-green-500" />
+        <StatCard title={t('bagsScanned')} value="25,832" icon={BaggageClaim} color="text-blue-500" />
+        <StatCard title={t('securityAlerts')} value="3" icon={ShieldCheck} color="text-red-500" />
+        <StatCard title={t('flightsMonitored')} value="128" icon={Plane} color="text-purple-500" />
+        <StatCard title={t('avgProcessingTime')} value={data?.main?.avgProcessingTime?.airport || '...'} icon={Clock} color="text-orange-500" />
       </div>
       )}
        <div className="mt-8 grid gap-8 grid-cols-1">

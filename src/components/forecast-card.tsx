@@ -3,8 +3,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { UserCheck } from 'lucide-react';
-import CalendarIcon from '@/components/icons/calendar-icon';
+import { UserCheck, Calendar } from 'lucide-react';
 
 interface ForecastMetric {
     title: string;
@@ -38,7 +37,7 @@ export function ForecastCard({ forecast }: ForecastCardProps) {
                     <CardTitle>{title}</CardTitle>
                     <CardDescription>{description}</CardDescription>
                 </div>
-                <CalendarIcon className="h-8 w-8 text-primary" />
+                <Calendar className="h-8 w-8 text-primary" />
             </CardHeader>
             <CardContent className="grid gap-4 md:grid-cols-2">
                 {metrics.map((metric, index) => (
@@ -52,7 +51,7 @@ export function ForecastCard({ forecast }: ForecastCardProps) {
                             <p className="text-sm text-muted-foreground">{metric.description}</p>
                         </div>
                         <div className="flex justify-end mt-4">
-                            <Badge variant="default" className="flex items-center gap-1">
+                            <Badge variant="default" className="flex items-center gap-1 bg-primary/80">
                                 <UserCheck className="h-3 w-3" />
                                 {recommendedStaff} Officers
                             </Badge>

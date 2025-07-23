@@ -8,22 +8,22 @@ export interface NavItem {
 }
 
 const allNavItems: Record<string, NavItem> = {
-  dashboard: { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  monitoring: { href: '/dashboard', label: 'Real-time Monitoring', icon: Activity },
-  analytics: { href: '/dashboard', label: 'Security Analytics', icon: BarChart3 },
-  users: { href: '/dashboard', label: 'User Management', icon: Users },
-  settings: { href: '/dashboard', label: 'System Settings', icon: Settings },
+  dashboard: { href: '/', label: 'Dashboard', icon: LayoutDashboard },
+  monitoring: { href: '/', label: 'Real-time Monitoring', icon: Activity },
+  analytics: { href: '/', label: 'Security Analytics', icon: BarChart3 },
+  users: { href: '/', label: 'User Management', icon: Users },
+  settings: { href: '/', label: 'System Settings', icon: Settings },
 };
 
 export const moduleNavItems: Record<Module, NavItem> = {
-    airport: { href: '/dashboard/airport', label: 'AirPort', icon: Plane },
-    landport: { href: '/dashboard/landport', label: 'Landport', icon: LandPlot },
-    seaport: { href: '/dashboard/seaport', label: 'SeaPort', icon: Ship },
-    egate: { href: '/dashboard/egate', label: 'E-Gate', icon: DoorOpen },
+    airport: { href: '/airport', label: 'AirPort', icon: Plane },
+    landport: { href: '/landport', label: 'Landport', icon: LandPlot },
+    seaport: { href: '/seaport', label: 'SeaPort', icon: Ship },
+    egate: { href: '/egate', label: 'E-Gate', icon: DoorOpen },
 };
 
-// Note: For this demo, all extra links point to /dashboard.
-// In a real app, they would point to e.g., /dashboard/monitoring.
+// Note: For this demo, all extra links point to /.
+// In a real app, they would point to e.g., /monitoring.
 
 export const getNavItems = (role: Role, modules: Module[]): NavItem[] => {
   let items: NavItem[] = [allNavItems.dashboard];

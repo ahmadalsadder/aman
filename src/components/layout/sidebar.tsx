@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import { usePathname } from 'next/navigation';
+import Link from 'next/link';
 import { useAuth } from '@/hooks/use-auth';
 import { getNavItems, type NavItem } from '@/lib/navigation';
 import Logo from '@/components/logo';
@@ -47,13 +48,13 @@ export default function AppSidebar() {
             <SidebarMenuItem key={item.label}>
               <SidebarMenuButton
                 asChild
-                isActive={pathname.startsWith(item.href) && item.href !== '/'}
+                isActive={pathname.startsWith(item.href) && (item.href !== '/' || pathname === '/')}
                 tooltip={{ children: item.label }}
               >
-                <a href={item.href}>
+                <Link href={item.href}>
                   <item.icon />
                   <span>{item.label}</span>
-                </a>
+                </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
           ))}

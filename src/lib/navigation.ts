@@ -8,14 +8,12 @@ export interface NavItem {
   icon: React.ElementType;
 }
 
-// Note: For this demo, all extra links point to /.
-// In a real app, they would point to e.g., /monitoring.
-
 export const getNavItems = (role: Role, modules: Module[], t: any): NavItem[] => {
 
   const allNavItems: Record<string, NavItem> = {
-    users: { href: '/', label: t('userManagement'), icon: Users },
-    settings: { href: '/', label: t('systemSettings'), icon: Settings },
+    dashboard: { href: '/dashboard', label: t('dashboard'), icon: LayoutDashboard },
+    users: { href: '/dashboard', label: t('userManagement'), icon: Users },
+    settings: { href: '/dashboard', label: t('systemSettings'), icon: Settings },
   };
 
   const moduleNavItems: Record<Module, NavItem> = {
@@ -26,8 +24,11 @@ export const getNavItems = (role: Role, modules: Module[], t: any): NavItem[] =>
   };
 
   let items: NavItem[] = [];
+
+  if (role === 'admin') {
+    items.push(allNavItems.dashboard);
+  }
   
-  // Add module-specific nav items
   const sortedModules = modules.sort();
   sortedModules.forEach(module => {
     if (moduleNavItems[module]) {

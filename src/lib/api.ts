@@ -36,7 +36,7 @@ export async function api<T>(endpoint: string, options: RequestInit = {}): Promi
     },
   };
   
-  let response;
+  let response: Response | undefined;
   let responseText: string = '';
   let result: Result<T>;
 
@@ -51,17 +51,14 @@ export async function api<T>(endpoint: string, options: RequestInit = {}): Promi
     } else {
         result = new Result<T>(parsedJson.data, parsedJson.errors, parsedJson.isSuccess, parsedJson.warnings, parsedJson.info);
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error('Network or fetch error:', error);
-    if (error instanceof Error && (error.message.includes('JSON'))) { // JSON parsing error
+    if (error instanceof SyntaxError && error.message.includes('JSON')) { // JSON parsing error
         result = Result.failure([new ApiError(String(response?.status ?? 500), "Invalid response from server.")]);
         responseText = `Invalid JSON Response: ${responseText}`;
-    } else {
+    } else { // Network error or other exceptions
         result = Result.failure([new ApiError("NETWORK_ERROR", "Could not connect to the server.")]);
-    }
-    
-    if (error instanceof Error) {
-        responseText = error.message;
+        responseText = error.message || "Failed to fetch";
     }
   }
 

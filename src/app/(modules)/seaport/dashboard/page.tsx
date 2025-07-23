@@ -78,7 +78,7 @@ export default function SeaportDashboardPage() {
                 <StatCard title={t('containersProcessed')} value="2,480" icon={Container} />
                 <StatCard title={t('cargoThroughput')} value="15,600" icon={Warehouse} />
                 <StatCard title={t('activeBerths')} value="6" icon={Ship} />
-                <StatCard title={t('avgProcessingTime')} value="12.5m" icon={Clock} />
+                <StatCard title={t('avgProcessingTime')} value={data?.main?.avgProcessingTime?.seaport || '...'} icon={Clock} />
             </div>
             )}
             

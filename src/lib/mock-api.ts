@@ -1,3 +1,4 @@
+
 import type { User } from '@/types';
 import { Result, ApiError } from '@/types/api/result';
 
@@ -66,6 +67,15 @@ const mainDashboardData = {
         'AUS': 380,
         'JPN': 320,
         'BRA': 280,
+    },
+    avgProcessingTime: {
+        airport: '2.5m',
+        seaport: '12.5m',
+        landport: '3.1m',
+        egate: '1.2m',
+        analyst: '1.2m',
+        'gate-supervisor': '1.2m',
+        'control-room': '1.2m',
     }
 };
 

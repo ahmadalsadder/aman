@@ -77,7 +77,7 @@ export default function LandportDashboardPage() {
             <StatCard title={t('travelersChecked')} value="7,123" icon={UserSquare} />
             <StatCard title={t('documentsScanned')} value="9,876" icon={ScanText} />
             <StatCard title={t('activeLanes')} value="8" icon={LandPlot} />
-            <StatCard title={t('avgProcessingTime')} value="3.1m" icon={Clock} />
+            <StatCard title={t('avgProcessingTime')} value={data?.main?.avgProcessingTime?.landport || '...'} icon={Clock} />
         </div>
         )}
 

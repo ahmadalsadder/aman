@@ -85,7 +85,7 @@ export default function AirportDashboardPage() {
         <StatCard title={t('bagsScanned')} value="25,832" icon={BaggageClaim} />
         <StatCard title={t('securityAlerts')} value="3" icon={ShieldCheck} />
         <StatCard title={t('flightsMonitored')} value="128" icon={Plane} />
-        <StatCard title={t('avgProcessingTime')} value="2.5m" icon={Clock} />
+        <StatCard title={t('avgProcessingTime')} value={data?.main?.avgProcessingTime?.airport || '...'} icon={Clock} />
       </div>
       )}
        <div className="mt-8 grid gap-8 grid-cols-1">

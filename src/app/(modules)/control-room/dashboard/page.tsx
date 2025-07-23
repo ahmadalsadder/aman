@@ -77,7 +77,7 @@ export default function ControlRoomDashboardPage() {
                 <StatCard title={t('failedAttempts')} value="14" icon={ShieldAlert} />
                 <StatCard title={t('biometricVerifications')} value="8,224" icon={Fingerprint} />
                 <StatCard title={t('activeGates')} value="24" icon={DoorOpen} />
-                <StatCard title={t('avgProcessingTime')} value="1.2m" icon={Clock} />
+                <StatCard title={t('avgProcessingTime')} value={data?.main?.avgProcessingTime?.['control-room'] || '...'} icon={Clock} />
             </div>
             )}
             

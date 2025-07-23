@@ -186,6 +186,13 @@ const passengerData = {
     ],
 };
 
+const seaportTravelerCategoriesData = [
+    { name: 'Citizens', value: 1200 },
+    { name: 'Visitors', value: 3400 },
+    { name: 'Residents', value: 800 },
+    { name: 'Crew', value: 450 },
+];
+
 const transactionOverviewData = [
     { name: 'Day 1', entry: 4210, exit: 2390 },
     { name: 'Day 2', entry: 3800, exit: 1100 },
@@ -463,6 +470,10 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
 
     if (method === 'GET' && url.pathname === '/dashboard/processing-time-distribution') {
         return Result.success(processingTimeDistributionData) as Result<T>;
+    }
+
+    if (method === 'GET' && url.pathname === '/dashboard/seaport-traveler-categories') {
+        return Result.success(seaportTravelerCategoriesData) as Result<T>;
     }
 
     return Result.failure([new ApiError('NOT_FOUND', `Mock endpoint ${method} ${endpoint} not found.`)]) as Result<T>;

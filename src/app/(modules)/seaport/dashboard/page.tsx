@@ -15,6 +15,7 @@ import { ForecastCard } from '@/components/forecast-card';
 import { DashboardHeader } from '@/components/layout/dashboard-header';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList } from '@/components/ui/breadcrumb';
 import PassengerTypeChart from '@/components/charts/passenger-type-chart';
+import { TravelerCategoryChart } from '@/components/charts/traveler-category-chart';
 
 export default function SeaportDashboardPage() {
     const t = useTranslations('SeaportDashboard');
@@ -25,21 +26,23 @@ export default function SeaportDashboardPage() {
     React.useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
-            const [mainResult, overviewResult, forecastResult, statsResult, passengerResult] = await Promise.all([
+            const [mainResult, overviewResult, forecastResult, statsResult, passengerResult, travelerCategoriesResult] = await Promise.all([
                 api.get('/dashboard/main'),
                 api.get('/dashboard/transaction-overview'),
                 api.get('/dashboard/forecasts?module=seaport'),
                 api.get('/dashboard/stats?module=seaport'),
                 api.get('/data/passengers'),
+                api.get('/dashboard/seaport-traveler-categories'),
             ]);
             
-            if (mainResult.isSuccess && overviewResult.isSuccess && forecastResult.isSuccess && statsResult.isSuccess && passengerResult.isSuccess) {
+            if (mainResult.isSuccess && overviewResult.isSuccess && forecastResult.isSuccess && statsResult.isSuccess && passengerResult.isSuccess && travelerCategoriesResult.isSuccess) {
                 setData({ 
                     main: mainResult.data,
                     overview: overviewResult.data,
                     forecasts: forecastResult.data,
                     stats: statsResult.data,
                     passengers: passengerResult.data,
+                    travelerCategories: travelerCategoriesResult.data,
                 });
             }
             setLoading(false);
@@ -133,9 +136,15 @@ export default function SeaportDashboardPage() {
             )}
 
             {loading || !data ? (
-                <Skeleton className="h-[400px] w-full" />
+                <div className="grid gap-8 md:grid-cols-2">
+                    <Skeleton className="h-[400px] w-full" />
+                    <Skeleton className="h-[400px] w-full" />
+                </div>
             ) : (
+              <div className="grid gap-8 md:grid-cols-2">
                 <PassengerTypeChart data={data.passengers.seaport} />
+                <TravelerCategoryChart data={data.travelerCategories} />
+              </div>
             )}
 
             {loading || !data ? (

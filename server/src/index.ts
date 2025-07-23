@@ -3,6 +3,8 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import { users } from './data/users';
 import type { User } from './types';
+import { Result, ApiError } from './api-contracts';
+
 
 const app = express();
 const port = 3001;
@@ -15,7 +17,7 @@ app.post('/api/login', (req, res) => {
   
   // In a real app, you'd hash and compare the password
   if (!email || !password) {
-    return res.status(400).json({ message: 'Email and password are required.' });
+    return res.status(400).json(Result.failure([new ApiError('BAD_REQUEST', 'Email and password are required.')]));
   }
 
   const user = users.find(u => u.email === email);
@@ -23,36 +25,18 @@ app.post('/api/login', (req, res) => {
   if (user && password === 'password') {
     // In a real app, generate a real JWT
     const { permissions, ...userWithoutPermissions } = user;
-    res.json({
-      isSuccess: true,
-      data: user,
-      errors: null,
-      warnings: null,
-      info: null,
-    });
+    res.json(Result.success(user));
   } else {
-    res.status(401).json({ 
-      isSuccess: false,
-      data: null,
-      errors: [{ code: 'UNAUTHORIZED', message: 'Invalid email or password.' }],
-      warnings: null,
-      info: null,
-    });
+    res.status(401).json(Result.failure([new ApiError('UNAUTHORIZED', 'Invalid email or password.')]));
   }
 });
 
 app.get('/api/dashboard/stats', (req, res) => {
-  res.json({
-    isSuccess: true,
-    data: {
-      totalAnomalies: 12,
-      monitoredEndpoints: 42,
-      uptimePercentage: 99.9,
-    },
-    errors: null,
-    warnings: null,
-    info: null,
-  });
+  res.json(Result.success({
+    totalAnomalies: 12,
+    monitoredEndpoints: 42,
+    uptimePercentage: 99.9,
+  }));
 });
 
 app.get('/api/dashboard/stats-error', (req, res) => {

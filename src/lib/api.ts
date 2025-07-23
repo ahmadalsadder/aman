@@ -2,7 +2,7 @@
 
 import { flagEdgeCaseResponse } from '@/ai/flows/flag-edge-case-responses';
 import { toast } from '@/hooks/use-toast';
-import type { Result } from '@/types/api/contracts';
+import { Result, ApiError } from '@/types/api/contracts';
 import type { User } from '@/types';
 
 const API_BASE_URL = 'http://localhost:3001/api';
@@ -43,22 +43,23 @@ export async function api<T>(endpoint: string, options: RequestInit = {}): Promi
   try {
     response = await fetch(`${API_BASE_URL}${endpoint}`, config);
     responseText = await response.text();
+    const parsedJson = JSON.parse(responseText);
 
     if (!response.ok) {
-        // If the server returns a non-JSON error response, the AI can still analyze it
         console.error(`API Error: ${response.status} ${response.statusText}`, responseText);
-        try {
-            result = JSON.parse(responseText);
-        } catch (e) {
-            // The response is not valid JSON, create a structured error
-             result = { data: null, isSuccess: false, errors: [{code: String(response.status), message: response.statusText || "An unknown error occurred."}], warnings: null, info: null };
-        }
+        result = new Result<T>(parsedJson.data, parsedJson.errors, parsedJson.isSuccess, parsedJson.warnings, parsedJson.info);
     } else {
-        result = JSON.parse(responseText);
+        result = new Result<T>(parsedJson.data, parsedJson.errors, parsedJson.isSuccess, parsedJson.warnings, parsedJson.info);
     }
   } catch (error) {
     console.error('Network or fetch error:', error);
-    result = { data: null, isSuccess: false, errors: [{code: "NETWORK_ERROR", message: "Could not connect to the server."}], warnings: null, info: null };
+    if (error instanceof Error && (error.message.includes('JSON'))) { // JSON parsing error
+        result = Result.failure([new ApiError(String(response?.status ?? 500), "Invalid response from server.")]);
+        responseText = `Invalid JSON Response: ${responseText}`;
+    } else {
+        result = Result.failure([new ApiError("NETWORK_ERROR", "Could not connect to the server.")]);
+    }
+    
     if (error instanceof Error) {
         responseText = error.message;
     }
@@ -69,6 +70,7 @@ export async function api<T>(endpoint: string, options: RequestInit = {}): Promi
         variant: 'destructive',
         title: 'API Error',
         description: result.errors[0].message,
+        duration: 5000,
     });
   }
 

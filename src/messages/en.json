@@ -48,6 +48,18 @@
     "buttonText": "Create New Record",
     "alertMessage": "Create new record functionality would be here!"
   },
+  "Dashboard": {
+    "title": "System-Wide Dashboard",
+    "description": "An overview of all border control operations and performance metrics.",
+    "totalTransactions": "Total Transactions",
+    "transactionsToday": "Transactions Today",
+    "avgProcessingTime": "Avg. Processing Time",
+    "inMinutes": "in minutes",
+    "realtimeAlerts": "Real-time Alerts",
+    "criticalAlerts": "Critical Alerts",
+    "systemUptime": "System Uptime",
+    "last30days": "Last 30 days"
+  },
   "AirportDashboard": {
     "title": "AirPort Dashboard",
     "description": "Real-time monitoring of all airport operations.",
@@ -62,7 +74,8 @@
     "title": "AirPort Module",
     "description": "Manage and monitor all airport operations.",
     "mainPageMessage": "This is the main page for the AirPort module. From here you can navigate to the different sections of this module.",
-    "goToDashboard": "Go to Dashboard"
+    "goToDashboard": "Go to Dashboard",
+    "goToAnalytics": "Go to Analytics"
   },
   "PassengerTypeChart": {
     "title": "Passenger Demographics",
@@ -83,7 +96,8 @@
     "title": "E-Gate Module",
     "description": "Manage and monitor all E-Gate operations.",
     "mainPageMessage": "This is the main page for the E-Gate module. From here you can navigate to the different sections of this module.",
-    "goToDashboard": "Go to Dashboard"
+    "goToDashboard": "Go to Dashboard",
+    "goToAnalytics": "Go to Analytics"
   },
   "LandportDashboard": {
     "title": "Landport Dashboard",
@@ -99,7 +113,8 @@
     "title": "Landport Module",
     "description": "Manage and monitor all landport operations.",
     "mainPageMessage": "This is the main page for the Landport module. From here you can navigate to the different sections of this module.",
-    "goToDashboard": "Go to Dashboard"
+    "goToDashboard": "Go to Dashboard",
+    "goToAnalytics": "Go to Analytics"
   },
   "SeaportDashboard": {
     "title": "SeaPort Dashboard",
@@ -115,6 +130,7 @@
     "title": "SeaPort Module",
     "description": "Manage and monitor all seaport operations.",
     "mainPageMessage": "This is the main page for the SeaPort module. From here you can navigate to the different sections of this module.",
-    "goToDashboard": "Go to Dashboard"
+    "goToDashboard": "Go to Dashboard",
+    "goToAnalytics": "Go to Analytics"
   }
 }

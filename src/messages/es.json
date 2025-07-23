@@ -48,6 +48,18 @@
     "buttonText": "Crear nuevo registro",
     "alertMessage": "¡La funcionalidad para crear un nuevo registro estaría aquí!"
   },
+  "Dashboard": {
+    "title": "Tablero de todo el sistema",
+    "description": "Una descripción general de todas las operaciones de control de fronteras y métricas de rendimiento.",
+    "totalTransactions": "Transacciones totales",
+    "transactionsToday": "Transacciones de hoy",
+    "avgProcessingTime": "Tiempo de procesamiento promedio",
+    "inMinutes": "en minutos",
+    "realtimeAlerts": "Alertas en tiempo real",
+    "criticalAlerts": "Alertas críticas",
+    "systemUptime": "Tiempo de actividad del sistema",
+    "last30days": "Últimos 30 días"
+  },
   "AirportDashboard": {
     "title": "Tablero del Aeropuerto",
     "description": "Monitoreo en tiempo real de todas las operaciones del aeropuerto.",
@@ -62,7 +74,8 @@
     "title": "Módulo de Aeropuerto",
     "description": "Gestionar y monitorear todas las operaciones del aeropuerto.",
     "mainPageMessage": "Esta es la página principal del módulo de Aeropuerto. Desde aquí puede navegar a las diferentes secciones de este módulo.",
-    "goToDashboard": "Ir al Tablero"
+    "goToDashboard": "Ir al Tablero",
+    "goToAnalytics": "Ir a Análisis"
   },
   "PassengerTypeChart": {
     "title": "Demografía de pasajeros",
@@ -83,7 +96,8 @@
     "title": "Módulo de Puerta Electrónica",
     "description": "Gestionar y monitorear todas las operaciones de la Puerta Electrónica.",
     "mainPageMessage": "Esta es la página principal del módulo de Puerta Electrónica. Desde aquí puede navegar a las diferentes secciones de este módulo.",
-    "goToDashboard": "Ir al Tablero"
+    "goToDashboard": "Ir al Tablero",
+    "goToAnalytics": "Ir a Análisis"
   },
   "LandportDashboard": {
     "title": "Tablero del Puerto Terrestre",
@@ -99,7 +113,8 @@
     "title": "Módulo de Puerto Terrestre",
     "description": "Gestionar y monitorear todas las operaciones del puerto terrestre.",
     "mainPageMessage": "Esta es la página principal del módulo de Puerto Terrestre. Desde aquí puede navegar a las diferentes secciones de este módulo.",
-    "goToDashboard": "Ir al Tablero"
+    "goToDashboard": "Ir al Tablero",
+    "goToAnalytics": "Ir a Análisis"
   },
   "SeaportDashboard": {
     "title": "Tablero del Puerto Marítimo",
@@ -115,6 +130,7 @@
     "title": "Módulo de Puerto Marítimo",
     "description": "Gestionar y monitorear todas las operaciones del puerto marítimo.",
     "mainPageMessage": "Esta es la página principal del módulo de Puerto Marítimo. Desde aquí puede navegar a las diferentes secciones de este módulo.",
-    "goToDashboard": "Ir al Tablero"
+    "goToDashboard": "Ir al Tablero",
+    "goToAnalytics": "Ir a Análisis"
   }
 }

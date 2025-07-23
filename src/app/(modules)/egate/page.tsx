@@ -14,12 +14,17 @@ export default function EgatePage() {
       description={t('description')}
       icon={DoorOpen}
     >
-      <div>
-        <p className="mb-4">{t('mainPageMessage')}</p>
-        <Button asChild>
-          <Link href="/egate/dashboard">{t('goToDashboard')}</Link>
-        </Button>
-      </div>
+        <div className="flex flex-col gap-4">
+            <p className="mb-4">{t('mainPageMessage')}</p>
+             <div className="flex gap-4">
+                <Button asChild>
+                    <Link href="/egate/dashboard">{t('goToDashboard')}</Link>
+                </Button>
+                 <Button asChild variant="outline">
+                    <Link href="/">{t('goToAnalytics')}</Link>
+                </Button>
+            </div>
+        </div>
     </ModulePage>
   );
 }

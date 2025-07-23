@@ -14,11 +14,16 @@ export default function SeaportPage() {
       description={t('description')}
       icon={Ship}
     >
-        <div>
+        <div className="flex flex-col gap-4">
             <p className="mb-4">{t('mainPageMessage')}</p>
-            <Button asChild>
-                <Link href="/seaport/dashboard">{t('goToDashboard')}</Link>
-            </Button>
+             <div className="flex gap-4">
+                <Button asChild>
+                    <Link href="/seaport/dashboard">{t('goToDashboard')}</Link>
+                </Button>
+                 <Button asChild variant="outline">
+                    <Link href="/">{t('goToAnalytics')}</Link>
+                </Button>
+            </div>
         </div>
     </ModulePage>
   );

@@ -6,6 +6,9 @@ import PassengerTypeChart from '@/components/charts/passenger-type-chart';
 import { passengerData } from '@/data/passenger-data';
 import CreateRecordButton from '@/components/create-record-button';
 import { useTranslations } from 'next-intl';
+import { AgeDistributionChart } from '@/components/charts/age-distribution-chart';
+import { NationalityDistributionChart } from '@/components/charts/nationality-distribution-chart';
+import { airportDashboardData } from '@/data/dashboard-data';
 
 export default function AirportDashboardPage() {
   const t = useTranslations('AirportDashboard');
@@ -35,9 +38,11 @@ export default function AirportDashboardPage() {
         <StatCard title={t('securityAlerts')} value="3" icon={ShieldCheck} />
         <StatCard title={t('flightsMonitored')} value="128" icon={Plane} />
       </div>
-       <div className="mt-8 grid gap-8">
+       <div className="mt-8 grid gap-8 md:grid-cols-2">
         <PassengerTypeChart data={passengerData.airport} />
-        <Card>
+        <AgeDistributionChart data={airportDashboardData.ageDistribution} />
+        <NationalityDistributionChart data={airportDashboardData.nationalityDistribution} />
+         <Card>
           <CardHeader>
             <CardTitle>{t('actions')}</CardTitle>
           </CardHeader>

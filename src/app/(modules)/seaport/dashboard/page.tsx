@@ -3,7 +3,7 @@
 import * as React from 'react';
 import ModulePage from '@/components/module-page';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Ship, Anchor, Warehouse, Container, Globe, Clock, Users, ArrowUp, ArrowDown } from 'lucide-react';
+import { Ship, Anchor, UserCheck, Users as CruisePassengers, Globe, Clock, Users, ArrowUp, ArrowDown } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { ThroughputChart } from '@/components/charts/throughput-chart';
 import { RiskRuleTriggerChart } from '@/components/charts/risk-rule-trigger-chart';
@@ -79,8 +79,8 @@ export default function SeaportDashboardPage() {
             {loading ? renderSkeleton() : (
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
                 <StatCard title={t('vesselsInPort')} value="23" icon={Anchor} />
-                <StatCard title={t('containersProcessed')} value="2,480" icon={Container} />
-                <StatCard title={t('cargoThroughput')} value="15,600" icon={Warehouse} />
+                <StatCard title={t('cruisePassengers')} value="2,480" icon={CruisePassengers} />
+                <StatCard title={t('passengersProcessed')} value="1,250" icon={UserCheck} />
                 <StatCard title={t('activeBerths')} value="6" icon={Ship} />
                 <StatCard title={t('avgProcessingTime')} value={data?.main?.avgProcessingTime?.seaport || '...'} icon={Clock} />
             </div>
@@ -93,7 +93,7 @@ export default function SeaportDashboardPage() {
                   description="Expected vessel arrivals and container traffic for the current shift (06:00 - 18:00)."
                   items={[
                     { icon: Ship, label: "Expected Vessel Arrivals", value: "4", trend: <span className="flex items-center text-gray-500">-</span> },
-                    { icon: Container, label: "Expected Containers", value: "850 TEU", trend: <span className="flex items-center text-green-600"><ArrowUp className="h-4 w-4" /> 10%</span> },
+                    { icon: Users, label: "Expected Passengers", value: "850", trend: <span className="flex items-center text-green-600"><ArrowUp className="h-4 w-4" /> 10%</span> },
                     { icon: Clock, label: "Peak Activity", value: "10:00 - 14:00", trend: <span className="flex items-center text-red-600"><ArrowUp className="h-4 w-4" /> High Congestion</span> },
                   ]}
                 />
@@ -102,7 +102,7 @@ export default function SeaportDashboardPage() {
                   description="Expected vessel arrivals and container traffic for the next shift (18:00 - 06:00)."
                   items={[
                     { icon: Ship, label: "Expected Vessel Arrivals", value: "2", trend: <span className="flex items-center text-red-600"><ArrowDown className="h-4 w-4" /> 50%</span> },
-                    { icon: Container, label: "Expected Containers", value: "400 TEU", trend: <span className="flex items-center text-red-600"><ArrowDown className="h-4 w-4" /> 25%</span> },
+                    { icon: Users, label: "Expected Passengers", value: "400", trend: <span className="flex items-center text-red-600"><ArrowDown className="h-4 w-4" /> 25%</span> },
                     { icon: Clock, label: "Peak Activity", value: "20:00 - 22:00", trend: <span className="flex items-center text-green-600">Low Congestion</span> },
                   ]}
                 />

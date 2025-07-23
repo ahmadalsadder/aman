@@ -2,7 +2,7 @@
 'use client';
 import * as React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Ship, Anchor, UserCheck, Users as CruisePassengers, Globe, Clock, Users, ArrowUp, ArrowDown, ArrowRight, ArrowLeft } from 'lucide-react';
+import { Ship, Anchor, UserCheck, Users as CruisePassengers, Globe, Clock, ArrowRight, ArrowLeft } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { ThroughputChart } from '@/components/charts/throughput-chart';
 import { RiskRuleTriggerChart } from '@/components/charts/risk-rule-trigger-chart';
@@ -78,7 +78,7 @@ export default function SeaportDashboardPage() {
   
   const getForecastWithIcons = (forecastData: any) => {
     if (!forecastData) return forecastData;
-    const metricsWithIcons = forecastData.metrics.map((metric: any, index: number) => ({
+    const metricsWithIcons = forecastData.metrics.map((metric: any) => ({
       ...metric,
       icon: metric.title.toLowerCase().includes('arrival') ? ArrowLeft : ArrowRight,
     }));

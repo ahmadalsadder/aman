@@ -2,7 +2,7 @@
 'use client';
 import * as React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { UserCheck, BaggageClaim, ShieldCheck, Clock, ArrowRight, ArrowLeft, Plane, ArrowUp, ArrowDown, Globe } from 'lucide-react';
+import { UserCheck, BaggageClaim, ShieldCheck, Clock, ArrowRight, ArrowLeft, Plane, Globe } from 'lucide-react';
 import PassengerTypeChart from '@/components/charts/passenger-type-chart';
 import CreateRecordButton from '@/components/create-record-button';
 import { useTranslations } from 'next-intl';
@@ -84,7 +84,7 @@ export default function AirportDashboardPage() {
   
   const getForecastWithIcons = (forecastData: any) => {
     if (!forecastData) return forecastData;
-    const metricsWithIcons = forecastData.metrics.map((metric: any, index: number) => ({
+    const metricsWithIcons = forecastData.metrics.map((metric: any) => ({
       ...metric,
       icon: metric.title.toLowerCase().includes('in') ? ArrowLeft : ArrowRight,
     }));

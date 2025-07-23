@@ -2,7 +2,7 @@
 'use client';
 import * as React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { DoorOpen, Fingerprint, ShieldAlert, CheckCircle, Globe, PieChart, Clock } from 'lucide-react';
+import { DoorOpen, Fingerprint, ShieldAlert, CheckCircle, Globe, Clock } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { ThroughputChart } from '@/components/charts/throughput-chart';
 import { RiskRuleTriggerChart } from '@/components/charts/risk-rule-trigger-chart';

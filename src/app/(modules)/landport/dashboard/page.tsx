@@ -2,7 +2,7 @@
 'use client';
 import * as React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { LandPlot, Car, ScanText, UserSquare, Globe, Clock, Users, ArrowUp, ArrowDown, ArrowRight, ArrowLeft } from 'lucide-react';
+import { LandPlot, Car, ScanText, UserSquare, Globe, Clock, ArrowRight, ArrowLeft } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { ThroughputChart } from '@/components/charts/throughput-chart';
 import { RiskRuleTriggerChart } from '@/components/charts/risk-rule-trigger-chart';
@@ -13,7 +13,7 @@ import { TransactionOverviewChart } from '@/components/charts/transaction-overvi
 import { useAuth } from '@/hooks/use-auth';
 import { ForecastCard } from '@/components/forecast-card';
 import { DashboardHeader } from '@/components/layout/dashboard-header';
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList } from '@/components/ui/breadcrumb';
 import PassengerTypeChart from '@/components/charts/passenger-type-chart';
 
 export default function LandportDashboardPage() {
@@ -78,7 +78,7 @@ export default function LandportDashboardPage() {
   
   const getForecastWithIcons = (forecastData: any) => {
     if (!forecastData) return forecastData;
-    const metricsWithIcons = forecastData.metrics.map((metric: any, index: number) => ({
+    const metricsWithIcons = forecastData.metrics.map((metric: any) => ({
       ...metric,
       icon: metric.title.toLowerCase().includes('in') ? ArrowLeft : ArrowRight,
     }));
@@ -96,7 +96,7 @@ export default function LandportDashboardPage() {
         </BreadcrumbList>
       </Breadcrumb>
       <DashboardHeader 
-        title="Dashboard"
+        title={t('title')}
         description={t('welcome')}
       />
       <div className="flex flex-col gap-8">

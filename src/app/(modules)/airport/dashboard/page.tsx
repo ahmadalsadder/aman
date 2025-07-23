@@ -76,7 +76,7 @@ export default function AirportDashboardPage() {
     </div>
   );
 
-  const isSupervisor = user?.role === 'gate-supervisor';
+  const isSupervisorOrAdmin = user?.role === 'gate-supervisor' || user?.role === 'admin';
 
   return (
     <ModulePage
@@ -95,7 +95,7 @@ export default function AirportDashboardPage() {
       </div>
       )}
        <div className="mt-8 grid gap-8 grid-cols-1">
-        {isSupervisor && (
+        {isSupervisorOrAdmin && (
           <div className="grid gap-8 md:grid-cols-2">
             <ForecastCard
               title="Current Shift Forecast"

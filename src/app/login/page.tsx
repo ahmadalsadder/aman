@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { useRouter } from 'next/navigation';
-import { Eye, EyeOff, Loader2 } from 'lucide-react';
+import { Eye, EyeOff, Loader2, Fingerprint } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/button';
@@ -21,10 +21,13 @@ import { Input } from '@/components/ui/input';
 import { useAuth } from '@/hooks/use-auth';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import Logo from '@/components/logo';
+import { Separator } from '@/components/ui/separator';
+import { useToast } from '@/hooks/use-toast';
 
 export default function LoginPage() {
   const router = useRouter();
   const { login } = useAuth();
+  const { toast } = useToast();
   const t = useTranslations('LoginPage');
   
   const formSchema = z.object({
@@ -63,6 +66,13 @@ export default function LoginPage() {
     }
   }
 
+  const handleBiometricLogin = () => {
+    toast({
+      title: 'Feature Not Available',
+      description: 'Biometric login is currently disabled and will be available in a future update.',
+    });
+  };
+
   const getFieldStatus = (fieldName: 'email' | 'password') => {
     if (formState.errors[fieldName]) return 'error';
     if (formState.touchedFields[fieldName] && !formState.errors[fieldName]) return 'success';
@@ -74,7 +84,7 @@ export default function LoginPage() {
       <Card className="w-full max-w-md shadow-2xl">
         <CardHeader className="text-center">
           <div className="mx-auto mb-4">
-            <Logo />
+            <Logo className="h-16 w-16" />
           </div>
           <CardTitle className="text-2xl font-bold tracking-tight">{t('title')}</CardTitle>
           <CardDescription>{t('description')}</CardDescription>
@@ -104,7 +114,12 @@ export default function LoginPage() {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('passwordLabel')}</FormLabel>
+                     <div className="flex items-center justify-between">
+                        <FormLabel>{t('passwordLabel')}</FormLabel>
+                        <a href="#" className="text-sm font-medium text-primary hover:underline">
+                            {t('forgotPassword')}
+                        </a>
+                    </div>
                     <FormControl>
                       <div className="relative">
                         <Input
@@ -135,6 +150,11 @@ export default function LoginPage() {
               </Button>
             </form>
           </Form>
+           <Separator className="my-6" />
+           <Button variant="outline" className="w-full" onClick={handleBiometricLogin}>
+              <Fingerprint className="mr-2 h-4 w-4" />
+              {t('biometricLogin')}
+           </Button>
         </CardContent>
       </Card>
     </main>

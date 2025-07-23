@@ -10,7 +10,9 @@
     "signingInButton": "Asegurando su sesión...",
     "invalidEmailError": "Por favor ingrese una dirección de correo electrónico válida.",
     "passwordRequiredError": "Se requiere contraseña.",
-    "unknownError": "Ocurrió un error desconocido."
+    "unknownError": "Ocurrió un error desconocido.",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "biometricLogin": "Iniciar sesión con Biometría"
   },
   "HomePage": {
     "initializing": "Inicializando Guardian Gate..."

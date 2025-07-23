@@ -10,7 +10,9 @@
     "signingInButton": "تأمين جلستك...",
     "invalidEmailError": "الرجاء إدخال عنوان بريد إلكتروني صالح.",
     "passwordRequiredError": "كلمة المرور مطلوبة.",
-    "unknownError": "حدث خطأ غير معروف."
+    "unknownError": "حدث خطأ غير معروف.",
+    "forgotPassword": "هل نسيت كلمة المرور؟",
+    "biometricLogin": "تسجيل الدخول بالبصمة"
   },
   "HomePage": {
     "initializing": "جاري تهيئة بوابة الحماية..."

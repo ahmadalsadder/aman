@@ -14,7 +14,11 @@ export default function Home() {
   useEffect(() => {
     if (!loading) {
       if (user) {
-        router.replace('/dashboard');
+        if (user.modules && user.modules.length > 0) {
+          router.replace(`/${user.modules[0]}`);
+        } else {
+          router.replace('/login'); // Or a 'no modules assigned' page
+        }
       } else {
         router.replace('/login');
       }

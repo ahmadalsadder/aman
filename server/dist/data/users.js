@@ -8,7 +8,7 @@ exports.users = [
         email: 'admin@example.com',
         role: 'admin',
         token: 'fake-admin-token',
-        modules: ['landport', 'seaport', 'airport', 'egate'],
+        modules: ['dashboard', 'landport', 'seaport', 'airport', 'egate', 'analyst', 'gate-supervisor', 'control-room', 'users', 'settings'],
         permissions: ['records:view', 'records:create', 'records:edit', 'records:delete', 'users:manage', 'reports:view']
     },
     {

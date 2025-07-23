@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { ApiContextSnatcher } from '@/lib/api';
 
 export interface LoaderContextType {
   isLoading: boolean;
@@ -35,5 +36,8 @@ export function LoaderProvider({ children }: { children: React.ReactNode }) {
     hideLoader,
   }), [isLoading, showLoader, hideLoader]);
 
-  return <LoaderContext.Provider value={value}>{children}</LoaderContext.Provider>;
+  return <LoaderContext.Provider value={value}>
+    <ApiContextSnatcher />
+    {children}
+    </LoaderContext.Provider>;
 }

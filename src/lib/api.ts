@@ -9,12 +9,17 @@ const API_BASE_URL = 'http://localhost:3001/api';
 
 const getAuthInfo = (): Partial<User> => {
   try {
-    const authData = localStorage.getItem('guardian-gate-auth');
-    if (authData) {
-      return JSON.parse(authData);
+    const authCookie = document.cookie
+      .split('; ')
+      .find((row) => row.startsWith('guardian-gate-auth='))
+      ?.split('=')[1];
+      
+    if (authCookie) {
+      // The cookie is URI encoded
+      return JSON.parse(decodeURIComponent(authCookie));
     }
   } catch (error) {
-    console.error('Failed to parse auth data from localStorage', error);
+    console.error('Failed to parse auth data from cookie', error);
   }
   return {};
 };

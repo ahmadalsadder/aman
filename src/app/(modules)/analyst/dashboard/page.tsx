@@ -1,7 +1,6 @@
 
 'use client';
 import * as React from 'react';
-import ModulePage from '@/components/module-page';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { DoorOpen, Fingerprint, ShieldAlert, CheckCircle, Globe, PieChart, Clock } from 'lucide-react';
 import { useTranslations } from 'next-intl';
@@ -11,6 +10,8 @@ import { WorldMapChart } from '@/components/charts/world-map-chart';
 import { api } from '@/lib/api';
 import { Skeleton } from '@/components/ui/skeleton';
 import { TransactionOverviewChart } from '@/components/charts/transaction-overview-chart';
+import { DashboardHeader } from '@/components/layout/dashboard-header';
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList } from '@/components/ui/breadcrumb';
 
 export default function AnalystDashboardPage() {
     const t = useTranslations('AnalystDashboard');
@@ -64,12 +65,18 @@ export default function AnalystDashboardPage() {
   );
 
   return (
-    <ModulePage
-      module="analyst"
-      title={t('title')}
-      description={t('description')}
-      icon={PieChart}
-    >
+    <div className="flex flex-col gap-8">
+       <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/analyst/dashboard">Dashboard</BreadcrumbLink>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+      <DashboardHeader 
+        title={t('title')}
+        description={t('description')}
+      />
         <div className="flex flex-col gap-8">
             {loading ? renderSkeleton() : (
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
@@ -119,6 +126,6 @@ export default function AnalystDashboardPage() {
             </Card>
             )}
         </div>
-    </ModulePage>
+    </div>
   );
 }

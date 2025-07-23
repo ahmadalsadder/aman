@@ -1,7 +1,6 @@
 
 'use client';
 import * as React from 'react';
-import ModulePage from '@/components/module-page';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { UserCheck, BaggageClaim, ShieldCheck, Clock, ArrowRight, ArrowLeftRight } from 'lucide-react';
 import PassengerTypeChart from '@/components/charts/passenger-type-chart';
@@ -19,6 +18,8 @@ import PlaneIcon from '@/components/icons/plane-icon';
 import { useAuth } from '@/hooks/use-auth';
 import { ForecastCard } from '@/components/forecast-card';
 import { ArrowUp, ArrowDown, Globe } from 'lucide-react';
+import { DashboardHeader } from '@/components/layout/dashboard-header';
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList } from '@/components/ui/breadcrumb';
 
 export default function AirportDashboardPage() {
   const t = useTranslations('AirportDashboard');
@@ -91,12 +92,18 @@ export default function AirportDashboardPage() {
   };
 
   return (
-    <ModulePage
-      module="airport"
-      title={t('title')}
-      description={t('description')}
-      icon={PlaneIcon}
-    >
+    <div className="flex flex-col gap-8">
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/airport/dashboard">Dashboard</BreadcrumbLink>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+      <DashboardHeader
+        title={t('title')}
+        description={t('description')}
+      />
       {loading ? renderSkeleton() : (
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
         <StatCard title={t('passengersProcessed')} value="12,453" icon={UserCheck} />
@@ -189,6 +196,6 @@ export default function AirportDashboardPage() {
           </CardContent>
         </Card>
        </div>
-    </ModulePage>
+    </div>
   );
 }

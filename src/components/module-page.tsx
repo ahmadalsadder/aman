@@ -1,3 +1,4 @@
+
 'use client';
 import * as React from 'react';
 import { useAuth } from '@/hooks/use-auth';
@@ -5,6 +6,8 @@ import type { Module } from '@/types';
 import { useRouter } from 'next/navigation';
 import { Loader2, AlertTriangle } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { DashboardHeader } from './layout/dashboard-header';
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList } from './ui/breadcrumb';
 
 export default function ModulePage({ module, children, title, description, icon: Icon }: { module: Module, children: React.ReactNode, title: string, description: string, icon: React.ElementType }) {
   const { user, loading } = useAuth();
@@ -45,13 +48,17 @@ export default function ModulePage({ module, children, title, description, icon:
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex items-center gap-4">
-        <Icon className="h-8 w-8 text-primary" />
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">{title}</h1>
-          <p className="text-muted-foreground">{description}</p>
-        </div>
-      </div>
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href={`/${module}/dashboard`}>Dashboard</BreadcrumbLink>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+        <DashboardHeader 
+          title={title}
+          description={description}
+        />
       <div>{children}</div>
     </div>
   );

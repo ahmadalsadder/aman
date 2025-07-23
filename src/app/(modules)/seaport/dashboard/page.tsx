@@ -1,7 +1,6 @@
 
 'use client';
 import * as React from 'react';
-import ModulePage from '@/components/module-page';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Ship, Anchor, UserCheck, Users as CruisePassengers, Globe, Clock, Users, ArrowUp, ArrowDown, ArrowRight, ArrowLeftRight } from 'lucide-react';
 import { useTranslations } from 'next-intl';
@@ -13,6 +12,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { TransactionOverviewChart } from '@/components/charts/transaction-overview-chart';
 import { useAuth } from '@/hooks/use-auth';
 import { ForecastCard } from '@/components/forecast-card';
+import { DashboardHeader } from '@/components/layout/dashboard-header';
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList } from '@/components/ui/breadcrumb';
 
 export default function SeaportDashboardPage() {
     const t = useTranslations('SeaportDashboard');
@@ -81,12 +82,18 @@ export default function SeaportDashboardPage() {
 
 
   return (
-    <ModulePage
-      module="seaport"
-      title={t('title')}
-      description={t('description')}
-      icon={Ship}
-    >
+    <div className="flex flex-col gap-8">
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/seaport/dashboard">Dashboard</BreadcrumbLink>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+      <DashboardHeader
+        title={t('title')}
+        description={t('description')}
+      />
         <div className="flex flex-col gap-8">
             {loading ? renderSkeleton() : (
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
@@ -152,6 +159,6 @@ export default function SeaportDashboardPage() {
             </Card>
             )}
         </div>
-    </ModulePage>
+    </div>
   );
 }

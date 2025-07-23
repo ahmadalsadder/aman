@@ -1,4 +1,3 @@
-'use server';
 import express, { type Request, type Response } from 'express';
 import cors from 'cors';
 import { users } from './data/users';
@@ -13,13 +12,8 @@ const app = express();
 const port = 3001;
 
 // A real app would have a more restrictive CORS policy.
-// For this demo, we will allow requests from the Next.js dev server.
-const corsOptions = {
-  origin: 'http://localhost:9002',
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-};
-
-app.use(cors(corsOptions));
+// For this demo, we will allow requests from any origin.
+app.use(cors());
 app.use(express.json());
 
 app.post('/api/login', (req: Request, res: Response) => {

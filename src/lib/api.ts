@@ -5,7 +5,7 @@ import { toast } from '@/hooks/use-toast';
 import { Result, ApiError } from '@/types/api/result';
 import type { User } from '@/types';
 
-const API_BASE_URL = 'http://localhost:3001/api';
+const API_BASE_URL = '/api';
 
 const getAuthInfo = (): Partial<User> => {
   try {

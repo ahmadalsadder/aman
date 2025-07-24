@@ -4,7 +4,7 @@
 import { LiveProcessingFlow } from '@/components/transactions/live-processing-flow';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { DashboardHeader } from '@/components/layout/dashboard-header';
-import { Plane } from 'lucide-react';
+import { LayoutDashboard, Plane, RadioTower } from 'lucide-react';
 
 export default function AirportLiveProcessingPage() {
   return (
@@ -12,15 +12,11 @@ export default function AirportLiveProcessingPage() {
        <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink href="/airport/dashboard">Dashboard</BreadcrumbLink>
+            <BreadcrumbLink href="/airport/dashboard" icon={LayoutDashboard}>Dashboard</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage>Transactions</BreadcrumbPage>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>Live Processing</BreadcrumbPage>
+            <BreadcrumbPage icon={RadioTower}>Live Processing</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>

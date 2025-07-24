@@ -2,7 +2,7 @@
 'use client';
 import * as React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { LandPlot, Car, ScanText, UserSquare, Globe, Clock, ArrowRight, ArrowLeft, Zap } from 'lucide-react';
+import { LandPlot, Car, ScanText, UserSquare, Globe, Clock, ArrowRight, ArrowLeft, Zap, LayoutDashboard } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { ThroughputChart } from '@/components/charts/throughput-chart';
 import { RiskRuleTriggerChart } from '@/components/charts/risk-rule-trigger-chart';
@@ -13,7 +13,7 @@ import { TransactionOverviewChart } from '@/components/charts/transaction-overvi
 import { useAuth } from '@/hooks/use-auth';
 import { ForecastCard } from '@/components/forecast-card';
 import { DashboardHeader } from '@/components/layout/dashboard-header';
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList } from '@/components/ui/breadcrumb';
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage } from '@/components/ui/breadcrumb';
 import PassengerTypeChart from '@/components/charts/passenger-type-chart';
 import { ProcessingTimeDistributionChart } from '@/components/charts/processing-time-distribution-chart';
 
@@ -94,7 +94,7 @@ export default function LandportDashboardPage() {
       <Breadcrumb>
           <BreadcrumbList>
           <BreadcrumbItem>
-              <BreadcrumbLink href="/landport/dashboard">Dashboard</BreadcrumbLink>
+              <BreadcrumbPage icon={LayoutDashboard}>Dashboard</BreadcrumbPage>
           </BreadcrumbItem>
           </BreadcrumbList>
       </Breadcrumb>

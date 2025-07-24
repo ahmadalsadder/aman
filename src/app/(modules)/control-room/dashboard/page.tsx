@@ -2,7 +2,7 @@
 'use client';
 import * as React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { DoorOpen, Fingerprint, ShieldAlert, CheckCircle, Globe, Clock, Users } from 'lucide-react';
+import { DoorOpen, Fingerprint, ShieldAlert, CheckCircle, Globe, Clock, Users, LayoutDashboard } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { ThroughputChart } from '@/components/charts/throughput-chart';
 import { RiskRuleTriggerChart } from '@/components/charts/risk-rule-trigger-chart';
@@ -13,7 +13,7 @@ import { TransactionOverviewChart } from '@/components/charts/transaction-overvi
 import { useAuth } from '@/hooks/use-auth';
 import { ForecastCard } from '@/components/forecast-card';
 import { DashboardHeader } from '@/components/layout/dashboard-header';
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList } from '@/components/ui/breadcrumb';
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage } from '@/components/ui/breadcrumb';
 import { GateRejectionReasonsChart } from '@/components/charts/gate-rejection-reasons-chart';
 import { SimplePieChart } from '@/components/charts/simple-pie-chart';
 import { GatePerformanceTable } from '@/components/charts/gate-performance-table';
@@ -97,7 +97,7 @@ export default function ControlRoomDashboardPage() {
        <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink href="/control-room/dashboard">Dashboard</BreadcrumbLink>
+            <BreadcrumbPage icon={LayoutDashboard}>Dashboard</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>

@@ -4,7 +4,7 @@
 import { LiveProcessingFlow } from '@/components/transactions/live-processing-flow';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { DashboardHeader } from '@/components/layout/dashboard-header';
-import { UserCog } from 'lucide-react';
+import { LayoutDashboard, RadioTower, UserCog } from 'lucide-react';
 
 export default function GateSupervisorLiveProcessingPage() {
   return (
@@ -12,15 +12,11 @@ export default function GateSupervisorLiveProcessingPage() {
        <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink href="/gate-supervisor/dashboard">Dashboard</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-           <BreadcrumbItem>
-            <BreadcrumbPage>Transactions</BreadcrumbPage>
+            <BreadcrumbLink href="/gate-supervisor/dashboard" icon={LayoutDashboard}>Dashboard</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage>Live Processing</BreadcrumbPage>
+            <BreadcrumbPage icon={RadioTower}>Live Processing</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>

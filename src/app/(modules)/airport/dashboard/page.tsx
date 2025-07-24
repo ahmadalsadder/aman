@@ -2,7 +2,7 @@
 'use client';
 import * as React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { UserCheck, BaggageClaim, ShieldCheck, Clock, ArrowRight, ArrowLeft, Plane, Globe, Zap } from 'lucide-react';
+import { UserCheck, BaggageClaim, ShieldCheck, Clock, ArrowRight, ArrowLeft, Plane, Globe, Zap, LayoutDashboard } from 'lucide-react';
 import PassengerTypeChart from '@/components/charts/passenger-type-chart';
 import CreateRecordButton from '@/components/create-record-button';
 import { useTranslations } from 'next-intl';
@@ -16,7 +16,7 @@ import { TransactionOverviewChart } from '@/components/charts/transaction-overvi
 import { useAuth } from '@/hooks/use-auth';
 import { ForecastCard } from '@/components/forecast-card';
 import { DashboardHeader } from '@/components/layout/dashboard-header';
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList } from '@/components/ui/breadcrumb';
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage } from '@/components/ui/breadcrumb';
 
 export default function AirportDashboardPage() {
   const t = useTranslations('AirportDashboard');
@@ -92,15 +92,13 @@ export default function AirportDashboardPage() {
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex justify-between items-center">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/airport/dashboard">Dashboard</BreadcrumbLink>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-      </div>
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbPage icon={LayoutDashboard}>Dashboard</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
       <DashboardHeader
         title={t('title')}
         description={t('description')}

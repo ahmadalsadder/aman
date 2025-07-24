@@ -2,7 +2,7 @@
 'use client';
 import * as React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { DoorOpen, Fingerprint, ShieldAlert, CheckCircle, Globe, Clock, Users, ArrowRight, ArrowLeft, Zap } from 'lucide-react';
+import { DoorOpen, Fingerprint, ShieldAlert, CheckCircle, Globe, Clock, Users, ArrowRight, ArrowLeft, Zap, LayoutDashboard } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { ThroughputChart } from '@/components/charts/throughput-chart';
 import { RiskRuleTriggerChart } from '@/components/charts/risk-rule-trigger-chart';
@@ -11,7 +11,7 @@ import { api } from '@/lib/api';
 import { Skeleton } from '@/components/ui/skeleton';
 import { TransactionOverviewChart } from '@/components/charts/transaction-overview-chart';
 import { DashboardHeader } from '@/components/layout/dashboard-header';
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList } from '@/components/ui/breadcrumb';
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage } from '@/components/ui/breadcrumb';
 import PassengerTypeChart from '@/components/charts/passenger-type-chart';
 import { GateRejectionReasonsChart } from '@/components/charts/gate-rejection-reasons-chart';
 import { GatePerformanceTable } from '@/components/charts/gate-performance-table';
@@ -102,7 +102,7 @@ export default function GateSupervisorDashboardPage() {
       <Breadcrumb>
           <BreadcrumbList>
           <BreadcrumbItem>
-              <BreadcrumbLink href="/gate-supervisor/dashboard">Dashboard</BreadcrumbLink>
+              <BreadcrumbPage icon={LayoutDashboard}>Dashboard</BreadcrumbPage>
           </BreadcrumbItem>
           </BreadcrumbList>
       </Breadcrumb>

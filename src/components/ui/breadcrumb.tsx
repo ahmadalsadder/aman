@@ -2,6 +2,7 @@
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { ChevronRight, MoreHorizontal } from "lucide-react"
+import { motion } from "framer-motion"
 
 import { cn } from "@/lib/utils"
 
@@ -10,7 +11,17 @@ const Breadcrumb = React.forwardRef<
   React.ComponentPropsWithoutRef<"nav"> & {
     separator?: React.ReactNode
   }
->(({ ...props }, ref) => <nav ref={ref} aria-label="breadcrumb" {...props} />)
+>(({ className, ...props }, ref) => (
+  <motion.nav 
+    ref={ref} 
+    aria-label="breadcrumb" 
+    className={cn("bg-card/80 backdrop-blur-sm p-2 rounded-md border", className)} 
+    initial={{ opacity: 0, y: -10 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.3 }}
+    {...props} 
+  />
+))
 Breadcrumb.displayName = "Breadcrumb"
 
 const BreadcrumbList = React.forwardRef<
@@ -43,33 +54,42 @@ BreadcrumbItem.displayName = "BreadcrumbItem"
 const BreadcrumbLink = React.forwardRef<
   HTMLAnchorElement,
   React.ComponentPropsWithoutRef<"a"> & {
-    asChild?: boolean
+    asChild?: boolean,
+    icon?: React.ElementType,
   }
->(({ asChild, className, ...props }, ref) => {
+>(({ asChild, className, children, icon: Icon, ...props }, ref) => {
   const Comp = asChild ? Slot : "a"
 
   return (
     <Comp
       ref={ref}
-      className={cn("transition-colors hover:text-foreground", className)}
+      className={cn("transition-colors hover:text-foreground flex items-center gap-2", className)}
       {...props}
-    />
+    >
+      {Icon && <Icon className="h-4 w-4" />}
+      {children}
+    </Comp>
   )
 })
 BreadcrumbLink.displayName = "BreadcrumbLink"
 
 const BreadcrumbPage = React.forwardRef<
   HTMLSpanElement,
-  React.ComponentPropsWithoutRef<"span">
->(({ className, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<"span"> & {
+    icon?: React.ElementType,
+  }
+>(({ className, children, icon: Icon, ...props }, ref) => (
   <span
     ref={ref}
     role="link"
     aria-disabled="true"
     aria-current="page"
-    className={cn("font-normal text-foreground", className)}
+    className={cn("font-normal text-foreground flex items-center gap-2", className)}
     {...props}
-  />
+  >
+     {Icon && <Icon className="h-4 w-4" />}
+     {children}
+  </span>
 ))
 BreadcrumbPage.displayName = "BreadcrumbPage"
 

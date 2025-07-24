@@ -18,7 +18,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
-import { format, isValid, parse, isToday, subYears, addYears } from 'date-fns';
+import { format, isValid, parse, isToday } from 'date-fns';
 import { DeleteTransactionDialog } from '@/components/transactions/delete-transaction-dialog';
 import { useToast } from '@/hooks/use-toast';
 import { Combobox } from '@/components/ui/combobox';
@@ -279,9 +279,6 @@ export function TransactionsPage({ module, title, description }: TransactionsPag
     });
   }, [transactions, appliedFilters, officerDesks]);
 
-  const fromDate = subYears(new Date(), 10);
-  const toDate = addYears(new Date(), 10);
-
   if (!canViewPage) {
     return (
         <div className="flex h-full w-full flex-col items-center justify-center gap-4 text-center">
@@ -403,7 +400,7 @@ export function TransactionsPage({ module, title, description }: TransactionsPag
                       {filters.dateFrom ? format(filters.dateFrom, "PPP") : <span>{t('filterFromDate')}</span>}
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0"><Calendar mode="single" selected={filters.dateFrom ?? undefined} onSelect={(date) => handleUpdateFilter('dateFrom', date || null)} disabled={(date) => date > new Date() || (filters.dateTo ? date > filters.dateTo : false)} initialFocus captionLayout="dropdown-nav" fromYear={fromDate.getFullYear()} toYear={toDate.getFullYear()} /></PopoverContent>
+                  <PopoverContent className="w-auto p-0"><Calendar mode="single" selected={filters.dateFrom ?? undefined} onSelect={(date) => handleUpdateFilter('dateFrom', date || null)} disabled={(date) => date > new Date() || (filters.dateTo ? date > filters.dateTo : false)} initialFocus /></PopoverContent>
                 </Popover>
 
                 <Popover>
@@ -413,7 +410,7 @@ export function TransactionsPage({ module, title, description }: TransactionsPag
                       {filters.dateTo ? format(filters.dateTo, "PPP") : <span>{t('filterToDate')}</span>}
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0"><Calendar mode="single" selected={filters.dateTo ?? undefined} onSelect={(date) => handleUpdateFilter('dateTo', date || null)} disabled={(date) => date > new Date() || (filters.dateFrom ? date < filters.dateFrom : false)} initialFocus captionLayout="dropdown-nav" fromYear={fromDate.getFullYear()} toYear={toDate.getFullYear()} /></PopoverContent>
+                  <PopoverContent className="w-auto p-0"><Calendar mode="single" selected={filters.dateTo ?? undefined} onSelect={(date) => handleUpdateFilter('dateTo', date || null)} disabled={(date) => date > new Date() || (filters.dateFrom ? date < filters.dateFrom : false)} initialFocus /></PopoverContent>
                 </Popover>
               </div>
               <div className="mt-6 flex justify-end gap-2">

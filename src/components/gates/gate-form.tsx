@@ -84,11 +84,7 @@ export function GateForm({
   
   const form = useForm<GateFormValues>({
     resolver: zodResolver(gateFormSchema),
-    defaultValues: gateToEdit ? {
-        ...gateToEdit,
-        warrantyStartDate: gateToEdit.warrantyStartDate ? new Date(gateToEdit.warrantyStartDate) : undefined,
-        warrantyEndDate: gateToEdit.warrantyEndDate ? new Date(gateToEdit.warrantyEndDate) : undefined,
-    } : {
+    defaultValues: gateToEdit ? gateToEdit : {
       name: '',
       code: '',
       portId: '',
@@ -107,6 +103,8 @@ export function GateForm({
   const gateType = watch('type');
   const portId = watch('portId');
   const terminalId = watch('terminalId');
+  const warrantyStart = watch('warrantyStartDate');
+  const warrantyEnd = watch('warrantyEndDate');
 
   useEffect(() => { if (portId) resetField('terminalId', { defaultValue: '' }); }, [portId, resetField]);
   useEffect(() => { if (terminalId) resetField('zoneId', { defaultValue: '' }); }, [terminalId, resetField]);
@@ -152,8 +150,8 @@ export function GateForm({
                     <FormField control={control} name="type" render={({ field }) => ( <FormItem><FormLabel required>{t('config.type')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue /></SelectTrigger></FormControl><SelectContent><SelectItem value="Entry">Entry</SelectItem><SelectItem value="Exit">Exit</SelectItem><SelectItem value="Bidirectional">Bidirectional</SelectItem><SelectItem value="VIP">VIP</SelectItem><SelectItem value="Crew">Crew</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <FormField control={control} name="warrantyStartDate" render={({ field }) => ( <FormItem><FormLabel>{t('config.warrantyStart')}</FormLabel><Popover><PopoverTrigger asChild><FormControl><Button variant="outline" className={cn("w-full pl-3 text-left font-normal", !field.value && "text-muted-foreground")}><CalendarIcon className="mr-2 h-4 w-4" />{field.value ? format(field.value, 'PPP') : <span>{t('config.pickDate')}</span>}</Button></FormControl></PopoverTrigger><PopoverContent className="w-auto p-0" align="start"><Calendar mode="single" selected={field.value} onSelect={field.onChange} initialFocus /></PopoverContent></Popover><FormMessage /></FormItem> )} />
-                    <FormField control={control} name="warrantyEndDate" render={({ field }) => ( <FormItem><FormLabel>{t('config.warrantyEnd')}</FormLabel><Popover><PopoverTrigger asChild><FormControl><Button variant="outline" className={cn("w-full pl-3 text-left font-normal", !field.value && "text-muted-foreground")}><CalendarIcon className="mr-2 h-4 w-4" />{field.value ? format(field.value, 'PPP') : <span>{t('config.pickDate')}</span>}</Button></FormControl></PopoverTrigger><PopoverContent className="w-auto p-0" align="start"><Calendar mode="single" selected={field.value} onSelect={field.onChange} initialFocus /></PopoverContent></Popover><FormMessage /></FormItem> )} />
+                    <FormField control={control} name="warrantyStartDate" render={({ field }) => ( <FormItem><FormLabel>{t('config.warrantyStart')}</FormLabel><Popover><PopoverTrigger asChild><FormControl><Button variant="outline" className={cn("w-full pl-3 text-left font-normal", !field.value && "text-muted-foreground")}><CalendarIcon className="mr-2 h-4 w-4" />{field.value ? format(field.value, 'PPP') : <span>{t('config.pickDate')}</span>}</Button></FormControl></PopoverTrigger><PopoverContent className="w-auto p-0" align="start"><Calendar mode="single" selected={field.value} onSelect={field.onChange} disabled={(date) => (warrantyEnd ? date > warrantyEnd : false)} initialFocus /></PopoverContent></Popover><FormMessage /></FormItem> )} />
+                    <FormField control={control} name="warrantyEndDate" render={({ field }) => ( <FormItem><FormLabel>{t('config.warrantyEnd')}</FormLabel><Popover><PopoverTrigger asChild><FormControl><Button variant="outline" className={cn("w-full pl-3 text-left font-normal", !field.value && "text-muted-foreground")}><CalendarIcon className="mr-2 h-4 w-4" />{field.value ? format(field.value, 'PPP') : <span>{t('config.pickDate')}</span>}</Button></FormControl></PopoverTrigger><PopoverContent className="w-auto p-0" align="start"><Calendar mode="single" selected={field.value} onSelect={field.onChange} disabled={(date) => (warrantyStart ? date < warrantyStart : false)} initialFocus /></PopoverContent></Popover><FormMessage /></FormItem> )} />
                 </div>
               </CardContent>
             </Card>

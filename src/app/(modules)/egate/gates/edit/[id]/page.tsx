@@ -53,8 +53,14 @@ export default function EditGatePage() {
                 ]);
 
                 if (gateRes.isSuccess && gateRes.data && portsRes.isSuccess && terminalsRes.isSuccess && zonesRes.isSuccess && workflowsRes.isSuccess && riskProfilesRes.isSuccess) {
+                    const gateWithDates = {
+                        ...gateRes.data.gate,
+                        warrantyStartDate: gateRes.data.gate.warrantyStartDate ? new Date(gateRes.data.gate.warrantyStartDate) : undefined,
+                        warrantyEndDate: gateRes.data.gate.warrantyEndDate ? new Date(gateRes.data.gate.warrantyEndDate) : undefined,
+                    };
+
                     setPageData({
-                        gate: gateRes.data.gate,
+                        gate: gateWithDates as any,
                         ports: portsRes.data!,
                         terminals: terminalsRes.data!,
                         zones: zonesRes.data!,

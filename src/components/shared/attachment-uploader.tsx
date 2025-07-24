@@ -53,7 +53,7 @@ const AttachmentViewerDialog = ({ src, name, mimeType }: { src: string; name: st
             <DialogHeader>
                 <DialogTitle>{name}</DialogTitle>
             </DialogHeader>
-            <div className="flex-grow flex items-center justify-center bg-muted/50 rounded-lg overflow-hidden">
+            <div className="flex-grow flex items-center justify-center bg-muted/50 rounded-lg overflow-hidden relative">
                 {mimeType.startsWith('image/') ? (
                     <Image src={src} alt={name} layout="fill" objectFit="contain" />
                 ) : mimeType === 'application/pdf' ? (

@@ -76,7 +76,7 @@ export function TransactionsPage({ module, title, description }: TransactionsPag
   const { hasPermission } = useAuth();
   const t = useTranslations('Transactions');
 
-  const canViewPage = useMemo(() => hasPermission([`page:${module}:transactions:view` as Permission]), [hasPermission, module]);
+  const canViewPage = useMemo(() => hasPermission([`${module}:transactions:view` as Permission]), [hasPermission, module]);
 
   useEffect(() => {
     if (!canViewPage) {

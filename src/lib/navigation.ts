@@ -1,6 +1,7 @@
 
 
 
+
 'use client';
 import { Shield, LayoutDashboard, BarChart3, Users, Settings, Activity, Ship, LandPlot, DoorOpen, PieChart, UserCog, RadioTower, Home, Plane, ArrowRightLeft } from 'lucide-react';
 import type { Role, Module, Permission } from '@/types';
@@ -55,7 +56,7 @@ export const getModuleNavItems = (module: Module, role: Role, t: any): NavItem[]
             href: `${moduleBaseUrl}/transactions`, 
             label: t('transactions'),
             icon: ArrowRightLeft,
-            permission: `page:${module}:transactions:view` as Permission,
+            permission: `${module}:transactions:view` as Permission,
             children: [
                 {
                     href: `${moduleBaseUrl}/transactions`,

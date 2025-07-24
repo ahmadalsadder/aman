@@ -10,10 +10,10 @@ export type Permission =
   | 'users:manage'
   | 'reports:view'
   // Page-level view permissions
-  | 'page:airport:transactions:view'
-  | 'page:landport:transactions:view'
-  | 'page:seaport:transactions:view'
-  | 'page:gate-supervisor:transactions:view';
+  | 'airport:transactions:view'
+  | 'landport:transactions:view'
+  | 'seaport:transactions:view'
+  | 'gate-supervisor:transactions:view';
 
 
 export interface User {

@@ -11,7 +11,7 @@ export const users: User[] = [
     modules: ['dashboard', 'landport', 'seaport', 'airport', 'egate', 'analyst', 'shiftsupervisor', 'control-room', 'users', 'settings'],
     permissions: [
         'records:view', 'records:create', 'records:edit', 'records:delete', 'users:manage', 'reports:view',
-        'page:airport:transactions:view', 'page:landport:transactions:view', 'page:seaport:transactions:view', 'page:gate-supervisor:transactions:view'
+        'airport:transactions:view', 'landport:transactions:view', 'seaport:transactions:view', 'gate-supervisor:transactions:view'
     ]
   },
   { 
@@ -21,7 +21,7 @@ export const users: User[] = [
     role: 'auditor', 
     token: 'fake-auditor-token', 
     modules: ['landport', 'seaport'],
-    permissions: ['records:view', 'reports:view', 'page:landport:transactions:view', 'page:seaport:transactions:view']
+    permissions: ['records:view', 'reports:view', 'landport:transactions:view', 'seaport:transactions:view']
   },
   { 
     id: '3', 

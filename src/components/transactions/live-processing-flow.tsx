@@ -50,6 +50,7 @@ import type { Module } from '@/types';
 import { FlightDetailsCard } from '@/app/(modules)/airport/transactions/components/flight-details-card';
 import { VehicleDetailsCard } from '@/app/(modules)/landport/transactions/components/vehicle-details-card';
 import { VesselDetailsCard } from '@/app/(modules)/seaport/transactions/components/vessel-details-card';
+import { extractPassportData } from '@/ai/flows/extract-passport-data-flow';
 
 type ProcessingStep = 'upload_document' | 'confirm_new_passenger' | 'capture_photo' | 'analyzing' | 'review' | 'completed';
 type UpdateChoice = 'update_all' | 'update_images';
@@ -191,26 +192,18 @@ export function LiveProcessingFlow({ module }: { module: Module }) {
     try {
         const dataUri = await fileToDataUri(file);
         setPassportScan(dataUri);
-        // This is a simplified extraction for the UI before the full API call
-        // The real extraction happens in the AI flow.
-        const tempExtractedData = {
-          firstName: 'Scanning...',
-          lastName: '',
-          passportNumber: 'Reading MRZ...',
-          nationality: '',
-          dateOfBirth: '',
-          gender: '',
-          passportIssueDate: '',
-          passportExpiryDate: '',
-          passportCountry: ''
-        };
-        setExtractedData(tempExtractedData);
         
+        const extracted = await extractPassportData({ passportPhotoDataUri: dataUri });
+        if (!extracted) {
+            throw new Error('AI extraction returned no data.');
+        }
+
+        setExtractedData(extracted);
         setCurrentStep('confirm_new_passenger');
-        addLog(`Passport scan captured. Waiting for confirmation to proceed.`);
+        addLog(`Passport scan captured and data extracted. Waiting for confirmation to proceed.`);
 
     } catch (error) {
-        console.error("Data URI Error:", error);
+        console.error("Data URI or Extraction Error:", error);
         toast({ variant: 'destructive', title: t('toast.extractionFailedTitle'), description: t('toast.extractionFailedDescription') });
     } finally {
         setIsScanning(false);

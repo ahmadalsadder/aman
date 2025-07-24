@@ -21,7 +21,10 @@ export const users: User[] = [
         'seaport:dashboard:view', 'seaport:dashboard:stats:view', 'seaport:dashboard:forecasts:view', 'seaport:dashboard:charts:view', 'seaport:dashboard:officer-performance:view',
         'egate:dashboard:view', 'egate:dashboard:stats:view', 'egate:dashboard:charts:view',
         'analyst:dashboard:view', 'analyst:dashboard:stats:view', 'analyst:dashboard:charts:view',
-        'control-room:dashboard:view', 'control-room:dashboard:stats:view', 'control-room:dashboard:forecasts:view', 'control-room:dashboard:charts:view', 'control-room:dashboard:officer-performance:view'
+        'control-room:dashboard:view', 'control-room:dashboard:stats:view', 'control-room:dashboard:forecasts:view', 'control-room:dashboard:charts:view', 'control-room:dashboard:officer-performance:view',
+        'airport:desks:view', 'airport:desks:create', 'airport:desks:edit', 'airport:desks:delete',
+        'landport:desks:view', 'landport:desks:create', 'landport:desks:edit', 'landport:desks:delete',
+        'seaport:desks:view', 'seaport:desks:create', 'seaport:desks:edit', 'seaport:desks:delete'
     ]
   },
   { 

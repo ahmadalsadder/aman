@@ -80,7 +80,7 @@ export default function Header() {
                 <DropdownMenuContent>
                     <DropdownMenuItem asChild>
                         <Link href={`/${currentModule}/live-processing`} className="flex items-center gap-2">
-                           <RadioTower className="h-4 w-4" />
+                           <RadioTower className="h-4 w-4 text-primary animate-pulse" />
                            <span>Live Processing</span>
                         </Link>
                     </DropdownMenuItem>

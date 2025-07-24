@@ -162,9 +162,9 @@ const ImageEditorDialog = ({ src, onSave, onCancel }: { src: string, onSave: (da
     }
 
     return (
-        <DialogContent className="max-w-4xl">
+        <DialogContent className="max-w-md h-[90vh] flex flex-col lg:max-w-2xl xl:max-w-4xl">
             <DialogHeader><DialogTitle>Edit Image</DialogTitle></DialogHeader>
-            <div className="flex justify-center my-4">
+            <div className="flex-grow flex items-center justify-center my-4 overflow-auto">
                 <ReactCrop
                     crop={crop}
                     onChange={c => setCrop(c)}
@@ -178,7 +178,7 @@ const ImageEditorDialog = ({ src, onSave, onCancel }: { src: string, onSave: (da
                         style={{ transform: `rotate(${rotation}deg)` }}
                         width={500}
                         height={500}
-                        className="max-h-[60vh] object-contain"
+                        className="max-h-full w-auto object-contain"
                     />
                 </ReactCrop>
             </div>

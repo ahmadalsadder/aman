@@ -4,6 +4,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
+import Link from 'next/link';
 import type { Transaction, Passenger } from '@/types/live-processing';
 import { api } from '@/lib/api';
 
@@ -332,5 +333,5 @@ export default function TransactionDetailsPage() {
         </Button>
       </div>
     </div>
-  );
-}
+
+    

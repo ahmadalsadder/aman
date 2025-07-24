@@ -5,6 +5,9 @@ import React, { useState, useMemo, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
+import ReactCrop, { type Crop, centerCrop, makeAspectCrop } from 'react-image-crop';
+import 'react-image-crop/dist/ReactCrop.css';
+
 
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -12,11 +15,12 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { UploadCloud, File as FileIcon, Trash2, Download, Eye, Loader2, AlertCircle, Pencil } from 'lucide-react';
+import { UploadCloud, File as FileIcon, Trash2, Download, Eye, Loader2, AlertCircle, Pencil, RotateCcw, RotateCw, CropIcon } from 'lucide-react';
 import { FilePdfIcon } from '@/components/icons/file-pdf-icon';
 import { FileAudioIcon } from '@/components/icons/file-audio-icon';
 import { FileVideoIcon } from '@/components/icons/file-video-icon';
 import { Label } from '@/components/ui/label';
+import { Slider } from '@/components/ui/slider';
 
 type OutputType = 'base64' | 'bytes';
 
@@ -99,6 +103,98 @@ const AttachmentViewerDialog = ({ src, name, mimeType }: { src: string; name: st
     );
 };
 
+
+const ImageEditorDialog = ({ src, onSave, onCancel }: { src: string, onSave: (dataUri: string) => void, onCancel: () => void }) => {
+    const [crop, setCrop] = useState<Crop>();
+    const [rotation, setRotation] = useState(0);
+    const imgRef = useRef<HTMLImageElement>(null);
+
+    function handleSaveCrop() {
+        if (!crop || !imgRef.current) return;
+
+        const canvas = document.createElement('canvas');
+        const scaleX = imgRef.current.naturalWidth / imgRef.current.width;
+        const scaleY = imgRef.current.naturalHeight / imgRef.current.height;
+        canvas.width = Math.floor(crop.width * scaleX);
+        canvas.height = Math.floor(crop.height * scaleY);
+        const ctx = canvas.getContext('2d');
+
+        if (!ctx) return;
+        
+        const cropX = crop.x * scaleX;
+        const cropY = crop.y * scaleY;
+
+        ctx.translate(canvas.width / 2, canvas.height / 2);
+        ctx.rotate((rotation * Math.PI) / 180);
+        ctx.translate(-canvas.width / 2, -canvas.height / 2);
+
+        ctx.drawImage(
+            imgRef.current,
+            cropX,
+            cropY,
+            crop.width * scaleX,
+            crop.height * scaleY,
+            0,
+            0,
+            crop.width * scaleX,
+            crop.height * scaleY
+        );
+
+        onSave(canvas.toDataURL('image/jpeg'));
+    }
+
+    function onImageLoad(e: React.SyntheticEvent<HTMLImageElement>) {
+        const { width, height } = e.currentTarget;
+        const newCrop = centerCrop(
+            makeAspectCrop(
+              {
+                unit: '%',
+                width: 90,
+              },
+              1, // aspect ratio 1:1
+              width,
+              height
+            ),
+            width,
+            height
+          );
+        setCrop(newCrop);
+    }
+
+    return (
+        <DialogContent className="max-w-4xl">
+            <DialogHeader><DialogTitle>Edit Image</DialogTitle></DialogHeader>
+            <div className="flex justify-center my-4">
+                <ReactCrop
+                    crop={crop}
+                    onChange={c => setCrop(c)}
+                    aspect={1}
+                >
+                    <Image
+                        ref={imgRef}
+                        src={src}
+                        alt="Crop preview"
+                        onLoad={onImageLoad}
+                        style={{ transform: `rotate(${rotation}deg)` }}
+                        width={500}
+                        height={500}
+                        className="max-h-[60vh] object-contain"
+                    />
+                </ReactCrop>
+            </div>
+            <div className="flex items-center gap-4">
+                <Label htmlFor="rotation" className="flex items-center gap-2"><RotateCw className="h-4 w-4"/> Rotation</Label>
+                <Slider id="rotation" min={0} max={360} step={1} value={[rotation]} onValueChange={(value) => setRotation(value[0])} />
+            </div>
+            <DialogFooter>
+                <Button variant="ghost" onClick={onCancel}>Cancel</Button>
+                <Button onClick={handleSaveCrop}><CropIcon className="mr-2 h-4 w-4"/> Save Changes</Button>
+            </DialogFooter>
+        </DialogContent>
+    );
+};
+
+
 const getFileExtension = (fileName: string) => {
     return fileName.slice(((fileName.lastIndexOf(".") - 1) >>> 0) + 2);
 }
@@ -114,6 +210,8 @@ function SingleUploader({ config, value, onFileChange, outputType, disabled }: {
     const inputRef = useRef<HTMLInputElement>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [uploadProgress, setUploadProgress] = useState(0);
+    const [isEditorOpen, setIsEditorOpen] = useState(false);
+
 
     const handleFileSelect = useCallback(async (selectedFile: File | null) => {
         if (!selectedFile) return;
@@ -171,17 +269,20 @@ function SingleUploader({ config, value, onFileChange, outputType, disabled }: {
         if(inputRef.current) inputRef.current.value = '';
     };
 
-    const handleEdit = () => {
-      toast({
-        title: 'Feature Not Available',
-        description: 'Advanced image editing will be available in a future update.',
-      });
-    }
+    const handleSaveEdit = (editedDataUri: string) => {
+        if (value) {
+            onFileChange({
+                ...value,
+                content: editedDataUri,
+            });
+            toast({ title: 'Image Edited', description: 'Your changes have been saved.' });
+        }
+        setIsEditorOpen(false);
+    };
 
     const fileSrc = useMemo(() => {
         if (!value) return null;
         if (typeof value.content === 'string') return value.content;
-        // Cannot preview ArrayBuffer directly
         return null;
     }, [value]);
 
@@ -228,18 +329,25 @@ function SingleUploader({ config, value, onFileChange, outputType, disabled }: {
                                     {value ? 'Change' : 'Upload'}
                                 </Button>
                                 {value && (
-                                    <Dialog>
+                                    <Dialog open={isEditorOpen} onOpenChange={setIsEditorOpen}>
                                         <TooltipProvider>
-                                            {fileSrc &&
-                                                <Tooltip><TooltipTrigger asChild><DialogTrigger asChild><Button size="sm" variant="ghost"><Eye className="h-4 w-4" /></Button></DialogTrigger></TooltipTrigger><TooltipContent><p>View</p></TooltipContent></Tooltip>
-                                            }
-                                            <Tooltip><TooltipTrigger asChild><Button size="sm" variant="ghost" onClick={handleEdit}><Pencil className="h-4 w-4" /></Button></TooltipTrigger><TooltipContent><p>Edit</p></TooltipContent></Tooltip>
+                                            <Dialog>
+                                                {fileSrc &&
+                                                    <Tooltip><TooltipTrigger asChild><DialogTrigger asChild><Button size="sm" variant="ghost"><Eye className="h-4 w-4" /></Button></DialogTrigger></TooltipTrigger><TooltipContent><p>View</p></TooltipContent></Tooltip>
+                                                }
+                                                <AttachmentViewerDialog src={fileSrc!} name={value.fileInfo.name} mimeType={value.fileInfo.type} />
+                                            </Dialog>
+                                            {fileType === 'image' && (
+                                                <Tooltip><TooltipTrigger asChild><Button size="sm" variant="ghost" onClick={() => setIsEditorOpen(true)}><Pencil className="h-4 w-4" /></Button></TooltipTrigger><TooltipContent><p>Edit</p></TooltipContent></Tooltip>
+                                            )}
                                             <Tooltip><TooltipTrigger asChild><Button size="sm" variant="ghost" disabled={disabled} onClick={handleDelete}><Trash2 className="h-4 w-4 text-destructive" /></Button></TooltipTrigger><TooltipContent><p>Delete</p></TooltipContent></Tooltip>
                                             {fileSrc && 
                                                 <Tooltip><TooltipTrigger asChild><Button size="sm" variant="ghost" asChild><a href={fileSrc} download={value.fileInfo.name}><Download className="h-4 w-4" /></a></Button></TooltipTrigger><TooltipContent><p>Download</p></TooltipContent></Tooltip>
                                             }
                                         </TooltipProvider>
-                                        <AttachmentViewerDialog src={fileSrc!} name={value.fileInfo.name} mimeType={value.fileInfo.type} />
+                                        {fileType === 'image' && fileSrc && (
+                                            <ImageEditorDialog src={fileSrc} onSave={handleSaveEdit} onCancel={() => setIsEditorOpen(false)} />
+                                        )}
                                     </Dialog>
                                 )}
                             </div>

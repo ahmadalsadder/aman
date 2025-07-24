@@ -4,6 +4,7 @@
 import { LiveProcessingFlow } from '@/components/transactions/live-processing-flow';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { DashboardHeader } from '@/components/layout/dashboard-header';
+import { Ship } from 'lucide-react';
 
 export default function SeaportLiveProcessingPage() {
   return (
@@ -26,6 +27,7 @@ export default function SeaportLiveProcessingPage() {
       <DashboardHeader 
         title="Live Officer Processing"
         description="Real-time passenger processing workflow."
+        icon={Ship}
       />
       <LiveProcessingFlow module="seaport" />
     </div>

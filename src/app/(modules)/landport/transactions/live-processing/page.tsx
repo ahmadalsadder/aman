@@ -4,6 +4,7 @@
 import { LiveProcessingFlow } from '@/components/transactions/live-processing-flow';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { DashboardHeader } from '@/components/layout/dashboard-header';
+import { Car } from 'lucide-react';
 
 export default function LandportLiveProcessingPage() {
   return (
@@ -26,6 +27,7 @@ export default function LandportLiveProcessingPage() {
       <DashboardHeader 
         title="Live Officer Processing"
         description="Real-time passenger processing workflow."
+        icon={Car}
       />
       <LiveProcessingFlow module="landport" />
     </div>

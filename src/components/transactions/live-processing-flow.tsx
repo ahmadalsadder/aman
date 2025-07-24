@@ -195,57 +195,18 @@ export function LiveProcessingFlow() {
         const result = await extractPassportData({ passportPhotoDataUri: dataUri });
         setExtractedData(result);
         
-        const countryLabel = countries.find(c => c.value === result.nationality)?.label || result.nationality;
-        const needsVisa = NATIONALITIES_REQUIRING_VISA.includes(countryLabel);
-        let isVisaValid = false;
-
         const newWorkflow = [
             { id: 'doc_scan', name: t('workflow.docScan'), status: 'in-progress' as InternalWorkflowStatus, Icon: ScanLine },
-        ];
-
-        if (needsVisa) {
-            newWorkflow.push({ id: 'visa_check', name: t('workflow.visaCheck'), status: 'pending', Icon: FileWarning });
-            const visaResult = await api.get<{ passportNumber: string, nationality: string, visaType: string, expiryDate: string }[]>(`/data/visa-database`);
-            if (visaResult.isSuccess && visaResult.data) {
-                const visaHolder = visaResult.data.find(v => v.passportNumber === result.passportNumber && v.nationality === countryLabel);
-                isVisaValid = !!visaHolder;
-            }
-            setVisaCheckResult(isVisaValid ? 'valid' : 'invalid');
-        } else {
-             newWorkflow.push({ id: 'visa_check', name: t('workflow.visaCheck'), status: 'skipped', Icon: FileWarning });
-            setVisaCheckResult('not_required');
-        }
-
-        newWorkflow.push(
-            { id: 'identity_confirmation', name: t('workflow.identity'), status: 'pending' as InternalWorkflowStatus, Icon: UserCheck },
-            { id: 'biometric_capture', name: t('workflow.biometric'), status: 'pending', Icon: Fingerprint },
+            { id: 'data_confirmation', name: t('workflow.identity'), status: 'pending' as InternalWorkflowStatus, Icon: UserCheck },
+            { id: 'biometric_capture', name: t('workflow.biometric'), status: 'pending' as InternalWorkflowStatus, Icon: Fingerprint },
             { id: 'security_ai_checks', name: t('workflow.security'), status: 'pending', Icon: ShieldAlert },
             { id: 'officer_review', name: t('workflow.review'), status: 'pending', Icon: User }
-        );
-        
+        ];
+
         setWorkflow(newWorkflow);
         updateStepStatus('doc_scan', 'completed');
-        updateStepStatus('visa_check', needsVisa ? (isVisaValid ? 'completed' : 'failed') : 'skipped');
-
-        const passengerResult = await api.get<{ airport: Passenger[], seaport: Passenger[], landport: Passenger[] }>(`/data/passengers`);
-        if (passengerResult.isSuccess && passengerResult.data) {
-            const allPassengers = [...passengerResult.data.airport, ...passengerResult.data.seaport, ...passengerResult.data.landport];
-            const existingMatch = allPassengers.find(p => p.passportNumber === result.passportNumber);
-
-            if (existingMatch) {
-                addLog(`Passenger match found for ${result.firstName} ${result.lastName}.`);
-                setExistingPassenger(existingMatch);
-                setCurrentStep('match_found');
-            } else {
-                setCurrentStep('confirm_new_passenger');
-                addLog(`Data extracted for new passenger: ${result.firstName} ${result.lastName}`);
-            }
-        } else {
-            toast({ variant: 'destructive', title: 'Error', description: 'Could not fetch passenger data.' });
-            throw new Error('Failed to fetch passengers');
-        }
-
-
+        setCurrentStep('confirm_new_passenger');
+        addLog(`Data extracted for passenger: ${result.firstName} ${result.lastName}`);
     } catch (error) {
         console.error("Data Extraction Error:", error);
         toast({ variant: 'destructive', title: t('toast.extractionFailedTitle'), description: t('toast.extractionFailedDescription') });
@@ -254,29 +215,9 @@ export function LiveProcessingFlow() {
     }
   }
 
-  const handleConfirmNewPassenger = () => {
-    if (!extractedData) return;
-    const countryLabel = countries.find(c => c.value === extractedData.nationality)?.label || extractedData.nationality;
-    const passportCountryLabel = countries.find(c => c.value === extractedData.passportCountry)?.label || extractedData.passportCountry;
-
-    const passengerFromScan: Partial<Passenger> = {
-        id: `P${Date.now()}`,
-        firstName: extractedData.firstName,
-        lastName: extractedData.lastName,
-        passportNumber: extractedData.passportNumber,
-        nationality: countryLabel,
-        dateOfBirth: extractedData.dateOfBirth,
-        passportIssueDate: extractedData.passportIssueDate,
-        passportExpiryDate: extractedData.passportExpiryDate,
-        passportCountry: passportCountryLabel,
-        gender: extractedData.gender,
-        riskLevel: 'Low', 
-        profilePicture: passportScan || '',
-    };
-    
-    updateStepStatus('identity_confirmation', 'completed');
-    setSelectedPassenger(passengerFromScan);
-    addLog(`Officer confirmed record for new passenger ${passengerFromScan.firstName}.`);
+  const handleConfirmExtractedData = () => {
+    updateStepStatus('data_confirmation', 'completed');
+    addLog(`Officer confirmed extracted data.`);
     setCurrentStep('capture_photo');
   }
 
@@ -340,30 +281,68 @@ export function LiveProcessingFlow() {
   }
 
   const handleStartAnalysis = async () => {
-    if (!selectedPassenger || !passportScan || !biometricCaptures.face) {
+    if (!extractedData || !passportScan || !biometricCaptures.face) {
         toast({ variant: 'destructive', title: t('toast.missingInfoTitle'), description: t('toast.missingInfoDescription') });
         return;
     }
     updateStepStatus('biometric_capture', 'completed');
     setCurrentStep('analyzing');
     addLog('Starting AI analysis...');
+
     try {
-        const result = await assessPassengerRisk({
+        // Here you would make the single, comprehensive API call.
+        // For now, we simulate the steps of the backend.
+
+        // 1. Check for existing passenger
+        const passengerResult = await api.get<{ airport: Passenger[], seaport: Passenger[], landport: Passenger[] }>(`/data/passengers`);
+        let existingMatch: Passenger | undefined;
+        if (passengerResult.isSuccess && passengerResult.data) {
+            const allPassengers = [...passengerResult.data.airport, ...passengerResult.data.seaport, ...passengerResult.data.landport];
+            existingMatch = allPassengers.find(p => p.passportNumber === extractedData.passportNumber);
+            if (existingMatch) {
+                setExistingPassenger(existingMatch);
+            }
+        }
+        
+        // 2. Visa Check
+        const countryLabel = countries.find(c => c.value === extractedData.nationality)?.label || extractedData.nationality;
+        const needsVisa = NATIONALITIES_REQUIRING_VISA.includes(countryLabel);
+        let isVisaValid = false;
+        if (needsVisa) {
+            const visaResult = await api.get<{ passportNumber: string, nationality: string, visaType: string, expiryDate: string }[]>(`/data/visa-database`);
+            if (visaResult.isSuccess && visaResult.data) {
+                const visaHolder = visaResult.data.find(v => v.passportNumber === extractedData.passportNumber && v.nationality === countryLabel);
+                isVisaValid = !!visaHolder;
+            }
+        }
+        setVisaCheckResult(needsVisa ? (isVisaValid ? 'valid' : 'invalid') : 'not_required');
+
+        // 3. Risk Assessment
+        const riskResult = await assessPassengerRisk({
             passengerDetails: {
-                nationality: selectedPassenger.nationality || '',
-                dateOfBirth: selectedPassenger.dateOfBirth || '',
-                riskLevel: selectedPassenger.riskLevel || 'Low',
+                nationality: extractedData.nationality,
+                dateOfBirth: extractedData.dateOfBirth,
+                riskLevel: existingMatch?.riskLevel || 'Low',
             },
             passportPhotoDataUri: passportScan,
             livePhotoDataUri: biometricCaptures.face,
         });
+
+        // Combine alerts
+        if (needsVisa && !isVisaValid) {
+            riskResult.alerts.unshift(t('alert.visaRequired'));
+            riskResult.recommendation = 'Reject';
+            riskResult.riskScore = Math.max(riskResult.riskScore, 85);
+        }
+
         updateStepStatus('security_ai_checks', 'completed');
-        setAiResult(result);
+        setAiResult(riskResult);
         setCurrentStep('review');
-        if (result.alerts.length > 0) {
+        if (riskResult.alerts.length > 0 && riskResult.recommendation === 'Reject') {
             setFinalDecision('Rejected');
         }
         addLog('AI analysis complete.');
+
     } catch (error) {
         console.error("AI Analysis Error:", error);
         toast({ variant: 'destructive', title: t('toast.analysisFailedTitle') });
@@ -468,9 +447,10 @@ export function LiveProcessingFlow() {
     const newApprovedAlerts = { ...approvedAlerts, [alert]: true };
     setApprovedAlerts(newApprovedAlerts);
   
-    // Check if this was the last alert to be acknowledged
     if (aiResult && Object.keys(newApprovedAlerts).length === aiResult.alerts.length) {
-      setFinalDecision('Approved');
+      if (finalDecision === 'Rejected') {
+          setFinalDecision('Approved');
+      }
     }
   };
 
@@ -507,6 +487,7 @@ export function LiveProcessingFlow() {
   };
 
   const allAlertsAcknowledged = aiResult ? aiResult.alerts.every(alert => approvedAlerts[alert]) : true;
+  const hardStop = visaCheckResult === 'invalid';
 
   const renderContent = () => {
     switch (currentStep) {
@@ -516,68 +497,6 @@ export function LiveProcessingFlow() {
                     <CardHeader><CardTitle>{t('uploadDocument.title')}</CardTitle><CardDescription>{t('uploadDocument.description')}</CardDescription></CardHeader>
                     <CardContent>
                         <ScanCard title={t('uploadDocument.passport')} onScan={handlePassportScan} scannedImage={passportScan} onClear={() => setPassportScan(null)} loading={isScanning} />
-                    </CardContent>
-                </motion.div>
-            )
-        case 'match_found':
-            if (!existingPassenger || !extractedData) return null;
-            return (
-                <motion.div {...motionProps} key="match">
-                    <CardHeader>
-                        <CardTitle>{t('matchFound.title')}</CardTitle>
-                        <CardDescription>{t('matchFound.description')}</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <Card className="bg-secondary/30">
-                                <CardHeader><CardTitle className="text-base">{t('matchFound.existingRecord')}</CardTitle></CardHeader>
-                                <CardContent className="space-y-2">
-                                    <DetailItem label={t('common.name')} value={`${existingPassenger.firstName} ${existingPassenger.lastName}`} />
-                                    <DetailItem label={t('common.nationality')} value={existingPassenger.nationality} />
-                                    <DetailItem label={t('common.dob')} value={existingPassenger.dateOfBirth} />
-                                    <DetailItem label={t('common.passportNo')} value={existingPassenger.passportNumber} />
-                                    <DetailItem label={t('common.gender')} value={existingPassenger.gender} />
-                                    <DetailItem label={t('common.issueDate')} value={existingPassenger.passportIssueDate} />
-                                    <DetailItem label={t('common.expiryDate')} value={existingPassenger.passportExpiryDate} />
-                                </CardContent>
-                            </Card>
-                             <Card>
-                                <CardHeader><CardTitle className="text-base">{t('matchFound.scannedData')}</CardTitle></CardHeader>
-                                <CardContent className="space-y-2">
-                                    <DetailItem label={t('common.name')} value={`${extractedData.firstName} ${extractedData.lastName}`} />
-                                    <DetailItem label={t('common.nationality')} value={countries.find(c => c.value === extractedData.nationality)?.label || extractedData.nationality} />
-                                    <DetailItem label={t('common.dob')} value={extractedData.dateOfBirth} />
-                                    <DetailItem label={t('common.passportNo')} value={extractedData.passportNumber} />
-                                    <DetailItem label={t('common.gender')} value={extractedData.gender} />
-                                    <DetailItem label={t('common.issueDate')} value={extractedData.passportIssueDate} />
-                                    <DetailItem label={t('common.expiryDate')} value={extractedData.passportExpiryDate} />
-                                </CardContent>
-                            </Card>
-                        </div>
-                        {visaCheckResult === 'invalid' ? (
-                            <div className="space-y-4">
-                               <Alert variant="destructive">
-                                   <FileWarning className="h-4 w-4" />
-                                   <AlertTitle>{t('alert.missingVisaTitle')}</AlertTitle>
-                                   <AlertDescription>{t('alert.missingVisaDescription')}</AlertDescription>
-                               </Alert>
-                               <Button className="w-full" variant="default" onClick={handleTransferToDutyManager}>
-                                   <ShieldAlert className="mr-2 h-4 w-4" /> {t('matchFound.transfer')}
-                               </Button>
-                           </div>
-                        ) : (
-                            <div className="space-y-2 rounded-md border p-4">
-                               <h4 className="font-semibold">{t('matchFound.chooseAction')}</h4>
-                               <p className="text-sm text-muted-foreground">{t('matchFound.chooseActionDescription')}</p>
-                               <div className="flex flex-col gap-2 pt-2">
-                                 <Button onClick={() => handleMatchDecision('update_all')} className="w-full justify-start">{t('matchFound.updateAll')}</Button>
-                                 <Button variant="outline" onClick={() => handleMatchDecision('update_images')} className="w-full justify-start">{t('matchFound.updateImages')}</Button>
-                               </div>
-                            </div>
-                        )}
-                        <Button variant="destructive" className="w-full" onClick={() => resetState()}>
-                           <XCircle className="mr-2 h-4 w-4" /> {t('common.cancelTransaction')}
-                        </Button>
                     </CardContent>
                 </motion.div>
             )
@@ -604,30 +523,14 @@ export function LiveProcessingFlow() {
                                 <DetailItem label={t('common.expiryDate')} value={extractedData.passportExpiryDate} />
                             </CardContent>
                         </Card>
-                        {visaCheckResult === 'invalid' ? (
-                           <div className="space-y-4">
-                                <Alert variant="destructive">
-                                    <FileWarning className="h-4 w-4" />
-                                    <AlertTitle>{t('alert.missingVisaTitle')}</AlertTitle>
-                                    <AlertDescription>{t('alert.missingVisaDescription')}</AlertDescription>
-                                </Alert>
-                                <Button className="w-full" variant="default" onClick={handleTransferToDutyManager}>
-                                    <ShieldAlert className="mr-2 h-4 w-4" /> {t('matchFound.transfer')}
-                                </Button>
-                                <Button variant="destructive" className="w-full" onClick={() => resetState()}>
-                                    <XCircle className="mr-2 h-4 w-4" /> {t('common.cancelTransaction')}
-                                </Button>
-                            </div>
-                        ) : (
-                             <div className="flex flex-col gap-2 sm:flex-row">
-                                <Button className="w-full" onClick={handleConfirmNewPassenger}>
-                                    {t('common.confirmAndProceed')} <ChevronRight className="ml-2 h-4 w-4" />
-                                </Button>
-                                <Button variant="destructive" className="w-full" onClick={() => resetState()}>
-                                    <XCircle className="mr-2 h-4 w-4" /> {t('common.cancelTransaction')}
-                                </Button>
-                             </div>
-                        )}
+                        <div className="flex flex-col gap-2 sm:flex-row">
+                            <Button className="w-full" onClick={handleConfirmExtractedData}>
+                                {t('common.confirmAndProceed')} <ChevronRight className="ml-2 h-4 w-4" />
+                            </Button>
+                            <Button variant="destructive" className="w-full" onClick={() => resetState()}>
+                                <XCircle className="mr-2 h-4 w-4" /> {t('common.cancelTransaction')}
+                            </Button>
+                        </div>
                     </CardContent>
                 </motion.div>
             )
@@ -652,7 +555,7 @@ export function LiveProcessingFlow() {
                                 {t('capturePhoto.next')} <ChevronRight className="ml-2 h-4 w-4" />
                             </Button>
                              <div className="flex flex-col sm:flex-row gap-2">
-                                <Button variant="outline" className="w-full" onClick={() => setCurrentStep(existingPassenger ? 'match_found' : 'confirm_new_passenger')}>
+                                <Button variant="outline" className="w-full" onClick={() => setCurrentStep('confirm_new_passenger')}>
                                     <ArrowLeft className="mr-2 h-4 w-4" />
                                     {t('common.back')}
                                 </Button>
@@ -682,6 +585,21 @@ export function LiveProcessingFlow() {
                         <CardDescription>{t('review.description')}</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
+                        {existingPassenger && (
+                             <Card className="bg-secondary/30">
+                                <CardHeader><CardTitle className="text-base">{t('matchFound.existingRecord')}</CardTitle></CardHeader>
+                                <CardContent className="space-y-2">
+                                     <div className="space-y-2 rounded-md border p-4">
+                                       <h4 className="font-semibold">{t('matchFound.chooseAction')}</h4>
+                                       <p className="text-sm text-muted-foreground">{t('matchFound.chooseActionDescription')}</p>
+                                       <RadioGroup onValueChange={(v) => setUpdateChoice(v as any)} defaultValue={updateChoice || 'update_images'} className="flex flex-col gap-2 pt-2">
+                                         <Label htmlFor="update_all" className="flex items-center gap-2 rounded-md border p-3 flex-1 has-[input:checked]:border-primary"><RadioGroupItem value="update_all" id="update_all" /> {t('matchFound.updateAll')}</Label>
+                                         <Label htmlFor="update_images" className="flex items-center gap-2 rounded-md border p-3 flex-1 has-[input:checked]:border-primary"><RadioGroupItem value="update_images" id="update_images" /> {t('matchFound.updateImages')}</Label>
+                                       </RadioGroup>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        )}
                         <Card className="bg-secondary/50">
                             <CardHeader><CardTitle className="text-lg">{t('review.aiAssessment')}</CardTitle></CardHeader>
                             <CardContent className="space-y-4">
@@ -708,7 +626,7 @@ export function LiveProcessingFlow() {
                                                         size="sm"
                                                         variant={approvedAlerts[alert] ? "secondary" : "outline"}
                                                         onClick={() => handleAcknowledgeAlert(alert)}
-                                                        disabled={approvedAlerts[alert]}
+                                                        disabled={approvedAlerts[alert] || hardStop}
                                                         className="ml-4"
                                                     >
                                                         {approvedAlerts[alert] ? <CheckCircle2 className="mr-2 h-4 w-4 text-green-500" /> : <ShieldAlert className="mr-2 h-4 w-4" />}
@@ -721,34 +639,39 @@ export function LiveProcessingFlow() {
                                 )}
                             </CardContent>
                         </Card>
-                        {visaCheckResult === 'invalid' ? (
-                            <div className="space-y-4">
-                                <Alert variant="destructive">
-                                    <FileWarning className="h-4 w-4" />
-                                    <AlertTitle>{t('alert.missingVisaTitle')}</AlertTitle>
-                                    <AlertDescription>{t('alert.missingVisaDescription')}</AlertDescription>
-                                </Alert>
-                                <Button className="w-full" variant="default" onClick={handleTransferToDutyManager}>
-                                    <ShieldAlert className="mr-2 h-4 w-4" /> {t('matchFound.transfer')}
-                                </Button>
-                            </div>
-                        ) : (
-                            <>
-                                <Textarea placeholder={t('review.notesPlaceholder')} value={officerNotes} onChange={(e) => setOfficerNotes(e.target.value)} />
-                                <RadioGroup onValueChange={(v) => setFinalDecision(v as any)} value={finalDecision}>
-                                    <Label className="font-semibold">{t('review.finalDecision')}</Label>
-                                    <div className="flex gap-4">
-                                        <Label htmlFor="approve" className="flex items-center gap-2 rounded-md border p-3 flex-1 has-[input:checked]:border-primary"><RadioGroupItem value="Approved" id="approve" /> {t('review.approve')}</Label>
-                                        <Label htmlFor="reject" className="flex items-center gap-2 rounded-md border p-3 flex-1 has-[input:checked]:border-destructive"><RadioGroupItem value="Rejected" id="reject" /> {t('review.reject')}</Label>
-                                    </div>
-                                </RadioGroup>
-                                <div className="flex flex-col gap-2 sm:flex-row-reverse">
-                                    <Button className="w-full sm:flex-1" onClick={handleCompleteTransaction} disabled={!finalDecision || !allAlertsAcknowledged}>
-                                        {t('review.complete')}
+                        
+                        <div className="space-y-4">
+                            <Textarea placeholder={t('review.notesPlaceholder')} value={officerNotes} onChange={(e) => setOfficerNotes(e.target.value)} />
+                            
+                            {hardStop ? (
+                                <>
+                                    <Alert variant="destructive">
+                                        <FileWarning className="h-4 w-4" />
+                                        <AlertTitle>{t('alert.missingVisaTitle')}</AlertTitle>
+                                        <AlertDescription>{t('alert.missingVisaDescription')}</AlertDescription>
+                                    </Alert>
+                                    <Button className="w-full" variant="default" onClick={handleTransferToDutyManager}>
+                                        <ShieldAlert className="mr-2 h-4 w-4" /> {t('matchFound.transfer')}
                                     </Button>
-                                </div>
-                            </>
-                        )}
+                                </>
+                            ) : (
+                                <>
+                                    <RadioGroup onValueChange={(v) => setFinalDecision(v as any)} value={finalDecision}>
+                                        <Label className="font-semibold">{t('review.finalDecision')}</Label>
+                                        <div className="flex gap-4">
+                                            <Label htmlFor="approve" className="flex items-center gap-2 rounded-md border p-3 flex-1 has-[input:checked]:border-primary"><RadioGroupItem value="Approved" id="approve" /> {t('review.approve')}</Label>
+                                            <Label htmlFor="reject" className="flex items-center gap-2 rounded-md border p-3 flex-1 has-[input:checked]:border-destructive"><RadioGroupItem value="Rejected" id="reject" /> {t('review.reject')}</Label>
+                                        </div>
+                                    </RadioGroup>
+                                    <div className="flex flex-col gap-2 sm:flex-row-reverse">
+                                        <Button className="w-full sm:flex-1" onClick={handleCompleteTransaction} disabled={!finalDecision || !allAlertsAcknowledged}>
+                                            {t('review.complete')}
+                                        </Button>
+                                    </div>
+                                </>
+                            )}
+                        </div>
+
                         <div className="flex flex-col sm:flex-row gap-2">
                             <Button variant="outline" className="w-full" onClick={handleBackToCapture}>
                                 <ArrowLeft className="mr-2 h-4 w-4" />
@@ -759,7 +682,6 @@ export function LiveProcessingFlow() {
                                 {t('common.cancelTransaction')}
                             </Button>
                         </div>
-
                     </CardContent>
                 </motion.div>
             )
@@ -819,15 +741,15 @@ export function LiveProcessingFlow() {
                         </ul>
                     </CardContent>
                 </Card>
-                {selectedPassenger && (
+                {extractedData && (
                     <Card className="animate-in fade-in-50 duration-500">
                         <CardHeader className="flex flex-row items-center gap-4">
-                            <Avatar className="h-16 w-16"><AvatarImage src={selectedPassenger.profilePicture} data-ai-hint="portrait professional" /><AvatarFallback><User /></AvatarFallback></Avatar>
-                            <div><CardTitle>{selectedPassenger.firstName} {selectedPassenger.lastName}</CardTitle><CardDescription>{selectedPassenger.passportNumber}</CardDescription></div>
+                            <Avatar className="h-16 w-16"><AvatarImage src={passportScan || ''} data-ai-hint="portrait professional" /><AvatarFallback><User /></AvatarFallback></Avatar>
+                            <div><CardTitle>{extractedData.firstName} {extractedData.lastName}</CardTitle><CardDescription>{extractedData.passportNumber}</CardDescription></div>
                         </CardHeader>
                         <CardContent className="space-y-2">
-                            <DetailItem label={t('common.nationality')} value={selectedPassenger.nationality} />
-                            <DetailItem label={t('common.riskLevel')} value={selectedPassenger.riskLevel} />
+                            <DetailItem label={t('common.nationality')} value={countries.find(c => c.value === extractedData.nationality)?.label || extractedData.nationality} />
+                            <DetailItem label={t('common.riskLevel')} value={selectedPassenger?.riskLevel || 'N/A'} />
                         </CardContent>
                     </Card>
                 )}

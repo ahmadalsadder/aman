@@ -2,7 +2,7 @@
 'use client';
 import * as React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { UserCheck, BaggageClaim, ShieldCheck, Clock, ArrowRight, ArrowLeft, Plane, Globe, Zap, LayoutDashboard } from 'lucide-react';
+import { UserCheck, BaggageClaim, ShieldCheck, Clock, ArrowRight, ArrowLeft, Plane, Globe, Zap, LayoutDashboard, Users } from 'lucide-react';
 import PassengerTypeChart from '@/components/charts/passenger-type-chart';
 import CreateRecordButton from '@/components/create-record-button';
 import { useTranslations } from 'next-intl';
@@ -17,6 +17,9 @@ import { useAuth } from '@/hooks/use-auth';
 import { ForecastCard } from '@/components/forecast-card';
 import { DashboardHeader } from '@/components/layout/dashboard-header';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage } from '@/components/ui/breadcrumb';
+import { OfficerStatsCards } from '@/components/charts/officer-stats-cards';
+import { OfficerProcessingTimeChart } from '@/components/charts/officer-processing-time-chart';
+import { OfficerDecisionChart } from '@/components/charts/officer-decision-chart';
 
 export default function AirportDashboardPage() {
   const t = useTranslations('AirportDashboard');
@@ -27,19 +30,27 @@ export default function AirportDashboardPage() {
   const canViewStats = hasPermission(['airport:dashboard:stats:view']);
   const canViewForecasts = hasPermission(['airport:dashboard:forecasts:view']);
   const canViewCharts = hasPermission(['airport:dashboard:charts:view']);
+  const canViewOfficerPerformance = hasPermission(['airport:dashboard:officer-performance:view']);
 
 
   React.useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      const [mainResult, airportResult, passengerResult, overviewResult, forecastResult, statsResult] = await Promise.all([
+      const promises = [
         api.get('/dashboard/main'),
         api.get('/dashboard/airport'),
         api.get('/data/passengers'),
         api.get('/dashboard/transaction-overview'),
         api.get('/dashboard/forecasts?module=airport'),
         api.get('/dashboard/stats?module=airport'),
-      ]);
+      ];
+
+      if (canViewOfficerPerformance) {
+        promises.push(api.get('/dashboard/officer-performance'));
+      }
+
+      const results = await Promise.all(promises);
+      const [mainResult, airportResult, passengerResult, overviewResult, forecastResult, statsResult, officerPerformanceResult] = results;
       
       if (mainResult.isSuccess && airportResult.isSuccess && passengerResult.isSuccess && overviewResult.isSuccess && forecastResult.isSuccess && statsResult.isSuccess) {
         setData({
@@ -49,12 +60,14 @@ export default function AirportDashboardPage() {
           overview: overviewResult.data,
           forecasts: forecastResult.data,
           stats: statsResult.data,
+          officerPerformance: officerPerformanceResult?.isSuccess ? officerPerformanceResult.data : null,
         });
       }
       setLoading(false);
     };
+
     fetchData();
-  }, []);
+  }, [canViewOfficerPerformance]);
 
 
   const StatCard = ({ title, value, icon: Icon, color }: { title: string; value: string | number; icon: React.ElementType, color?: string }) => (
@@ -139,6 +152,28 @@ export default function AirportDashboardPage() {
         ) : (
           <TransactionOverviewChart data={data.overview} />
         ))}
+        
+        {canViewOfficerPerformance && data?.officerPerformance && (
+          <Card>
+            <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                    <Users className="h-5 w-5" />
+                    Officer Performance
+                </CardTitle>
+                <CardDescription>
+                    Key metrics for officer activity and efficiency.
+                </CardDescription>
+            </CardHeader>
+            <CardContent className="flex flex-col gap-8">
+                {loading ? <Skeleton className="h-24 w-full" /> : <OfficerStatsCards data={data.officerPerformance.officers} /> }
+                <div className="grid gap-8 md:grid-cols-2">
+                    {loading ? <Skeleton className="h-[300px] w-full" /> : <OfficerProcessingTimeChart data={data.officerPerformance.officers} /> }
+                    {loading ? <Skeleton className="h-[300px] w-full" /> : <OfficerDecisionChart data={data.officerPerformance.decisionBreakdown} /> }
+                </div>
+            </CardContent>
+          </Card>
+        )}
+
 
         {canViewCharts && (loading || !data ? (
           <div className="grid gap-8 md:grid-cols-2">

@@ -1,12 +1,4 @@
 
-
-
-
-
-
-
-
-
 import type { User } from '@/types';
 import { Result, ApiError } from '@/types/api/result';
 import { mockPassengers, mockTransactions, mockVisaDatabase, mockOfficerDesks } from './mock-data';
@@ -24,13 +16,17 @@ const users: User[] = [
     email: 'admin@example.com', 
     role: 'admin', 
     token: 'fake-admin-token', 
-    modules: ['dashboard', 'landport', 'seaport', 'airport', 'egate', 'analyst', 'shiftsupervisor', 'control-room', 'users', 'settings', 'gate-supervisor'],
+    modules: ['dashboard', 'landport', 'seaport', 'airport', 'egate', 'analyst', 'shiftsupervisor', 'control-room', 'users', 'settings'],
     permissions: [
         'records:view', 'records:create', 'records:edit', 'records:delete', 'users:manage', 'reports:view',
-        'airport:transactions:view', 'landport:transactions:view', 'seaport:transactions:view', 'gate-supervisor:transactions:view',
-        'airport:transactions:live', 'landport:transactions:live', 'seaport:transactions:live', 'gate-supervisor:transactions:live',
-        'airport:dashboard:view', 'airport:dashboard:stats:view', 'airport:dashboard:forecasts:view', 'airport:dashboard:charts:view',
-        'landport:dashboard:view', 'seaport:dashboard:view', 'egate:dashboard:view', 'analyst:dashboard:view', 'control-room:dashboard:view', 'gate-supervisor:dashboard:view'
+        'airport:transactions:view', 'landport:transactions:view', 'seaport:transactions:view',
+        'airport:transactions:live', 'landport:transactions:live', 'seaport:transactions:live',
+        'airport:dashboard:view', 'airport:dashboard:stats:view', 'airport:dashboard:forecasts:view', 'airport:dashboard:charts:view', 'airport:dashboard:officer-performance:view',
+        'landport:dashboard:view', 'landport:dashboard:stats:view', 'landport:dashboard:forecasts:view', 'landport:dashboard:charts:view', 'landport:dashboard:officer-performance:view',
+        'seaport:dashboard:view', 'seaport:dashboard:stats:view', 'seaport:dashboard:forecasts:view', 'seaport:dashboard:charts:view', 'seaport:dashboard:officer-performance:view',
+        'egate:dashboard:view', 'egate:dashboard:stats:view', 'egate:dashboard:charts:view',
+        'analyst:dashboard:view', 'analyst:dashboard:stats:view', 'analyst:dashboard:charts:view',
+        'control-room:dashboard:view', 'control-room:dashboard:stats:view', 'control-room:dashboard:forecasts:view', 'control-room:dashboard:charts:view', 'control-room:dashboard:officer-performance:view'
     ]
   },
   { 
@@ -60,13 +56,15 @@ const users: User[] = [
     email: 'supervisor@example.com',
     role: 'shiftsupervisor',
     token: 'fake-supervisor-token',
-    modules: ['airport', 'landport', 'seaport', 'control-room', 'gate-supervisor'],
+    modules: ['airport', 'landport', 'seaport', 'control-room'],
     permissions: [
-      'records:view', 'records:edit', 'reports:view', 
-      'airport:transactions:view', 'landport:transactions:view', 'seaport:transactions:view', 'gate-supervisor:transactions:view', 
-      'airport:transactions:live', 'landport:transactions:live', 'seaport:transactions:live', 'gate-supervisor:transactions:live',
-      'airport:dashboard:view', 'airport:dashboard:stats:view', 'airport:dashboard:forecasts:view', 'airport:dashboard:charts:view',
-      'landport:dashboard:view', 'seaport:dashboard:view', 'control-room:dashboard:view', 'gate-supervisor:dashboard:view'
+        'records:view', 'records:edit', 'reports:view', 
+        'airport:transactions:view', 'landport:transactions:view', 'seaport:transactions:view',
+        'airport:transactions:live', 'landport:transactions:live', 'seaport:transactions:live',
+        'airport:dashboard:view', 'airport:dashboard:stats:view', 'airport:dashboard:forecasts:view', 'airport:dashboard:charts:view', 'airport:dashboard:officer-performance:view',
+        'landport:dashboard:view', 'landport:dashboard:stats:view', 'landport:dashboard:forecasts:view', 'landport:dashboard:charts:view', 'landport:dashboard:officer-performance:view',
+        'seaport:dashboard:view', 'seaport:dashboard:stats:view', 'seaport:dashboard:forecasts:view', 'seaport:dashboard:charts:view', 'seaport:dashboard:officer-performance:view',
+        'control-room:dashboard:view', 'control-room:dashboard:stats:view', 'control-room:dashboard:forecasts:view', 'control-room:dashboard:charts:view', 'control-room:dashboard:officer-performance:view'
     ]
   },
   {
@@ -132,7 +130,6 @@ const mainDashboardData = {
         egate: '1.2m',
         analyst: '1.2m',
         'shiftsupervisor': '1.2m',
-        'gate-supervisor': '1.2m',
         'control-room': '1.2m',
     }
 };
@@ -170,13 +167,6 @@ const dashboardStats = {
         activeGates: '24',
     },
     shiftsupervisor: {
-        successfulEntries: '8,210',
-        avgOfficerProcessingTime: '2.1m',
-        biometricVerifications: '8,224',
-        activeGates: '24',
-        activeAlerts: '3',
-    },
-    'gate-supervisor': {
         successfulEntries: '8,210',
         avgOfficerProcessingTime: '2.1m',
         biometricVerifications: '8,224',
@@ -328,26 +318,6 @@ const forecastData = {
     }
   },
   shiftsupervisor: {
-    current: {
-        title: "Current Shift Forecast",
-        description: "Predicted traffic and staffing for the current shift (08:00 - 16:00).",
-        recommendedStaff: 12,
-        metrics: [
-            { title: 'Total Transactions', value: '8,500', description: 'Predicted entries & exits' },
-            { title: 'Peak Hour', value: '14:00-15:00', description: 'Highest traffic expected' },
-        ],
-    },
-    next: {
-        title: "Next Shift Forecast",
-        description: "Predicted traffic and staffing for the next shift (16:00 - 00:00).",
-        recommendedStaff: 10,
-        metrics: [
-            { title: 'Total Transactions', value: '6,200', description: 'Predicted entries & exits' },
-            { title: 'Peak Hour', value: '18:00-19:00', description: 'Highest traffic expected' },
-        ],
-    }
-  },
-  'gate-supervisor': {
     current: {
         title: "Current Shift Forecast",
         description: "Predicted traffic and staffing for the current shift (08:00 - 16:00).",
@@ -647,8 +617,3 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
 
     return Result.failure([new ApiError('NOT_FOUND', `Mock endpoint ${method} ${endpoint} not found.`)]) as Result<T>;
 }
-
-    
-
-    
-

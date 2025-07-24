@@ -1,8 +1,4 @@
 
-
-
-
-
 'use client';
 import { Shield, LayoutDashboard, BarChart3, Users, Settings, Activity, Ship, LandPlot, DoorOpen, PieChart, UserCog, RadioTower, Home, Plane, ArrowRightLeft } from 'lucide-react';
 import type { Role, Module, Permission } from '@/types';
@@ -15,14 +11,13 @@ export interface NavItem {
   permission?: Permission;
 }
 
-const allModules: Record<Module, Omit<NavItem, 'label'>> = {
+const allModules: Record<string, Omit<NavItem, 'label'>> = {
   dashboard: { href: '/dashboard', icon: LayoutDashboard },
   airport: { href: '/airport/dashboard', icon: Plane },
   landport: { href: '/landport/dashboard', icon: LandPlot },
   seaport: { href: '/seaport/dashboard', icon: Ship },
   egate: { href: '/egate/dashboard', icon: DoorOpen },
   analyst: { href: '/analyst/dashboard', icon: PieChart },
-  'shiftsupervisor': { href: '/gate-supervisor/dashboard', icon: UserCog },
   'control-room': { href: '/control-room/dashboard', icon: RadioTower },
 };
 
@@ -53,7 +48,7 @@ export const getModuleNavItems = (module: Module, role: Role, t: any): NavItem[]
     });
     
     // Add transaction processing for specific modules
-    if (['airport', 'landport', 'seaport', 'shiftsupervisor', 'gate-supervisor'].includes(module)) {
+    if (['airport', 'landport', 'seaport'].includes(module)) {
         baseNav.push({
             href: `${moduleBaseUrl}/transactions`, 
             label: t('transactions'),
@@ -69,6 +64,7 @@ export const getModuleNavItems = (module: Module, role: Role, t: any): NavItem[]
                     href: `${moduleBaseUrl}/transactions/live-processing`,
                     label: t('liveProcessing'),
                     icon: RadioTower,
+                    permission: `${module}:transactions:live` as Permission,
                 }
             ]
         });

@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
@@ -23,6 +22,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import CalendarIcon from '@/components/icons/calendar-icon';
 import { format, isValid, parse } from 'date-fns';
 import { Calendar } from '@/components/ui/calendar';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const riskColors: { [key: string]: { text: string; bg: string; border: string; } } = {
   High: { text: 'text-red-700 dark:text-red-300', bg: 'bg-red-500/10', border: 'border-red-500/20' },
@@ -39,6 +39,8 @@ export default function DutyManagerPage() {
   const [allPendingTransactions, setAllPendingTransactions] = useState<Transaction[]>([]);
   const { hasPermission } = useAuth();
   const t = useTranslations('DutyManager');
+  const tNav = useTranslations('Navigation');
+  const tTransactions = useTranslations('Transactions');
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState(initialFilters);
   const [appliedFilters, setAppliedFilters] = useState(initialFilters);
@@ -51,6 +53,7 @@ export default function DutyManagerPage() {
         return;
     }
     const fetchData = async () => {
+        setLoading(true);
         const result = await api.get<Transaction[]>(`/data/transactions/pending`);
         if (result.isSuccess) {
             setAllPendingTransactions(result.data || []);
@@ -79,14 +82,14 @@ export default function DutyManagerPage() {
   }, [allPendingTransactions, appliedFilters]);
 
   const stats = useMemo(() => {
-    const highRisk = allPendingTransactions.filter(t => t.riskScore >= 75).length;
-    const mediumRisk = allPendingTransactions.filter(t => t.riskScore > 40 && t.riskScore < 75).length;
+    const highRisk = filteredTransactions.filter(t => t.riskScore >= 75).length;
+    const mediumRisk = filteredTransactions.filter(t => t.riskScore > 40 && t.riskScore < 75).length;
     return {
-        total: allPendingTransactions.length,
+        total: filteredTransactions.length,
         highRisk,
         mediumRisk
     };
-  }, [allPendingTransactions]);
+  }, [filteredTransactions]);
   
   const getRiskLevel = (score: number): keyof typeof riskColors => {
     if (score >= 75) return 'High';
@@ -160,6 +163,14 @@ export default function DutyManagerPage() {
     },
   ];
 
+  if (loading) {
+    return <div className="space-y-6">
+        <Skeleton className="h-24" />
+        <Skeleton className="h-32" />
+        <Skeleton className="h-96" />
+    </div>;
+  }
+  
   if (!canView) {
     return (
         <div className="flex h-full w-full flex-col items-center justify-center gap-4 text-center">
@@ -185,7 +196,7 @@ export default function DutyManagerPage() {
         <Breadcrumb>
             <BreadcrumbList>
                 <BreadcrumbItem>
-                    <BreadcrumbLink href="/airport/dashboard" icon={LayoutDashboard}>{t('dashboard', {ns: 'Navigation'})}</BreadcrumbLink>
+                    <BreadcrumbLink href="/airport/dashboard" icon={LayoutDashboard}>{tNav('dashboard')}</BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbItem>
                     <BreadcrumbPage icon={ShieldAlert}>{t('title')}</BreadcrumbPage>
@@ -210,7 +221,7 @@ export default function DutyManagerPage() {
             <div className="flex w-full cursor-pointer items-center justify-between p-4">
               <div className="flex items-center gap-3">
                 <Filter className="h-5 w-5" />
-                <h2 className="text-lg font-semibold">{t('filterTitle', {ns: 'Transactions'})}</h2>
+                <h2 className="text-lg font-semibold">{tTransactions('filterTitle')}</h2>
               </div>
               <ChevronDown className="h-5 w-5 transition-transform duration-300 [&[data-state=open]]:rotate-180" />
             </div>
@@ -228,7 +239,7 @@ export default function DutyManagerPage() {
                         <PopoverTrigger asChild>
                             <Button variant={"outline"} className={cn("justify-start text-left font-normal", !filters.dateFrom && "text-muted-foreground")}>
                             <CalendarIcon className="mr-2 h-4 w-4" />
-                            {filters.dateFrom ? format(filters.dateFrom, "PPP") : <span>{t('filterFromDate', {ns: 'Transactions'})}</span>}
+                            {filters.dateFrom ? format(filters.dateFrom, "PPP") : <span>{tTransactions('filterFromDate')}</span>}
                             </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-auto p-0"><Calendar mode="single" selected={filters.dateFrom ?? undefined} onSelect={(date) => handleUpdateFilter('dateFrom', date || null)} disabled={(date) => date > new Date() || (filters.dateTo ? date > filters.dateTo : false)} initialFocus /></PopoverContent>
@@ -238,7 +249,7 @@ export default function DutyManagerPage() {
                         <PopoverTrigger asChild>
                             <Button variant={"outline"} className={cn("justify-start text-left font-normal", !filters.dateTo && "text-muted-foreground")}>
                             <CalendarIcon className="mr-2 h-4 w-4" />
-                            {filters.dateTo ? format(filters.dateTo, "PPP") : <span>{t('filterToDate', {ns: 'Transactions'})}</span>}
+                            {filters.dateTo ? format(filters.dateTo, "PPP") : <span>{tTransactions('filterToDate')}</span>}
                             </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-auto p-0"><Calendar mode="single" selected={filters.dateTo ?? undefined} onSelect={(date) => handleUpdateFilter('dateTo', date || null)} disabled={(date) => date > new Date() || (filters.dateFrom ? date < filters.dateFrom : false)} initialFocus /></PopoverContent>
@@ -269,5 +280,3 @@ export default function DutyManagerPage() {
     </div>
   );
 }
-
-    

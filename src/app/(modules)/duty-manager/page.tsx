@@ -19,10 +19,20 @@ import { TransactionStatsCard } from '@/components/transactions/transaction-stat
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage } from '@/components/ui/breadcrumb';
 import { Input } from '@/components/ui/input';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import CalendarIcon from '@/components/icons/calendar-icon';
+import { format, isValid, parse } from 'date-fns';
+import { Calendar } from '@/components/ui/calendar';
 
 const riskColors: { [key: string]: { text: string; bg: string; border: string; } } = {
   High: { text: 'text-red-700 dark:text-red-300', bg: 'bg-red-500/10', border: 'border-red-500/20' },
   Medium: { text: 'text-yellow-700 dark:text-yellow-300', bg: 'bg-yellow-500/10', border: 'border-yellow-500/20' },
+};
+
+const initialFilters = {
+    passportNumber: '',
+    dateFrom: null as Date | null,
+    dateTo: null as Date | null,
 };
 
 export default function DutyManagerPage() {
@@ -30,8 +40,8 @@ export default function DutyManagerPage() {
   const { hasPermission } = useAuth();
   const t = useTranslations('DutyManager');
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState('');
-  const [appliedFilter, setAppliedFilter] = useState('');
+  const [filters, setFilters] = useState(initialFilters);
+  const [appliedFilters, setAppliedFilters] = useState(initialFilters);
 
   const canView = hasPermission(['duty-manager:view']);
 
@@ -51,12 +61,22 @@ export default function DutyManagerPage() {
   }, [canView]);
 
   const filteredTransactions = useMemo(() => {
-    if (!appliedFilter) return allPendingTransactions;
-    const lowercasedFilter = appliedFilter.toLowerCase();
-    return allPendingTransactions.filter(
-      t => t.passportNumber && t.passportNumber.toLowerCase().includes(lowercasedFilter)
-    );
-  }, [allPendingTransactions, appliedFilter]);
+    return allPendingTransactions.filter(t => {
+        if (appliedFilters.passportNumber && t.passportNumber && !t.passportNumber.toLowerCase().includes(appliedFilters.passportNumber.toLowerCase())) {
+            return false;
+        }
+
+        try {
+            const transactionDate = parse(t.dateTime, 'yyyy-MM-dd HH:mm', new Date());
+            if (appliedFilters.dateFrom && isValid(transactionDate) && transactionDate < appliedFilters.dateFrom) return false;
+            if (appliedFilters.dateTo && isValid(transactionDate) && transactionDate > appliedFilters.dateTo) return false;
+        } catch (e) {
+            // Ignore if date is invalid for filtering
+        }
+
+        return true;
+    });
+  }, [allPendingTransactions, appliedFilters]);
 
   const stats = useMemo(() => {
     const highRisk = allPendingTransactions.filter(t => t.riskScore >= 75).length;
@@ -150,11 +170,15 @@ export default function DutyManagerPage() {
     );
   }
 
-  const handleSearch = () => setAppliedFilter(filter);
+  const handleUpdateFilter = (key: keyof typeof filters, value: any) => {
+    setFilters(prev => ({ ...prev, [key]: value }));
+  };
+
+  const handleSearch = () => setAppliedFilters(filters);
   const handleReset = () => {
-      setFilter('');
-      setAppliedFilter('');
-  }
+    setFilters(initialFilters);
+    setAppliedFilters(initialFilters);
+  };
 
   return (
     <div className="space-y-6">
@@ -196,10 +220,29 @@ export default function DutyManagerPage() {
                 <div className="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                     <Input 
                         placeholder={t('filterPlaceholder')}
-                        value={filter}
-                        onChange={(e) => setFilter(e.target.value)}
+                        value={filters.passportNumber}
+                        onChange={(e) => handleUpdateFilter('passportNumber', e.target.value)}
                         className="max-w-sm"
                     />
+                    <Popover>
+                        <PopoverTrigger asChild>
+                            <Button variant={"outline"} className={cn("justify-start text-left font-normal", !filters.dateFrom && "text-muted-foreground")}>
+                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            {filters.dateFrom ? format(filters.dateFrom, "PPP") : <span>{t('filterFromDate', {ns: 'Transactions'})}</span>}
+                            </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0"><Calendar mode="single" selected={filters.dateFrom ?? undefined} onSelect={(date) => handleUpdateFilter('dateFrom', date || null)} disabled={(date) => date > new Date() || (filters.dateTo ? date > filters.dateTo : false)} initialFocus /></PopoverContent>
+                    </Popover>
+
+                    <Popover>
+                        <PopoverTrigger asChild>
+                            <Button variant={"outline"} className={cn("justify-start text-left font-normal", !filters.dateTo && "text-muted-foreground")}>
+                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            {filters.dateTo ? format(filters.dateTo, "PPP") : <span>{t('filterToDate', {ns: 'Transactions'})}</span>}
+                            </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0"><Calendar mode="single" selected={filters.dateTo ?? undefined} onSelect={(date) => handleUpdateFilter('dateTo', date || null)} disabled={(date) => date > new Date() || (filters.dateFrom ? date < filters.dateFrom : false)} initialFocus /></PopoverContent>
+                    </Popover>
                 </div>
                 <div className="mt-6 flex justify-end gap-2">
                     <Button onClick={handleReset} variant="outline"><X className="mr-2 h-4 w-4" />{t('reset')}</Button>
@@ -226,3 +269,5 @@ export default function DutyManagerPage() {
     </div>
   );
 }
+
+    

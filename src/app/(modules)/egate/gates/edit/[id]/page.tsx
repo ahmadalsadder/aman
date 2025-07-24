@@ -77,7 +77,7 @@ export default function EditGatePage() {
         };
 
         fetchData();
-    }, [id, canEdit, t]);
+    }, [id, canEdit, t, toast]);
 
     const handleSave = async (formData: GateFormValues) => {
         setLoading(true);

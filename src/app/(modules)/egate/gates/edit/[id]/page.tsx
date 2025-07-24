@@ -7,11 +7,12 @@ import { useToast } from '@/hooks/use-toast';
 import { useRouter, useParams } from 'next/navigation';
 import type { Gate, Port, Terminal, Zone, Workflow, RiskProfile } from '@/types/live-processing';
 import { useState, useEffect } from 'react';
-import { Loader2, FilePenLine, AlertTriangle } from 'lucide-react';
+import { Loader2, FilePenLine, AlertTriangle, LayoutDashboard, ClipboardList } from 'lucide-react';
 import { useAuth } from '@/hooks/use-auth';
 import { useTranslations } from 'next-intl';
 import { api } from '@/lib/api';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 
 export default function EditGatePage() {
     const router = useRouter();
@@ -19,6 +20,7 @@ export default function EditGatePage() {
     const { toast } = useToast();
     const { hasPermission } = useAuth();
     const t = useTranslations('GatesPage.form');
+    const tNav = useTranslations('Navigation');
     
     const [pageData, setPageData] = useState<{
         gate: Gate,
@@ -134,6 +136,21 @@ export default function EditGatePage() {
 
     return (
         <div className="space-y-6">
+             <Breadcrumb>
+                <BreadcrumbList>
+                    <BreadcrumbItem>
+                        <BreadcrumbLink href="/egate/dashboard" icon={LayoutDashboard}>{tNav('dashboard')}</BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                        <BreadcrumbLink href="/egate/gates" icon={ClipboardList}>{tNav('gateManagement')}</BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                        <BreadcrumbPage icon={FilePenLine}>{t('editTitle')}</BreadcrumbPage>
+                    </BreadcrumbItem>
+                </BreadcrumbList>
+            </Breadcrumb>
             <GradientPageHeader
                 title={t('editTitle')}
                 description={t('editDescription', { gateName: pageData.gate.name })}

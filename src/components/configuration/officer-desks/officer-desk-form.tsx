@@ -74,17 +74,29 @@ export function OfficerDeskForm({
   const terminalId = form.watch('terminalId');
 
   useEffect(() => {
-    form.resetField('terminalId', { defaultValue: '' });
-    form.resetField('zoneId', { defaultValue: '' });
+    if (portId) {
+        form.resetField('terminalId', { defaultValue: '' });
+        form.resetField('zoneId', { defaultValue: '' });
+    }
   }, [portId, form]);
 
   useEffect(() => {
-    form.resetField('zoneId', { defaultValue: '' });
+    if (terminalId) {
+        form.resetField('zoneId', { defaultValue: '' });
+    }
   }, [terminalId, form]);
 
   const portOptions = useMemo(() => ports.map(p => ({ value: p.id, label: p.name })), [ports]);
-  const terminalOptions = useMemo(() => terminals.filter(t => t.portId === portId).map(t => ({ value: t.id, label: t.name })), [terminals, portId]);
-  const zoneOptions = useMemo(() => zones.filter(z => z.terminalId === terminalId).map(z => ({ value: z.id, label: z.name })), [zones, terminalId]);
+  const terminalOptions = useMemo(() => 
+    terminals
+        .filter(t => t.portId === portId)
+        .map(t => ({ value: t.id, label: t.name }))
+  , [terminals, portId]);
+  const zoneOptions = useMemo(() => 
+    zones
+        .filter(z => z.terminalId === terminalId)
+        .map(z => ({ value: z.id, label: z.name }))
+  , [zones, terminalId]);
   const workflowOptions = useMemo(() => workflows.map(w => ({ value: w.id, label: w.name })), [workflows]);
   const riskProfileOptions = useMemo(() => riskProfiles.map(r => ({ value: r.id, label: r.name })), [riskProfiles]);
 
@@ -101,8 +113,8 @@ export function OfficerDeskForm({
                 <CardContent className="space-y-4">
                   <FormField control={form.control} name="name" render={({ field }) => ( <FormItem><FormLabel required>{t('deskName')}</FormLabel><FormControl><Input placeholder={t('deskNamePlaceholder')} {...field} /></FormControl><FormMessage /></FormItem> )} />
                   <FormField control={form.control} name="portId" render={({ field }) => ( <FormItem><FormLabel required>{t('port')}</FormLabel><Combobox options={portOptions} value={field.value} onChange={field.onChange} placeholder={t('selectPort')} /><FormMessage /></FormItem> )} />
-                  <FormField control={form.control} name="terminalId" render={({ field }) => ( <FormItem><FormLabel required>{t('terminal')}</FormLabel><Combobox options={terminalOptions} value={field.value} onChange={field.onChange} placeholder={t('selectTerminal')} disabled={!portId} /><FormMessage /></FormItem> )} />
-                  <FormField control={form.control} name="zoneId" render={({ field }) => ( <FormItem><FormLabel required>{t('zone')}</FormLabel><Combobox options={zoneOptions} value={field.value} onChange={field.onChange} placeholder={t('selectZone')} disabled={!terminalId} /><FormMessage /></FormItem> )} />
+                  <FormField control={form.control} name="terminalId" render={({ field }) => ( <FormItem><FormLabel required>{t('terminal')}</FormLabel><Combobox options={terminalOptions} value={field.value} onChange={field.onChange} placeholder={t('selectTerminal')} disabled={!portId || terminalOptions.length === 0} /><FormMessage /></FormItem> )} />
+                  <FormField control={form.control} name="zoneId" render={({ field }) => ( <FormItem><FormLabel required>{t('zone')}</FormLabel><Combobox options={zoneOptions} value={field.value} onChange={field.onChange} placeholder={t('selectZone')} disabled={!terminalId || zoneOptions.length === 0} /><FormMessage /></FormItem> )} />
                 </CardContent>
               </Card>
             </div>

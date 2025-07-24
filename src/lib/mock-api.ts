@@ -696,7 +696,10 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
     if (method === 'GET' && url.pathname === '/data/ports') {
         const moduleType = url.searchParams.get('moduleType');
         let portsForModule = mockPorts;
-        if (moduleType) {
+        if (moduleType === 'egate') {
+            // E-gates are typically at airports, so return airport-type ports.
+            portsForModule = mockPorts.filter(p => p.type === 'Airport');
+        } else if (moduleType) {
             portsForModule = mockPorts.filter(p => p.type.toLowerCase() === moduleType);
         }
         return Result.success(portsForModule) as Result<T>;

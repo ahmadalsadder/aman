@@ -532,7 +532,7 @@ export function LiveProcessingFlow() {
                                 </CardContent>
                             </Card>
                         </div>
-                        {visaCheckResult === 'invalid' ? (
+                        {visaCheckResult === 'invalid' && (
                              <div className="space-y-4">
                                 <Alert variant="destructive">
                                     <FileWarning className="h-4 w-4" />
@@ -543,7 +543,8 @@ export function LiveProcessingFlow() {
                                     <ShieldAlert className="mr-2 h-4 w-4" /> {t('matchFound.transfer')}
                                 </Button>
                             </div>
-                        ) : (
+                        )}
+                        {visaCheckResult !== 'invalid' && (
                             <div className="space-y-2 rounded-md border p-4">
                                <h4 className="font-semibold">{t('matchFound.chooseAction')}</h4>
                                <p className="text-sm text-muted-foreground">{t('matchFound.chooseActionDescription')}</p>
@@ -582,7 +583,7 @@ export function LiveProcessingFlow() {
                                 <DetailItem label={t('common.expiryDate')} value={extractedData.passportExpiryDate} />
                             </CardContent>
                         </Card>
-                        {visaCheckResult === 'invalid' ? (
+                        {visaCheckResult === 'invalid' && (
                             <div className="space-y-4">
                                 <Alert variant="destructive">
                                     <FileWarning className="h-4 w-4" />
@@ -593,16 +594,17 @@ export function LiveProcessingFlow() {
                                     <ShieldAlert className="mr-2 h-4 w-4" /> {t('matchFound.transfer')}
                                 </Button>
                             </div>
-                        ) : (
+                        )}
+                        {visaCheckResult !== 'invalid' && (
                              <div className="flex flex-col gap-2 sm:flex-row">
-                                <Button variant="destructive" className="w-full" onClick={() => resetState()}>
-                                    <XCircle className="mr-2 h-4 w-4" /> {t('common.cancelTransaction')}
-                                </Button>
                                 <Button className="w-full" onClick={handleConfirmNewPassenger}>
                                     {t('common.confirmAndProceed')} <ChevronRight className="ml-2 h-4 w-4" />
                                 </Button>
                              </div>
                         )}
+                        <Button variant="destructive" className="w-full" onClick={() => resetState()}>
+                             <XCircle className="mr-2 h-4 w-4" /> {t('common.cancelTransaction')}
+                        </Button>
                     </CardContent>
                 </motion.div>
             )

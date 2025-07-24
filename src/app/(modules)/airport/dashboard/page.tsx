@@ -20,9 +20,14 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbP
 
 export default function AirportDashboardPage() {
   const t = useTranslations('AirportDashboard');
-  const { user } = useAuth();
+  const { user, hasPermission } = useAuth();
   const [data, setData] = React.useState<any>(null);
   const [loading, setLoading] = React.useState(true);
+  
+  const canViewStats = hasPermission(['airport:dashboard:stats:view']);
+  const canViewForecasts = hasPermission(['airport:dashboard:forecasts:view']);
+  const canViewCharts = hasPermission(['airport:dashboard:charts:view']);
+
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -103,7 +108,7 @@ export default function AirportDashboardPage() {
         title={t('title')}
         description={t('description')}
       />
-      {loading ? renderSkeleton() : (
+      {canViewStats && (loading ? renderSkeleton() : (
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
         <StatCard title={t('passengersProcessed')} value={data?.stats?.passengersProcessed || '...'} icon={UserCheck} color="text-green-500" />
         <StatCard title={t('bagsScanned')} value={data?.stats?.bagsScanned || '...'} icon={BaggageClaim} color="text-blue-500" />
@@ -111,9 +116,9 @@ export default function AirportDashboardPage() {
         <StatCard title={t('flightsMonitored')} value={data?.stats?.flightsMonitored || '...'} icon={Plane} color="text-purple-500" />
         <StatCard title={t('avgProcessingTime')} value={data?.main?.avgProcessingTime?.airport || '...'} icon={Clock} color="text-orange-500" />
       </div>
-      )}
+      ))}
        <div className="mt-8 grid gap-8 grid-cols-1">
-        {isSupervisorOrAdmin && (
+        {isSupervisorOrAdmin && canViewForecasts && (
           <div className="grid gap-8 md:grid-cols-2">
            {loading || !data ? (
                 <>
@@ -129,13 +134,13 @@ export default function AirportDashboardPage() {
           </div>
         )}
 
-        {loading || !data ? (
+        {canViewCharts && (loading || !data ? (
           <Skeleton className="h-[400px] w-full" />
         ) : (
           <TransactionOverviewChart data={data.overview} />
-        )}
+        ))}
 
-        {loading || !data ? (
+        {canViewCharts && (loading || !data ? (
           <div className="grid gap-8 md:grid-cols-2">
             <Skeleton className="h-[400px] w-full" />
             <Skeleton className="h-[400px] w-full" />
@@ -145,9 +150,9 @@ export default function AirportDashboardPage() {
             <PassengerTypeChart data={data.passengers.airport} />
             <RiskRuleTriggerChart data={data.main.riskRules} className="h-full" />
         </div>
-        )}
+        ))}
         
-        {loading || !data ? (
+        {canViewCharts && (loading || !data ? (
            <div className="grid gap-8 md:grid-cols-2">
                 <Skeleton className="h-[400px] w-full" />
                 <Skeleton className="h-[400px] w-full" />
@@ -157,9 +162,9 @@ export default function AirportDashboardPage() {
             <ThroughputChart data={data.main.throughput} className="h-full" />
             <AgeDistributionChart data={data.airport.ageDistribution} />
         </div>
-        )}
+        ))}
 
-        {loading || !data ? (
+        {canViewCharts && (loading || !data ? (
           <Skeleton className="h-[400px] w-full" />
         ) : (
         <Card>
@@ -176,7 +181,7 @@ export default function AirportDashboardPage() {
                 <WorldMapChart data={data.main.nationalityDistribution} />
             </CardContent>
         </Card>
-        )}
+        ))}
 
          <Card>
           <CardHeader>

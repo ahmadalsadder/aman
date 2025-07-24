@@ -2,6 +2,7 @@
 
 
 
+
 'use client';
 import { Shield, LayoutDashboard, BarChart3, Users, Settings, Activity, Ship, LandPlot, DoorOpen, PieChart, UserCog, RadioTower, Home, Plane, ArrowRightLeft } from 'lucide-react';
 import type { Role, Module, Permission } from '@/types';
@@ -48,6 +49,7 @@ export const getModuleNavItems = (module: Module, role: Role, t: any): NavItem[]
         href: `${moduleBaseUrl}/dashboard`,
         label: t('dashboard'),
         icon: LayoutDashboard,
+        permission: `${module}:dashboard:view` as Permission,
     });
     
     // Add transaction processing for specific modules

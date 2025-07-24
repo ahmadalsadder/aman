@@ -12,7 +12,9 @@ export const users: User[] = [
     permissions: [
         'records:view', 'records:create', 'records:edit', 'records:delete', 'users:manage', 'reports:view',
         'airport:transactions:view', 'landport:transactions:view', 'seaport:transactions:view', 'gate-supervisor:transactions:view',
-        'airport:transactions:live', 'landport:transactions:live', 'seaport:transactions:live', 'gate-supervisor:transactions:live'
+        'airport:transactions:live', 'landport:transactions:live', 'seaport:transactions:live', 'gate-supervisor:transactions:live',
+        'airport:dashboard:view', 'airport:dashboard:stats:view', 'airport:dashboard:forecasts:view', 'airport:dashboard:charts:view',
+        'landport:dashboard:view', 'seaport:dashboard:view', 'egate:dashboard:view', 'analyst:dashboard:view', 'control-room:dashboard:view', 'gate-supervisor:dashboard:view'
     ]
   },
   { 
@@ -22,7 +24,7 @@ export const users: User[] = [
     role: 'auditor', 
     token: 'fake-auditor-token', 
     modules: ['landport', 'seaport'],
-    permissions: ['records:view', 'reports:view', 'landport:transactions:view', 'seaport:transactions:view']
+    permissions: ['records:view', 'reports:view', 'landport:transactions:view', 'seaport:transactions:view', 'landport:dashboard:view', 'seaport:dashboard:view']
   },
   { 
     id: '3', 
@@ -31,7 +33,7 @@ export const users: User[] = [
     role: 'viewer', 
     token: 'fake-viewer-token', 
     modules: ['airport'],
-    permissions: ['records:view'] // This user can view records, but not the transactions page itself
+    permissions: ['records:view', 'airport:dashboard:view', 'airport:dashboard:stats:view']
   },
   {
     id: '4',
@@ -40,7 +42,13 @@ export const users: User[] = [
     role: 'shiftsupervisor',
     token: 'fake-supervisor-token',
     modules: ['airport', 'landport', 'seaport', 'control-room', 'gate-supervisor'],
-    permissions: ['records:view', 'records:edit', 'reports:view', 'airport:transactions:view', 'landport:transactions:view', 'seaport:transactions:view', 'gate-supervisor:transactions:view', 'airport:transactions:live', 'landport:transactions:live', 'seaport:transactions:live', 'gate-supervisor:transactions:live']
+    permissions: [
+        'records:view', 'records:edit', 'reports:view', 
+        'airport:transactions:view', 'landport:transactions:view', 'seaport:transactions:view', 'gate-supervisor:transactions:view', 
+        'airport:transactions:live', 'landport:transactions:live', 'seaport:transactions:live', 'gate-supervisor:transactions:live',
+        'airport:dashboard:view', 'airport:dashboard:stats:view', 'airport:dashboard:forecasts:view', 'airport:dashboard:charts:view',
+        'landport:dashboard:view', 'seaport:dashboard:view', 'control-room:dashboard:view', 'gate-supervisor:dashboard:view'
+    ]
   }
 ];
 

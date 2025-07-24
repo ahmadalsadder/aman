@@ -6,6 +6,7 @@
 
 
 
+
 import type { User } from '@/types';
 import { Result, ApiError } from '@/types/api/result';
 import { mockPassengers, mockTransactions, mockVisaDatabase, mockOfficerDesks } from './mock-data';
@@ -27,7 +28,9 @@ const users: User[] = [
     permissions: [
         'records:view', 'records:create', 'records:edit', 'records:delete', 'users:manage', 'reports:view',
         'airport:transactions:view', 'landport:transactions:view', 'seaport:transactions:view', 'gate-supervisor:transactions:view',
-        'airport:transactions:live', 'landport:transactions:live', 'seaport:transactions:live', 'gate-supervisor:transactions:live'
+        'airport:transactions:live', 'landport:transactions:live', 'seaport:transactions:live', 'gate-supervisor:transactions:live',
+        'airport:dashboard:view', 'airport:dashboard:stats:view', 'airport:dashboard:forecasts:view', 'airport:dashboard:charts:view',
+        'landport:dashboard:view', 'seaport:dashboard:view', 'egate:dashboard:view', 'analyst:dashboard:view', 'control-room:dashboard:view', 'gate-supervisor:dashboard:view'
     ]
   },
   { 
@@ -38,7 +41,7 @@ const users: User[] = [
     role: 'auditor', 
     token: 'fake-auditor-token', 
     modules: ['landport', 'seaport'],
-    permissions: ['records:view', 'reports:view', 'landport:transactions:view', 'seaport:transactions:view']
+    permissions: ['records:view', 'reports:view', 'landport:transactions:view', 'seaport:transactions:view', 'landport:dashboard:view', 'seaport:dashboard:view']
   },
   { 
     id: '3', 
@@ -48,7 +51,7 @@ const users: User[] = [
     role: 'viewer', 
     token: 'fake-viewer-token', 
     modules: ['airport'],
-    permissions: ['records:view']
+    permissions: ['records:view', 'airport:dashboard:view', 'airport:dashboard:stats:view']
   },
   {
     id: '4',
@@ -58,7 +61,13 @@ const users: User[] = [
     role: 'shiftsupervisor',
     token: 'fake-supervisor-token',
     modules: ['airport', 'landport', 'seaport', 'control-room', 'gate-supervisor'],
-    permissions: ['records:view', 'records:edit', 'reports:view', 'airport:transactions:view', 'landport:transactions:view', 'seaport:transactions:view', 'gate-supervisor:transactions:view', 'airport:transactions:live', 'landport:transactions:live', 'seaport:transactions:live', 'gate-supervisor:transactions:live']
+    permissions: [
+      'records:view', 'records:edit', 'reports:view', 
+      'airport:transactions:view', 'landport:transactions:view', 'seaport:transactions:view', 'gate-supervisor:transactions:view', 
+      'airport:transactions:live', 'landport:transactions:live', 'seaport:transactions:live', 'gate-supervisor:transactions:live',
+      'airport:dashboard:view', 'airport:dashboard:stats:view', 'airport:dashboard:forecasts:view', 'airport:dashboard:charts:view',
+      'landport:dashboard:view', 'seaport:dashboard:view', 'control-room:dashboard:view', 'gate-supervisor:dashboard:view'
+    ]
   },
   {
     id: '5',
@@ -68,7 +77,7 @@ const users: User[] = [
     role: 'analyst',
     token: 'fake-analyst-token',
     modules: ['analyst'],
-    permissions: ['records:view', 'reports:view']
+    permissions: ['records:view', 'reports:view', 'analyst:dashboard:view']
   },
   {
     id: '6',
@@ -78,7 +87,7 @@ const users: User[] = [
     role: 'control-room',
     token: 'fake-control-room-token',
     modules: ['control-room'],
-    permissions: ['records:view', 'reports:view']
+    permissions: ['records:view', 'reports:view', 'control-room:dashboard:view']
   }
 ];
 
@@ -642,3 +651,4 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
     
 
     
+

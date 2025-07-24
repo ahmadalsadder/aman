@@ -7,10 +7,8 @@ import { useRouter } from 'next/navigation';
 
 import type { Passenger, Transaction, WorkflowStep } from '@/types/live-processing';
 import { assessPassengerRisk, type AssessPassengerRiskOutput } from '@/ai/flows/assess-risk-flow';
-import { extractPassportData } from '@/ai/flows/extract-passport-data-flow';
-import type { PassportDataOutput } from '@/types/ai/passport-data';
+import { extractPassportData, type PassportDataOutput } from '@/ai/flows/extract-passport-data-flow';
 import { useAuth } from '@/hooks/use-auth';
-import { mockTransactions, mockPassengers, mockVisaDatabase } from '@/lib/mock-data';
 import { countries } from '@/lib/countries';
 
 import { useToast } from '@/hooks/use-toast';
@@ -48,6 +46,7 @@ import {
 } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
+import { api } from '@/lib/api';
 
 type ProcessingStep = 'upload_document' | 'confirm_new_passenger' | 'match_found' | 'capture_photo' | 'analyzing' | 'review' | 'completed';
 type UpdateChoice = 'update_all' | 'update_images';
@@ -199,11 +198,14 @@ export function LiveProcessingFlow() {
         const newWorkflow = [
             { id: 'doc_scan', name: 'Document Scan', status: 'in-progress' as InternalWorkflowStatus, Icon: ScanLine },
         ];
-        
+
         if (needsVisa) {
             newWorkflow.push({ id: 'visa_check', name: 'Visa Check', status: 'pending', Icon: FileWarning });
-            const visaHolder = mockVisaDatabase.find(v => v.passportNumber === result.passportNumber && v.nationality === countryLabel);
-            isVisaValid = !!visaHolder;
+            const visaResult = await api.get<{ passportNumber: string, nationality: string, visaType: string, expiryDate: string }[]>(`/data/visa-database`);
+            if (visaResult.isSuccess && visaResult.data) {
+                const visaHolder = visaResult.data.find(v => v.passportNumber === result.passportNumber && v.nationality === countryLabel);
+                isVisaValid = !!visaHolder;
+            }
             setVisaCheckResult(isVisaValid ? 'valid' : 'invalid');
         } else {
              newWorkflow.push({ id: 'visa_check', name: 'Visa Check', status: 'skipped', Icon: FileWarning });
@@ -221,19 +223,22 @@ export function LiveProcessingFlow() {
         updateStepStatus('doc_scan', 'completed');
         updateStepStatus('visa_check', needsVisa ? (isVisaValid ? 'completed' : 'failed') : 'skipped');
 
-
-        const passengersFromStorage = localStorage.getItem(PASSENGERS_STORAGE_KEY);
-        const allPassengers: Passenger[] = passengersFromStorage ? JSON.parse(passengersFromStorage) : mockPassengers;
-        const existingMatch = allPassengers.find(p => p.passportNumber === result.passportNumber);
+        const passengerResult = await api.get<Passenger[]>(`/data/passengers`);
+        if(passengerResult.isSuccess && passengerResult.data) {
+            const existingMatch = passengerResult.data.find(p => p.passportNumber === result.passportNumber);
         
-        if (existingMatch) {
-            addLog(`Passenger match found for ${result.firstName} ${result.lastName}.`);
-            setExistingPassenger(existingMatch);
-            setCurrentStep('match_found');
+            if (existingMatch) {
+                addLog(`Passenger match found for ${result.firstName} ${result.lastName}.`);
+                setExistingPassenger(existingMatch);
+                setCurrentStep('match_found');
+            } else {
+                setCurrentStep('confirm_new_passenger');
+                addLog(`Data extracted for new passenger: ${result.firstName} ${result.lastName}`);
+            }
         } else {
-            setCurrentStep('confirm_new_passenger');
-            addLog(`Data extracted for new passenger: ${result.firstName} ${result.lastName}`);
+            toast({ variant: 'destructive', title: 'Error', description: 'Could not fetch passenger data.' });
         }
+
 
     } catch (error) {
         console.error("Data Extraction Error:", error);
@@ -368,10 +373,12 @@ export function LiveProcessingFlow() {
       let passengers: Passenger[] = [];
       try {
         const storedPassengers = localStorage.getItem(PASSENGERS_STORAGE_KEY);
-        passengers = storedPassengers ? JSON.parse(storedPassengers) : mockPassengers;
+        // This is a temporary solution for the demo to work with mock data.
+        // In a real app, you would fetch this from the backend.
+        // passengers = storedPassengers ? JSON.parse(storedPassengers) : mockPassengers;
       } catch (e) {
         console.error("Failed to parse passengers from localStorage, falling back to mock.", e);
-        passengers = mockPassengers;
+        // passengers = mockPassengers;
       }
       
       let finalPassengerRecord: Passenger;
@@ -461,7 +468,7 @@ export function LiveProcessingFlow() {
           status,
           duration: 'N/A',
           riskScore,
-          officerName: user?.name || 'Officer Live',
+          officerName: user?.fullName || 'Officer Live',
           finalDecision: decision,
           triggeredRules,
           officerNotes: finalNotes,
@@ -483,10 +490,10 @@ export function LiveProcessingFlow() {
       let transactions: Transaction[] = [];
       try {
         const storedTransactions = localStorage.getItem(TRANSACTIONS_STORAGE_KEY);
-        transactions = storedTransactions ? JSON.parse(storedTransactions) : mockTransactions;
+        // transactions = storedTransactions ? JSON.parse(storedTransactions) : mockTransactions;
       } catch (e) {
         console.error("Failed to parse transactions from localStorage, falling back to mock.", e);
-        transactions = mockTransactions;
+        // transactions = mockTransactions;
       }
       
       const updatedTransactions = [...transactions, newTransaction];
@@ -513,7 +520,7 @@ export function LiveProcessingFlow() {
       updateStepStatus('officer_review', 'completed');
       addLog(`Transaction completed by officer. Decision: ${finalDecision}.`);
       setCurrentStep('completed');
-      toast({ title: 'Transaction Complete', description: `Passenger processed and record saved. Decision: ${finalDecision}`});
+      toast({ variant: 'success', title: 'Transaction Complete', description: `Passenger processed and record saved. Decision: ${finalDecision}`});
     }
   }
   

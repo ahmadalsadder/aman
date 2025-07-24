@@ -1,14 +1,15 @@
+
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useRouter } from 'next/navigation';
 
-import { mockPassengers } from '@/lib/mock-data';
 import type { Passenger } from '@/types/live-processing';
 import { useToast } from '@/hooks/use-toast';
+import { api } from '@/lib/api';
 
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -50,13 +51,24 @@ export function ManualEntryForm() {
   const router = useRouter();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const [passengers, setPassengers] = useState<Passenger[]>([]);
   const [selectedPassenger, setSelectedPassenger] = useState<Passenger | null>(null);
 
+  useEffect(() => {
+    const fetchPassengers = async () => {
+        const result = await api.get<Passenger[]>('/data/passengers');
+        if (result.isSuccess && result.data) {
+            setPassengers(result.data);
+        }
+    };
+    fetchPassengers();
+  }, []);
+
   const passengerOptions = useMemo(() => 
-    mockPassengers.map(p => ({
+    passengers.map(p => ({
       value: p.id,
       label: `${p.firstName} ${p.lastName} (${p.passportNumber})`
-    })), []);
+    })), [passengers]);
   
   const form = useForm<FormValues>({
     resolver: zodResolver(manualTransactionSchema),
@@ -73,7 +85,7 @@ export function ManualEntryForm() {
 
   React.useEffect(() => {
     if (passengerId) {
-      const passenger = mockPassengers.find(p => p.id === passengerId) || null;
+      const passenger = passengers.find(p => p.id === passengerId) || null;
       setSelectedPassenger(passenger);
       // Reset verification status when passenger changes
       form.resetField('passportVerified');
@@ -82,7 +94,7 @@ export function ManualEntryForm() {
     } else {
       setSelectedPassenger(null);
     }
-  }, [passengerId, form]);
+  }, [passengerId, form, passengers]);
 
   const needsVisaCheck = useMemo(() => {
     if (!selectedPassenger) return false;

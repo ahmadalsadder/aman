@@ -1,11 +1,13 @@
 
 import type { User } from '@/types';
 import { Result, ApiError } from '@/types/api/result';
+import { mockPassengers, mockTransactions, mockVisaDatabase } from './mock-data';
 
 const users: User[] = [
   { 
     id: '1', 
     name: 'Admin User', 
+    fullName: 'Admin User',
     email: 'admin@example.com', 
     role: 'admin', 
     token: 'fake-admin-token', 
@@ -15,6 +17,7 @@ const users: User[] = [
   { 
     id: '2', 
     name: 'Auditor User', 
+    fullName: 'Auditor User',
     email: 'auditor@example.com', 
     role: 'auditor', 
     token: 'fake-auditor-token', 
@@ -24,6 +27,7 @@ const users: User[] = [
   { 
     id: '3', 
     name: 'Viewer User', 
+    fullName: 'Viewer User',
     email: 'viewer@example.com', 
     role: 'viewer', 
     token: 'fake-viewer-token', 
@@ -33,15 +37,17 @@ const users: User[] = [
   {
     id: '4',
     name: 'Shift Supervisor User',
+    fullName: 'Shift Supervisor User',
     email: 'supervisor@example.com',
     role: 'shiftsupervisor',
     token: 'fake-supervisor-token',
-    modules: ['airport', 'landport', 'seaport', 'control-room', 'shiftsupervisor'],
+    modules: ['airport', 'landport', 'seaport', 'control-room', 'gate-supervisor'],
     permissions: ['records:view', 'records:edit', 'reports:view']
   },
   {
     id: '5',
     name: 'Analyst User',
+    fullName: 'Analyst User',
     email: 'analyst@example.com',
     role: 'analyst',
     token: 'fake-analyst-token',
@@ -51,6 +57,7 @@ const users: User[] = [
   {
     id: '6',
     name: 'Control Room User',
+    fullName: 'Control Room User',
     email: 'controlroom@example.com',
     role: 'control-room',
     token: 'fake-control-room-token',
@@ -98,6 +105,7 @@ const mainDashboardData = {
         egate: '1.2m',
         analyst: '1.2m',
         'shiftsupervisor': '1.2m',
+        'gate-supervisor': '1.2m',
         'control-room': '1.2m',
     }
 };
@@ -135,6 +143,13 @@ const dashboardStats = {
         activeGates: '24',
     },
     shiftsupervisor: {
+        successfulEntries: '8,210',
+        avgOfficerProcessingTime: '2.1m',
+        biometricVerifications: '8,224',
+        activeGates: '24',
+        activeAlerts: '3',
+    },
+    'gate-supervisor': {
         successfulEntries: '8,210',
         avgOfficerProcessingTime: '2.1m',
         biometricVerifications: '8,224',
@@ -304,6 +319,26 @@ const forecastData = {
             { title: 'Peak Hour', value: '18:00-19:00', description: 'Highest traffic expected' },
         ],
     }
+  },
+  'gate-supervisor': {
+    current: {
+        title: "Current Shift Forecast",
+        description: "Predicted traffic and staffing for the current shift (08:00 - 16:00).",
+        recommendedStaff: 12,
+        metrics: [
+            { title: 'Total Transactions', value: '8,500', description: 'Predicted entries & exits' },
+            { title: 'Peak Hour', value: '14:00-15:00', description: 'Highest traffic expected' },
+        ],
+    },
+    next: {
+        title: "Next Shift Forecast",
+        description: "Predicted traffic and staffing for the next shift (16:00 - 00:00).",
+        recommendedStaff: 10,
+        metrics: [
+            { title: 'Total Transactions', value: '6,200', description: 'Predicted entries & exits' },
+            { title: 'Peak Hour', value: '18:00-19:00', description: 'Highest traffic expected' },
+        ],
+    }
   }
 };
 
@@ -428,8 +463,21 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
         return Result.success(airportDashboardData) as Result<T>;
     }
 
-    if (method === 'GET' && url.pathname === '/data/passengers') {
+    if (method === 'GET' && url.pathname.startsWith('/data/passengers')) {
+        const url_ = new URL(endpoint, 'http://mock.com');
+        const id = url_.searchParams.get('id');
+        if (id) {
+            const passenger = mockPassengers.find(p => p.id === id);
+            if (passenger) {
+                return Result.success(passenger) as Result<T>;
+            }
+            return Result.failure([new ApiError('NOT_FOUND', `Passenger with id '${id}' not found.`)]) as Result<T>;
+        }
         return Result.success(passengerData) as Result<T>;
+    }
+
+    if (method === 'GET' && url.pathname === '/data/visa-database') {
+        return Result.success(mockVisaDatabase) as Result<T>;
     }
 
     if (method === 'GET' && url.pathname === '/dashboard/transaction-overview') {

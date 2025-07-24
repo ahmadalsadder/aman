@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
@@ -6,16 +7,18 @@ import type { Transaction } from '@/types/live-processing';
 import { DataTable } from '@/components/shared/data-table';
 import { GradientPageHeader } from '@/components/shared/gradient-page-header';
 import { Button } from '@/components/ui/button';
-import { ShieldAlert, Eye, User, Printer, AlertTriangle, LayoutDashboard, Badge } from 'lucide-react';
+import { ShieldAlert, Eye, User, Printer, AlertTriangle, LayoutDashboard, Search, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Progress } from '@/components/ui/progress';
 import Link from 'next/link';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { useAuth } from '@/hooks/use-auth';
 import { api } from '@/lib/api';
 import { useTranslations } from 'next-intl';
 import { TransactionStatsCard } from '@/components/transactions/transaction-stats-card';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage } from '@/components/ui/breadcrumb';
+import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
 
 const typeColors: { [key: string]: 'text-blue-500' | 'text-purple-500' | 'text-orange-500' } = {
     Entry: 'text-blue-500',
@@ -23,16 +26,18 @@ const typeColors: { [key: string]: 'text-blue-500' | 'text-purple-500' | 'text-o
     Transit: 'text-orange-500',
 };
 
-const riskColors: { [key: string]: string } = {
-  High: 'bg-red-500/20 text-red-700 border-red-500/30',
-  Medium: 'bg-yellow-500/20 text-yellow-700 border-yellow-500/30',
+const riskColors: { [key: string]: { text: string; bg: string; border: string; } } = {
+  High: { text: 'text-red-700 dark:text-red-300', bg: 'bg-red-500/10', border: 'border-red-500/20' },
+  Medium: { text: 'text-yellow-700 dark:text-yellow-300', bg: 'bg-yellow-500/10', border: 'border-yellow-500/20' },
 };
 
 export default function DutyManagerPage() {
-  const [pendingTransactions, setPendingTransactions] = useState<Transaction[]>([]);
+  const [allPendingTransactions, setAllPendingTransactions] = useState<Transaction[]>([]);
   const { hasPermission } = useAuth();
   const t = useTranslations('DutyManager');
   const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState('');
+  const [appliedFilter, setAppliedFilter] = useState('');
 
   const canView = hasPermission(['duty-manager:view']);
 
@@ -44,22 +49,31 @@ export default function DutyManagerPage() {
     const fetchData = async () => {
         const result = await api.get<Transaction[]>('/data/transactions/pending');
         if (result.isSuccess) {
-            setPendingTransactions(result.data || []);
+            setAllPendingTransactions(result.data || []);
         }
         setLoading(false);
     };
     fetchData();
   }, [canView]);
 
+  const filteredTransactions = useMemo(() => {
+    if (!appliedFilter) return allPendingTransactions;
+    const lowercasedFilter = appliedFilter.toLowerCase();
+    return allPendingTransactions.filter(
+      t => t.passengerName.toLowerCase().includes(lowercasedFilter) ||
+           t.passportNumber.toLowerCase().includes(lowercasedFilter)
+    );
+  }, [allPendingTransactions, appliedFilter]);
+
   const stats = useMemo(() => {
-    const highRisk = pendingTransactions.filter(t => t.riskScore >= 75).length;
-    const mediumRisk = pendingTransactions.filter(t => t.riskScore > 40 && t.riskScore < 75).length;
+    const highRisk = allPendingTransactions.filter(t => t.riskScore >= 75).length;
+    const mediumRisk = allPendingTransactions.filter(t => t.riskScore > 40 && t.riskScore < 75).length;
     return {
-        total: pendingTransactions.length,
+        total: allPendingTransactions.length,
         highRisk,
         mediumRisk
     };
-  }, [pendingTransactions]);
+  }, [allPendingTransactions]);
   
   const getRiskLevel = (score: number): keyof typeof riskColors => {
     if (score >= 75) return 'High';
@@ -96,13 +110,14 @@ export default function DutyManagerPage() {
       header: t('columns.riskScore'),
       cell: ({row}) => {
         const riskLevel = getRiskLevel(row.original.riskScore);
+        const colorClasses = riskColors[riskLevel];
         return (
-            <div className="flex flex-col gap-1 items-start">
-                 <div className="flex items-center gap-2">
-                    <Progress value={row.original.riskScore} className="h-2 w-20" />
-                    <span>{row.original.riskScore}</span>
+            <div className={cn("flex flex-col gap-2 rounded-md border p-2", colorClasses.bg, colorClasses.border)}>
+                 <div className="flex items-center justify-between text-xs font-bold">
+                    <span className={colorClasses.text}>{riskLevel} Risk</span>
+                    <span className={colorClasses.text}>{row.original.riskScore}</span>
                 </div>
-                <Badge variant="outline" className={cn(riskColors[riskLevel])}>{riskLevel}</Badge>
+                <Progress value={row.original.riskScore} className="h-1" />
             </div>
         )
       }
@@ -146,6 +161,12 @@ export default function DutyManagerPage() {
     );
   }
 
+  const handleSearch = () => setAppliedFilter(filter);
+  const handleReset = () => {
+      setFilter('');
+      setAppliedFilter('');
+  }
+
   return (
     <div className="space-y-6">
         <Breadcrumb>
@@ -173,12 +194,23 @@ export default function DutyManagerPage() {
       <Card>
         <CardHeader>
           <CardTitle>{t('pendingTransactions')}</CardTitle>
+          <CardDescription>{t('pendingTransactionsDesc')}</CardDescription>
+           <div className="flex items-center gap-2 pt-4">
+                <Input 
+                    placeholder={t('filterPlaceholder')}
+                    value={filter}
+                    onChange={(e) => setFilter(e.target.value)}
+                    className="max-w-sm"
+                />
+                <Button onClick={handleSearch}><Search className="mr-2 h-4 w-4" />{t('search')}</Button>
+                <Button onClick={handleReset} variant="outline"><X className="mr-2 h-4 w-4" />{t('reset')}</Button>
+           </div>
         </CardHeader>
         <CardContent>
            <DataTable
             columns={columns}
-            data={pendingTransactions}
-            filterColumnId="passengerName"
+            data={filteredTransactions}
+            hideDefaultFilter
           />
         </CardContent>
       </Card>

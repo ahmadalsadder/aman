@@ -486,7 +486,7 @@
       "viewAll": "View All Transactions"
     }
   },
-  "OfficerDesks": {
+   "OfficerDesks": {
     "pageTitle": "Officer Desk Management",
     "pageDescription": "Real-time status and configuration of all officer desks.",
     "addDesk": "Add Desk",
@@ -717,6 +717,7 @@
     "title": "Duty Manager",
     "description": "Review and action transactions pending supervisor review.",
     "pendingTransactions": "Pending Transactions",
+    "pendingTransactionsDesc": "A list of all transactions that have been escalated for supervisor approval.",
     "accessDenied": {
       "title": "Access Denied",
       "description": "You do not have permission to view this page."
@@ -736,6 +737,9 @@
       "dateTime": "Date/Time",
       "riskScore": "Risk Score",
       "escalatedBy": "Escalated By"
-    }
+    },
+    "filterPlaceholder": "Filter by name or passport...",
+    "search": "Search",
+    "reset": "Reset"
   }
 }

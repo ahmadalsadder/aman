@@ -714,28 +714,32 @@
     }
   },
   "DutyManager": {
-    "title": "Gerente de Turno",
-    "description": "Revise y actúe sobre las transacciones pendientes de revisión del supervisor.",
-    "pendingTransactions": "Transacciones Pendientes",
+    "title": "Duty Manager",
+    "description": "Review and action transactions pending supervisor review.",
+    "pendingTransactions": "Pending Transactions",
+    "pendingTransactionsDesc": "A list of all transactions that have been escalated for supervisor approval.",
     "accessDenied": {
-      "title": "Acceso Denegado",
-      "description": "No tiene permiso para ver esta página."
+      "title": "Access Denied",
+      "description": "You do not have permission to view this page."
     },
     "stats": {
-      "totalPending": "Total de Pendientes",
-      "totalPendingDesc": "Requieren revisión inmediata",
-      "highRisk": "Alto Riesgo",
-      "highRiskDesc": "Transacciones con puntuación de riesgo >75",
-      "mediumRisk": "Riesgo Medio",
-      "mediumRiskDesc": "Transacciones con puntuación de riesgo 41-75"
+      "totalPending": "Total Pending",
+      "totalPendingDesc": "Require immediate review",
+      "highRisk": "High-Risk",
+      "highRiskDesc": "Transactions with risk score >75",
+      "mediumRisk": "Medium-Risk",
+      "mediumRiskDesc": "Transactions with risk score 41-75"
     },
     "columns": {
-      "id": "ID de Transacción",
-      "passenger": "Pasajero",
-      "type": "Tipo",
-      "dateTime": "Fecha/Hora",
-      "riskScore": "Puntuación de Riesgo",
-      "escalatedBy": "Escalado por"
-    }
+      "id": "Transaction ID",
+      "passenger": "Passenger",
+      "type": "Type",
+      "dateTime": "Date/Time",
+      "riskScore": "Risk Score",
+      "escalatedBy": "Escalated By"
+    },
+    "filterPlaceholder": "Filter by name or passport...",
+    "search": "Search",
+    "reset": "Reset"
   }
 }

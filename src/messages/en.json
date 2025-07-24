@@ -203,5 +203,125 @@
     "cardDescription": "Access the {module} dashboard and tools.",
     "openModule": "Open Module",
     "notYourPortals": "Don't see the portal you're looking for? Contact your administrator."
+  },
+  "LiveProcessingFlow": {
+    "toast": {
+      "extractionFailedTitle": "Data Extraction Failed",
+      "extractionFailedDescription": "Could not read data from the document. Please try again with a clearer image.",
+      "missingInfoTitle": "Missing Information",
+      "missingInfoDescription": "Face Scan is required to proceed.",
+      "analysisFailedTitle": "AI Analysis Failed",
+      "missingDataTitle": "Missing Data",
+      "missingDataDescription": "Cannot complete transaction due to missing data.",
+      "saveFailedTitle": "Save Failed",
+      "saveFailedDescription": "Could not save the transaction data.",
+      "decisionRequiredTitle": "Decision Required",
+      "decisionRequiredDescription": "Please select Approve or Reject.",
+      "transactionCompleteTitle": "Transaction Complete",
+      "transactionCompleteDescription": "Passenger processed and record saved. Decision: {decision}",
+      "transferredTitle": "Transferred to Duty Manager",
+      "transferredDescription": "Transaction {id} sent for supervisor review.",
+      "transferFailedDescription": "Could not transfer to duty manager due to missing passenger data.",
+      "cameraDeniedTitle": "Camera access denied.",
+      "cameraErrorTitle": "Camera Error",
+      "cameraErrorDescription": "The camera feed is not ready yet. Please wait a moment and try again."
+    },
+    "alert": {
+      "visaRequired": "Visa Required - Not Found",
+      "escalatedNotes": "Passenger requires visa but none was found. Escalated to Duty Manager.",
+      "missingVisaTitle": "Action Required: Missing Valid Visa",
+      "missingVisaDescription": "This passenger requires a visa, but a valid one was not found. This transaction must be escalated."
+    },
+    "common": {
+      "name": "Name",
+      "nationality": "Nationality",
+      "dob": "DOB",
+      "passportNo": "Passport #",
+      "gender": "Gender",
+      "issueDate": "Issue Date",
+      "expiryDate": "Expiry Date",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "issuingCountry": "Issuing Country",
+      "backAndRescan": "Go Back & Re-scan",
+      "rescanDocument": "Re-scan Document",
+      "confirmAndProceed": "Confirm & Proceed",
+      "back": "Back",
+      "riskLevel": "Risk Level"
+    },
+    "workflow": {
+      "title": "Processing Workflow",
+      "docScan": "Document Scan",
+      "visaCheck": "Visa Check",
+      "identity": "Identity Confirmation",
+      "biometric": "Biometric Capture",
+      "security": "Security & AI Checks",
+      "review": "Officer Review",
+      "skipped": "Skipped"
+    },
+    "scanCard": {
+      "preview": "{title} Preview",
+      "rescan": "Re-scan Document",
+      "scan": "Scan Document",
+      "clear": "Clear Scan"
+    },
+    "captureCard": {
+      "retake": "Retake",
+      "capture": "Capture"
+    },
+    "uploadDocument": {
+      "title": "1. Scan Document",
+      "description": "Place the passenger's passport on the scanner or upload an image to begin.",
+      "passport": "Passport"
+    },
+    "matchFound": {
+      "title": "Passenger Match Found",
+      "description": "An existing record was found. Please review and choose how to proceed.",
+      "existingRecord": "Existing Record",
+      "scannedData": "New Scanned Data",
+      "transfer": "Transfer to Duty Manager",
+      "chooseAction": "Choose Action",
+      "chooseActionDescription": "Select how to proceed with this passenger.",
+      "updateAll": "Update All Info with Scan & Proceed",
+      "updateImages": "Update Images Only & Proceed"
+    },
+    "confirmNew": {
+      "title": "2. Confirm New Passenger",
+      "description": "Please verify the data extracted from the document."
+    },
+    "capturePhoto": {
+      "title": "3. Capture Biometrics",
+      "description": "Take live biometric scans of the passenger. Face scan is required.",
+      "cameraNotAvailable": "Camera not available",
+      "faceScan": "Face Scan",
+      "leftIris": "Left Iris",
+      "rightIris": "Right Iris",
+      "fingerprint": "Fingerprint",
+      "next": "Next: Analyze Data"
+    },
+    "analyzing": {
+      "title": "Analyzing...",
+      "description": "AI is assessing risk based on the provided data. Please wait."
+    },
+    "review": {
+      "title": "4. Officer Review & Decision",
+      "description": "Review the AI assessment and make a final decision.",
+      "aiAssessment": "AI Risk Assessment",
+      "riskScore": "Risk Score",
+      "aiRecommendation": "AI Recommendation",
+      "assessmentSummary": "Assessment Summary",
+      "finalDecision": "Final Decision",
+      "approve": "Approve",
+      "reject": "Reject",
+      "notesPlaceholder": "Add officer notes (optional)...",
+      "complete": "Complete Transaction",
+      "backToCapture": "Back to Capture"
+    },
+    "completed": {
+      "title": "Transaction Completed",
+      "description": "The transaction has been successfully recorded.",
+      "startNew": "Start New Transaction",
+      "viewAll": "View All Transactions"
+    }
   }
 }

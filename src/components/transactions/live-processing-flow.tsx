@@ -47,6 +47,7 @@ import {
 import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
 import { api } from '@/lib/api';
+import { useTranslations } from 'next-intl';
 
 type ProcessingStep = 'upload_document' | 'confirm_new_passenger' | 'match_found' | 'capture_photo' | 'analyzing' | 'review' | 'completed';
 type UpdateChoice = 'update_all' | 'update_images';
@@ -65,6 +66,7 @@ const NATIONALITIES_REQUIRING_VISA = ['Jordan'];
 
 function ScanCard({ title, onScan, scannedImage, onClear, disabled, loading }: { title: string; onScan: (file: File) => void, scannedImage?: string | null, onClear: () => void, disabled?: boolean, loading?: boolean }) {
     const inputRef = useRef<HTMLInputElement>(null);
+    const t = useTranslations('LiveProcessingFlow');
 
     return (
         <div className="flex flex-col items-center space-y-4 rounded-lg border p-6 text-center">
@@ -74,20 +76,21 @@ function ScanCard({ title, onScan, scannedImage, onClear, disabled, loading }: {
                 {scannedImage ? <Image src={scannedImage} alt={`${title} preview`} width={160} height={120} className="h-32 w-auto rounded-md object-contain" /> : <ScanLine className="h-12 w-12 text-muted-foreground" />}
             </div>
 
-            {scannedImage && <p className="text-sm font-medium">{title} Preview</p>}
+            {scannedImage && <p className="text-sm font-medium">{t('scanCard.preview', { title })}</p>}
             
             <div className="w-full space-y-2">
                 <Button type="button" size="lg" onClick={() => inputRef.current?.click()} disabled={disabled || loading} className="w-full">
                     {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <ScanLine className="mr-2 h-4 w-4" />}
-                    {scannedImage ? 'Re-scan Document' : 'Scan Document'}
+                    {scannedImage ? t('scanCard.rescan') : t('scanCard.scan')}
                 </Button>
-                {scannedImage && <Button type="button" variant="ghost" size="sm" onClick={onClear} className="w-full">Clear Scan</Button>}
+                {scannedImage && <Button type="button" variant="ghost" size="sm" onClick={onClear} className="w-full">{t('scanCard.clear')}</Button>}
             </div>
         </div>
     )
 }
 
 function CaptureCard({ title, icon: Icon, onCapture, capturedImage, onClear, disabled }: { title: string; icon: React.ElementType, onCapture: () => void, capturedImage?: string | null, onClear: () => void, disabled?: boolean }) {
+    const t = useTranslations('LiveProcessingFlow');
     return (
         <div className="flex flex-col items-center space-y-2 rounded-lg border p-4">
             <div className="flex h-16 w-16 items-center justify-center rounded-md bg-secondary">
@@ -101,7 +104,7 @@ function CaptureCard({ title, icon: Icon, onCapture, capturedImage, onClear, dis
             <div className="flex gap-2">
                 <Button type="button" variant="outline" size="sm" onClick={onCapture} disabled={disabled}>
                     <Camera className="mr-2 h-4 w-4" />
-                    {capturedImage ? 'Retake' : 'Capture'}
+                    {capturedImage ? t('captureCard.retake') : t('captureCard.capture')}
                 </Button>
                 {capturedImage && (
                     <Button type="button" variant="destructive" size="icon" onClick={onClear}>
@@ -121,6 +124,7 @@ export function LiveProcessingFlow() {
   const router = useRouter();
   const { toast } = useToast();
   const { user } = useAuth();
+  const t = useTranslations('LiveProcessingFlow');
   
   const [currentStep, setCurrentStep] = useState<ProcessingStep>('upload_document');
   const [workflow, setWorkflow] = useState<{ id: string, name: string, status: InternalWorkflowStatus, Icon: React.ElementType }[]>([]);
@@ -194,11 +198,11 @@ export function LiveProcessingFlow() {
         let isVisaValid = false;
 
         const newWorkflow = [
-            { id: 'doc_scan', name: 'Document Scan', status: 'in-progress' as InternalWorkflowStatus, Icon: ScanLine },
+            { id: 'doc_scan', name: t('workflow.docScan'), status: 'in-progress' as InternalWorkflowStatus, Icon: ScanLine },
         ];
 
         if (needsVisa) {
-            newWorkflow.push({ id: 'visa_check', name: 'Visa Check', status: 'pending', Icon: FileWarning });
+            newWorkflow.push({ id: 'visa_check', name: t('workflow.visaCheck'), status: 'pending', Icon: FileWarning });
             const visaResult = await api.get<{ passportNumber: string, nationality: string, visaType: string, expiryDate: string }[]>(`/data/visa-database`);
             if (visaResult.isSuccess && visaResult.data) {
                 const visaHolder = visaResult.data.find(v => v.passportNumber === result.passportNumber && v.nationality === countryLabel);
@@ -206,15 +210,15 @@ export function LiveProcessingFlow() {
             }
             setVisaCheckResult(isVisaValid ? 'valid' : 'invalid');
         } else {
-             newWorkflow.push({ id: 'visa_check', name: 'Visa Check', status: 'skipped', Icon: FileWarning });
+             newWorkflow.push({ id: 'visa_check', name: t('workflow.visaCheck'), status: 'skipped', Icon: FileWarning });
             setVisaCheckResult('not_required');
         }
 
         newWorkflow.push(
-            { id: 'identity_confirmation', name: 'Identity Confirmation', status: 'pending' as InternalWorkflowStatus, Icon: UserCheck },
-            { id: 'biometric_capture', name: 'Biometric Capture', status: 'pending', Icon: Fingerprint },
-            { id: 'security_ai_checks', name: 'Security & AI Checks', status: 'pending', Icon: ShieldAlert },
-            { id: 'officer_review', name: 'Officer Review', status: 'pending', Icon: User }
+            { id: 'identity_confirmation', name: t('workflow.identity'), status: 'pending' as InternalWorkflowStatus, Icon: UserCheck },
+            { id: 'biometric_capture', name: t('workflow.biometric'), status: 'pending', Icon: Fingerprint },
+            { id: 'security_ai_checks', name: t('workflow.security'), status: 'pending', Icon: ShieldAlert },
+            { id: 'officer_review', name: t('workflow.review'), status: 'pending', Icon: User }
         );
         
         setWorkflow(newWorkflow);
@@ -242,7 +246,7 @@ export function LiveProcessingFlow() {
 
     } catch (error) {
         console.error("Data Extraction Error:", error);
-        toast({ variant: 'destructive', title: 'Data Extraction Failed', description: 'Could not read data from the document. Please try again with a clearer image.' });
+        toast({ variant: 'destructive', title: t('toast.extractionFailedTitle'), description: t('toast.extractionFailedDescription') });
     } finally {
         setIsScanning(false);
     }
@@ -310,8 +314,8 @@ export function LiveProcessingFlow() {
         if (video.videoWidth === 0 || video.videoHeight === 0) {
             toast({
                 variant: 'destructive',
-                title: 'Camera Error',
-                description: 'The camera feed is not ready yet. Please wait a moment and try again.'
+                title: t('toast.cameraErrorTitle'),
+                description: t('toast.cameraErrorDescription')
             });
             return;
         }
@@ -335,7 +339,7 @@ export function LiveProcessingFlow() {
 
   const handleStartAnalysis = async () => {
     if (!selectedPassenger || !passportScan || !biometricCaptures.face) {
-        toast({ variant: 'destructive', title: 'Missing Information', description: 'Face Scan is required to proceed.' });
+        toast({ variant: 'destructive', title: t('toast.missingInfoTitle'), description: t('toast.missingInfoDescription') });
         return;
     }
     updateStepStatus('biometric_capture', 'completed');
@@ -357,7 +361,7 @@ export function LiveProcessingFlow() {
         addLog('AI analysis complete.');
     } catch (error) {
         console.error("AI Analysis Error:", error);
-        toast({ variant: 'destructive', title: 'AI Analysis Failed' });
+        toast({ variant: 'destructive', title: t('toast.analysisFailedTitle') });
         updateStepStatus('security_ai_checks', 'failed');
         setCurrentStep('capture_photo'); // Go back a step on failure
     }
@@ -365,13 +369,13 @@ export function LiveProcessingFlow() {
 
   const saveTransactionAndPassenger = useCallback(async (decision: 'Approved' | 'Rejected' | 'Manual Review', status: 'Completed' | 'Failed' | 'Pending', passengerToSave: Partial<Passenger>) => {
     if(!passengerToSave || (!aiResult && status !== 'Pending' && decision !== 'Manual Review') || !extractedData) {
-        toast({ variant: 'destructive', title: 'Missing Data', description: 'Cannot complete transaction due to missing data.' });
+        toast({ variant: 'destructive', title: t('toast.missingDataTitle'), description: t('toast.missingDataDescription') });
         return null;
     }
     
     const riskScore = aiResult ? aiResult.riskScore : (visaCheckResult === 'invalid' ? 75 : 50);
-    const triggeredRules = aiResult ? aiResult.alerts : (visaCheckResult === 'invalid' ? ['Visa Required - Not Found'] : []);
-    const finalNotes = officerNotes || (status === 'Pending' ? 'Passenger requires visa but none was found. Escalated to Duty Manager.' : '');
+    const triggeredRules = aiResult ? aiResult.alerts : (visaCheckResult === 'invalid' ? [t('alert.visaRequired')] : []);
+    const finalNotes = officerNotes || (status === 'Pending' ? t('alert.escalatedNotes') : '');
     
     const finalWorkflow: WorkflowStep[] = workflow.map(step => ({
         id: step.id,
@@ -401,14 +405,14 @@ export function LiveProcessingFlow() {
     if (result.isSuccess) {
         return result.data as Transaction;
     } else {
-        toast({ title: 'Save Failed', description: result.errors?.[0]?.message || 'Could not save the transaction data.', variant: 'destructive' });
+        toast({ title: t('toast.saveFailedTitle'), description: result.errors?.[0]?.message || t('toast.saveFailedDescription'), variant: 'destructive' });
         return null;
     }
-  }, [updateChoice, extractedData, passportScan, biometricCaptures, workflow, officerNotes, user, aiResult, visaCheckResult, existingPassenger]);
+  }, [updateChoice, extractedData, passportScan, biometricCaptures, workflow, officerNotes, user, aiResult, visaCheckResult, existingPassenger, t]);
 
   const handleCompleteTransaction = async () => {
     if(!finalDecision) {
-        toast({ variant: 'destructive', title: 'Decision Required', description: 'Please select Approve or Reject.' });
+        toast({ variant: 'destructive', title: t('toast.decisionRequiredTitle'), description: t('toast.decisionRequiredDescription') });
         return;
     }
     const status = finalDecision === 'Approved' ? 'Completed' : 'Failed';
@@ -418,7 +422,7 @@ export function LiveProcessingFlow() {
       updateStepStatus('officer_review', 'completed');
       addLog(`Transaction completed by officer. Decision: ${finalDecision}.`);
       setCurrentStep('completed');
-      toast({ variant: 'success', title: 'Transaction Complete', description: `Passenger processed and record saved. Decision: ${finalDecision}`});
+      toast({ variant: 'success', title: t('toast.transactionCompleteTitle'), description: t('toast.transactionCompleteDescription', { decision: finalDecision })});
     }
   }
   
@@ -447,11 +451,11 @@ export function LiveProcessingFlow() {
     if (passengerRecord) {
       const transaction = await saveTransactionAndPassenger('Manual Review', 'Pending', passengerRecord);
       if (transaction) {
-        toast({ title: "Transferred to Duty Manager", description: `Transaction ${transaction.id} sent for supervisor review.` });
+        toast({ title: t('toast.transferredTitle'), description: t('toast.transferredDescription', { id: transaction.id }) });
         router.push('/duty-manager');
       }
     } else {
-      toast({ variant: 'destructive', title: 'Missing Data', description: 'Could not transfer to duty manager due to missing passenger data.' });
+      toast({ variant: 'destructive', title: t('toast.missingDataTitle'), description: t('toast.transferFailedDescription') });
     }
   };
 
@@ -465,7 +469,7 @@ export function LiveProcessingFlow() {
                 setHasCameraPermission(true);
             } catch (err) {
                 setHasCameraPermission(false);
-                toast({ variant: 'destructive', title: 'Camera access denied.' });
+                toast({ variant: 'destructive', title: t('toast.cameraDeniedTitle') });
             }
         }
     };
@@ -473,7 +477,7 @@ export function LiveProcessingFlow() {
     return () => {
         stream?.getTracks().forEach(track => track.stop());
     }
-  }, [currentStep, toast]);
+  }, [currentStep, toast, t]);
   
   const motionProps = {
     initial: { opacity: 0, y: 20 },
@@ -487,9 +491,9 @@ export function LiveProcessingFlow() {
         case 'upload_document':
             return (
                 <motion.div {...motionProps} key="scan">
-                    <CardHeader><CardTitle>1. Scan Document</CardTitle><CardDescription>Place the passenger's passport on the scanner or upload an image to begin.</CardDescription></CardHeader>
+                    <CardHeader><CardTitle>{t('uploadDocument.title')}</CardTitle><CardDescription>{t('uploadDocument.description')}</CardDescription></CardHeader>
                     <CardContent>
-                        <ScanCard title="Passport" onScan={handlePassportScan} scannedImage={passportScan} onClear={() => setPassportScan(null)} loading={isScanning} />
+                        <ScanCard title={t('uploadDocument.passport')} onScan={handlePassportScan} scannedImage={passportScan} onClear={() => setPassportScan(null)} loading={isScanning} />
                     </CardContent>
                 </motion.div>
             )
@@ -498,33 +502,33 @@ export function LiveProcessingFlow() {
             return (
                 <motion.div {...motionProps} key="match">
                     <CardHeader>
-                        <CardTitle>Passenger Match Found</CardTitle>
-                        <CardDescription>An existing record was found. Please review and choose how to proceed.</CardDescription>
+                        <CardTitle>{t('matchFound.title')}</CardTitle>
+                        <CardDescription>{t('matchFound.description')}</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <Card className="bg-secondary/30">
-                                <CardHeader><CardTitle className="text-base">Existing Record</CardTitle></CardHeader>
+                                <CardHeader><CardTitle className="text-base">{t('matchFound.existingRecord')}</CardTitle></CardHeader>
                                 <CardContent className="space-y-2">
-                                    <DetailItem label="Name" value={`${existingPassenger.firstName} ${existingPassenger.lastName}`} />
-                                    <DetailItem label="Nationality" value={existingPassenger.nationality} />
-                                    <DetailItem label="DOB" value={existingPassenger.dateOfBirth} />
-                                    <DetailItem label="Passport #" value={existingPassenger.passportNumber} />
-                                    <DetailItem label="Gender" value={existingPassenger.gender} />
-                                    <DetailItem label="Issue Date" value={existingPassenger.passportIssueDate} />
-                                    <DetailItem label="Expiry Date" value={existingPassenger.passportExpiryDate} />
+                                    <DetailItem label={t('common.name')} value={`${existingPassenger.firstName} ${existingPassenger.lastName}`} />
+                                    <DetailItem label={t('common.nationality')} value={existingPassenger.nationality} />
+                                    <DetailItem label={t('common.dob')} value={existingPassenger.dateOfBirth} />
+                                    <DetailItem label={t('common.passportNo')} value={existingPassenger.passportNumber} />
+                                    <DetailItem label={t('common.gender')} value={existingPassenger.gender} />
+                                    <DetailItem label={t('common.issueDate')} value={existingPassenger.passportIssueDate} />
+                                    <DetailItem label={t('common.expiryDate')} value={existingPassenger.passportExpiryDate} />
                                 </CardContent>
                             </Card>
                              <Card>
-                                <CardHeader><CardTitle className="text-base">New Scanned Data</CardTitle></CardHeader>
+                                <CardHeader><CardTitle className="text-base">{t('matchFound.scannedData')}</CardTitle></CardHeader>
                                 <CardContent className="space-y-2">
-                                    <DetailItem label="Name" value={`${extractedData.firstName} ${extractedData.lastName}`} />
-                                    <DetailItem label="Nationality" value={countries.find(c => c.value === extractedData.nationality)?.label || extractedData.nationality} />
-                                    <DetailItem label="DOB" value={extractedData.dateOfBirth} />
-                                    <DetailItem label="Passport #" value={extractedData.passportNumber} />
-                                    <DetailItem label="Gender" value={extractedData.gender} />
-                                    <DetailItem label="Issue Date" value={extractedData.passportIssueDate} />
-                                    <DetailItem label="Expiry Date" value={extractedData.passportExpiryDate} />
+                                    <DetailItem label={t('common.name')} value={`${extractedData.firstName} ${extractedData.lastName}`} />
+                                    <DetailItem label={t('common.nationality')} value={countries.find(c => c.value === extractedData.nationality)?.label || extractedData.nationality} />
+                                    <DetailItem label={t('common.dob')} value={extractedData.dateOfBirth} />
+                                    <DetailItem label={t('common.passportNo')} value={extractedData.passportNumber} />
+                                    <DetailItem label={t('common.gender')} value={extractedData.gender} />
+                                    <DetailItem label={t('common.issueDate')} value={extractedData.passportIssueDate} />
+                                    <DetailItem label={t('common.expiryDate')} value={extractedData.passportExpiryDate} />
                                 </CardContent>
                             </Card>
                         </div>
@@ -532,27 +536,25 @@ export function LiveProcessingFlow() {
                              <div className="space-y-4">
                                 <Alert variant="destructive">
                                     <FileWarning className="h-4 w-4" />
-                                    <AlertTitle>Action Required: Missing Valid Visa</AlertTitle>
-                                    <AlertDescription>
-                                        This passenger requires a visa, but a valid one was not found. This transaction must be escalated.
-                                    </AlertDescription>
+                                    <AlertTitle>{t('alert.missingVisaTitle')}</AlertTitle>
+                                    <AlertDescription>{t('alert.missingVisaDescription')}</AlertDescription>
                                 </Alert>
                                 <Button className="w-full" onClick={handleTransferToDutyManager} variant="destructive">
-                                    <ShieldAlert className="mr-2 h-4 w-4" /> Transfer to Duty Manager
+                                    <ShieldAlert className="mr-2 h-4 w-4" /> {t('matchFound.transfer')}
                                 </Button>
                             </div>
                         ) : (
                             <div className="space-y-2 rounded-md border p-4">
-                               <h4 className="font-semibold">Choose Action</h4>
-                               <p className="text-sm text-muted-foreground">Select how to proceed with this passenger.</p>
+                               <h4 className="font-semibold">{t('matchFound.chooseAction')}</h4>
+                               <p className="text-sm text-muted-foreground">{t('matchFound.chooseActionDescription')}</p>
                                <div className="flex flex-col gap-2 pt-2">
-                                 <Button onClick={() => handleMatchDecision('update_all')} className="w-full justify-start">Update All Info with Scan & Proceed</Button>
-                                 <Button variant="outline" onClick={() => handleMatchDecision('update_images')} className="w-full justify-start">Update Images Only & Proceed</Button>
+                                 <Button onClick={() => handleMatchDecision('update_all')} className="w-full justify-start">{t('matchFound.updateAll')}</Button>
+                                 <Button variant="outline" onClick={() => handleMatchDecision('update_images')} className="w-full justify-start">{t('matchFound.updateImages')}</Button>
                                </div>
                             </div>
                         )}
                          <Button variant="ghost" className="w-full" onClick={() => resetState()}>
-                            <ArrowLeft className="mr-2 h-4 w-4" /> Go Back & Re-scan
+                            <ArrowLeft className="mr-2 h-4 w-4" /> {t('common.backAndRescan')}
                          </Button>
                     </CardContent>
                 </motion.div>
@@ -561,7 +563,7 @@ export function LiveProcessingFlow() {
             if (!extractedData) return null;
             return (
                 <motion.div {...motionProps} key="confirm">
-                    <CardHeader><CardTitle>2. Confirm New Passenger</CardTitle><CardDescription>Please verify the data extracted from the document.</CardDescription></CardHeader>
+                    <CardHeader><CardTitle>{t('confirmNew.title')}</CardTitle><CardDescription>{t('confirmNew.description')}</CardDescription></CardHeader>
                     <CardContent className="space-y-4">
                         <Card>
                              <CardHeader className="flex flex-row items-center gap-4">
@@ -569,37 +571,35 @@ export function LiveProcessingFlow() {
                                 <div><CardTitle>{extractedData.firstName} {extractedData.lastName}</CardTitle><CardDescription>{extractedData.passportNumber}</CardDescription></div>
                             </CardHeader>
                              <CardContent className="grid grid-cols-2 gap-4 pt-4">
-                                <DetailItem label="First Name" value={extractedData.firstName} />
-                                <DetailItem label="Last Name" value={extractedData.lastName} />
-                                <DetailItem label="Passport Number" value={extractedData.passportNumber} />
-                                <DetailItem label="Nationality" value={countries.find(c => c.value === extractedData.nationality)?.label || extractedData.nationality} />
-                                <DetailItem label="Date of Birth" value={extractedData.dateOfBirth} />
-                                <DetailItem label="Gender" value={extractedData.gender} />
-                                <DetailItem label="Issuing Country" value={countries.find(c => c.value === extractedData.passportCountry)?.label || extractedData.passportCountry} />
-                                <DetailItem label="Date of Issue" value={extractedData.passportIssueDate} />
-                                <DetailItem label="Date of Expiry" value={extractedData.passportExpiryDate} />
+                                <DetailItem label={t('common.firstName')} value={extractedData.firstName} />
+                                <DetailItem label={t('common.lastName')} value={extractedData.lastName} />
+                                <DetailItem label={t('common.passportNo')} value={extractedData.passportNumber} />
+                                <DetailItem label={t('common.nationality')} value={countries.find(c => c.value === extractedData.nationality)?.label || extractedData.nationality} />
+                                <DetailItem label={t('common.dob')} value={extractedData.dateOfBirth} />
+                                <DetailItem label={t('common.gender')} value={extractedData.gender} />
+                                <DetailItem label={t('common.issuingCountry')} value={countries.find(c => c.value === extractedData.passportCountry)?.label || extractedData.passportCountry} />
+                                <DetailItem label={t('common.issueDate')} value={extractedData.passportIssueDate} />
+                                <DetailItem label={t('common.expiryDate')} value={extractedData.passportExpiryDate} />
                             </CardContent>
                         </Card>
                         {visaCheckResult === 'invalid' ? (
                             <div className="space-y-4">
                                 <Alert variant="destructive">
                                     <FileWarning className="h-4 w-4" />
-                                    <AlertTitle>Action Required: Missing Valid Visa</AlertTitle>
-                                    <AlertDescription>
-                                        This passenger requires a visa, but a valid one was not found. This transaction must be escalated.
-                                    </AlertDescription>
+                                    <AlertTitle>{t('alert.missingVisaTitle')}</AlertTitle>
+                                    <AlertDescription>{t('alert.missingVisaDescription')}</AlertDescription>
                                 </Alert>
                                 <Button className="w-full" onClick={handleTransferToDutyManager} variant="destructive">
-                                    <ShieldAlert className="mr-2 h-4 w-4" /> Transfer to Duty Manager
+                                    <ShieldAlert className="mr-2 h-4 w-4" /> {t('matchFound.transfer')}
                                 </Button>
                             </div>
                         ) : (
                              <div className="flex flex-col gap-2 sm:flex-row">
                                 <Button variant="outline" className="w-full" onClick={() => resetState()}>
-                                    <ArrowLeft className="mr-2 h-4 w-4" /> Re-scan Document
+                                    <ArrowLeft className="mr-2 h-4 w-4" /> {t('common.rescanDocument')}
                                 </Button>
                                 <Button className="w-full" onClick={handleConfirmNewPassenger}>
-                                    Confirm & Proceed <ChevronRight className="ml-2 h-4 w-4" />
+                                    {t('common.confirmAndProceed')} <ChevronRight className="ml-2 h-4 w-4" />
                                 </Button>
                              </div>
                         )}
@@ -609,26 +609,26 @@ export function LiveProcessingFlow() {
         case 'capture_photo':
             return (
                 <motion.div {...motionProps} key="capture">
-                    <CardHeader><CardTitle>3. Capture Biometrics</CardTitle><CardDescription>Take live biometric scans of the passenger. Face scan is required.</CardDescription></CardHeader>
+                    <CardHeader><CardTitle>{t('capturePhoto.title')}</CardTitle><CardDescription>{t('capturePhoto.description')}</CardDescription></CardHeader>
                     <CardContent className="space-y-4">
                         <div className="relative">
                             <video ref={videoRef} className="w-full aspect-video rounded-md bg-muted" autoPlay muted playsInline />
                             <canvas ref={canvasRef} className="hidden" />
-                            {!hasCameraPermission && <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-md"><p className="text-white">Camera not available</p></div>}
+                            {!hasCameraPermission && <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-md"><p className="text-white">{t('capturePhoto.cameraNotAvailable')}</p></div>}
                         </div>
                         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-                            <CaptureCard title="Face Scan" icon={ScanFace} onCapture={() => handleCapture('face')} capturedImage={biometricCaptures.face} onClear={() => handleClearBiometric('face')} disabled={!hasCameraPermission} />
-                            <CaptureCard title="Left Iris" icon={ScanEye} onCapture={() => handleCapture('leftIris')} capturedImage={biometricCaptures.leftIris} onClear={() => handleClearBiometric('leftIris')} disabled={!hasCameraPermission} />
-                            <CaptureCard title="Right Iris" icon={ScanEye} onCapture={() => handleCapture('rightIris')} capturedImage={biometricCaptures.rightIris} onClear={() => handleClearBiometric('rightIris')} disabled={!hasCameraPermission} />
-                            <CaptureCard title="Fingerprint" icon={Fingerprint} onCapture={() => handleCapture('fingerprint')} capturedImage={biometricCaptures.fingerprint} onClear={() => handleClearBiometric('fingerprint')} disabled={!hasCameraPermission}/>
+                            <CaptureCard title={t('capturePhoto.faceScan')} icon={ScanFace} onCapture={() => handleCapture('face')} capturedImage={biometricCaptures.face} onClear={() => handleClearBiometric('face')} disabled={!hasCameraPermission} />
+                            <CaptureCard title={t('capturePhoto.leftIris')} icon={ScanEye} onCapture={() => handleCapture('leftIris')} capturedImage={biometricCaptures.leftIris} onClear={() => handleClearBiometric('leftIris')} disabled={!hasCameraPermission} />
+                            <CaptureCard title={t('capturePhoto.rightIris')} icon={ScanEye} onCapture={() => handleCapture('rightIris')} capturedImage={biometricCaptures.rightIris} onClear={() => handleClearBiometric('rightIris')} disabled={!hasCameraPermission} />
+                            <CaptureCard title={t('capturePhoto.fingerprint')} icon={Fingerprint} onCapture={() => handleCapture('fingerprint')} capturedImage={biometricCaptures.fingerprint} onClear={() => handleClearBiometric('fingerprint')} disabled={!hasCameraPermission}/>
                         </div>
                         <div className="space-y-2">
                             <Button className="w-full" disabled={!biometricCaptures.face} onClick={handleStartAnalysis}>
-                                Next: Analyze Data <ChevronRight className="ml-2 h-4 w-4" />
+                                {t('capturePhoto.next')} <ChevronRight className="ml-2 h-4 w-4" />
                             </Button>
                             <Button variant="outline" className="w-full" onClick={() => setCurrentStep(existingPassenger ? 'match_found' : 'confirm_new_passenger')}>
                                 <ArrowLeft className="mr-2 h-4 w-4" />
-                                Back
+                                {t('common.back')}
                             </Button>
                         </div>
                     </CardContent>
@@ -638,8 +638,8 @@ export function LiveProcessingFlow() {
             return (
                 <motion.div {...motionProps} key="analyzing" className="flex flex-col items-center justify-center h-full p-6 text-center">
                     <Scan className="h-16 w-16 animate-pulse text-primary" />
-                    <h2 className="mt-4 text-xl font-semibold">Analyzing...</h2>
-                    <p className="text-muted-foreground">AI is assessing risk based on the provided data. Please wait.</p>
+                    <h2 className="mt-4 text-xl font-semibold">{t('analyzing.title')}</h2>
+                    <p className="text-muted-foreground">{t('analyzing.description')}</p>
                 </motion.div>
             )
         case 'review':
@@ -647,22 +647,22 @@ export function LiveProcessingFlow() {
             return (
                 <motion.div {...motionProps} key="review">
                     <CardHeader>
-                        <CardTitle>4. Officer Review & Decision</CardTitle>
-                        <CardDescription>Review the AI assessment and make a final decision.</CardDescription>
+                        <CardTitle>{t('review.title')}</CardTitle>
+                        <CardDescription>{t('review.description')}</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <Card className="bg-secondary/50">
-                            <CardHeader><CardTitle className="text-lg">AI Risk Assessment</CardTitle></CardHeader>
+                            <CardHeader><CardTitle className="text-lg">{t('review.aiAssessment')}</CardTitle></CardHeader>
                             <CardContent className="space-y-4">
                                 <div>
-                                    <Label>Risk Score</Label>
+                                    <Label>{t('review.riskScore')}</Label>
                                     <div className="flex items-center gap-4">
                                         <Progress value={aiResult?.riskScore} className="h-4" />
                                         <span className="font-bold text-lg">{aiResult?.riskScore}</span>
                                     </div>
                                 </div>
-                                <DetailItem label="AI Recommendation" value={aiResult?.recommendation} />
-                                <DetailItem label="Assessment Summary" value={aiResult?.assessment} />
+                                <DetailItem label={t('review.aiRecommendation')} value={aiResult?.recommendation} />
+                                <DetailItem label={t('review.assessmentSummary')} value={aiResult?.assessment} />
                                 {aiResult?.alerts && aiResult.alerts.length > 0 && (
                                     <div className="space-y-2">
                                         {aiResult.alerts.map((alert, i) => (
@@ -679,28 +679,26 @@ export function LiveProcessingFlow() {
                             <div className="space-y-4">
                                 <Alert variant="destructive">
                                     <FileWarning className="h-4 w-4" />
-                                    <AlertTitle>Action Required: Missing Valid Visa</AlertTitle>
-                                    <AlertDescription>
-                                        This passenger requires a visa, but a valid one was not found. This transaction must be escalated.
-                                    </AlertDescription>
+                                    <AlertTitle>{t('alert.missingVisaTitle')}</AlertTitle>
+                                    <AlertDescription>{t('alert.missingVisaDescription')}</AlertDescription>
                                 </Alert>
                                 <Button className="w-full" onClick={handleTransferToDutyManager} variant="destructive">
-                                    <ShieldAlert className="mr-2 h-4 w-4" /> Transfer to Duty Manager
+                                    <ShieldAlert className="mr-2 h-4 w-4" /> {t('matchFound.transfer')}
                                 </Button>
                             </div>
                         ) : (
                             <>
                                 <RadioGroup onValueChange={(v) => setFinalDecision(v as any)} value={finalDecision}>
-                                    <Label className="font-semibold">Final Decision</Label>
+                                    <Label className="font-semibold">{t('review.finalDecision')}</Label>
                                     <div className="flex gap-4">
-                                        <Label htmlFor="approve" className="flex items-center gap-2 rounded-md border p-3 flex-1 has-[input:checked]:border-primary"><RadioGroupItem value="Approved" id="approve" /> Approve</Label>
-                                        <Label htmlFor="reject" className="flex items-center gap-2 rounded-md border p-3 flex-1 has-[input:checked]:border-destructive"><RadioGroupItem value="Rejected" id="reject" /> Reject</Label>
+                                        <Label htmlFor="approve" className="flex items-center gap-2 rounded-md border p-3 flex-1 has-[input:checked]:border-primary"><RadioGroupItem value="Approved" id="approve" /> {t('review.approve')}</Label>
+                                        <Label htmlFor="reject" className="flex items-center gap-2 rounded-md border p-3 flex-1 has-[input:checked]:border-destructive"><RadioGroupItem value="Rejected" id="reject" /> {t('review.reject')}</Label>
                                     </div>
                                 </RadioGroup>
-                                <Textarea placeholder="Add officer notes (optional)..." value={officerNotes} onChange={(e) => setOfficerNotes(e.target.value)} />
+                                <Textarea placeholder={t('review.notesPlaceholder')} value={officerNotes} onChange={(e) => setOfficerNotes(e.target.value)} />
                                 <div className="flex flex-col gap-2 sm:flex-row-reverse">
                                     <Button className="w-full sm:flex-1" onClick={handleCompleteTransaction} disabled={!finalDecision}>
-                                        Complete Transaction
+                                        {t('review.complete')}
                                     </Button>
                                 </div>
                             </>
@@ -708,7 +706,7 @@ export function LiveProcessingFlow() {
 
                         <Button variant="outline" className="w-full" onClick={() => setCurrentStep('capture_photo')}>
                             <ArrowLeft className="mr-2 h-4 w-4" />
-                            Back to Capture
+                            {t('review.backToCapture')}
                         </Button>
                     </CardContent>
                 </motion.div>
@@ -717,11 +715,11 @@ export function LiveProcessingFlow() {
             return (
                 <motion.div {...motionProps} key="completed" className="flex flex-col items-center justify-center h-full p-6 text-center">
                     <CheckCircle2 className="h-16 w-16 text-green-500" />
-                    <h2 className="mt-4 text-xl font-semibold">Transaction Completed</h2>
-                    <p className="text-muted-foreground">The transaction has been successfully recorded.</p>
+                    <h2 className="mt-4 text-xl font-semibold">{t('completed.title')}</h2>
+                    <p className="text-muted-foreground">{t('completed.description')}</p>
                     <div className="flex gap-2 mt-4">
-                        <Button onClick={resetState}><RefreshCw className="mr-2 h-4 w-4" /> Start New Transaction</Button>
-                        <Button variant="outline" asChild><Link href="/transactions">View All Transactions</Link></Button>
+                        <Button onClick={resetState}><RefreshCw className="mr-2 h-4 w-4" /> {t('completed.startNew')}</Button>
+                        <Button variant="outline" asChild><Link href="/transactions">{t('completed.viewAll')}</Link></Button>
                     </div>
                 </motion.div>
             )
@@ -746,7 +744,7 @@ export function LiveProcessingFlow() {
             <div className="lg:col-span-1 space-y-6">
                 <Card className="animate-in fade-in-50 duration-500">
                     <CardHeader>
-                        <CardTitle>Processing Workflow</CardTitle>
+                        <CardTitle>{t('workflow.title')}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <ul className="space-y-0">
@@ -761,7 +759,7 @@ export function LiveProcessingFlow() {
                                 </div>
                                 <div className="flex-grow pt-1">
                                     <p className={cn("font-medium text-sm", isActive && 'text-primary')}>{step.name}</p>
-                                    {step.status === 'skipped' && <p className="text-xs text-muted-foreground italic">Skipped</p>}
+                                    {step.status === 'skipped' && <p className="text-xs text-muted-foreground italic">{t('workflow.skipped')}</p>}
                                 </div>
                                 </li>
                             )
@@ -776,8 +774,8 @@ export function LiveProcessingFlow() {
                             <div><CardTitle>{selectedPassenger.firstName} {selectedPassenger.lastName}</CardTitle><CardDescription>{selectedPassenger.passportNumber}</CardDescription></div>
                         </CardHeader>
                         <CardContent className="space-y-2">
-                            <DetailItem label="Nationality" value={selectedPassenger.nationality} />
-                            <DetailItem label="Risk Level" value={selectedPassenger.riskLevel} />
+                            <DetailItem label={t('common.nationality')} value={selectedPassenger.nationality} />
+                            <DetailItem label={t('common.riskLevel')} value={selectedPassenger.riskLevel} />
                         </CardContent>
                     </Card>
                 )}

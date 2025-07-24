@@ -1,6 +1,6 @@
 
 export type Role = 'admin' | 'auditor' | 'viewer' | 'shiftsupervisor';
-export type Module = 'landport' | 'seaport' | 'airport' | 'egate' | 'analyst' | 'shiftsupervisor' | 'control-room';
+export type Module = 'landport' | 'seaport' | 'airport' | 'egate' | 'analyst' | 'control-room' | 'gate-supervisor';
 export type Permission = 
   | 'records:view'
   | 'records:create'

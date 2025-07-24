@@ -203,5 +203,125 @@
     "cardDescription": "Acceda al tablero y las herramientas de {module}.",
     "openModule": "Abrir Módulo",
     "notYourPortals": "¿No ve el portal que está buscando? Contacte a su administrador."
+  },
+  "LiveProcessingFlow": {
+    "toast": {
+      "extractionFailedTitle": "Error en la extracción de datos",
+      "extractionFailedDescription": "No se pudieron leer los datos del documento. Inténtelo de nuevo con una imagen más clara.",
+      "missingInfoTitle": "Falta información",
+      "missingInfoDescription": "Se requiere el escaneo facial para continuar.",
+      "analysisFailedTitle": "Falló el análisis de IA",
+      "missingDataTitle": "Faltan datos",
+      "missingDataDescription": "No se puede completar la transacción debido a la falta de datos.",
+      "saveFailedTitle": "Error al guardar",
+      "saveFailedDescription": "No se pudieron guardar los datos de la transacción.",
+      "decisionRequiredTitle": "Se requiere una decisión",
+      "decisionRequiredDescription": "Seleccione Aprobar o Rechazar.",
+      "transactionCompleteTitle": "Transacción completada",
+      "transactionCompleteDescription": "Pasajero procesado y registro guardado. Decisión: {decision}",
+      "transferredTitle": "Transferido al Gerente de Turno",
+      "transferredDescription": "La transacción {id} se envió para revisión del supervisor.",
+      "transferFailedDescription": "No se pudo transferir al gerente de turno debido a la falta de datos del pasajero.",
+      "cameraDeniedTitle": "Acceso a la cámara denegado.",
+      "cameraErrorTitle": "Error de la cámara",
+      "cameraErrorDescription": "La transmisión de la cámara aún no está lista. Espere un momento y vuelva a intentarlo."
+    },
+    "alert": {
+      "visaRequired": "Visa requerida - No encontrada",
+      "escalatedNotes": "El pasajero requiere una visa pero no se encontró ninguna. Escalado al Gerente de Turno.",
+      "missingVisaTitle": "Acción requerida: Falta visa válida",
+      "missingVisaDescription": "Este pasajero requiere una visa, pero no se encontró una válida. Esta transacción debe ser escalada."
+    },
+    "common": {
+      "name": "Nombre",
+      "nationality": "Nacionalidad",
+      "dob": "Fecha de nacimiento",
+      "passportNo": "Pasaporte #",
+      "gender": "Género",
+      "issueDate": "Fecha de emisión",
+      "expiryDate": "Fecha de vencimiento",
+      "firstName": "Nombre",
+      "lastName": "Apellido",
+      "issuingCountry": "País emisor",
+      "backAndRescan": "Volver y volver a escanear",
+      "rescanDocument": "Volver a escanear el documento",
+      "confirmAndProceed": "Confirmar y continuar",
+      "back": "Atrás",
+      "riskLevel": "Nivel de riesgo"
+    },
+    "workflow": {
+      "title": "Flujo de trabajo de procesamiento",
+      "docScan": "Escaneo de documentos",
+      "visaCheck": "Verificación de visa",
+      "identity": "Confirmación de identidad",
+      "biometric": "Captura biométrica",
+      "security": "Controles de seguridad e IA",
+      "review": "Revisión del oficial",
+      "skipped": "Omitido"
+    },
+    "scanCard": {
+      "preview": "Vista previa de {title}",
+      "rescan": "Volver a escanear el documento",
+      "scan": "Escanear documento",
+      "clear": "Borrar escaneo"
+    },
+    "captureCard": {
+      "retake": "Retomar",
+      "capture": "Capturar"
+    },
+    "uploadDocument": {
+      "title": "1. Escanear documento",
+      "description": "Coloque el pasaporte del pasajero en el escáner o cargue una imagen para comenzar.",
+      "passport": "Pasaporte"
+    },
+    "matchFound": {
+      "title": "Coincidencia de pasajero encontrada",
+      "description": "Se encontró un registro existente. Revíselo y elija cómo proceder.",
+      "existingRecord": "Registro existente",
+      "scannedData": "Nuevos datos escaneados",
+      "transfer": "Transferir al Gerente de Turno",
+      "chooseAction": "Elegir acción",
+      "chooseActionDescription": "Seleccione cómo proceder con este pasajero.",
+      "updateAll": "Actualizar toda la información con escaneo y continuar",
+      "updateImages": "Actualizar solo imágenes y continuar"
+    },
+    "confirmNew": {
+      "title": "2. Confirmar nuevo pasajero",
+      "description": "Verifique los datos extraídos del documento."
+    },
+    "capturePhoto": {
+      "title": "3. Capturar datos biométricos",
+      "description": "Tome escaneos biométricos en vivo del pasajero. Se requiere escaneo facial.",
+      "cameraNotAvailable": "Cámara no disponible",
+      "faceScan": "Escaneo facial",
+      "leftIris": "Iris izquierdo",
+      "rightIris": "Iris derecho",
+      "fingerprint": "Huella dactilar",
+      "next": "Siguiente: Analizar datos"
+    },
+    "analyzing": {
+      "title": "Analizando...",
+      "description": "La IA está evaluando el riesgo en función de los datos proporcionados. Espere por favor."
+    },
+    "review": {
+      "title": "4. Revisión y decisión del oficial",
+      "description": "Revise la evaluación de la IA y tome una decisión final.",
+      "aiAssessment": "Evaluación de riesgos de la IA",
+      "riskScore": "Puntuación de riesgo",
+      "aiRecommendation": "Recomendación de la IA",
+      "assessmentSummary": "Resumen de la evaluación",
+      "finalDecision": "Decisión final",
+      "approve": "Aprobar",
+      "reject": "Rechazar",
+      "notesPlaceholder": "Agregar notas del oficial (opcional)...",
+      "complete": "Completar transacción",
+      "backToCapture": "Volver a la captura"
+    },
+    "completed": {
+      "title": "Transacción completada",
+      "description": "La transacción se ha registrado correctamente.",
+      "startNew": "Iniciar nueva transacción",
+      "viewAll": "Ver todas las transacciones"
+    }
   }
 }

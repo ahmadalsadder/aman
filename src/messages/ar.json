@@ -247,7 +247,8 @@
       "rescanDocument": "إعادة مسح المستند",
       "confirmAndProceed": "تأكيد ومتابعة",
       "back": "رجوع",
-      "riskLevel": "مستوى المخاطرة"
+      "riskLevel": "مستوى المخاطرة",
+      "cancelTransaction": "إلغاء المعاملة"
     },
     "workflow": {
       "title": "سير عمل المعالجة",

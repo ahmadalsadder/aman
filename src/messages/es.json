@@ -247,7 +247,8 @@
       "rescanDocument": "Volver a escanear el documento",
       "confirmAndProceed": "Confirmar y continuar",
       "back": "Atrás",
-      "riskLevel": "Nivel de riesgo"
+      "riskLevel": "Nivel de riesgo",
+      "cancelTransaction": "Cancelar transacción"
     },
     "workflow": {
       "title": "Flujo de trabajo de procesamiento",

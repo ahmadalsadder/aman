@@ -553,8 +553,8 @@ export function LiveProcessingFlow() {
                                </div>
                             </div>
                         )}
-                         <Button variant="ghost" className="w-full" onClick={() => resetState()}>
-                            <ArrowLeft className="mr-2 h-4 w-4" /> {t('common.backAndRescan')}
+                         <Button variant="destructive" className="w-full" onClick={() => resetState()}>
+                            <XCircle className="mr-2 h-4 w-4" /> {t('common.cancelTransaction')}
                          </Button>
                     </CardContent>
                 </motion.div>
@@ -595,8 +595,8 @@ export function LiveProcessingFlow() {
                             </div>
                         ) : (
                              <div className="flex flex-col gap-2 sm:flex-row">
-                                <Button variant="outline" className="w-full" onClick={() => resetState()}>
-                                    <ArrowLeft className="mr-2 h-4 w-4" /> {t('common.rescanDocument')}
+                                <Button variant="destructive" className="w-full" onClick={() => resetState()}>
+                                    <XCircle className="mr-2 h-4 w-4" /> {t('common.cancelTransaction')}
                                 </Button>
                                 <Button className="w-full" onClick={handleConfirmNewPassenger}>
                                     {t('common.confirmAndProceed')} <ChevronRight className="ml-2 h-4 w-4" />
@@ -626,10 +626,16 @@ export function LiveProcessingFlow() {
                             <Button className="w-full" disabled={!biometricCaptures.face} onClick={handleStartAnalysis}>
                                 {t('capturePhoto.next')} <ChevronRight className="ml-2 h-4 w-4" />
                             </Button>
-                            <Button variant="outline" className="w-full" onClick={() => setCurrentStep(existingPassenger ? 'match_found' : 'confirm_new_passenger')}>
-                                <ArrowLeft className="mr-2 h-4 w-4" />
-                                {t('common.back')}
-                            </Button>
+                             <div className="flex flex-col sm:flex-row gap-2">
+                                <Button variant="outline" className="w-full" onClick={() => setCurrentStep(existingPassenger ? 'match_found' : 'confirm_new_passenger')}>
+                                    <ArrowLeft className="mr-2 h-4 w-4" />
+                                    {t('common.back')}
+                                </Button>
+                                <Button variant="destructive" className="w-full" onClick={resetState}>
+                                    <XCircle className="mr-2 h-4 w-4" />
+                                    {t('common.cancelTransaction')}
+                                </Button>
+                            </div>
                         </div>
                     </CardContent>
                 </motion.div>
@@ -703,11 +709,17 @@ export function LiveProcessingFlow() {
                                 </div>
                             </>
                         )}
+                        <div className="flex flex-col sm:flex-row gap-2">
+                            <Button variant="outline" className="w-full" onClick={() => setCurrentStep('capture_photo')}>
+                                <ArrowLeft className="mr-2 h-4 w-4" />
+                                {t('review.backToCapture')}
+                            </Button>
+                             <Button variant="destructive" className="w-full" onClick={resetState}>
+                                <XCircle className="mr-2 h-4 w-4" />
+                                {t('common.cancelTransaction')}
+                            </Button>
+                        </div>
 
-                        <Button variant="outline" className="w-full" onClick={() => setCurrentStep('capture_photo')}>
-                            <ArrowLeft className="mr-2 h-4 w-4" />
-                            {t('review.backToCapture')}
-                        </Button>
                     </CardContent>
                 </motion.div>
             )

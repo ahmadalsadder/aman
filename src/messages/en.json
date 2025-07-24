@@ -247,7 +247,8 @@
       "rescanDocument": "Re-scan Document",
       "confirmAndProceed": "Confirm & Proceed",
       "back": "Back",
-      "riskLevel": "Risk Level"
+      "riskLevel": "Risk Level",
+      "cancelTransaction": "Cancel Transaction"
     },
     "workflow": {
       "title": "Processing Workflow",

@@ -26,9 +26,10 @@ interface ComboboxProps {
     placeholder?: string;
     searchPlaceholder?: string;
     noResultsText?: string;
+    disabled?: boolean;
 }
 
-export function Combobox({ options, value, onChange, placeholder, searchPlaceholder, noResultsText }: ComboboxProps) {
+export function Combobox({ options, value, onChange, placeholder, searchPlaceholder, noResultsText, disabled }: ComboboxProps) {
   const [open, setOpen] = React.useState(false)
 
   return (
@@ -39,6 +40,7 @@ export function Combobox({ options, value, onChange, placeholder, searchPlacehol
           role="combobox"
           aria-expanded={open}
           className="w-full justify-between"
+          disabled={disabled}
         >
           {value
             ? options.find((option) => option.value === value)?.label

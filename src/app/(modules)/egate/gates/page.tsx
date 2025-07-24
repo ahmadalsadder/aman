@@ -384,7 +384,7 @@ export default function GatesPage() {
             key={gate.id} 
             gate={gate} 
             onView={() => setGateToView(gate)}
-            onEdit={() => router.push(`/egate/gates/${gate.id}/edit`)}
+            onEdit={() => router.push(`/egate/gates/edit/${gate.id}`)}
             onDelete={() => setGateToDelete(gate)}
             onToggleStatus={handleToggleStatus}
             canEdit={canEdit}

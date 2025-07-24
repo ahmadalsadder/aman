@@ -5,7 +5,6 @@ import React, { useState, useMemo, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
-import ReactCrop, { type Crop, centerCrop, makeAspectCrop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 
 
@@ -15,12 +14,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { UploadCloud, File as FileIcon, Trash2, Download, Eye, Loader2, AlertCircle, Pencil, RotateCcw, RotateCw, CropIcon } from 'lucide-react';
+import { UploadCloud, File as FileIcon, Trash2, Download, Eye, Loader2, AlertCircle, Pencil, CropIcon } from 'lucide-react';
 import { FilePdfIcon } from '@/components/icons/file-pdf-icon';
 import { FileAudioIcon } from '@/components/icons/file-audio-icon';
 import { FileVideoIcon } from '@/components/icons/file-video-icon';
 import { Label } from '@/components/ui/label';
-import { Slider } from '@/components/ui/slider';
 
 type OutputType = 'base64' | 'bytes';
 
@@ -104,96 +102,6 @@ const AttachmentViewerDialog = ({ src, name, mimeType }: { src: string; name: st
 };
 
 
-const ImageEditorDialog = ({ src, onSave, onCancel }: { src: string, onSave: (dataUri: string) => void, onCancel: () => void }) => {
-    const [crop, setCrop] = useState<Crop>();
-    const [rotation, setRotation] = useState(0);
-    const imgRef = useRef<HTMLImageElement>(null);
-
-    function handleSaveCrop() {
-        if (!crop || !imgRef.current) return;
-
-        const canvas = document.createElement('canvas');
-        const scaleX = imgRef.current.naturalWidth / imgRef.current.width;
-        const scaleY = imgRef.current.naturalHeight / imgRef.current.height;
-        
-        canvas.width = Math.floor(crop.width * scaleX);
-        canvas.height = Math.floor(crop.height * scaleY);
-        const ctx = canvas.getContext('2d');
-
-        if (!ctx) return;
-        
-        const cropX = crop.x * scaleX;
-        const cropY = crop.y * scaleY;
-
-        ctx.translate(canvas.width / 2, canvas.height / 2);
-        ctx.rotate((rotation * Math.PI) / 180);
-        ctx.translate(-canvas.width / 2, -canvas.height / 2);
-
-        ctx.drawImage(
-            imgRef.current,
-            cropX,
-            cropY,
-            crop.width * scaleX,
-            crop.height * scaleY,
-            0,
-            0,
-            crop.width * scaleX,
-            crop.height * scaleY
-        );
-
-        onSave(canvas.toDataURL('image/jpeg'));
-    }
-
-    function onImageLoad(e: React.SyntheticEvent<HTMLImageElement>) {
-        const { width, height } = e.currentTarget;
-        const newCrop = centerCrop(
-            makeAspectCrop(
-              {
-                unit: '%',
-                width: 90,
-              },
-              1, // aspect ratio 1:1
-              width,
-              height
-            ),
-            width,
-            height
-          );
-        setCrop(newCrop);
-    }
-
-    return (
-        <DialogContent className="max-w-md h-[90vh] flex flex-col lg:max-w-2xl xl:max-w-4xl">
-            <DialogHeader><DialogTitle>Edit Image</DialogTitle></DialogHeader>
-            <div className="flex-grow flex items-center justify-center my-4 overflow-auto">
-                <ReactCrop
-                    crop={crop}
-                    onChange={c => setCrop(c)}
-                    aspect={1}
-                >
-                    <Image
-                        ref={imgRef}
-                        src={src}
-                        alt="Crop preview"
-                        onLoad={onImageLoad}
-                        style={{ transform: `rotate(${rotation}deg)` }}
-                        className="max-h-full w-auto object-contain"
-                    />
-                </ReactCrop>
-            </div>
-            <div className="flex items-center gap-4">
-                <Label htmlFor="rotation" className="flex items-center gap-2"><RotateCw className="h-4 w-4"/> Rotation</Label>
-                <Slider id="rotation" min={0} max={360} step={1} value={[rotation]} onValueChange={(value) => setRotation(value[0])} />
-            </div>
-            <DialogFooter>
-                <Button variant="ghost" onClick={onCancel}>Cancel</Button>
-                <Button onClick={handleSaveCrop}><CropIcon className="mr-2 h-4 w-4"/> Save Changes</Button>
-            </DialogFooter>
-        </DialogContent>
-    );
-};
-
-
 const getFileExtension = (fileName: string) => {
     return fileName.slice(((fileName.lastIndexOf(".") - 1) >>> 0) + 2);
 }
@@ -209,8 +117,6 @@ function SingleUploader({ config, value, onFileChange, outputType, disabled }: {
     const inputRef = useRef<HTMLInputElement>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [uploadProgress, setUploadProgress] = useState(0);
-    const [isEditorOpen, setIsEditorOpen] = useState(false);
-
 
     const handleFileSelect = useCallback(async (selectedFile: File | null) => {
         if (!selectedFile) return;
@@ -268,17 +174,6 @@ function SingleUploader({ config, value, onFileChange, outputType, disabled }: {
         if(inputRef.current) inputRef.current.value = '';
     };
 
-    const handleSaveEdit = (editedDataUri: string) => {
-        if (value) {
-            onFileChange({
-                ...value,
-                content: editedDataUri,
-            });
-            toast({ title: 'Image Edited', description: 'Your changes have been saved.' });
-        }
-        setIsEditorOpen(false);
-    };
-
     const fileSrc = useMemo(() => {
         if (!value) return null;
         if (typeof value.content === 'string') return value.content;
@@ -293,7 +188,7 @@ function SingleUploader({ config, value, onFileChange, outputType, disabled }: {
         if (mime.startsWith('video/')) return 'video';
         return 'other';
     }, [value]);
-
+    
     const FileTypeIcon = useMemo(() => {
         switch(fileType) {
             case 'pdf': return FilePdfIcon;
@@ -306,7 +201,14 @@ function SingleUploader({ config, value, onFileChange, outputType, disabled }: {
     return (
       <div>
         <Label htmlFor={config.name} className={cn(config.required && "after:content-['*'] after:text-destructive after:ml-1")}>{config.label}</Label>
-        <Card id={config.name} className={cn('mt-2 overflow-hidden', disabled && 'bg-muted/50')}>
+        <div 
+            className={cn(
+                'group relative mt-2 flex h-48 w-full cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-muted-foreground/30 bg-secondary/50 transition-colors hover:border-primary hover:bg-primary/5', 
+                disabled && 'cursor-not-allowed !border-muted !bg-muted/50 hover:border-muted',
+                fileType === 'image' && fileSrc && 'border-solid'
+            )}
+            onClick={() => !disabled && inputRef.current?.click()}
+        >
             <input
                 type="file"
                 ref={inputRef}
@@ -314,43 +216,47 @@ function SingleUploader({ config, value, onFileChange, outputType, disabled }: {
                 className="hidden"
                 disabled={disabled}
             />
-            <CardContent className="p-4">
-                <div className="flex items-center gap-4">
-                    <div className="relative flex h-20 w-20 flex-shrink-0 cursor-pointer items-center justify-center rounded-lg bg-secondary" onClick={() => !disabled && inputRef.current?.click()}>
-                        {isLoading ? <Loader2 className="h-8 w-8 animate-spin text-primary" /> : fileSrc && fileType === 'image' ? <Image src={fileSrc} alt={config.label} layout="fill" objectFit="cover" className="rounded-lg" /> : value ? <FileTypeIcon className="h-10 w-10 text-primary" /> : <UploadCloud className="h-10 w-10 text-muted-foreground" />}
-                    </div>
-                    <div className="w-full space-y-2">
-                        <p className="text-xs text-muted-foreground truncate">{value?.fileInfo.name || "No file selected"}</p>
-                        {isLoading || (uploadProgress > 0 && uploadProgress < 100) ? <Progress value={uploadProgress} className="h-2" /> : (
-                            <div className="flex items-center gap-1">
-                                <Button size="sm" variant="outline" onClick={() => inputRef.current?.click()} disabled={disabled}>
-                                    <UploadCloud className="mr-2 h-4 w-4" />
-                                    {value ? 'Change' : 'Upload'}
-                                </Button>
-                                {value && (
-                                    <Dialog open={isEditorOpen} onOpenChange={setIsEditorOpen}>
-                                        <TooltipProvider>
-                                            <Dialog>
-                                                {fileSrc &&
-                                                    <Tooltip><TooltipTrigger asChild><DialogTrigger asChild><Button size="sm" variant="ghost"><Eye className="h-4 w-4" /></Button></DialogTrigger></TooltipTrigger><TooltipContent><p>View</p></TooltipContent></Tooltip>
-                                                }
-                                                <AttachmentViewerDialog src={fileSrc!} name={value.fileInfo.name} mimeType={value.fileInfo.type} />
-                                            </Dialog>
-                                            
-                                            <Tooltip><TooltipTrigger asChild><Button size="sm" variant="ghost" disabled={disabled} onClick={handleDelete}><Trash2 className="h-4 w-4 text-destructive" /></Button></TooltipTrigger><TooltipContent><p>Delete</p></TooltipContent></Tooltip>
-                                            {fileSrc && 
-                                                <Tooltip><TooltipTrigger asChild><Button size="sm" variant="ghost" asChild><a href={fileSrc} download={value.fileInfo.name}><Download className="h-4 w-4" /></a></Button></TooltipTrigger><TooltipContent><p>Download</p></TooltipContent></Tooltip>
-                                            }
-                                        </TooltipProvider>
-                                        
-                                    </Dialog>
-                                )}
-                            </div>
-                        )}
-                    </div>
+
+            {isLoading && (
+                <div className="flex flex-col items-center gap-2 text-primary">
+                    <Loader2 className="h-8 w-8 animate-spin" />
+                    <p className="text-sm font-semibold">Uploading...</p>
+                    <Progress value={uploadProgress} className="h-1 w-24" />
                 </div>
-            </CardContent>
-        </Card>
+            )}
+
+            {!isLoading && !value && (
+                <div className="text-center text-muted-foreground">
+                    <UploadCloud className="mx-auto h-10 w-10" />
+                    <p className="mt-2 font-semibold">Click to upload</p>
+                    <p className="text-xs">or drag and drop</p>
+                </div>
+            )}
+            
+            {!isLoading && value && fileSrc && (
+                 <>
+                    {fileType === 'image' ? (
+                         <Image src={fileSrc} alt={config.label} layout="fill" objectFit="cover" className="rounded-lg" />
+                    ) : (
+                        <div className="flex flex-col items-center gap-2 text-primary">
+                            <FileTypeIcon className="h-12 w-12" />
+                            <p className="text-sm font-semibold text-center max-w-full truncate px-4">{value.fileInfo.name}</p>
+                        </div>
+                    )}
+                    <div className="absolute inset-0 flex items-center justify-center gap-2 rounded-lg bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">
+                        <Dialog>
+                             <TooltipProvider>
+                                <Tooltip><TooltipTrigger asChild><DialogTrigger asChild><Button size="icon" variant="ghost" className="text-white hover:bg-white/20 hover:text-white"><Eye/></Button></DialogTrigger></TooltipTrigger><TooltipContent><p>View</p></TooltipContent></Tooltip>
+                                <Tooltip><TooltipTrigger asChild><Button size="icon" variant="ghost" className="text-white hover:bg-white/20 hover:text-white" onClick={(e) => {e.stopPropagation(); handleDelete()}}><Trash2 /></Button></TooltipTrigger><TooltipContent><p>Delete</p></TooltipContent></Tooltip>
+                                <Tooltip><TooltipTrigger asChild><a href={fileSrc} download={value.fileInfo.name} onClick={e => e.stopPropagation()}><Button size="icon" variant="ghost" className="text-white hover:bg-white/20 hover:text-white" asChild><span className="flex items-center justify-center"><Download/></span></Button></a></TooltipTrigger><TooltipContent><p>Download</p></TooltipContent></Tooltip>
+                            </TooltipProvider>
+                            <AttachmentViewerDialog src={fileSrc!} name={value.fileInfo.name} mimeType={value.fileInfo.type} />
+                        </Dialog>
+                    </div>
+                </>
+            )}
+
+        </div>
       </div>
     );
 }

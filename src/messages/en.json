@@ -637,7 +637,7 @@
     "toast": {
       "statusUpdated": {
         "title": "Gate {status, select, Active {Activated} other {Deactivated}}",
-        "description": "Gate \"{name}\" has been set to {status}."
+        "description": "Gate \"{name}\" has been set to {status, select, Active {active} other {offline}}."
       },
       "deleteSuccess": {
         "title": "Gate Deleted",

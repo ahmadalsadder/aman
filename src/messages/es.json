@@ -637,7 +637,7 @@
     "toast": {
       "statusUpdated": {
         "title": "Puerta {status, select, Active {Activada} other {Desactivada}}",
-        "description": "La puerta \"{name}\" se ha establecido como {status}."
+        "description": "La puerta \"{name}\" se ha establecido como {status, select, Active {activa} other {fuera de línea}}."
       },
       "deleteSuccess": {
         "title": "Puerta Eliminada",

@@ -1,5 +1,6 @@
 
 
+import type { Port, Terminal, Zone, Workflow, RiskProfile } from './configuration';
 
 export interface Passenger {
     id: string;
@@ -141,13 +142,19 @@ export interface Gate {
     id: string;
     code: string;
     name: string;
+    portId: string;
+    terminalId: string;
+    zoneId: string;
     terminalName: string;
+    zoneName: string;
     type: 'Entry' | 'Exit' | 'Bidirectional' | 'VIP' | 'Crew';
     status: 'Active' | 'Maintenance' | 'Offline' | 'Limited';
     ipAddress: string;
     macAddress: string;
     lastMaintenance: string;
     lastModified: string;
+    warrantyStartDate?: string;
+    warrantyEndDate?: string;
     currentLoad?: number;
     passengerCount?: number;
     avgProcessingTime?: string;
@@ -163,4 +170,6 @@ export interface Gate {
       capacity: number;
     };
   }
+
+export { Port, Terminal, Zone, Workflow, RiskProfile };
     

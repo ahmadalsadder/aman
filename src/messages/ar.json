@@ -647,6 +647,69 @@
         "title": "فشلت العملية",
         "description": "حدث خطأ. يرجى المحاولة مرة أخرى."
       }
+    },
+    "form": {
+      "addTitle": "إضافة بوابة إلكترونية جديدة",
+      "addDescription": "تكوين بوابة آلية جديدة لمعالجة الركاب.",
+      "editTitle": "تحرير البوابة الإلكترونية",
+      "editDescription": "تحديث التكوين للبوابة {gateName}.",
+      "common": {
+        "cancel": "إلغاء",
+        "save": "حفظ التغييرات",
+        "add": "إضافة بوابة"
+      },
+      "basicInfo": {
+        "title": "المعلومات الأساسية",
+        "description": "تفاصيل التعريف والموقع الأساسية للبوابة.",
+        "name": "اسم البوابة",
+        "code": "رمز البوابة",
+        "port": "المنفذ",
+        "selectPort": "اختر منفذًا...",
+        "terminal": "المحطة",
+        "selectTerminal": "اختر محطة...",
+        "zone": "المنطقة",
+        "selectZone": "اختر منطقة..."
+      },
+      "technicalInfo": {
+        "title": "التفاصيل الفنية",
+        "description": "معرفات الشبكة ومعلومات الأجهزة.",
+        "ipAddress": "عنوان IP",
+        "macAddress": "عنوان MAC"
+      },
+      "config": {
+        "title": "التكوين التشغيلي",
+        "description": "تحديد كيفية عمل البوابة.",
+        "status": "الحالة",
+        "type": "نوع البوابة",
+        "warrantyStart": "تاريخ بدء الضمان",
+        "warrantyEnd": "تاريخ انتهاء الضمان",
+        "pickDate": "اختر تاريخًا"
+      },
+      "entryConfig": {
+        "title": "تكوين الدخول",
+        "workflow": "سير عمل الدخول",
+        "selectWorkflow": "اختر سير عمل...",
+        "riskProfile": "ملف تعريف مخاطر الدخول",
+        "selectRiskProfile": "اختر ملف تعريف مخاطر...",
+        "capacity": "سعة الطابور"
+      },
+      "exitConfig": {
+        "title": "تكوين الخروج",
+        "workflow": "سير عمل الخروج",
+        "selectWorkflow": "اختر سير عمل...",
+        "riskProfile": "ملف تعريف مخاطر الخروج",
+        "selectRiskProfile": "اختر ملف تعريف مخاطر...",
+        "capacity": "سعة الطابور"
+      },
+      "toast": {
+        "updateSuccessTitle": "تم تحديث البوابة",
+        "updateSuccessDesc": "تم تحديث البوابة '{gateName}' بنجاح.",
+        "addSuccessTitle": "تمت إضافة البوابة",
+        "addSuccessDesc": "تم إنشاء البوابة الجديدة '{gateName}' بنجاح.",
+        "errorTitle": "فشلت العملية",
+        "errorDesc": "حدث خطأ. يرجى المحاولة مرة أخرى.",
+        "loadError": "فشل تحميل بيانات البوابة. يرجى المحاولة مرة أخرى لاحقًا."
+      }
     }
   }
 }

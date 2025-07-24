@@ -647,6 +647,69 @@
         "title": "Operación Fallida",
         "description": "Ocurrió un error. Por favor, inténtelo de nuevo."
       }
+    },
+    "form": {
+        "addTitle": "Añadir Nueva Puerta Electrónica",
+        "addDescription": "Configurar una nueva puerta automatizada para el procesamiento de pasajeros.",
+        "editTitle": "Editar Puerta Electrónica",
+        "editDescription": "Actualizar la configuración para la puerta {gateName}.",
+        "common": {
+            "cancel": "Cancelar",
+            "save": "Guardar Cambios",
+            "add": "Añadir Puerta"
+        },
+        "basicInfo": {
+            "title": "Información Básica",
+            "description": "Detalles de identificación y ubicación principales de la puerta.",
+            "name": "Nombre de la Puerta",
+            "code": "Código de la Puerta",
+            "port": "Puerto",
+            "selectPort": "Seleccione un puerto...",
+            "terminal": "Terminal",
+            "selectTerminal": "Seleccione una terminal...",
+            "zone": "Zona",
+            "selectZone": "Seleccione una zona..."
+        },
+        "technicalInfo": {
+            "title": "Detalles Técnicos",
+            "description": "Identificadores de red e información de hardware.",
+            "ipAddress": "Dirección IP",
+            "macAddress": "Dirección MAC"
+        },
+        "config": {
+            "title": "Configuración Operativa",
+            "description": "Definir cómo funciona la puerta.",
+            "status": "Estado",
+            "type": "Tipo de Puerta",
+            "warrantyStart": "Fecha de Inicio de la Garantía",
+            "warrantyEnd": "Fecha de Fin de la Garantía",
+            "pickDate": "Elija una fecha"
+        },
+        "entryConfig": {
+            "title": "Configuración de Entrada",
+            "workflow": "Flujo de Trabajo de Entrada",
+            "selectWorkflow": "Seleccione un flujo de trabajo...",
+            "riskProfile": "Perfil de Riesgo de Entrada",
+            "selectRiskProfile": "Seleccione un perfil de riesgo...",
+            "capacity": "Capacidad de la Cola"
+        },
+        "exitConfig": {
+            "title": "Configuración de Salida",
+            "workflow": "Flujo de Trabajo de Salida",
+            "selectWorkflow": "Seleccione un flujo de trabajo...",
+            "riskProfile": "Perfil de Riesgo de Salida",
+            "selectRiskProfile": "Seleccione un perfil de riesgo...",
+            "capacity": "Capacidad de la Cola"
+        },
+        "toast": {
+            "updateSuccessTitle": "Puerta Actualizada",
+            "updateSuccessDesc": "La puerta '{gateName}' ha sido actualizada exitosamente.",
+            "addSuccessTitle": "Puerta Añadida",
+            "addSuccessDesc": "La nueva puerta '{gateName}' ha sido creada exitosamente.",
+            "errorTitle": "Operación Fallida",
+            "errorDesc": "Ocurrió un error. Por favor, inténtelo de nuevo.",
+            "loadError": "Error al cargar los datos de la puerta. Por favor, inténtelo de nuevo más tarde."
+        }
     }
   }
 }

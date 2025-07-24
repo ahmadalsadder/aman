@@ -588,8 +588,34 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
     }
     
     // GATES DATA
+    if (method === 'GET' && url.pathname.startsWith('/data/gates/')) {
+        const id = pathParts[pathParts.length - 1];
+        const gate = mockGates.find(g => g.id === id);
+        if (gate) {
+            return Result.success({ gate }) as Result<T>;
+        }
+        return Result.failure([new ApiError('NOT_FOUND', `Gate with id ${id} not found.`)]) as Result<T>;
+    }
+    
     if (method === 'GET' && url.pathname === '/data/gates') {
         return Result.success(mockGates) as Result<T>;
+    }
+
+    if (method === 'POST' && url.pathname === '/data/gates/save') {
+        const gateData = JSON.parse(body as string) as Gate;
+        const isNew = !gateData.id;
+        
+        let updatedGate: Gate;
+        if (isNew) {
+            updatedGate = { ...gateData, id: `GATE-NEW-${Date.now()}`, lastModified: new Date().toISOString() };
+            const newGates = [...mockGates, updatedGate];
+            setMockGates(newGates);
+        } else {
+            updatedGate = { ...gateData, lastModified: new Date().toISOString() };
+            const newGates = mockGates.map(d => d.id === gateData.id ? updatedGate : d);
+            setMockGates(newGates);
+        }
+        return Result.success(updatedGate) as Result<T>;
     }
 
     if (method === 'POST' && url.pathname === '/data/gates/update-status') {
@@ -669,7 +695,10 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
 
     if (method === 'GET' && url.pathname === '/data/ports') {
         const moduleType = url.searchParams.get('moduleType');
-        const portsForModule = mockPorts.filter(p => p.type.toLowerCase() === moduleType);
+        let portsForModule = mockPorts;
+        if (moduleType) {
+            portsForModule = mockPorts.filter(p => p.type.toLowerCase() === moduleType);
+        }
         return Result.success(portsForModule) as Result<T>;
     }
     if (method === 'GET' && url.pathname === '/data/terminals') {

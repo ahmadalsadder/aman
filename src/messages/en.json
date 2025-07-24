@@ -647,6 +647,69 @@
         "title": "Operation Failed",
         "description": "An error occurred. Please try again."
       }
+    },
+     "form": {
+        "addTitle": "Add New E-Gate",
+        "addDescription": "Configure a new automated gate for passenger processing.",
+        "editTitle": "Edit E-Gate",
+        "editDescription": "Update the configuration for gate {gateName}.",
+        "common": {
+            "cancel": "Cancel",
+            "save": "Save Changes",
+            "add": "Add Gate"
+        },
+        "basicInfo": {
+            "title": "Basic Information",
+            "description": "Core identification and location details for the gate.",
+            "name": "Gate Name",
+            "code": "Gate Code",
+            "port": "Port",
+            "selectPort": "Select a port...",
+            "terminal": "Terminal",
+            "selectTerminal": "Select a terminal...",
+            "zone": "Zone",
+            "selectZone": "Select a zone..."
+        },
+        "technicalInfo": {
+            "title": "Technical Details",
+            "description": "Network identifiers and hardware information.",
+            "ipAddress": "IP Address",
+            "macAddress": "MAC Address"
+        },
+        "config": {
+            "title": "Operational Configuration",
+            "description": "Define how the gate functions.",
+            "status": "Status",
+            "type": "Gate Type",
+            "warrantyStart": "Warranty Start Date",
+            "warrantyEnd": "Warranty End Date",
+            "pickDate": "Pick a date"
+        },
+        "entryConfig": {
+            "title": "Entry Configuration",
+            "workflow": "Entry Workflow",
+            "selectWorkflow": "Select a workflow...",
+            "riskProfile": "Entry Risk Profile",
+            "selectRiskProfile": "Select a risk profile...",
+            "capacity": "Queue Capacity"
+        },
+        "exitConfig": {
+            "title": "Exit Configuration",
+            "workflow": "Exit Workflow",
+            "selectWorkflow": "Select a workflow...",
+            "riskProfile": "Exit Risk Profile",
+            "selectRiskProfile": "Select a risk profile...",
+            "capacity": "Queue Capacity"
+        },
+        "toast": {
+            "updateSuccessTitle": "Gate Updated",
+            "updateSuccessDesc": "Gate '{gateName}' has been successfully updated.",
+            "addSuccessTitle": "Gate Added",
+            "addSuccessDesc": "New gate '{gateName}' has been successfully created.",
+            "errorTitle": "Operation Failed",
+            "errorDesc": "An error occurred. Please try again.",
+            "loadError": "Failed to load gate data. Please try again later."
+        }
     }
   }
 }

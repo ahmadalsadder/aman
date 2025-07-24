@@ -193,7 +193,6 @@ export function LiveProcessingFlow() {
         const result = await extractPassportData({ passportPhotoDataUri: dataUri });
         setExtractedData(result);
         
-        // Don't set workflow here anymore. It will be set by the API response.
         setCurrentStep('confirm_new_passenger');
         addLog(`Data extracted for passenger: ${result.firstName} ${result.lastName}`);
     } catch (error) {
@@ -202,7 +201,7 @@ export function LiveProcessingFlow() {
     } finally {
         setIsScanning(false);
     }
-  }
+}
 
   const handleCapture = (biometricType: keyof typeof biometricCaptures) => {
     if (videoRef.current && canvasRef.current) {
@@ -252,7 +251,6 @@ export function LiveProcessingFlow() {
       if (apiResponse.isSuccess && apiResponse.data) {
         const { riskResult, existingPassenger, visaCheckResult, workflow } = apiResponse.data as any;
   
-        // Set all the state from the single API response
         setAiResult(riskResult);
         setExistingPassenger(existingPassenger || null);
         setVisaCheckResult(visaCheckResult);
@@ -283,7 +281,7 @@ export function LiveProcessingFlow() {
     } catch (error) {
       console.error("API Analysis Error:", error);
       toast({ variant: 'destructive', title: t('toast.analysisFailedTitle') });
-      setCurrentStep('capture_photo'); // Go back a step on failure
+      setCurrentStep('capture_photo');
     }
   };
 
@@ -702,3 +700,5 @@ export function LiveProcessingFlow() {
     </div>
   );
 }
+
+    

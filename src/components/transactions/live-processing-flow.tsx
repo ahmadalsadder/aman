@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
@@ -41,12 +41,13 @@ import {
   Fingerprint,
   Users,
   FileWarning,
+  AlertTriangle
 } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
 import { api } from '@/lib/api';
 import { useTranslations } from 'next-intl';
-import type { Module } from '@/types';
+import type { Module, Permission } from '@/types';
 import { FlightDetailsCard } from '@/app/(modules)/airport/transactions/components/flight-details-card';
 import { VehicleDetailsCard } from '@/app/(modules)/landport/transactions/components/vehicle-details-card';
 import { VesselDetailsCard } from '@/app/(modules)/seaport/transactions/components/vessel-details-card';
@@ -124,7 +125,7 @@ const DetailItem = ({ label, value }: { label: string; value?: string | null }) 
 export function LiveProcessingFlow({ module }: { module: Module }) {
   const router = useRouter();
   const { toast } = useToast();
-  const { user } = useAuth();
+  const { user, hasPermission } = useAuth();
   const t = useTranslations('LiveProcessingFlow');
   
   const [currentStep, setCurrentStep] = useState<ProcessingStep>('upload_document');
@@ -165,6 +166,8 @@ export function LiveProcessingFlow({ module }: { module: Module }) {
   const isWorkflowVisible = workflow.length > 0;
   
   const addLog = useCallback((message: string) => { console.log(message) }, []);
+
+  const canProcessLive = useMemo(() => hasPermission([`${module}:transactions:live` as Permission]), [hasPermission, module]);
 
   const resetState = () => {
     setCurrentStep('upload_document');
@@ -431,6 +434,18 @@ export function LiveProcessingFlow({ module }: { module: Module }) {
 
   const allAlertsAcknowledged = aiResult ? aiResult.alerts.every((alert: string) => approvedAlerts[alert]) : true;
   const hardStop = visaCheckResult === 'invalid';
+
+  if (!canProcessLive) {
+    return (
+        <div className="flex h-full w-full flex-col items-center justify-center gap-4 text-center">
+            <AlertTriangle className="h-16 w-16 text-destructive" />
+            <h1 className="text-2xl font-bold">Access Denied</h1>
+            <p className="max-w-md text-muted-foreground">
+                You do not have permission to perform live transaction processing.
+            </p>
+        </div>
+    );
+  }
 
   const renderContent = () => {
     switch (currentStep) {

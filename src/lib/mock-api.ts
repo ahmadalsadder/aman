@@ -5,6 +5,7 @@
 
 
 
+
 import type { User } from '@/types';
 import { Result, ApiError } from '@/types/api/result';
 import { mockPassengers, mockTransactions, mockVisaDatabase, mockOfficerDesks } from './mock-data';
@@ -25,7 +26,8 @@ const users: User[] = [
     modules: ['dashboard', 'landport', 'seaport', 'airport', 'egate', 'analyst', 'shiftsupervisor', 'control-room', 'users', 'settings', 'gate-supervisor'],
     permissions: [
         'records:view', 'records:create', 'records:edit', 'records:delete', 'users:manage', 'reports:view',
-        'airport:transactions:view', 'landport:transactions:view', 'seaport:transactions:view', 'gate-supervisor:transactions:view'
+        'airport:transactions:view', 'landport:transactions:view', 'seaport:transactions:view', 'gate-supervisor:transactions:view',
+        'airport:transactions:live', 'landport:transactions:live', 'seaport:transactions:live', 'gate-supervisor:transactions:live'
     ]
   },
   { 
@@ -56,7 +58,7 @@ const users: User[] = [
     role: 'shiftsupervisor',
     token: 'fake-supervisor-token',
     modules: ['airport', 'landport', 'seaport', 'control-room', 'gate-supervisor'],
-    permissions: ['records:view', 'records:edit', 'reports:view', 'airport:transactions:view', 'landport:transactions:view', 'seaport:transactions:view', 'gate-supervisor:transactions:view']
+    permissions: ['records:view', 'records:edit', 'reports:view', 'airport:transactions:view', 'landport:transactions:view', 'seaport:transactions:view', 'gate-supervisor:transactions:view', 'airport:transactions:live', 'landport:transactions:live', 'seaport:transactions:live', 'gate-supervisor:transactions:live']
   },
   {
     id: '5',

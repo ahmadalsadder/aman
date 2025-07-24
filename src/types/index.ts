@@ -13,7 +13,12 @@ export type Permission =
   | 'airport:transactions:view'
   | 'landport:transactions:view'
   | 'seaport:transactions:view'
-  | 'gate-supervisor:transactions:view';
+  | 'gate-supervisor:transactions:view'
+  // Action-level permissions
+  | 'airport:transactions:live'
+  | 'landport:transactions:live'
+  | 'seaport:transactions:live'
+  | 'gate-supervisor:transactions:live';
 
 
 export interface User {

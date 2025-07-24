@@ -21,11 +21,11 @@ import { SidebarTrigger } from '@/components/ui/sidebar';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/hooks/use-auth';
 import Link from 'next/link';
-import type { Module } from '@/types';
+import type { Module, Permission } from '@/types';
 import { cn } from '@/lib/utils';
 
 export default function Header() {
-  const { user, logout } = useAuth();
+  const { user, logout, hasPermission } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
   const t = useTranslations('Header');
@@ -35,6 +35,8 @@ export default function Header() {
   const currentModule = pathname.split('/')[1] as Module;
 
   const showQuickActions = ['airport', 'landport', 'seaport', 'shiftsupervisor', 'gate-supervisor'].includes(currentModule);
+  const canProcessLive = React.useMemo(() => hasPermission([`${currentModule}:transactions:live` as Permission]), [hasPermission, currentModule]);
+
 
   React.useEffect(() => {
     const handleLocaleChange = (event: CustomEvent) => {
@@ -69,7 +71,7 @@ export default function Header() {
         </div>
       </div>
       <div className="flex items-center gap-4">
-        {showQuickActions && (
+        {showQuickActions && canProcessLive && (
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button variant="outline">

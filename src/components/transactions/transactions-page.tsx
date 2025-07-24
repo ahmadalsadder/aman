@@ -77,6 +77,7 @@ export function TransactionsPage({ module, title, description }: TransactionsPag
   const t = useTranslations('Transactions');
 
   const canViewPage = useMemo(() => hasPermission([`${module}:transactions:view` as Permission]), [hasPermission, module]);
+  const canProcessLive = useMemo(() => hasPermission([`${module}:transactions:live` as Permission]), [hasPermission, module]);
 
   useEffect(() => {
     if (!canViewPage) {
@@ -311,11 +312,13 @@ export function TransactionsPage({ module, title, description }: TransactionsPag
         icon={ArrowRightLeft}
       >
         <div className="flex gap-2">
-          <Button asChild className="bg-white font-semibold text-primary hover:bg-white/90">
-              <Link href={`/${module}/transactions/live-processing`}>
-                  <PlusCircle className="mr-2 h-4 w-4" /> {t('processTransaction')}
-              </Link>
-          </Button>
+          {canProcessLive && (
+            <Button asChild className="bg-white font-semibold text-primary hover:bg-white/90">
+                <Link href={`/${module}/transactions/live-processing`}>
+                    <PlusCircle className="mr-2 h-4 w-4" /> {t('processTransaction')}
+                </Link>
+            </Button>
+          )}
         </div>
       </GradientPageHeader>
       

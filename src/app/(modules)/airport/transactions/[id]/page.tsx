@@ -204,7 +204,7 @@ export default function TransactionDetailsPage() {
                           step.status === 'Failed' ? 'bg-red-100 dark:bg-red-900' : 
                           step.status === 'Skipped' ? 'bg-gray-100 dark:bg-gray-700' : ''
                       )}>
-                          {config ? <step.Icon className={cn("h-5 w-5", config.color)} /> : <step.Icon className="h-5 w-5" />}
+                          {config?.icon && <config.icon className={cn("h-5 w-5", config.color)} />}
                       </div>
                       <div className="flex-grow pt-1">
                         <p className="font-medium text-sm">{step.name}</p>

@@ -115,6 +115,7 @@ const ImageEditorDialog = ({ src, onSave, onCancel }: { src: string, onSave: (da
         const canvas = document.createElement('canvas');
         const scaleX = imgRef.current.naturalWidth / imgRef.current.width;
         const scaleY = imgRef.current.naturalHeight / imgRef.current.height;
+        
         canvas.width = Math.floor(crop.width * scaleX);
         canvas.height = Math.floor(crop.height * scaleY);
         const ctx = canvas.getContext('2d');

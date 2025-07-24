@@ -2,7 +2,7 @@
 'use client';
 
 import * as React from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/use-auth';
 import { getModuleNavItems, type NavItem } from '@/lib/navigation';
@@ -22,12 +22,13 @@ import {
 } from '@/components/ui/sidebar';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useTranslations } from 'next-intl';
-import { ArrowLeft, ChevronDown } from 'lucide-react';
+import { ArrowLeft, ChevronDown, LogOut } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { cn } from '@/lib/utils';
 
 export default function AppSidebar() {
-  const { user, hasPermission } = useAuth();
+  const { user, hasPermission, logout } = useAuth();
+  const router = useRouter();
   const pathname = usePathname();
   const t = useTranslations('Navigation');
 
@@ -46,6 +47,11 @@ export default function AppSidebar() {
 
   
   const [openCollapsibles, setOpenCollapsibles] = React.useState<Record<string, boolean>>({});
+
+  const handleLogout = () => {
+    logout();
+    router.push('/login');
+  };
 
   const getInitials = (name: string) => {
     return name
@@ -151,6 +157,15 @@ export default function AppSidebar() {
             <SidebarSeparator />
         </>
       )}
+        <SidebarMenu>
+            <SidebarMenuItem>
+                <SidebarMenuButton onClick={handleLogout} tooltip={{ children: t('logout') }}>
+                    <LogOut />
+                    <span>{t('logout')}</span>
+                </SidebarMenuButton>
+            </SidebarMenuItem>
+        </SidebarMenu>
+       <SidebarSeparator />
       <SidebarFooter>
         {user && (
           <div className="flex items-center gap-2 p-2">

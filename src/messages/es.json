@@ -47,7 +47,8 @@
     "transactions": "Transacciones",
     "liveProcessing": "Procesamiento en vivo",
     "allTransactions": "Todas las transacciones",
-    "officerDesks": "Escritorios de Oficial"
+    "officerDesks": "Escritorios de Oficial",
+    "logout": "Cerrar sesión"
   },
   "ModulePage": {
     "verifyingAccess": "Verificando acceso...",

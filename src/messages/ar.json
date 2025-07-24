@@ -47,7 +47,8 @@
     "transactions": "المعاملات",
     "liveProcessing": "المعالجة المباشرة",
     "allTransactions": "جميع المعاملات",
-    "officerDesks": "مكاتب الضباط"
+    "officerDesks": "مكاتب الضباط",
+    "logout": "تسجيل الخروج"
   },
   "ModulePage": {
     "verifyingAccess": "التحقق من الوصول...",
@@ -209,6 +210,7 @@
   },
   "Transactions": {
     "processTransaction": "معالجة المعاملة",
+    "manualEntry": "دخول يدوي",
     "filterTitle": "بحث وتصفية المعاملات",
     "filterId": "معرف المعاملة...",
     "filterPassengerName": "اسم المسافر...",

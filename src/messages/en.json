@@ -47,7 +47,8 @@
     "transactions": "Transactions",
     "liveProcessing": "Live Processing",
     "allTransactions": "All Transactions",
-    "officerDesks": "Officer Desks"
+    "officerDesks": "Officer Desks",
+    "logout": "Log out"
   },
   "ModulePage": {
     "verifyingAccess": "Verifying access...",

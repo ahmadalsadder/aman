@@ -7,7 +7,7 @@ import type { Transaction } from '@/types/live-processing';
 import { DataTable } from '@/components/shared/data-table';
 import { GradientPageHeader } from '@/components/shared/gradient-page-header';
 import { Button } from '@/components/ui/button';
-import { ShieldAlert, Eye, User, Printer, AlertTriangle, LayoutDashboard, Search, X } from 'lucide-react';
+import { ShieldAlert, Eye, User, Printer, AlertTriangle, LayoutDashboard, Search, X, Filter, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Progress } from '@/components/ui/progress';
 import Link from 'next/link';
@@ -17,14 +17,8 @@ import { api } from '@/lib/api';
 import { useTranslations } from 'next-intl';
 import { TransactionStatsCard } from '@/components/transactions/transaction-stats-card';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage } from '@/components/ui/breadcrumb';
-import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-
-const typeColors: { [key: string]: 'text-blue-500' | 'text-purple-500' | 'text-orange-500' } = {
-    Entry: 'text-blue-500',
-    Exit: 'text-purple-500',
-    Transit: 'text-orange-500',
-};
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 
 const riskColors: { [key: string]: { text: string; bg: string; border: string; } } = {
   High: { text: 'text-red-700 dark:text-red-300', bg: 'bg-red-500/10', border: 'border-red-500/20' },
@@ -47,7 +41,7 @@ export default function DutyManagerPage() {
         return;
     }
     const fetchData = async () => {
-        const result = await api.get<Transaction[]>('/data/transactions/pending');
+        const result = await api.get<Transaction[]>(`/data/transactions/pending`);
         if (result.isSuccess) {
             setAllPendingTransactions(result.data || []);
         }
@@ -60,8 +54,8 @@ export default function DutyManagerPage() {
     if (!appliedFilter) return allPendingTransactions;
     const lowercasedFilter = appliedFilter.toLowerCase();
     return allPendingTransactions.filter(
-      t => t.passengerName.toLowerCase().includes(lowercasedFilter) ||
-           t.passportNumber.toLowerCase().includes(lowercasedFilter)
+      t => (t.passengerName && t.passengerName.toLowerCase().includes(lowercasedFilter)) ||
+           (t.passportNumber && t.passportNumber.toLowerCase().includes(lowercasedFilter))
     );
   }, [allPendingTransactions, appliedFilter]);
 
@@ -97,11 +91,6 @@ export default function DutyManagerPage() {
       ),
     },
     {
-      accessorKey: 'type',
-      header: t('columns.type'),
-      cell: ({row}) => <div className={cn("font-medium", typeColors[row.original.type])}>{row.original.type}</div>
-    },
-    {
       accessorKey: 'dateTime',
       header: t('columns.dateTime'),
     },
@@ -112,7 +101,7 @@ export default function DutyManagerPage() {
         const riskLevel = getRiskLevel(row.original.riskScore);
         const colorClasses = riskColors[riskLevel];
         return (
-            <div className={cn("flex flex-col gap-2 rounded-md border p-2", colorClasses.bg, colorClasses.border)}>
+            <div className={cn("flex flex-col gap-2 rounded-md border p-2 min-w-[120px]", colorClasses.bg, colorClasses.border)}>
                  <div className="flex items-center justify-between text-xs font-bold">
                     <span className={colorClasses.text}>{riskLevel} Risk</span>
                     <span className={colorClasses.text}>{row.original.riskScore}</span>
@@ -130,15 +119,16 @@ export default function DutyManagerPage() {
       id: 'actions',
       cell: ({ row }) => {
         const transaction = row.original;
+        const module = transaction.tripInformation?.type || 'airport';
         return (
           <div className="flex items-center gap-2">
             <Button asChild variant="ghost" size="icon" className="text-primary hover:text-primary/80">
-              <Link href={`/airport/transactions/${transaction.id}`}>
+              <Link href={`/${module}/transactions/${transaction.id}`}>
                 <Eye className="h-4 w-4" />
               </Link>
             </Button>
-            <Button asChild variant="ghost" size="icon" className="text-primary hover:text-primary/80">
-                <Link href={`/airport/passengers/${transaction.passengerId}/edit`}>
+            <Button asChild variant="ghost" size="icon" className="text-primary hover:text-primary/80" disabled>
+                <Link href={`/${module}/passengers/${transaction.passengerId}/edit`}>
                     <User className="h-4 w-4" />
                 </Link>
             </Button>
@@ -191,20 +181,38 @@ export default function DutyManagerPage() {
         <TransactionStatsCard title={t('stats.mediumRisk')} value={stats.mediumRisk.toLocaleString()} description={t('stats.mediumRiskDesc')} icon={AlertTriangle} iconColor="text-orange-500" />
       </div>
 
+       <Card>
+        <Collapsible>
+          <CollapsibleTrigger asChild>
+            <div className="flex w-full cursor-pointer items-center justify-between p-4">
+              <div className="flex items-center gap-3">
+                <Filter className="h-5 w-5" />
+                <h2 className="text-lg font-semibold">{t('filterTitle', {ns: 'Transactions'})}</h2>
+              </div>
+              <ChevronDown className="h-5 w-5 transition-transform duration-300 [&[data-state=open]]:rotate-180" />
+            </div>
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <div className="p-6 pt-0">
+                <div className="flex items-center gap-2">
+                    <Input 
+                        placeholder={t('filterPlaceholder')}
+                        value={filter}
+                        onChange={(e) => setFilter(e.target.value)}
+                        className="max-w-sm"
+                    />
+                    <Button onClick={handleSearch}><Search className="mr-2 h-4 w-4" />{t('search')}</Button>
+                    <Button onClick={handleReset} variant="outline"><X className="mr-2 h-4 w-4" />{t('reset')}</Button>
+                </div>
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
+      </Card>
+
       <Card>
         <CardHeader>
           <CardTitle>{t('pendingTransactions')}</CardTitle>
           <CardDescription>{t('pendingTransactionsDesc')}</CardDescription>
-           <div className="flex items-center gap-2 pt-4">
-                <Input 
-                    placeholder={t('filterPlaceholder')}
-                    value={filter}
-                    onChange={(e) => setFilter(e.target.value)}
-                    className="max-w-sm"
-                />
-                <Button onClick={handleSearch}><Search className="mr-2 h-4 w-4" />{t('search')}</Button>
-                <Button onClick={handleReset} variant="outline"><X className="mr-2 h-4 w-4" />{t('reset')}</Button>
-           </div>
         </CardHeader>
         <CardContent>
            <DataTable
@@ -217,3 +225,4 @@ export default function DutyManagerPage() {
     </div>
   );
 }
+

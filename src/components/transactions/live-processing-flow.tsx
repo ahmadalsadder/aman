@@ -539,7 +539,7 @@ export function LiveProcessingFlow() {
                                     <AlertTitle>{t('alert.missingVisaTitle')}</AlertTitle>
                                     <AlertDescription>{t('alert.missingVisaDescription')}</AlertDescription>
                                 </Alert>
-                                <Button className="w-full" onClick={handleTransferToDutyManager} variant="destructive">
+                                <Button className="w-full" onClick={handleTransferToDutyManager}>
                                     <ShieldAlert className="mr-2 h-4 w-4" /> {t('matchFound.transfer')}
                                 </Button>
                             </div>
@@ -590,7 +590,7 @@ export function LiveProcessingFlow() {
                                     <AlertTitle>{t('alert.missingVisaTitle')}</AlertTitle>
                                     <AlertDescription>{t('alert.missingVisaDescription')}</AlertDescription>
                                 </Alert>
-                                <Button className="w-full" onClick={handleTransferToDutyManager} variant="destructive">
+                                <Button className="w-full" onClick={handleTransferToDutyManager}>
                                     <ShieldAlert className="mr-2 h-4 w-4" /> {t('matchFound.transfer')}
                                 </Button>
                             </div>
@@ -690,7 +690,7 @@ export function LiveProcessingFlow() {
                                     <AlertTitle>{t('alert.missingVisaTitle')}</AlertTitle>
                                     <AlertDescription>{t('alert.missingVisaDescription')}</AlertDescription>
                                 </Alert>
-                                <Button className="w-full" onClick={handleTransferToDutyManager} variant="destructive">
+                                <Button className="w-full" onClick={handleTransferToDutyManager}>
                                     <ShieldAlert className="mr-2 h-4 w-4" /> {t('matchFound.transfer')}
                                 </Button>
                             </div>

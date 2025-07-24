@@ -1,7 +1,7 @@
 
 
 'use client';
-import { Shield, LayoutDashboard, BarChart3, Users, Settings, Activity, Ship, LandPlot, DoorOpen, PieChart, UserCog, RadioTower, Home, Plane, ArrowRightLeft, Monitor, ClipboardList, AlertTriangle, ShieldAlert } from 'lucide-react';
+import { Shield, LayoutDashboard, BarChart3, Users, Settings, Activity, Ship, LandPlot, DoorOpen, PieChart, UserCog, RadioTower, Home, Plane, ArrowRightLeft, Monitor, ClipboardList, AlertTriangle, ShieldAlert, BrainCircuit } from 'lucide-react';
 import type { Role, Module, Permission } from '@/types';
 
 export interface NavItem {
@@ -84,6 +84,15 @@ export const getModuleNavItems = (module: Module, role: Role, t: any): NavItem[]
             label: t('gateManagement'),
             icon: ClipboardList,
             permission: 'egate:records:view'
+        });
+    }
+
+    if (['airport', 'landport', 'seaport', 'egate'].includes(module)) {
+        baseNav.push({
+            href: `${moduleBaseUrl}/prediction`,
+            label: t('predictiveAnalytics'),
+            icon: BrainCircuit,
+            permission: `${module}:dashboard:forecasts:view` as Permission,
         });
     }
 

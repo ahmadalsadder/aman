@@ -440,6 +440,58 @@ const processingTimeDistributionData = [
     { name: '> 5m', value: 800 },
 ];
 
+const predictionData = {
+    passengerFlow: [
+        { hour: '08:00', air: 120, land: 30, sea: 5, egate: 80 },
+        { hour: '09:00', air: 150, land: 45, sea: 8, egate: 110 },
+        { hour: '10:00', air: 180, land: 50, sea: 10, egate: 130 },
+        { hour: '11:00', air: 200, land: 40, sea: 12, egate: 150 },
+        { hour: '12:00', air: 190, land: 35, sea: 15, egate: 140 },
+    ],
+    processingVelocity: [
+        { type: 'Citizen', time: 35 },
+        { type: 'Resident', time: 45 },
+        { type: 'Visitor', time: 65 },
+        { type: 'VIP', time: 25 },
+        { type: 'Crew', time: 30 },
+    ],
+    queueDynamics: [
+        { time: '08:00', current: 15, historical: 12 },
+        { time: '08:30', current: 25, historical: 20 },
+        { time: '09:00', current: 40, historical: 35 },
+        { time: '09:30', current: 35, historical: 38 },
+        { time: '10:00', current: 55, historical: 50 },
+    ],
+    flightSchedule: {
+        arrivals: [
+            { id: 'EK202', from: 'JFK', time: '08:15', status: 'On Time', gate: 'A12' },
+            { id: 'BA105', from: 'LHR', time: '08:45', status: 'On Time', gate: 'A14' },
+            { id: 'AF655', from: 'CDG', time: '09:30', status: 'Delayed', gate: 'B05' },
+        ],
+        departures: [
+            { id: 'EY101', to: 'AUH', time: '09:00', status: 'Boarding', gate: 'C22' },
+            { id: 'QR1007', to: 'DOH', time: '09:20', status: 'On Time', gate: 'C24' },
+        ]
+    },
+    vesselSchedule: {
+        arrivals: [
+            { id: 'MSC-WRLD', from: 'SGP', time: '07:30', status: 'On Time', berth: 'B2' },
+            { id: 'SYM-SEAS', from: 'BCN', time: '10:00', status: 'Expected', berth: 'C1' },
+        ],
+        departures: [
+            { id: 'QNM-II', to: 'SOU', time: '18:00', status: 'On Time', berth: 'A3' },
+        ]
+    },
+    stats: {
+        passengers: { total: 2450, change: 12.5 },
+        vehicles: { total: 450, change: -5.2 },
+        vessels: { total: 3, change: 0 },
+        processingTime: { avg: '2.8m', change: 3.1 },
+        staff: { recommended: 52, change: 4 },
+    }
+}
+
+
 let allTransactions: Transaction[] = [...mockTransactions];
 
 const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
@@ -570,7 +622,7 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
         } else if (module === 'landport') {
             tripInformation = { type: 'landport', vehiclePlateNumber: 'AUH 12345', vehicleType: 'Car', laneNumber: '3', vehicleMake: 'Toyota' };
         } else if (module === 'seaport') {
-            tripInformation = { type: 'seaport', vesselName: 'Symphony of the Seas', voyageNumber: 'SYM-004', berth: 'B2', lastPortOfCall: 'SGP' };
+            tripInformation = { type: 'seaport', vesselName: 'Symphony of the Seas', voyageNumber: 'SYM-004', berth: 'C4', lastPortOfCall: 'SGP' };
         }
 
 
@@ -762,6 +814,10 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
         return Result.failure([new ApiError('NOT_FOUND', `Forecast data for module '${module}' not found.`)]) as Result<T>;
     }
 
+    if (method === 'GET' && url.pathname === '/dashboard/prediction') {
+        return Result.success(predictionData) as Result<T>;
+    }
+    
     if (method === 'GET' && url.pathname === '/dashboard/gate-rejection-reasons') {
         return Result.success(gateRejectionReasonsData) as Result<T>;
     }

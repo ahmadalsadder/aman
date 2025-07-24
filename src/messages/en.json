@@ -1,4 +1,5 @@
 
+
 {
   "LoginPage": {
     "title": "Welcome to Guardian Gate",
@@ -49,7 +50,8 @@
     "officerDesks": "Officer Desks",
     "gateManagement": "Gate Management",
     "dutyManager": "Duty Manager",
-    "logout": "Log out"
+    "logout": "Log out",
+    "predictiveAnalytics": "Predictive Analytics"
   },
   "ModulePage": {
     "verifyingAccess": "Verifying access...",
@@ -649,7 +651,7 @@
         "description": "An error occurred. Please try again."
       }
     },
-     "form": {
+    "form": {
         "addTitle": "Add New E-Gate",
         "addDescription": "Configure a new automated gate for passenger processing.",
         "editTitle": "Edit E-Gate",
@@ -741,5 +743,47 @@
     "filterPlaceholder": "Filter by passport number...",
     "search": "Search",
     "reset": "Reset"
+  },
+  "Prediction": {
+    "title": "Predictive Analytics",
+    "description": "Forecast passenger flow, processing times, and operational demand.",
+    "searchAndFilter": "Search & Filter",
+    "fromDate": "From Date",
+    "toDate": "To Date",
+    "reset": "Reset",
+    "search": "Search",
+    "stats": {
+      "passenger": "Predicted Passengers",
+      "vehicle": "Predicted Vehicles",
+      "vessel": "Predicted Vessels",
+      "processingTime": "Predicted Avg. Processing Time",
+      "staff": "Recommended Staff"
+    },
+    "passengerFlow": {
+      "title": "Predicted Passenger/Vehicle Flow",
+      "description": "Forecasted hourly traffic across all port types."
+    },
+    "processingVelocity": {
+      "title": "Predicted Processing Velocity",
+      "description": "Average time in seconds to process each passenger type."
+    },
+    "queueDynamics": {
+      "title": "Queue Dynamics",
+      "description": "Comparison of predicted queue lengths against historical data.",
+      "predicted": "Predicted",
+      "historical": "Historical"
+    },
+    "schedule": {
+      "arrivals": "Scheduled Arrivals",
+      "departures": "Scheduled Departures",
+      "flight": "Flight",
+      "vessel": "Vessel",
+      "from": "From",
+      "to": "To",
+      "time": "Time",
+      "status": "Status",
+      "gate": "Gate",
+      "berth": "Berth"
+    }
   }
 }

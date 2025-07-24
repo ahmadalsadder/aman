@@ -239,6 +239,7 @@ export default function TransactionDetailsPage() {
               </ul>
             </CardContent>
           </Card>
+          <CivilRecordCard transaction={transaction} />
           <TripInformationCard transaction={transaction} />
         </div>
 
@@ -342,7 +343,7 @@ export default function TransactionDetailsPage() {
               </CardContent>
             </Card>
           )}
-           <CivilRecordCard transaction={transaction} />
+           
            <Card>
             <CardHeader><CardTitle>Risk Assessment</CardTitle></CardHeader>
             <CardContent className="space-y-4 text-center">

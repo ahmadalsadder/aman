@@ -2,12 +2,12 @@
 
 import type { User } from '@/types';
 import { Result, ApiError } from '@/types/api/result';
-import { mockPassengers, mockTransactions, mockVisaDatabase, mockOfficerDesks, mockPorts, mockTerminals, mockZones, mockWorkflows, mockRiskProfiles, setMockOfficerDesks } from './mock-data';
+import { mockPassengers, mockTransactions, mockVisaDatabase, mockOfficerDesks, mockPorts, mockTerminals, mockZones, mockWorkflows, mockRiskProfiles, setMockOfficerDesks, mockGates, setMockGates } from './mock-data';
 import { assessPassengerRisk } from '@/ai/flows/assess-risk-flow';
 import { countries } from './countries';
 import { Fingerprint, ScanLine, UserCheck, ShieldAlert, User } from 'lucide-react';
 import { extractPassportData } from '@/ai/flows/extract-passport-data-flow';
-import type { Transaction } from '@/types/live-processing';
+import type { Transaction, Gate } from '@/types/live-processing';
 import type { OfficerDesk } from '@/types/configuration';
 
 const users: User[] = [
@@ -24,6 +24,7 @@ const users: User[] = [
         'airport:records:view', 'airport:records:create', 'airport:records:edit', 'airport:records:delete',
         'landport:records:view', 'landport:records:create', 'landport:records:edit', 'landport:records:delete',
         'seaport:records:view', 'seaport:records:create', 'seaport:records:edit', 'seaport:records:delete',
+        'egate:records:view', 'egate:records:create', 'egate:records:edit', 'egate:records:delete',
         'airport:transactions:view', 'landport:transactions:view', 'seaport:transactions:view',
         'airport:transactions:live', 'landport:transactions:live', 'seaport:transactions:live',
         'airport:dashboard:view', 'airport:dashboard:stats:view', 'airport:dashboard:forecasts:view', 'airport:dashboard:charts:view', 'airport:dashboard:officer-performance:view',
@@ -586,6 +587,30 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
         return Result.success(responsePayload) as Result<T>;
     }
     
+    // GATES DATA
+    if (method === 'GET' && url.pathname === '/data/gates') {
+        return Result.success(mockGates) as Result<T>;
+    }
+
+    if (method === 'POST' && url.pathname === '/data/gates/update-status') {
+        const { gateId, status } = JSON.parse(body as string);
+        const newGates = mockGates.map(gate =>
+            gate.id === gateId 
+            ? { ...gate, status, lastModified: new Date().toISOString().split('T')[0] } 
+            : gate
+        );
+        setMockGates(newGates);
+        const updatedGate = newGates.find(g => g.id === gateId);
+        return Result.success(updatedGate) as Result<T>;
+    }
+
+    if (method === 'POST' && url.pathname === '/data/gates/delete') {
+        const { id } = JSON.parse(body as string);
+        setMockGates(mockGates.filter(g => g.id !== id));
+        return Result.success({ id }) as Result<T>;
+    }
+
+
     // CONFIGURATION DATA
     if(method === 'GET' && url.pathname === '/data/desks') {
         const moduleType = url.searchParams.get('moduleType');

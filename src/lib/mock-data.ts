@@ -1,6 +1,6 @@
 
 
-import type { Passenger, Transaction, OfficerDesk } from "@/types/live-processing";
+import type { Passenger, Transaction, OfficerDesk, Gate } from "@/types/live-processing";
 import { Plane, Car, Ship } from "lucide-react";
 import type { Port, Terminal, Zone, Workflow, RiskProfile } from '@/types/configuration';
 
@@ -182,6 +182,18 @@ export const mockVisaDatabase: { passportNumber: string, nationality: string, vi
     }
 ];
 
+export let mockGates: Gate[] = [
+    { id: 'EGATE-01', code: 'A-01', name: 'Main Entry Gate', terminalName: 'Terminal 1', type: 'Entry', status: 'Active', ipAddress: '192.168.1.50', macAddress: 'A1:B2:C3:D4:E5:F6', lastMaintenance: '2023-04-15', lastModified: '2023-05-20', currentLoad: 75, passengerCount: 15, avgProcessingTime: '45s', equipment: [{ name: 'Passport Reader', status: 'online' }, { name: 'Biometric Scanner', status: 'online' }], entryConfig: { workflowId: 'WF-Standard', riskProfileId: 'RR-Low', capacity: 20 } },
+    { id: 'EGATE-02', code: 'A-02', name: 'Main Entry Gate', terminalName: 'Terminal 1', type: 'Entry', status: 'Active', ipAddress: '192.168.1.51', macAddress: 'A1:B2:C3:D4:E5:F7', lastMaintenance: '2023-04-16', lastModified: '2023-05-21', currentLoad: 50, passengerCount: 10, avgProcessingTime: '42s', equipment: [{ name: 'Passport Reader', status: 'online' }, { name: 'Biometric Scanner', status: 'online' }], entryConfig: { workflowId: 'WF-Standard', riskProfileId: 'RR-Low', capacity: 20 } },
+    { id: 'EGATE-03', code: 'B-01', name: 'Business Class Gate', terminalName: 'Terminal 3', type: 'Bidirectional', status: 'Maintenance', ipAddress: '192.168.3.10', macAddress: 'A1:B2:C3:D4:E5:F8', lastMaintenance: '2023-05-18', lastModified: '2023-05-18', currentLoad: 0, passengerCount: 0, avgProcessingTime: 'N/A', equipment: [{ name: 'Passport Reader', status: 'offline' }, { name: 'Biometric Scanner', status: 'online' }], entryConfig: { workflowId: 'WF-FastTrack', riskProfileId: 'RR-Low', capacity: 15 }, exitConfig: { workflowId: 'WF-FastTrack', riskProfileId: 'RR-Low', capacity: 15 } },
+    { id: 'EGATE-04', code: 'C-05', name: 'Exit Gate', terminalName: 'Terminal 1', type: 'Exit', status: 'Offline', ipAddress: '192.168.1.55', macAddress: 'A1:B2:C3:D4:E5:F9', lastMaintenance: '2023-03-20', lastModified: '2023-05-10', currentLoad: 0, passengerCount: 0, avgProcessingTime: 'N/A', equipment: [{ name: 'Passport Reader', status: 'offline' }, { name: 'Biometric Scanner', status: 'offline' }], exitConfig: { workflowId: 'WF-Standard', riskProfileId: 'RR-Low', capacity: 25 } },
+];
+
+
 export const setMockOfficerDesks = (newDesks: OfficerDesk[]) => {
     mockOfficerDesks = newDesks;
+};
+
+export const setMockGates = (newGates: Gate[]) => {
+    mockGates = newGates;
 };

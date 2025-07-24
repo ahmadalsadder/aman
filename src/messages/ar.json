@@ -47,6 +47,7 @@
     "liveProcessing": "المعالجة المباشرة",
     "allTransactions": "جميع المعاملات",
     "officerDesks": "مكاتب الضباط",
+    "gateManagement": "إدارة البوابات",
     "logout": "تسجيل الخروج"
   },
   "ModulePage": {
@@ -569,6 +570,82 @@
         "addSuccessDesc": "تم إنشاء المكتب الجديد '{deskName}' بنجاح.",
         "errorTitle": "فشلت العملية",
         "errorDesc": "حدث خطأ. يرجى المحاولة مرة أخرى."
+      }
+    }
+  },
+  "GatesPage": {
+    "pageTitle": "إدارة البوابات",
+    "pageDescription": "الحالة والأداء في الوقت الفعلي لجميع بوابات مراقبة الحدود.",
+    "addGate": "إضافة بوابة",
+    "noResults": "لا توجد بوابات تطابق المرشحات الحالية.",
+    "accessDenied": {
+      "title": "تم رفض الوصول",
+      "description": "ليس لديك إذن لعرض سجلات البوابة الإلكترونية."
+    },
+    "stats": {
+      "total": "إجمالي البوابات",
+      "totalDesc": "جميع البوابات المكونة",
+      "active": "البوابات النشطة",
+      "activeDesc": "تعمل حاليًا",
+      "maintenance": "في صيانة",
+      "maintenanceDesc": "تحت الصيانة",
+      "offline": "البوابات غير المتصلة",
+      "offlineDesc": "لا تعمل"
+    },
+    "filters": {
+      "title": "بحث وتصفية البوابات",
+      "namePlaceholder": "اسم البوابة أو المحطة...",
+      "terminalPlaceholder": "المحطة",
+      "allTerminals": "جميع المحطات",
+      "typePlaceholder": "النوع",
+      "allTypes": "جميع الأنواع",
+      "statusPlaceholder": "الحالة",
+      "allStatuses": "جميع الحالات",
+      "reset": "إعادة تعيين",
+      "search": "بحث"
+    },
+    "card": {
+      "openMenu": "فتح القائمة",
+      "viewDetails": "عرض التفاصيل",
+      "editGate": "تحرير البوابة",
+      "deactivate": "إلغاء التنشيط",
+      "activate": "تنشيط",
+      "delete": "حذف",
+      "load": "الحمل",
+      "queue": "الطابور",
+      "avgTime": "متوسط الوقت",
+      "lastMaintenance": "آخر صيانة"
+    },
+    "detailsSheet": {
+      "title": "تفاصيل البوابة",
+      "status": "الحالة",
+      "type": "النوع",
+      "terminal": "المحطة",
+      "ipAddress": "عنوان IP",
+      "macAddress": "عنوان MAC",
+      "lastModified": "آخر تعديل",
+      "lastMaintenance": "آخر صيانة",
+      "equipmentStatus": "حالة المعدات",
+      "close": "إغلاق"
+    },
+    "deleteDialog": {
+      "title": "هل أنت متأكد؟",
+      "description": "لا يمكن التراجع عن هذا الإجراء. سيؤدي هذا إلى حذف البوابة '{name}' نهائيًا.",
+      "cancel": "إلغاء",
+      "confirm": "نعم، احذف البوابة"
+    },
+    "toast": {
+      "statusUpdated": {
+        "title": "البوابة {status, select, Active {مفعلة} other {معطلة}}",
+        "description": "تم ضبط البوابة \"{name}\" على {status}."
+      },
+      "deleteSuccess": {
+        "title": "تم حذف البوابة",
+        "description": "تم حذف البوابة نهائيًا."
+      },
+      "error": {
+        "title": "فشلت العملية",
+        "description": "حدث خطأ. يرجى المحاولة مرة أخرى."
       }
     }
   }

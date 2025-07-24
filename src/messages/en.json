@@ -47,6 +47,7 @@
     "liveProcessing": "Live Processing",
     "allTransactions": "All Transactions",
     "officerDesks": "Officer Desks",
+    "gateManagement": "Gate Management",
     "logout": "Log out"
   },
   "ModulePage": {
@@ -569,6 +570,82 @@
         "addSuccessDesc": "New desk '{deskName}' has been successfully created.",
         "errorTitle": "Operation Failed",
         "errorDesc": "An error occurred. Please try again."
+      }
+    }
+  },
+  "GatesPage": {
+    "pageTitle": "Gate Management",
+    "pageDescription": "Real-time status and performance of all border control gates.",
+    "addGate": "Add Gate",
+    "noResults": "No gates match the current filters.",
+    "accessDenied": {
+      "title": "Access Denied",
+      "description": "You do not have permission to view E-Gate records."
+    },
+    "stats": {
+      "total": "Total Gates",
+      "totalDesc": "All configured gates",
+      "active": "Active Gates",
+      "activeDesc": "Currently operational",
+      "maintenance": "In Maintenance",
+      "maintenanceDesc": "Undergoing maintenance",
+      "offline": "Offline Gates",
+      "offlineDesc": "Not operational"
+    },
+    "filters": {
+      "title": "Search & Filter Gates",
+      "namePlaceholder": "Gate Name or Terminal...",
+      "terminalPlaceholder": "Terminal",
+      "allTerminals": "All Terminals",
+      "typePlaceholder": "Type",
+      "allTypes": "All Types",
+      "statusPlaceholder": "Status",
+      "allStatuses": "All Statuses",
+      "reset": "Reset",
+      "search": "Search"
+    },
+    "card": {
+      "openMenu": "Open menu",
+      "viewDetails": "View details",
+      "editGate": "Edit gate",
+      "deactivate": "Deactivate",
+      "activate": "Activate",
+      "delete": "Delete",
+      "load": "Load",
+      "queue": "Queue",
+      "avgTime": "Avg. Time",
+      "lastMaintenance": "Last Maintenance"
+    },
+    "detailsSheet": {
+      "title": "Gate Details",
+      "status": "Status",
+      "type": "Type",
+      "terminal": "Terminal",
+      "ipAddress": "IP Address",
+      "macAddress": "MAC Address",
+      "lastModified": "Last Modified",
+      "lastMaintenance": "Last Maintenance",
+      "equipmentStatus": "Equipment Status",
+      "close": "Close"
+    },
+    "deleteDialog": {
+      "title": "Are you sure?",
+      "description": "This action cannot be undone. This will permanently delete the gate '{name}'.",
+      "cancel": "Cancel",
+      "confirm": "Yes, Delete Gate"
+    },
+    "toast": {
+      "statusUpdated": {
+        "title": "Gate {status, select, Active {Activated} other {Deactivated}}",
+        "description": "Gate \"{name}\" has been set to {status}."
+      },
+      "deleteSuccess": {
+        "title": "Gate Deleted",
+        "description": "The gate has been permanently deleted."
+      },
+      "error": {
+        "title": "Operation Failed",
+        "description": "An error occurred. Please try again."
       }
     }
   }

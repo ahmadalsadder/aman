@@ -1,7 +1,7 @@
 
 
 'use client';
-import { Shield, LayoutDashboard, BarChart3, Users, Settings, Activity, Ship, LandPlot, DoorOpen, PieChart, UserCog, RadioTower, Home, Plane, ArrowRightLeft, Monitor } from 'lucide-react';
+import { Shield, LayoutDashboard, BarChart3, Users, Settings, Activity, Ship, LandPlot, DoorOpen, PieChart, UserCog, RadioTower, Home, Plane, ArrowRightLeft, Monitor, ClipboardList } from 'lucide-react';
 import type { Role, Module, Permission } from '@/types';
 
 export interface NavItem {
@@ -77,6 +77,16 @@ export const getModuleNavItems = (module: Module, role: Role, t: any): NavItem[]
             permission: `${module}:desks:view` as Permission,
         });
     }
+
+    if (module === 'egate') {
+        baseNav.push({
+            href: '/egate/gates',
+            label: t('gateManagement'),
+            icon: ClipboardList,
+            permission: 'egate:records:view'
+        });
+    }
+
 
     // Add admin-specific items if the role is admin
     if (role === 'admin') {

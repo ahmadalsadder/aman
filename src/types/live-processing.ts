@@ -1,5 +1,6 @@
 
 
+
 export interface Passenger {
     id: string;
     firstName: string;
@@ -135,4 +136,31 @@ export interface OfficerDesk {
     id: string;
     name: string;
 }
+
+export interface Gate {
+    id: string;
+    code: string;
+    name: string;
+    terminalName: string;
+    type: 'Entry' | 'Exit' | 'Bidirectional' | 'VIP' | 'Crew';
+    status: 'Active' | 'Maintenance' | 'Offline' | 'Limited';
+    ipAddress: string;
+    macAddress: string;
+    lastMaintenance: string;
+    lastModified: string;
+    currentLoad?: number;
+    passengerCount?: number;
+    avgProcessingTime?: string;
+    equipment?: { name: string; status: 'online' | 'offline' }[];
+    entryConfig?: {
+      workflowId: string;
+      riskProfileId: string;
+      capacity: number;
+    };
+    exitConfig?: {
+      workflowId: string;
+      riskProfileId: string;
+      capacity: number;
+    };
+  }
     

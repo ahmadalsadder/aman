@@ -47,6 +47,7 @@
     "liveProcessing": "Procesamiento en vivo",
     "allTransactions": "Todas las transacciones",
     "officerDesks": "Escritorios de Oficial",
+    "gateManagement": "Gestión de Puertas",
     "logout": "Cerrar sesión"
   },
   "ModulePage": {
@@ -569,6 +570,82 @@
         "addSuccessDesc": "El nuevo escritorio '{deskName}' ha sido creado exitosamente.",
         "errorTitle": "Operación Fallida",
         "errorDesc": "Ocurrió un error. Por favor, inténtelo de nuevo."
+      }
+    }
+  },
+  "GatesPage": {
+    "pageTitle": "Gestión de Puertas",
+    "pageDescription": "Estado y rendimiento en tiempo real de todas las puertas de control fronterizo.",
+    "addGate": "Añadir Puerta",
+    "noResults": "No hay puertas que coincidan con los filtros actuales.",
+    "accessDenied": {
+      "title": "Acceso Denegado",
+      "description": "No tiene permiso para ver los registros de la Puerta Electrónica."
+    },
+    "stats": {
+      "total": "Puertas Totales",
+      "totalDesc": "Todas las puertas configuradas",
+      "active": "Puertas Activas",
+      "activeDesc": "Actualmente operativas",
+      "maintenance": "En Mantenimiento",
+      "maintenanceDesc": "En mantenimiento",
+      "offline": "Puertas Fuera de Línea",
+      "offlineDesc": "No operativas"
+    },
+    "filters": {
+      "title": "Buscar y Filtrar Puertas",
+      "namePlaceholder": "Nombre de la Puerta o Terminal...",
+      "terminalPlaceholder": "Terminal",
+      "allTerminals": "Todas las Terminales",
+      "typePlaceholder": "Tipo",
+      "allTypes": "Todos los Tipos",
+      "statusPlaceholder": "Estado",
+      "allStatuses": "Todos los Estados",
+      "reset": "Reiniciar",
+      "search": "Buscar"
+    },
+    "card": {
+      "openMenu": "Abrir menú",
+      "viewDetails": "Ver detalles",
+      "editGate": "Editar puerta",
+      "deactivate": "Desactivar",
+      "activate": "Activar",
+      "delete": "Eliminar",
+      "load": "Carga",
+      "queue": "Cola",
+      "avgTime": "Tiempo Prom.",
+      "lastMaintenance": "Último Mant."
+    },
+    "detailsSheet": {
+      "title": "Detalles de la Puerta",
+      "status": "Estado",
+      "type": "Tipo",
+      "terminal": "Terminal",
+      "ipAddress": "Dirección IP",
+      "macAddress": "Dirección MAC",
+      "lastModified": "Última Modificación",
+      "lastMaintenance": "Último Mantenimiento",
+      "equipmentStatus": "Estado del Equipo",
+      "close": "Cerrar"
+    },
+    "deleteDialog": {
+      "title": "¿Está seguro?",
+      "description": "Esta acción no se puede deshacer. Esto eliminará permanentemente la puerta '{name}'.",
+      "cancel": "Cancelar",
+      "confirm": "Sí, Eliminar Puerta"
+    },
+    "toast": {
+      "statusUpdated": {
+        "title": "Puerta {status, select, Active {Activada} other {Desactivada}}",
+        "description": "La puerta \"{name}\" se ha establecido como {status}."
+      },
+      "deleteSuccess": {
+        "title": "Puerta Eliminada",
+        "description": "La puerta ha sido eliminada permanentemente."
+      },
+      "error": {
+        "title": "Operación Fallida",
+        "description": "Ocurrió un error. Por favor, inténtelo de nuevo."
       }
     }
   }

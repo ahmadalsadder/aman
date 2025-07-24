@@ -15,17 +15,16 @@ import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Combobox } from '@/components/ui/combobox';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Separator } from '@/components/ui/separator';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Textarea } from '@/components/ui/textarea';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Loader2, User, Search } from 'lucide-react';
+import { Loader2, Search } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Input } from '@/components/ui/input';
 import { countries } from '@/lib/countries';
 import { useTranslations } from 'next-intl';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { AttachmentUploader } from '@/components/shared/attachment-uploader';
 
 const manualTransactionSchema = z.object({
   // Search and passenger data
@@ -37,6 +36,8 @@ const manualTransactionSchema = z.object({
   nationality: z.string().min(1, "Nationality is required."),
   dateOfBirth: z.string().min(1, "Date of birth is required."),
   gender: z.enum(['Male', 'Female', 'Other']),
+  passportPhoto: z.string().optional(),
+  livePhoto: z.string().optional(),
   
   // Transaction data
   transactionType: z.enum(['Entry', 'Exit']),
@@ -54,13 +55,6 @@ const manualTransactionSchema = z.object({
 });
 
 type FormValues = z.infer<typeof manualTransactionSchema>;
-
-const DetailItem = ({ label, value }: { label: string; value?: string | null }) => (
-  <div>
-    <p className="text-xs text-muted-foreground">{label}</p>
-    <p className="text-sm font-medium">{value || 'N/A'}</p>
-  </div>
-);
 
 export function ManualEntryForm() {
   const router = useRouter();
@@ -80,6 +74,8 @@ export function ManualEntryForm() {
         nationality: '',
         dateOfBirth: '',
         gender: 'Male',
+        passportPhoto: '',
+        livePhoto: '',
         transactionType: 'Entry',
         passportVerified: false,
         visaVerified: false,
@@ -107,6 +103,8 @@ export function ManualEntryForm() {
             nationality: countries.find(c => c.label === passenger.nationality)?.value || '',
             dateOfBirth: passenger.dateOfBirth,
             gender: passenger.gender,
+            passportPhoto: passenger.passportPhotoUrl,
+            livePhoto: passenger.profilePicture,
         });
         toast({ title: t('toast.passengerFoundTitle'), description: t('toast.passengerFoundDesc') });
     } else {
@@ -119,6 +117,8 @@ export function ManualEntryForm() {
             passportNumber: passportNumber, // Pre-fill the passport number
             nationality: '',
             dateOfBirth: '',
+            passportPhoto: '',
+            livePhoto: '',
         });
         toast({ title: t('toast.passengerNotFoundTitle'), description: t('toast.passengerNotFoundDesc'), variant: 'default' });
     }
@@ -191,6 +191,44 @@ export function ManualEntryForm() {
                      <FormField control={form.control} name="dateOfBirth" render={({ field }) => ( <FormItem><FormLabel required>{t('passengerDetails.dob')}</FormLabel><FormControl><Input type="date" {...field} disabled={!!searchedPassenger} /></FormControl><FormMessage /></FormItem> )} />
                      <FormField control={form.control} name="nationality" render={({ field }) => ( <FormItem><FormLabel required>{t('passengerDetails.nationality')}</FormLabel><Combobox options={countries} value={field.value} onChange={field.onChange} placeholder={t('passengerDetails.selectNationality')} disabled={!!searchedPassenger} /><FormMessage /></FormItem> )} />
                      <FormField control={form.control} name="gender" render={({ field }) => ( <FormItem><FormLabel required>{t('passengerDetails.gender')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value} disabled={!!searchedPassenger}><FormControl><SelectTrigger><SelectValue /></SelectTrigger></FormControl><SelectContent><SelectItem value="Male">Male</SelectItem><SelectItem value="Female">Female</SelectItem><SelectItem value="Other">Other</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
+                     <FormField
+                        control={form.control}
+                        name="passportPhoto"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormControl>
+                                    <AttachmentUploader 
+                                        attachmentName="Passport Image"
+                                        initialSrc={field.value}
+                                        allowedMimeTypes={['image/jpeg', 'image/png', 'image/webp']}
+                                        onUpload={({ content }) => form.setValue('passportPhoto', content as string)}
+                                        onDelete={() => form.setValue('passportPhoto', '')}
+                                        disabled={!!searchedPassenger}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                     <FormField
+                        control={form.control}
+                        name="livePhoto"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormControl>
+                                    <AttachmentUploader 
+                                        attachmentName="Live Photo"
+                                        initialSrc={field.value}
+                                        allowedMimeTypes={['image/jpeg', 'image/png', 'image/webp']}
+                                        onUpload={({ content }) => form.setValue('livePhoto', content as string)}
+                                        onDelete={() => form.setValue('livePhoto', '')}
+                                        disabled={!!searchedPassenger}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
                 </CardContent>
             </Card>
           </div>
@@ -325,5 +363,4 @@ export function ManualEntryForm() {
     </Form>
   );
 }
-
 

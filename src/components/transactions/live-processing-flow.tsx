@@ -221,10 +221,11 @@ export function LiveProcessingFlow() {
         updateStepStatus('doc_scan', 'completed');
         updateStepStatus('visa_check', needsVisa ? (isVisaValid ? 'completed' : 'failed') : 'skipped');
 
-        const passengerResult = await api.get<Passenger[]>(`/data/passengers`);
-        if(passengerResult.isSuccess && passengerResult.data) {
-            const existingMatch = passengerResult.data.find(p => p.passportNumber === result.passportNumber);
-        
+        const passengerResult = await api.get<{ airport: Passenger[], seaport: Passenger[], landport: Passenger[] }>(`/data/passengers`);
+        if (passengerResult.isSuccess && passengerResult.data) {
+            const allPassengers = [...passengerResult.data.airport, ...passengerResult.data.seaport, ...passengerResult.data.landport];
+            const existingMatch = allPassengers.find(p => p.passportNumber === result.passportNumber);
+
             if (existingMatch) {
                 addLog(`Passenger match found for ${result.firstName} ${result.lastName}.`);
                 setExistingPassenger(existingMatch);
@@ -235,6 +236,7 @@ export function LiveProcessingFlow() {
             }
         } else {
             toast({ variant: 'destructive', title: 'Error', description: 'Could not fetch passenger data.' });
+            throw new Error('Failed to fetch passengers');
         }
 
 

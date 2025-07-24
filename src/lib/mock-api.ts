@@ -446,6 +446,14 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
         
         return Result.success(user) as Result<T>;
     }
+
+    if (method === 'POST' && url.pathname === '/data/transactions') {
+        const transactionData = JSON.parse(body as string);
+        console.log("Saving transaction:", transactionData);
+        // In a real backend, you'd save this to a database.
+        // For the mock, we just confirm it was received.
+        return Result.success(transactionData) as Result<T>;
+    }
     
     if (method === 'GET' && url.pathname === '/dashboard/main') {
         return Result.success(mainDashboardData) as Result<T>;
@@ -464,15 +472,6 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
     }
 
     if (method === 'GET' && url.pathname.startsWith('/data/passengers')) {
-        const url_ = new URL(endpoint, 'http://mock.com');
-        const id = url_.searchParams.get('id');
-        if (id) {
-            const passenger = mockPassengers.find(p => p.id === id);
-            if (passenger) {
-                return Result.success(passenger) as Result<T>;
-            }
-            return Result.failure([new ApiError('NOT_FOUND', `Passenger with id '${id}' not found.`)]) as Result<T>;
-        }
         return Result.success(passengerData) as Result<T>;
     }
 

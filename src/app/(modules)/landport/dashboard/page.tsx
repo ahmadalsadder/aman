@@ -91,15 +91,13 @@ export default function LandportDashboardPage() {
 
   return (
     <div className="flex flex-col gap-8">
-       <div className="flex justify-between items-center">
-        <Breadcrumb>
-            <BreadcrumbList>
-            <BreadcrumbItem>
-                <BreadcrumbLink href="/landport/dashboard">Dashboard</BreadcrumbLink>
-            </BreadcrumbItem>
-            </BreadcrumbList>
-        </Breadcrumb>
-       </div>
+      <Breadcrumb>
+          <BreadcrumbList>
+          <BreadcrumbItem>
+              <BreadcrumbLink href="/landport/dashboard">Dashboard</BreadcrumbLink>
+          </BreadcrumbItem>
+          </BreadcrumbList>
+      </Breadcrumb>
       <DashboardHeader 
         title={t('title')}
         description={t('welcome')}

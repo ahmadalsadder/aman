@@ -195,16 +195,7 @@ export function LiveProcessingFlow() {
         const result = await extractPassportData({ passportPhotoDataUri: dataUri });
         setExtractedData(result);
         
-        const newWorkflow = [
-            { id: 'doc_scan', name: t('workflow.docScan'), status: 'in-progress' as InternalWorkflowStatus, Icon: ScanLine },
-            { id: 'data_confirmation', name: t('workflow.identity'), status: 'pending' as InternalWorkflowStatus, Icon: UserCheck },
-            { id: 'biometric_capture', name: t('workflow.biometric'), status: 'pending' as InternalWorkflowStatus, Icon: Fingerprint },
-            { id: 'security_ai_checks', name: t('workflow.security'), status: 'pending', Icon: ShieldAlert },
-            { id: 'officer_review', name: t('workflow.review'), status: 'pending', Icon: User }
-        ];
-
-        setWorkflow(newWorkflow);
-        updateStepStatus('doc_scan', 'completed');
+        // Don't set workflow here anymore. It will be set by the API response.
         setCurrentStep('confirm_new_passenger');
         addLog(`Data extracted for passenger: ${result.firstName} ${result.lastName}`);
     } catch (error) {
@@ -216,7 +207,6 @@ export function LiveProcessingFlow() {
   }
 
   const handleConfirmExtractedData = () => {
-    updateStepStatus('data_confirmation', 'completed');
     addLog(`Officer confirmed extracted data.`);
     setCurrentStep('capture_photo');
   }
@@ -285,11 +275,19 @@ export function LiveProcessingFlow() {
         toast({ variant: 'destructive', title: t('toast.missingInfoTitle'), description: t('toast.missingInfoDescription') });
         return;
     }
-    updateStepStatus('biometric_capture', 'completed');
     setCurrentStep('analyzing');
     addLog('Starting AI analysis...');
 
     try {
+        const newWorkflow = [
+            { id: 'doc_scan', name: t('workflow.docScan'), status: 'completed' as InternalWorkflowStatus, Icon: ScanLine },
+            { id: 'data_confirmation', name: t('workflow.identity'), status: 'completed' as InternalWorkflowStatus, Icon: UserCheck },
+            { id: 'biometric_capture', name: t('workflow.biometric'), status: 'completed' as InternalWorkflowStatus, Icon: Fingerprint },
+            { id: 'security_ai_checks', name: t('workflow.security'), status: 'in-progress' as InternalWorkflowStatus, Icon: ShieldAlert },
+            { id: 'officer_review', name: t('workflow.review'), status: 'pending' as InternalWorkflowStatus, Icon: User }
+        ];
+        setWorkflow(newWorkflow);
+        
         // Here you would make the single, comprehensive API call.
         // For now, we simulate the steps of the backend.
 
@@ -766,3 +764,5 @@ export function LiveProcessingFlow() {
     </div>
   );
 }
+
+    

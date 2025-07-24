@@ -33,3 +33,5 @@ export const users: User[] = [
     permissions: ['records:view'] // This user can view records, but not the transactions page itself
   },
 ];
+
+    

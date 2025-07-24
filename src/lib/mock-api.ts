@@ -3,6 +3,7 @@
 
 
 
+
 import type { User } from '@/types';
 import { Result, ApiError } from '@/types/api/result';
 import { mockPassengers, mockTransactions, mockVisaDatabase, mockOfficerDesks } from './mock-data';
@@ -20,8 +21,11 @@ const users: User[] = [
     email: 'admin@example.com', 
     role: 'admin', 
     token: 'fake-admin-token', 
-    modules: ['dashboard', 'landport', 'seaport', 'airport', 'egate', 'analyst', 'shiftsupervisor', 'control-room', 'users', 'settings'],
-    permissions: ['records:view', 'records:create', 'records:edit', 'records:delete', 'users:manage', 'reports:view']
+    modules: ['dashboard', 'landport', 'seaport', 'airport', 'egate', 'analyst', 'shiftsupervisor', 'control-room', 'users', 'settings', 'gate-supervisor'],
+    permissions: [
+        'records:view', 'records:create', 'records:edit', 'records:delete', 'users:manage', 'reports:view',
+        'page:airport:transactions:view', 'page:landport:transactions:view', 'page:seaport:transactions:view', 'page:gate-supervisor:transactions:view'
+    ]
   },
   { 
     id: '2', 
@@ -31,7 +35,7 @@ const users: User[] = [
     role: 'auditor', 
     token: 'fake-auditor-token', 
     modules: ['landport', 'seaport'],
-    permissions: ['records:view', 'reports:view']
+    permissions: ['records:view', 'reports:view', 'page:landport:transactions:view', 'page:seaport:transactions:view']
   },
   { 
     id: '3', 
@@ -51,7 +55,7 @@ const users: User[] = [
     role: 'shiftsupervisor',
     token: 'fake-supervisor-token',
     modules: ['airport', 'landport', 'seaport', 'control-room', 'gate-supervisor'],
-    permissions: ['records:view', 'records:edit', 'reports:view']
+    permissions: ['records:view', 'records:edit', 'reports:view', 'page:airport:transactions:view', 'page:landport:transactions:view', 'page:seaport:transactions:view', 'page:gate-supervisor:transactions:view']
   },
   {
     id: '5',
@@ -536,7 +540,7 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
         } else if (module === 'landport') {
             tripInformation = { type: 'landport', vehiclePlateNumber: 'AUH 12345', vehicleType: 'Car', laneNumber: '3', vehicleMake: 'Toyota' };
         } else if (module === 'seaport') {
-            tripInformation = { type: 'seaport', vesselName: 'Symphony of the Seas', voyageNumber: 'SYM-004', berth: 'B2', lastPortOfCall: 'CYP' };
+            tripInformation = { type: 'seaport', vesselName: 'Symphony of the Seas', voyageNumber: 'SYM-004', berth: 'B2', lastPortOfCall: 'SGP' };
         }
 
 
@@ -631,5 +635,7 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
 
     return Result.failure([new ApiError('NOT_FOUND', `Mock endpoint ${method} ${endpoint} not found.`)]) as Result<T>;
 }
+
+    
 
     

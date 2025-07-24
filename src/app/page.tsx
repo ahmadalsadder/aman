@@ -12,18 +12,20 @@ export default function Home() {
   const t = useTranslations('HomePage');
 
   useEffect(() => {
-    if (!loading) {
-      if (user) {
-         if (user.modules && user.modules.length > 1) {
-          router.replace('/portal');
-        } else if (user.modules && user.modules.length === 1) {
-          router.replace(`/${user.modules[0]}/dashboard`);
-        } else {
-          router.replace('/login'); // Or a 'no modules assigned' page
-        }
+    if (loading) {
+      return; // Wait for the authentication check to complete
+    }
+    
+    if (user) {
+        if (user.modules && user.modules.length > 1) {
+        router.replace('/portal');
+      } else if (user.modules && user.modules.length === 1) {
+        router.replace(`/${user.modules[0]}/dashboard`);
       } else {
-        router.replace('/login');
+        router.replace('/login'); // Or a 'no modules assigned' page
       }
+    } else {
+      router.replace('/login');
     }
   }, [user, loading, router]);
 

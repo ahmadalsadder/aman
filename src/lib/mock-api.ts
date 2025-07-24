@@ -472,6 +472,11 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
         return Result.success(user) as Result<T>;
     }
 
+    // COUNTRIES
+    if (method === 'GET' && url.pathname === '/data/countries') {
+        return Result.success(countries) as Result<T>;
+    }
+
     // PASSENGER
     if (method === 'GET' && url.pathname === '/data/passenger-by-passport') {
         const passportNumber = url.searchParams.get('passportNumber');

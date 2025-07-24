@@ -21,7 +21,6 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Loader2, Search } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Input } from '@/components/ui/input';
-import { countries } from '@/lib/countries';
 import { useTranslations } from 'next-intl';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { AttachmentUploader } from '@/components/shared/attachment-uploader';
@@ -62,6 +61,17 @@ export function ManualEntryForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const [searchedPassenger, setSearchedPassenger] = useState<Passenger | null>(null);
+  const [countries, setCountries] = useState<{ value: string; label: string }[]>([]);
+
+  useEffect(() => {
+    const fetchCountries = async () => {
+        const result = await api.get<{ value: string; label: string }[]>('/data/countries');
+        if (result.isSuccess && result.data) {
+            setCountries(result.data);
+        }
+    };
+    fetchCountries();
+  }, []);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(manualTransactionSchema),
@@ -83,8 +93,8 @@ export function ManualEntryForm() {
   });
 
   const attachmentConfigs = useMemo(() => [
-    { name: 'passportPhoto', label: 'Passport Image', allowedMimeTypes: ['image/jpeg', 'image/png', 'image/webp'] },
-    { name: 'livePhoto', label: 'Live Photo', allowedMimeTypes: ['image/jpeg', 'image/png', 'image/webp'] },
+    { name: 'passportPhoto', label: 'Passport Image', allowedMimeTypes: ['image/jpeg', 'image/png', 'image/webp'], maxSize: 2 * 1024 * 1024, required: true },
+    { name: 'livePhoto', label: 'Live Photo', allowedMimeTypes: ['image/jpeg', 'image/png', 'image/webp'], maxSize: 2 * 1024 * 1024, required: true },
   ], []);
 
   const handleSearch = async () => {
@@ -191,7 +201,7 @@ export function ManualEntryForm() {
                      <FormField control={form.control} name="lastName" render={({ field }) => ( <FormItem><FormLabel required>{t('passengerDetails.lastName')}</FormLabel><FormControl><Input {...field} disabled={!!searchedPassenger} /></FormControl><FormMessage /></FormItem> )} />
                      <FormField control={form.control} name="passportNumber" render={({ field }) => ( <FormItem><FormLabel required>{t('passengerDetails.passportNumber')}</FormLabel><FormControl><Input {...field} disabled={!!searchedPassenger} /></FormControl><FormMessage /></FormItem> )} />
                      <FormField control={form.control} name="dateOfBirth" render={({ field }) => ( <FormItem><FormLabel required>{t('passengerDetails.dob')}</FormLabel><FormControl><Input type="date" {...field} disabled={!!searchedPassenger} /></FormControl><FormMessage /></FormItem> )} />
-                     <FormField control={form.control} name="nationality" render={({ field }) => ( <FormItem><FormLabel required>{t('passengerDetails.nationality')}</FormLabel><Combobox options={countries} value={field.value} onChange={field.onChange} placeholder={t('passengerDetails.selectNationality')} disabled={!!searchedPassenger} /><FormMessage /></FormItem> )} />
+                     <FormField control={form.control} name="nationality" render={({ field }) => ( <FormItem><FormLabel required>{t('passengerDetails.nationality')}</FormLabel><Combobox options={countries} value={field.value} onChange={field.onChange} placeholder={t('passengerDetails.selectNationality')} disabled={!!searchedPassenger || countries.length === 0} /><FormMessage /></FormItem> )} />
                      <FormField control={form.control} name="gender" render={({ field }) => ( <FormItem><FormLabel required>{t('passengerDetails.gender')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value} disabled={!!searchedPassenger}><FormControl><SelectTrigger><SelectValue /></SelectTrigger></FormControl><SelectContent><SelectItem value="Male">Male</SelectItem><SelectItem value="Female">Female</SelectItem><SelectItem value="Other">Other</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
                 </CardContent>
             </Card>

@@ -1,7 +1,7 @@
 
 'use client';
 
-import { LogOut, User as UserIcon, Globe, Zap } from 'lucide-react';
+import { LogOut, User as UserIcon, Globe, Zap, RadioTower } from 'lucide-react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import * as React from 'react';
@@ -79,7 +79,10 @@ export default function Header() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                     <DropdownMenuItem asChild>
-                        <Link href={`/${currentModule}/live-processing`}>Live Processing</Link>
+                        <Link href={`/${currentModule}/live-processing`} className="flex items-center gap-2">
+                           <RadioTower className="h-4 w-4" />
+                           <span>Live Processing</span>
+                        </Link>
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>

@@ -177,8 +177,6 @@ const ImageEditorDialog = ({ src, onSave, onCancel }: { src: string, onSave: (da
                         alt="Crop preview"
                         onLoad={onImageLoad}
                         style={{ transform: `rotate(${rotation}deg)` }}
-                        width={500}
-                        height={500}
                         className="max-h-full w-auto object-contain"
                     />
                 </ReactCrop>
@@ -338,17 +336,13 @@ function SingleUploader({ config, value, onFileChange, outputType, disabled }: {
                                                 }
                                                 <AttachmentViewerDialog src={fileSrc!} name={value.fileInfo.name} mimeType={value.fileInfo.type} />
                                             </Dialog>
-                                            {fileType === 'image' && (
-                                                <Tooltip><TooltipTrigger asChild><Button size="sm" variant="ghost" onClick={() => setIsEditorOpen(true)}><Pencil className="h-4 w-4" /></Button></TooltipTrigger><TooltipContent><p>Edit</p></TooltipContent></Tooltip>
-                                            )}
+                                            
                                             <Tooltip><TooltipTrigger asChild><Button size="sm" variant="ghost" disabled={disabled} onClick={handleDelete}><Trash2 className="h-4 w-4 text-destructive" /></Button></TooltipTrigger><TooltipContent><p>Delete</p></TooltipContent></Tooltip>
                                             {fileSrc && 
                                                 <Tooltip><TooltipTrigger asChild><Button size="sm" variant="ghost" asChild><a href={fileSrc} download={value.fileInfo.name}><Download className="h-4 w-4" /></a></Button></TooltipTrigger><TooltipContent><p>Download</p></TooltipContent></Tooltip>
                                             }
                                         </TooltipProvider>
-                                        {fileType === 'image' && fileSrc && (
-                                            <ImageEditorDialog src={fileSrc} onSave={handleSaveEdit} onCancel={() => setIsEditorOpen(false)} />
-                                        )}
+                                        
                                     </Dialog>
                                 )}
                             </div>

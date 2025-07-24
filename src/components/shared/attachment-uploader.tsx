@@ -5,6 +5,7 @@ import React, { useState, useMemo, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
+import ReactCrop, { type Crop, centerCrop, makeAspectCrop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 
 
@@ -14,11 +15,12 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { UploadCloud, File as FileIcon, Trash2, Download, Eye, Loader2, AlertCircle, Pencil, CropIcon, Upload } from 'lucide-react';
+import { UploadCloud, File as FileIcon, Trash2, Download, Eye, Loader2, AlertCircle, Pencil, CropIcon, Upload, RotateCw, RotateCcw } from 'lucide-react';
 import { FilePdfIcon } from '@/components/icons/file-pdf-icon';
 import { FileAudioIcon } from '@/components/icons/file-audio-icon';
 import { FileVideoIcon } from '@/components/icons/file-video-icon';
 import { Label } from '@/components/ui/label';
+import { Slider } from '../ui/slider';
 
 type OutputType = 'base64' | 'bytes';
 
@@ -109,7 +111,6 @@ const AttachmentViewerDialog = ({ src, name, mimeType }: { src: string; name: st
     );
 };
 
-
 const getFileExtension = (fileName: string) => {
     return fileName.slice(((fileName.lastIndexOf(".") - 1) >>> 0) + 2);
 }
@@ -148,7 +149,7 @@ function SingleUploader({ config, value, onFileChange, outputType, disabled }: {
         }
     
         if (maxSize && selectedFile.size > maxSize) {
-          toast({ variant: 'destructive', title: 'File Too Large', description: `The file size cannot exceed ${Math.round(maxSize / 1024 / 1024)}MB.` });
+          toast({ variant: 'destructive', title: 'File Too Large', description: `The file size cannot exceed ${formatFileSize(maxSize)}.` });
           return;
         }
 
@@ -196,21 +197,41 @@ function SingleUploader({ config, value, onFileChange, outputType, disabled }: {
         if (mime.startsWith('video/')) return 'video';
         return 'other';
     }, [value]);
-    
-    const FileTypeIcon = useMemo(() => {
+
+    const fileTypeIconProps = useMemo(() => {
         switch(fileType) {
-            case 'pdf': return FilePdfIcon;
-            case 'audio': return FileAudioIcon;
-            case 'video': return FileVideoIcon;
-            default: return FileIcon;
+            case 'pdf': return { icon: FilePdfIcon, className: 'text-red-500' };
+            case 'audio': return { icon: FileAudioIcon, className: 'text-orange-500' };
+            case 'video': return { icon: FileVideoIcon, className: 'text-blue-500' };
+            default: return { icon: FileIcon, className: 'text-gray-500' };
         }
     }, [fileType]);
 
+    const FileTypeIcon = fileTypeIconProps.icon;
+    
+    const hints = [
+        config.allowedMimeTypes ? `Types: ${config.allowedMimeTypes.join(', ').toUpperCase()}` : null,
+        config.maxSize ? `Max size: ${formatFileSize(config.maxSize)}` : null,
+    ].filter(Boolean).join(' | ');
+
     return (
       <div>
-        <Label htmlFor={config.name} className={cn("text-sm font-medium", config.required && "after:content-['*'] after:text-destructive after:ml-1")}>
-            {config.label}
-        </Label>
+        <div className="flex justify-between items-end">
+            <div>
+                <Label htmlFor={config.name} required={config.required} className="text-sm font-medium">
+                    {config.label}
+                </Label>
+                {hints && <p className="text-xs text-muted-foreground">{hints}</p>}
+            </div>
+            
+             {!value && (
+                <Button type="button" size="sm" variant="outline" onClick={() => inputRef.current?.click()} disabled={disabled || isLoading} className="shrink-0">
+                    <Upload className="mr-2 h-4 w-4" />
+                    Upload File
+                </Button>
+            )}
+        </div>
+
         <div className="mt-2">
             <input
                 type="file"
@@ -219,10 +240,11 @@ function SingleUploader({ config, value, onFileChange, outputType, disabled }: {
                 onChange={(e) => handleFileSelect(e.target.files?.[0] || null)}
                 className="hidden"
                 disabled={disabled || isLoading}
+                accept={config.allowedMimeTypes?.join(',')}
             />
 
             {isLoading && (
-                 <Card className="flex items-center gap-4 p-4">
+                 <Card className="flex items-center gap-4 p-4 h-20">
                     <Loader2 className="h-8 w-8 animate-spin text-primary" />
                     <div className="flex-grow space-y-1">
                         <p className="text-sm font-semibold">Uploading file...</p>
@@ -231,20 +253,13 @@ function SingleUploader({ config, value, onFileChange, outputType, disabled }: {
                 </Card>
             )}
 
-            {!isLoading && !value && (
-                <Button type="button" variant="outline" onClick={() => inputRef.current?.click()} disabled={disabled} className="w-full">
-                    <Upload className="mr-2 h-4 w-4" />
-                    Upload File
-                </Button>
-            )}
-            
             {!isLoading && value && fileSrc && (
                 <Card className="flex items-center gap-4 p-2">
-                    <div className="flex h-16 w-16 items-center justify-center rounded-md bg-secondary flex-shrink-0">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-md bg-secondary flex-shrink-0">
                          {fileType === 'image' ? (
-                             <Image src={fileSrc} alt={config.label} width={64} height={64} className="h-full w-full rounded-md object-cover" />
+                             <Image src={fileSrc} alt={config.label} width={48} height={48} className="h-full w-full rounded-md object-cover" />
                         ) : (
-                            <FileTypeIcon className="h-8 w-8 text-primary" />
+                            <FileTypeIcon className={cn("h-8 w-8", fileTypeIconProps.className)} />
                         )}
                     </div>
                     <div className="flex-grow space-y-1 overflow-hidden">
@@ -256,7 +271,7 @@ function SingleUploader({ config, value, onFileChange, outputType, disabled }: {
                              <TooltipProvider>
                                 <Tooltip><TooltipTrigger asChild><DialogTrigger asChild><Button size="icon" variant="ghost"><Eye/></Button></DialogTrigger></TooltipTrigger><TooltipContent><p>View</p></TooltipContent></Tooltip>
                                 <Tooltip><TooltipTrigger asChild><a href={fileSrc} download={value.fileInfo.name}><Button size="icon" variant="ghost" asChild><span className="flex items-center justify-center"><Download/></span></Button></a></TooltipTrigger><TooltipContent><p>Download</p></TooltipContent></Tooltip>
-                                <Tooltip><TooltipTrigger asChild><Button size="icon" variant="ghost" onClick={handleDelete}><Trash2 /></Button></TooltipTrigger><TooltipContent><p>Delete</p></TooltipContent></Tooltip>
+                                <Tooltip><TooltipTrigger asChild><Button size="icon" variant="ghost" onClick={handleDelete}><Trash2 className="text-destructive"/></Button></TooltipTrigger><TooltipContent><p>Delete</p></TooltipContent></Tooltip>
                             </TooltipProvider>
                             <AttachmentViewerDialog src={fileSrc!} name={value.fileInfo.name} mimeType={value.fileInfo.type} />
                         </Dialog>

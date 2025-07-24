@@ -1,5 +1,4 @@
 
-
 {
   "LoginPage": {
     "title": "مرحبًا بك في بوابة الحماية",
@@ -304,6 +303,60 @@
     "voyageNumber": "رقم الرحلة",
     "berth": "الرصيف",
     "lastPortOfCall": "آخر ميناء"
+  },
+  "ManualEntry": {
+    "common": {
+      "cancel": "إلغاء",
+      "completeTransaction": "إتمام المعاملة"
+    },
+    "toast": {
+      "passengerFoundTitle": "تم العثور على المسافر",
+      "passengerFoundDesc": "تم ملء تفاصيل المسافر مسبقًا.",
+      "passengerNotFoundTitle": "لم يتم العثور على المسافر",
+      "passengerNotFoundDesc": "لم يتم العثور على سجل موجود. يرجى ملء التفاصيل يدويًا.",
+      "transactionRecordedTitle": "تم تسجيل المعاملة",
+      "transactionRecordedDesc": "تمت معالجة المعاملة لـ {passengerName} بقرار: {decision}."
+    },
+    "passengerSearch": {
+      "title": "1. البحث عن المسافر",
+      "description": "ابحث عن مسافر موجود برقم جواز سفره.",
+      "passportLabel": "رقم جواز السفر",
+      "passportPlaceholder": "أدخل رقم جواز السفر..."
+    },
+    "passengerDetails": {
+      "title": "تفاصيل المسافر",
+      "firstName": "الاسم الأول",
+      "lastName": "اسم العائلة",
+      "passportNumber": "رقم جواز السفر",
+      "dob": "تاريخ الميلاد",
+      "nationality": "الجنسية",
+      "selectNationality": "اختر جنسية...",
+      "gender": "الجنس"
+    },
+    "verification": {
+      "title": "2. تحقق الضابط",
+      "description": "تأكيد جميع الفحوصات يدويًا.",
+      "transactionType": "نوع المعاملة",
+      "entry": "دخول",
+      "exit": "خروج",
+      "passportVerified": "تم التحقق من جواز السفر",
+      "visaVerified": "تم التحقق من التأشيرة",
+      "biometricsVerified": "تم التحقق من القياسات الحيوية"
+    },
+    "decision": {
+      "title": "3. القرار النهائي",
+      "description": "سجل النتيجة النهائية وأي ملاحظات ذات صلة.",
+      "notesLabel": "ملاحظات الضابط",
+      "notesPlaceholder": "أضف أي ملاحظات ذات صلة...",
+      "decisionLabel": "القرار النهائي",
+      "approve": "موافقة",
+      "reject": "رفض",
+      "refer": "إحالة إلى المشرف (مراجعة يدوية)",
+      "highRiskTitle": "مسافر عالي الخطورة",
+      "highRiskDesc": "تم وضع علامة على هذا المسافر بأنه عالي الخطورة. توخ الحذر واتبع البروتوكول.",
+      "attachmentsTitle": "المرفقات",
+      "attachmentsDesc": "تحميل المستندات الداعمة (اختياري)."
+    }
   },
   "LiveProcessingFlow": {
     "toast": {

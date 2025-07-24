@@ -36,8 +36,7 @@ const manualTransactionSchema = z.object({
   nationality: z.string().min(1, "Nationality is required."),
   dateOfBirth: z.string().min(1, "Date of birth is required."),
   gender: z.enum(['Male', 'Female', 'Other']),
-  passportPhoto: z.string().optional(),
-  livePhoto: z.string().optional(),
+  attachments: z.record(z.any()).optional(),
   
   // Transaction data
   transactionType: z.enum(['Entry', 'Exit']),
@@ -74,8 +73,7 @@ export function ManualEntryForm() {
         nationality: '',
         dateOfBirth: '',
         gender: 'Male',
-        passportPhoto: '',
-        livePhoto: '',
+        attachments: {},
         transactionType: 'Entry',
         passportVerified: false,
         visaVerified: false,
@@ -83,6 +81,11 @@ export function ManualEntryForm() {
         officerNotes: '',
     },
   });
+
+  const attachmentConfigs = useMemo(() => [
+    { name: 'passportPhoto', label: 'Passport Image', allowedMimeTypes: ['image/jpeg', 'image/png', 'image/webp'] },
+    { name: 'livePhoto', label: 'Live Photo', allowedMimeTypes: ['image/jpeg', 'image/png', 'image/webp'] },
+  ], []);
 
   const handleSearch = async () => {
     const passportNumber = form.getValues('passportNumberSearch');
@@ -103,8 +106,10 @@ export function ManualEntryForm() {
             nationality: countries.find(c => c.label === passenger.nationality)?.value || '',
             dateOfBirth: passenger.dateOfBirth,
             gender: passenger.gender,
-            passportPhoto: passenger.passportPhotoUrl,
-            livePhoto: passenger.profilePicture,
+            attachments: {
+                passportPhoto: { content: passenger.passportPhotoUrl || '', fileInfo: { name: 'Existing Passport Photo', type: 'image/png', size: 0 } },
+                livePhoto: { content: passenger.profilePicture || '', fileInfo: { name: 'Existing Live Photo', type: 'image/png', size: 0 } },
+            }
         });
         toast({ title: t('toast.passengerFoundTitle'), description: t('toast.passengerFoundDesc') });
     } else {
@@ -114,11 +119,10 @@ export function ManualEntryForm() {
             passengerId: undefined,
             firstName: '',
             lastName: '',
-            passportNumber: passportNumber, // Pre-fill the passport number
+            passportNumber: passportNumber,
             nationality: '',
             dateOfBirth: '',
-            passportPhoto: '',
-            livePhoto: '',
+            attachments: {},
         });
         toast({ title: t('toast.passengerNotFoundTitle'), description: t('toast.passengerNotFoundDesc'), variant: 'default' });
     }
@@ -126,7 +130,7 @@ export function ManualEntryForm() {
   };
   
   const needsVisaCheck = useMemo(() => {
-    if (!searchedPassenger) return true; // Assume check needed for new entries
+    if (!searchedPassenger) return true;
     return searchedPassenger.nationality !== 'United Arab Emirates';
   }, [searchedPassenger]);
 
@@ -135,7 +139,6 @@ export function ManualEntryForm() {
     setIsLoading(true);
     console.log("Manual Transaction Data:", data);
 
-    // In a real app, you would submit this to a backend.
     setTimeout(() => {
       toast({
         title: t('toast.transactionRecordedTitle'),
@@ -151,7 +154,6 @@ export function ManualEntryForm() {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-          {/* Left column: Passenger Selection & Details */}
           <div className="lg:col-span-1 space-y-6">
             <Card>
               <CardHeader>
@@ -191,49 +193,10 @@ export function ManualEntryForm() {
                      <FormField control={form.control} name="dateOfBirth" render={({ field }) => ( <FormItem><FormLabel required>{t('passengerDetails.dob')}</FormLabel><FormControl><Input type="date" {...field} disabled={!!searchedPassenger} /></FormControl><FormMessage /></FormItem> )} />
                      <FormField control={form.control} name="nationality" render={({ field }) => ( <FormItem><FormLabel required>{t('passengerDetails.nationality')}</FormLabel><Combobox options={countries} value={field.value} onChange={field.onChange} placeholder={t('passengerDetails.selectNationality')} disabled={!!searchedPassenger} /><FormMessage /></FormItem> )} />
                      <FormField control={form.control} name="gender" render={({ field }) => ( <FormItem><FormLabel required>{t('passengerDetails.gender')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value} disabled={!!searchedPassenger}><FormControl><SelectTrigger><SelectValue /></SelectTrigger></FormControl><SelectContent><SelectItem value="Male">Male</SelectItem><SelectItem value="Female">Female</SelectItem><SelectItem value="Other">Other</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
-                     <FormField
-                        control={form.control}
-                        name="passportPhoto"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormControl>
-                                    <AttachmentUploader 
-                                        attachmentName="Passport Image"
-                                        initialSrc={field.value}
-                                        allowedMimeTypes={['image/jpeg', 'image/png', 'image/webp']}
-                                        onUpload={({ content }) => form.setValue('passportPhoto', content as string)}
-                                        onDelete={() => form.setValue('passportPhoto', '')}
-                                        disabled={!!searchedPassenger}
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                     <FormField
-                        control={form.control}
-                        name="livePhoto"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormControl>
-                                    <AttachmentUploader 
-                                        attachmentName="Live Photo"
-                                        initialSrc={field.value}
-                                        allowedMimeTypes={['image/jpeg', 'image/png', 'image/webp']}
-                                        onUpload={({ content }) => form.setValue('livePhoto', content as string)}
-                                        onDelete={() => form.setValue('livePhoto', '')}
-                                        disabled={!!searchedPassenger}
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
                 </CardContent>
             </Card>
           </div>
 
-          {/* Right column: Verification & Decision */}
           <div className="lg:col-span-2 space-y-6">
             <Card>
               <CardHeader>
@@ -290,6 +253,31 @@ export function ManualEntryForm() {
                     )}
                   />
               </CardContent>
+            </Card>
+
+            <Card>
+                <CardHeader>
+                    <CardTitle>{t('decision.attachmentsTitle')}</CardTitle>
+                    <CardDescription>{t('decision.attachmentsDesc')}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                     <FormField
+                        control={form.control}
+                        name="attachments"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormControl>
+                                    <AttachmentUploader 
+                                        configs={attachmentConfigs}
+                                        onFilesChange={(files) => form.setValue('attachments', files)}
+                                        disabled={!!searchedPassenger}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </CardContent>
             </Card>
 
             <Card>
@@ -363,4 +351,3 @@ export function ManualEntryForm() {
     </Form>
   );
 }
-

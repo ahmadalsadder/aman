@@ -1,6 +1,7 @@
+
 'use client';
 
-import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+import React, { useState, useMemo, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
@@ -11,20 +12,35 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { UploadCloud, File as FileIcon, Trash2, Download, Eye, Loader2, AlertCircle } from 'lucide-react';
+import { UploadCloud, File as FileIcon, Trash2, Download, Eye, Loader2, AlertCircle, Pencil } from 'lucide-react';
 import { FilePdfIcon } from '@/components/icons/file-pdf-icon';
 import { FileAudioIcon } from '@/components/icons/file-audio-icon';
 import { FileVideoIcon } from '@/components/icons/file-video-icon';
+import { Label } from '@/components/ui/label';
 
 type OutputType = 'base64' | 'bytes';
 
-interface AttachmentUploaderProps {
-  initialSrc?: string | null;
-  attachmentName?: string;
-  allowedMimeTypes?: string[];
+interface AttachmentConfig {
+  name: string;
+  label: string;
   maxSize?: number; // in bytes
-  onUpload?: (data: { content: string | ArrayBuffer; extension: string; mimeType: string }) => void;
-  onDelete?: () => void;
+  allowedMimeTypes?: string[];
+  required?: boolean;
+}
+
+interface FileData {
+  content: string | ArrayBuffer;
+  fileInfo: {
+    name: string;
+    type: string;
+    size: number;
+  };
+}
+
+interface AttachmentUploaderProps {
+  configs: AttachmentConfig[];
+  initialFiles?: Record<string, string | null>;
+  onFilesChange: (files: Record<string, FileData | null>) => void;
   outputType?: OutputType;
   disabled?: boolean;
 }
@@ -48,6 +64,7 @@ const fileToArrayBuffer = (file: File): Promise<ArrayBuffer> => {
 };
 
 const AttachmentViewerDialog = ({ src, name, mimeType }: { src: string; name: string, mimeType: string }) => {
+    if (!src) return null;
     return (
         <DialogContent className="max-w-4xl h-[90vh] flex flex-col">
             <DialogHeader>
@@ -82,216 +99,200 @@ const AttachmentViewerDialog = ({ src, name, mimeType }: { src: string; name: st
     );
 };
 
+const getFileExtension = (fileName: string) => {
+    return fileName.slice(((fileName.lastIndexOf(".") - 1) >>> 0) + 2);
+}
+
+function SingleUploader({ config, value, onFileChange, outputType, disabled }: {
+    config: AttachmentConfig;
+    value: FileData | null;
+    onFileChange: (fileData: FileData | null) => void;
+    outputType: OutputType;
+    disabled?: boolean;
+}) {
+    const { toast } = useToast();
+    const inputRef = useRef<HTMLInputElement>(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const [uploadProgress, setUploadProgress] = useState(0);
+
+    const handleFileSelect = useCallback(async (selectedFile: File | null) => {
+        if (!selectedFile) return;
+
+        const { allowedMimeTypes = [], maxSize } = config;
+
+        const extension = getFileExtension(selectedFile.name);
+        const criticalExtensions = ['exe', 'dll', 'bat', 'sh', 'cmd'];
+        if (criticalExtensions.includes(extension.toLowerCase())) {
+            toast({
+                variant: 'destructive',
+                title: 'Unsupported File Type',
+                description: 'For security reasons, executable files are not allowed.',
+            });
+            return;
+        }
+
+        if (allowedMimeTypes.length > 0 && !allowedMimeTypes.includes(selectedFile.type)) {
+          toast({ variant: 'destructive', title: 'Invalid File Type', description: `Please upload a file of type: ${allowedMimeTypes.join(', ')}` });
+          return;
+        }
+    
+        if (maxSize && selectedFile.size > maxSize) {
+          toast({ variant: 'destructive', title: 'File Too Large', description: `The file size cannot exceed ${Math.round(maxSize / 1024 / 1024)}MB.` });
+          return;
+        }
+
+        setIsLoading(true);
+        setUploadProgress(0);
+
+        const interval = setInterval(() => {
+            setUploadProgress(prev => (prev >= 95 ? prev : prev + 5));
+        }, 100);
+
+        try {
+            const content = outputType === 'bytes' ? await fileToArrayBuffer(selectedFile) : await fileToDataUri(selectedFile);
+            onFileChange({
+                content,
+                fileInfo: { name: selectedFile.name, type: selectedFile.type, size: selectedFile.size },
+            });
+            clearInterval(interval);
+            setUploadProgress(100);
+            toast({ variant: 'success', title: 'Upload Successful', description: `'${selectedFile.name}' has been prepared.` });
+        } catch (error) {
+            toast({ variant: 'destructive', title: 'Upload Failed', description: 'There was an error processing the file.' });
+            clearInterval(interval);
+            setUploadProgress(0);
+        } finally {
+            setIsLoading(false);
+        }
+    }, [config, onFileChange, outputType, toast]);
+
+    const handleDelete = () => {
+        onFileChange(null);
+        if(inputRef.current) inputRef.current.value = '';
+    };
+
+    const handleEdit = () => {
+      toast({
+        title: 'Feature Not Available',
+        description: 'Advanced image editing will be available in a future update.',
+      });
+    }
+
+    const fileSrc = useMemo(() => {
+        if (!value) return null;
+        if (typeof value.content === 'string') return value.content;
+        // Cannot preview ArrayBuffer directly
+        return null;
+    }, [value]);
+
+    const fileType = useMemo(() => {
+        const mime = value?.fileInfo.type || '';
+        if (mime.startsWith('image/')) return 'image';
+        if (mime === 'application/pdf') return 'pdf';
+        if (mime.startsWith('audio/')) return 'audio';
+        if (mime.startsWith('video/')) return 'video';
+        return 'other';
+    }, [value]);
+
+    const FileTypeIcon = useMemo(() => {
+        switch(fileType) {
+            case 'pdf': return FilePdfIcon;
+            case 'audio': return FileAudioIcon;
+            case 'video': return FileVideoIcon;
+            default: return FileIcon;
+        }
+    }, [fileType]);
+
+    return (
+      <div>
+        <Label htmlFor={config.name} className={cn(config.required && "after:content-['*'] after:text-destructive after:ml-1")}>{config.label}</Label>
+        <Card id={config.name} className={cn('mt-2 overflow-hidden', disabled && 'bg-muted/50')}>
+            <input
+                type="file"
+                ref={inputRef}
+                onChange={(e) => handleFileSelect(e.target.files?.[0] || null)}
+                className="hidden"
+                disabled={disabled}
+            />
+            <CardContent className="p-4">
+                <div className="flex items-center gap-4">
+                    <div className="relative flex h-20 w-20 flex-shrink-0 cursor-pointer items-center justify-center rounded-lg bg-secondary" onClick={() => !disabled && inputRef.current?.click()}>
+                        {isLoading ? <Loader2 className="h-8 w-8 animate-spin text-primary" /> : fileSrc && fileType === 'image' ? <Image src={fileSrc} alt={config.label} layout="fill" objectFit="cover" className="rounded-lg" /> : value ? <FileTypeIcon className="h-10 w-10 text-primary" /> : <UploadCloud className="h-10 w-10 text-muted-foreground" />}
+                    </div>
+                    <div className="w-full space-y-2">
+                        <p className="text-xs text-muted-foreground truncate">{value?.fileInfo.name || "No file selected"}</p>
+                        {isLoading || (uploadProgress > 0 && uploadProgress < 100) ? <Progress value={uploadProgress} className="h-2" /> : (
+                            <div className="flex items-center gap-1">
+                                <Button size="sm" variant="outline" onClick={() => inputRef.current?.click()} disabled={disabled}>
+                                    <UploadCloud className="mr-2 h-4 w-4" />
+                                    {value ? 'Change' : 'Upload'}
+                                </Button>
+                                {value && (
+                                    <Dialog>
+                                        <TooltipProvider>
+                                            {fileSrc &&
+                                                <Tooltip><TooltipTrigger asChild><DialogTrigger asChild><Button size="sm" variant="ghost"><Eye className="h-4 w-4" /></Button></DialogTrigger></TooltipTrigger><TooltipContent><p>View</p></TooltipContent></Tooltip>
+                                            }
+                                            <Tooltip><TooltipTrigger asChild><Button size="sm" variant="ghost" onClick={handleEdit}><Pencil className="h-4 w-4" /></Button></TooltipTrigger><TooltipContent><p>Edit</p></TooltipContent></Tooltip>
+                                            <Tooltip><TooltipTrigger asChild><Button size="sm" variant="ghost" disabled={disabled} onClick={handleDelete}><Trash2 className="h-4 w-4 text-destructive" /></Button></TooltipTrigger><TooltipContent><p>Delete</p></TooltipContent></Tooltip>
+                                            {fileSrc && 
+                                                <Tooltip><TooltipTrigger asChild><Button size="sm" variant="ghost" asChild><a href={fileSrc} download={value.fileInfo.name}><Download className="h-4 w-4" /></a></Button></TooltipTrigger><TooltipContent><p>Download</p></TooltipContent></Tooltip>
+                                            }
+                                        </TooltipProvider>
+                                        <AttachmentViewerDialog src={fileSrc!} name={value.fileInfo.name} mimeType={value.fileInfo.type} />
+                                    </Dialog>
+                                )}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </CardContent>
+        </Card>
+      </div>
+    );
+}
 
 export function AttachmentUploader({
-  initialSrc = null,
-  attachmentName = 'Attachment',
-  allowedMimeTypes = [],
-  maxSize, // in bytes
-  onUpload,
-  onDelete,
+  configs,
+  initialFiles = {},
+  onFilesChange,
   outputType = 'base64',
   disabled = false,
 }: AttachmentUploaderProps) {
-  const [fileSrc, setFileSrc] = useState<string | null>(initialSrc);
-  const [file, setFile] = useState<File | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState(0);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const { toast } = useToast();
-
-  useEffect(() => {
-    setFileSrc(initialSrc);
-  }, [initialSrc]);
-  
-  const getFileExtension = (fileName: string) => {
-    return fileName.slice(((fileName.lastIndexOf(".") - 1) >>> 0) + 2);
-  }
-
-  const handleFileSelect = useCallback(async (selectedFile: File | null) => {
-    if (!selectedFile) return;
-
-    // Validation
-    const extension = getFileExtension(selectedFile.name);
-    const criticalExtensions = ['exe', 'dll', 'bat', 'sh', 'cmd'];
-    if (criticalExtensions.includes(extension.toLowerCase())) {
-        toast({
-            variant: 'destructive',
-            title: 'Unsupported File Type',
-            description: 'For security reasons, executable files are not allowed.',
-        });
-        return;
-    }
-
-    if (allowedMimeTypes.length > 0 && !allowedMimeTypes.includes(selectedFile.type)) {
-      toast({
-        variant: 'destructive',
-        title: 'Invalid File Type',
-        description: `Please upload a file of type: ${allowedMimeTypes.join(', ')}`,
-      });
-      return;
-    }
-
-    if (maxSize && selectedFile.size > maxSize) {
-      toast({
-        variant: 'destructive',
-        title: 'File Too Large',
-        description: `The file size cannot exceed ${Math.round(maxSize / 1024 / 1024)}MB.`,
-      });
-      return;
-    }
-
-    setIsLoading(true);
-    setUploadProgress(0);
-
-    // Simulate progress
-    const interval = setInterval(() => {
-        setUploadProgress(prev => {
-            if (prev >= 95) {
-                clearInterval(interval);
-                return prev;
-            }
-            return prev + 5;
-        });
-    }, 100);
-
-    try {
-        const dataUri = await fileToDataUri(selectedFile);
-        setFile(selectedFile);
-        setFileSrc(dataUri);
-
-        if (onUpload) {
-            let content: string | ArrayBuffer;
-            if (outputType === 'bytes') {
-                content = await fileToArrayBuffer(selectedFile);
-            } else {
-                content = dataUri;
-            }
-            onUpload({ content, extension: getFileExtension(selectedFile.name), mimeType: selectedFile.type });
+  const [files, setFiles] = useState<Record<string, FileData | null>>(() => {
+    const initialState: Record<string, FileData | null> = {};
+    configs.forEach(config => {
+        const initialContent = initialFiles[config.name];
+        if (initialContent) {
+            initialState[config.name] = {
+                content: initialContent,
+                fileInfo: { name: `Initial ${config.label}`, type: 'image/png', size: 0 } // Mock fileInfo
+            };
+        } else {
+            initialState[config.name] = null;
         }
-        clearInterval(interval);
-        setUploadProgress(100);
-        toast({
-            variant: 'success',
-            title: 'Upload Successful',
-            description: `'${selectedFile.name}' has been prepared.`,
-        });
-    } catch (error) {
-        toast({
-            variant: 'destructive',
-            title: 'Upload Failed',
-            description: 'There was an error processing the file.',
-        });
-        clearInterval(interval);
-        setUploadProgress(0);
-    } finally {
-        setIsLoading(false);
-    }
-  }, [allowedMimeTypes, maxSize, onUpload, outputType, toast]);
+    });
+    return initialState;
+  });
+
+  const handleFileChange = (name: string, fileData: FileData | null) => {
+    const newFiles = { ...files, [name]: fileData };
+    setFiles(newFiles);
+    onFilesChange(newFiles);
+  };
   
-  const handleDelete = () => {
-    setFile(null);
-    setFileSrc(null);
-    setUploadProgress(0);
-    if(inputRef.current) inputRef.current.value = '';
-    if (onDelete) onDelete();
-  }
-
-  const fileType = useMemo(() => {
-    if (!file && !fileSrc) return 'none';
-    const mime = file?.type || '';
-    if (mime.startsWith('image/')) return 'image';
-    if (mime === 'application/pdf') return 'pdf';
-    if (mime.startsWith('audio/')) return 'audio';
-    if (mime.startsWith('video/')) return 'video';
-    return 'other';
-  }, [file, fileSrc]);
-
-  const FileTypeIcon = useMemo(() => {
-    switch(fileType) {
-        case 'pdf': return FilePdfIcon;
-        case 'audio': return FileAudioIcon;
-        case 'video': return FileVideoIcon;
-        default: return FileIcon;
-    }
-  }, [fileType]);
-
-  const triggerFileSelect = () => inputRef.current?.click();
-
   return (
-    <Card className={cn('overflow-hidden', disabled && 'bg-muted/50')}>
-      <input
-        type="file"
-        ref={inputRef}
-        onChange={(e) => handleFileSelect(e.target.files?.[0] || null)}
-        className="hidden"
-        disabled={disabled}
-      />
-      <CardContent className="p-4">
-        <div className="flex items-center gap-4">
-          <div
-            className="relative flex h-20 w-20 flex-shrink-0 cursor-pointer items-center justify-center rounded-lg bg-secondary"
-            onClick={!disabled ? triggerFileSelect : undefined}
-          >
-            {isLoading ? (
-              <Loader2 className="h-8 w-8 animate-spin text-primary" />
-            ) : fileSrc && fileType === 'image' ? (
-              <Image src={fileSrc} alt={attachmentName} layout="fill" objectFit="cover" className="rounded-lg" />
-            ) : fileSrc ? (
-              <FileTypeIcon className="h-10 w-10 text-primary" />
-            ) : (
-              <UploadCloud className="h-10 w-10 text-muted-foreground" />
-            )}
-          </div>
-          <div className="w-full space-y-2">
-            <h4 className="font-semibold">{attachmentName}</h4>
-            <div className="text-xs text-muted-foreground truncate">
-                {file ? file.name : (fileSrc ? "Existing file" : "No file selected")}
-            </div>
-             {isLoading || uploadProgress > 0 ? (
-                <Progress value={uploadProgress} className="h-2" />
-            ) : (
-                 <div className="flex items-center gap-2">
-                    <Button size="sm" variant="outline" onClick={triggerFileSelect} disabled={disabled}>
-                      <UploadCloud className="mr-2 h-4 w-4" />
-                      {fileSrc ? 'Change' : 'Upload'}
-                    </Button>
-                    {fileSrc && (
-                         <Dialog>
-                           <TooltipProvider>
-                            <Tooltip>
-                                <TooltipTrigger asChild>
-                                    <DialogTrigger asChild>
-                                        <Button size="sm" variant="ghost"><Eye className="h-4 w-4" /></Button>
-                                    </DialogTrigger>
-                                </TooltipTrigger>
-                                <TooltipContent><p>View</p></TooltipContent>
-                            </Tooltip>
-                            <Tooltip>
-                                <TooltipTrigger asChild>
-                                     <Button size="sm" variant="ghost" disabled={disabled} onClick={handleDelete}><Trash2 className="h-4 w-4 text-destructive" /></Button>
-                                </TooltipTrigger>
-                                <TooltipContent><p>Delete</p></TooltipContent>
-                            </Tooltip>
-                            <Tooltip>
-                                <TooltipTrigger asChild>
-                                    <Button size="sm" variant="ghost" asChild>
-                                        <a href={fileSrc} download={file?.name || attachmentName}>
-                                            <Download className="h-4 w-4" />
-                                        </a>
-                                    </Button>
-                                </TooltipTrigger>
-                                <TooltipContent><p>Download</p></TooltipContent>
-                            </Tooltip>
-                           </TooltipProvider>
-                           <AttachmentViewerDialog src={fileSrc} name={file?.name || attachmentName} mimeType={file?.type || ''} />
-                        </Dialog>
-                    )}
-                </div>
-            )}
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+    <div className="space-y-4">
+        {configs.map(config => (
+            <SingleUploader 
+                key={config.name}
+                config={config}
+                value={files[config.name]}
+                onFileChange={(fileData) => handleFileChange(config.name, fileData)}
+                outputType={outputType}
+                disabled={disabled}
+            />
+        ))}
+    </div>
   );
 }

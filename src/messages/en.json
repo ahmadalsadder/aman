@@ -1,5 +1,4 @@
 
-
 {
   "LoginPage": {
     "title": "Welcome to Guardian Gate",
@@ -354,7 +353,9 @@
       "reject": "Reject",
       "refer": "Refer to Supervisor (Manual Review)",
       "highRiskTitle": "High Risk Passenger",
-      "highRiskDesc": "This passenger is flagged as high-risk. Proceed with caution and follow protocol."
+      "highRiskDesc": "This passenger is flagged as high-risk. Proceed with caution and follow protocol.",
+      "attachmentsTitle": "Attachments",
+      "attachmentsDesc": "Upload supporting documents (optional)."
     }
   },
   "LiveProcessingFlow": {

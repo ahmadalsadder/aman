@@ -738,7 +738,7 @@
       "riskScore": "درجة المخاطرة",
       "escalatedBy": "تصعيد بواسطة"
     },
-    "filterPlaceholder": "تصفية بالاسم أو جواز السفر...",
+    "filterPlaceholder": "تصفية برقم جواز السفر...",
     "search": "بحث",
     "reset": "إعادة تعيين"
   }

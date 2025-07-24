@@ -738,7 +738,7 @@
       "riskScore": "Risk Score",
       "escalatedBy": "Escalated By"
     },
-    "filterPlaceholder": "Filter by name or passport...",
+    "filterPlaceholder": "Filter by passport number...",
     "search": "Search",
     "reset": "Reset"
   }

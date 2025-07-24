@@ -54,8 +54,7 @@ export default function DutyManagerPage() {
     if (!appliedFilter) return allPendingTransactions;
     const lowercasedFilter = appliedFilter.toLowerCase();
     return allPendingTransactions.filter(
-      t => (t.passengerName && t.passengerName.toLowerCase().includes(lowercasedFilter)) ||
-           (t.passportNumber && t.passportNumber.toLowerCase().includes(lowercasedFilter))
+      t => t.passportNumber && t.passportNumber.toLowerCase().includes(lowercasedFilter)
     );
   }, [allPendingTransactions, appliedFilter]);
 
@@ -194,15 +193,17 @@ export default function DutyManagerPage() {
           </CollapsibleTrigger>
           <CollapsibleContent>
             <div className="p-6 pt-0">
-                <div className="flex items-center gap-2">
+                <div className="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                     <Input 
                         placeholder={t('filterPlaceholder')}
                         value={filter}
                         onChange={(e) => setFilter(e.target.value)}
                         className="max-w-sm"
                     />
-                    <Button onClick={handleSearch}><Search className="mr-2 h-4 w-4" />{t('search')}</Button>
+                </div>
+                <div className="mt-6 flex justify-end gap-2">
                     <Button onClick={handleReset} variant="outline"><X className="mr-2 h-4 w-4" />{t('reset')}</Button>
+                    <Button onClick={handleSearch}><Search className="mr-2 h-4 w-4" />{t('search')}</Button>
                 </div>
             </div>
           </CollapsibleContent>
@@ -225,4 +226,3 @@ export default function DutyManagerPage() {
     </div>
   );
 }
-

@@ -66,7 +66,7 @@ const BreadcrumbLink = React.forwardRef<
       className={cn("transition-colors hover:text-foreground flex items-center gap-2", className)}
       {...props}
     >
-      {Icon && <Icon className="h-4 w-4" />}
+      {Icon && <Icon className="h-4 w-4 text-primary" />}
       {children}
     </Comp>
   )
@@ -87,7 +87,7 @@ const BreadcrumbPage = React.forwardRef<
     className={cn("font-normal text-foreground flex items-center gap-2", className)}
     {...props}
   >
-     {Icon && <Icon className="h-4 w-4" />}
+     {Icon && <Icon className="h-4 w-4 text-primary" />}
      {children}
   </span>
 ))

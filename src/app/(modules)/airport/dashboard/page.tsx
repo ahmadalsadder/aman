@@ -95,7 +95,7 @@ export default function AirportDashboardPage() {
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbPage icon={LayoutDashboard}>Dashboard</BreadcrumbPage>
+            <BreadcrumbLink href="/airport/dashboard" icon={LayoutDashboard}>Dashboard</BreadcrumbLink>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>

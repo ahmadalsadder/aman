@@ -79,7 +79,7 @@ export default function AnalystDashboardPage() {
        <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbPage icon={LayoutDashboard}>Dashboard</BreadcrumbPage>
+            <BreadcrumbLink href="/analyst/dashboard" icon={LayoutDashboard}>Dashboard</BreadcrumbLink>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>

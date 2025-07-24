@@ -97,7 +97,7 @@ export default function ControlRoomDashboardPage() {
        <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbPage icon={LayoutDashboard}>Dashboard</BreadcrumbPage>
+            <BreadcrumbLink href="/control-room/dashboard" icon={LayoutDashboard}>Dashboard</BreadcrumbLink>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>

@@ -94,7 +94,7 @@ export default function SeaportDashboardPage() {
       <Breadcrumb>
           <BreadcrumbList>
           <BreadcrumbItem>
-              <BreadcrumbPage icon={LayoutDashboard}>Dashboard</BreadcrumbPage>
+              <BreadcrumbLink href="/seaport/dashboard" icon={LayoutDashboard}>Dashboard</BreadcrumbLink>
           </BreadcrumbItem>
           </BreadcrumbList>
       </Breadcrumb>

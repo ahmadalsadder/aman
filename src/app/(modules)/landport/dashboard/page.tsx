@@ -94,7 +94,7 @@ export default function LandportDashboardPage() {
       <Breadcrumb>
           <BreadcrumbList>
           <BreadcrumbItem>
-              <BreadcrumbPage icon={LayoutDashboard}>Dashboard</BreadcrumbPage>
+              <BreadcrumbLink href="/landport/dashboard" icon={LayoutDashboard}>Dashboard</BreadcrumbLink>
           </BreadcrumbItem>
           </BreadcrumbList>
       </Breadcrumb>

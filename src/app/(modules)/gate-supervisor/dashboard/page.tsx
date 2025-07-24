@@ -102,7 +102,7 @@ export default function GateSupervisorDashboardPage() {
       <Breadcrumb>
           <BreadcrumbList>
           <BreadcrumbItem>
-              <BreadcrumbPage icon={LayoutDashboard}>Dashboard</BreadcrumbPage>
+              <BreadcrumbLink href="/gate-supervisor/dashboard" icon={LayoutDashboard}>Dashboard</BreadcrumbLink>
           </BreadcrumbItem>
           </BreadcrumbList>
       </Breadcrumb>

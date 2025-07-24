@@ -77,7 +77,7 @@ export default function EgateDashboardPage() {
        <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbPage icon={LayoutDashboard}>Dashboard</BreadcrumbPage>
+            <BreadcrumbLink href="/egate/dashboard" icon={LayoutDashboard}>Dashboard</BreadcrumbLink>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>

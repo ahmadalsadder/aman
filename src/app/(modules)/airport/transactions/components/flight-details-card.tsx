@@ -13,7 +13,7 @@ export function FlightDetailsCard({ details }: { details: TripInformation }) {
     if (details.type !== 'airport') return null;
 
     return (
-        <Card className="bg-secondary/30">
+        <Card >
             <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-base">
                     <Plane className="h-4 w-4" /> Flight Details

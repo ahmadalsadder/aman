@@ -13,7 +13,7 @@ export function VesselDetailsCard({ details }: { details: TripInformation }) {
     if (details.type !== 'seaport') return null;
 
     return (
-        <Card className="bg-secondary/30">
+        <Card>
             <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-base">
                     <Ship className="h-4 w-4" /> Vessel Details

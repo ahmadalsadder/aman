@@ -13,7 +13,7 @@ export function VehicleDetailsCard({ details }: { details: TripInformation }) {
     if (details.type !== 'landport') return null;
 
     return (
-        <Card className="bg-secondary/30">
+        <Card >
             <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-base">
                     <Car className="h-4 w-4" /> Vehicle Details

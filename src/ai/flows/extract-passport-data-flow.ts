@@ -29,6 +29,7 @@ const extractPassportDataFlow = ai.defineFlow(
         name: 'extractPassportDataFlow',
         inputSchema: ExtractPassportDataInputSchema,
         outputSchema: PassportDataSchema,
+        model: 'googleai/gemini-1.5-flash',
     },
     async (input) => {
         const { output } = await prompt(input);

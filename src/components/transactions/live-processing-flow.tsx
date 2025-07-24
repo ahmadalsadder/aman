@@ -467,12 +467,13 @@ export function LiveProcessingFlow({ module }: { module: Module }) {
                             </CardContent>
                         </Card>
                         <div className="flex flex-col gap-2 sm:flex-row">
+                        <Button variant="destructive" className="w-full" onClick={() => resetState()}>
+                                <XCircle className="mr-2 h-4 w-4" /> {t('common.cancelTransaction')}
+                            </Button>
                             <Button className="w-full" onClick={() => setCurrentStep('capture_photo')}>
                                 {t('common.confirmAndProceed')} <ChevronRight className="ml-2 h-4 w-4" />
                             </Button>
-                            <Button variant="destructive" className="w-full" onClick={() => resetState()}>
-                                <XCircle className="mr-2 h-4 w-4" /> {t('common.cancelTransaction')}
-                            </Button>
+                           
                         </div>
                     </CardContent>
                 </motion.div>

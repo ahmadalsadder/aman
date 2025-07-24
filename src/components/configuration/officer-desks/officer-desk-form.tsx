@@ -113,8 +113,8 @@ export function OfficerDeskForm({
                 <CardContent className="space-y-4">
                   <FormField control={form.control} name="name" render={({ field }) => ( <FormItem><FormLabel required>{t('deskName')}</FormLabel><FormControl><Input placeholder={t('deskNamePlaceholder')} {...field} /></FormControl><FormMessage /></FormItem> )} />
                   <FormField control={form.control} name="portId" render={({ field }) => ( <FormItem><FormLabel required>{t('port')}</FormLabel><Combobox options={portOptions} value={field.value} onChange={field.onChange} placeholder={t('selectPort')} /><FormMessage /></FormItem> )} />
-                  <FormField control={form.control} name="terminalId" render={({ field }) => ( <FormItem><FormLabel required>{t('terminal')}</FormLabel><Combobox options={terminalOptions} value={field.value} onChange={field.onChange} placeholder={t('selectTerminal')} disabled={!portId || terminalOptions.length === 0} /><FormMessage /></FormItem> )} />
-                  <FormField control={form.control} name="zoneId" render={({ field }) => ( <FormItem><FormLabel required>{t('zone')}</FormLabel><Combobox options={zoneOptions} value={field.value} onChange={field.onChange} placeholder={t('selectZone')} disabled={!terminalId || zoneOptions.length === 0} /><FormMessage /></FormItem> )} />
+                  <FormField control={form.control} name="terminalId" render={({ field }) => ( <FormItem><FormLabel required>{t('terminal')}</FormLabel><Combobox options={terminalOptions} value={field.value} onChange={field.onChange} placeholder={t('selectTerminal')} disabled={!portId} /><FormMessage /></FormItem> )} />
+                  <FormField control={form.control} name="zoneId" render={({ field }) => ( <FormItem><FormLabel required>{t('zone')}</FormLabel><Combobox options={zoneOptions} value={field.value} onChange={field.onChange} placeholder={t('selectZone')} disabled={!terminalId} /><FormMessage /></FormItem> )} />
                 </CardContent>
               </Card>
             </div>

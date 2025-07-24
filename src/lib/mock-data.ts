@@ -1,5 +1,6 @@
 
 import type { Passenger, Transaction, OfficerDesk } from "@/types/live-processing";
+import { Plane, Car, Ship } from "lucide-react";
 
 export const mockPassengers: Passenger[] = [
     {
@@ -59,13 +60,29 @@ export const mockTransactions: Transaction[] = [
       officerName: 'System',
       finalDecision: 'Approved',
       triggeredRules: [],
+      notes: 'Standard entry, no issues.',
+      workflow: [
+        { id: 'doc_scan', name: 'Document Scan', status: 'Completed', timestamp: '14:30:05' },
+        { id: 'biometric_capture', name: 'Biometric Capture', status: 'Completed', timestamp: '14:30:15' },
+        { id: 'security_ai_checks', name: 'Security & AI Checks', status: 'Completed', timestamp: '14:30:45' },
+        { id: 'officer_review', name: 'Officer Review', status: 'Completed', timestamp: '14:31:20' }
+      ],
+      tripInformation: { type: 'airport', flightNumber: 'EK202', carrier: 'Emirates', departureCountry: 'USA', seatNumber: '14A' },
+      passportScan: 'https://placehold.co/600x400.png',
+      biometrics: {
+        face: 'https://placehold.co/400x400.png',
+        leftIris: 'https://placehold.co/400x400.png',
+        rightIris: 'https://placehold.co/400x400.png',
+        fingerprint: 'https://placehold.co/400x400.png',
+      },
+      passenger: mockPassengers.find(p => p.id === 'P001'),
     },
     {
       id: 'TXN951753486',
       passengerId: 'P002',
       passengerName: 'Jane Smith',
       passportNumber: 'B87654321',
-      type: 'Entry',
+      type: 'Exit',
       gate: 'Desk 02',
       entranceType: 'Officer Desk',
       dateTime: '2023-05-20 14:35',
@@ -75,14 +92,16 @@ export const mockTransactions: Transaction[] = [
       officerName: 'Emily White',
       finalDecision: 'Approved',
       triggeredRules: [{ alert: 'Baggage Anomaly', acknowledged: true }],
-      officerNotes: 'Passenger states the bag was a gift. Contents cleared after secondary screening.'
+      notes: 'Passenger states the bag was a gift. Contents cleared after secondary screening.',
+      tripInformation: { type: 'landport', vehiclePlateNumber: 'UK-JS-123', vehicleType: 'Car', laneNumber: '3', vehicleMake: 'Range Rover' },
+      passenger: mockPassengers.find(p => p.id === 'P002'),
     },
     {
       id: 'TXN357159852',
       passengerId: 'P003',
       passengerName: 'Wei Chen',
       passportNumber: 'G55566677',
-      type: 'Entry',
+      type: 'Transit',
       gate: 'Desk 01',
       entranceType: 'Officer Desk',
       dateTime: '2023-05-19 18:00',
@@ -92,7 +111,9 @@ export const mockTransactions: Transaction[] = [
       officerName: 'David Green',
       finalDecision: 'Manual Review',
       triggeredRules: [{ alert: 'Watchlist Match', acknowledged: false }],
-      officerNotes: 'Passenger matches a name on the internal watchlist. Escalated to supervisor for identity verification.'
+      notes: 'Passenger matches a name on the internal watchlist. Escalated to supervisor for identity verification.',
+      tripInformation: { type: 'seaport', vesselName: 'Oceanic Explorer', voyageNumber: 'OE-555', berth: 'C4', lastPortOfCall: 'SGP' },
+      passenger: mockPassengers.find(p => p.id === 'P003'),
     }
 ];
 

@@ -83,17 +83,17 @@ export interface Passenger {
     passengerId: string;
     passengerName: string;
     passportNumber: string;
-    type: 'Entry' | 'Exit';
+    type: 'Entry' | 'Exit' | 'Transit';
     gate: string;
     entranceType: 'E-Gate' | 'Officer Desk';
     dateTime: string;
-    status: 'Completed' | 'Failed' | 'Pending';
+    status: 'Completed' | 'Failed' | 'Pending' | 'In Progress';
     duration: string;
     riskScore: number;
     officerName: string;
     finalDecision: 'Approved' | 'Rejected' | 'Manual Review';
     triggeredRules: { alert: string, acknowledged: boolean }[];
-    officerNotes?: string;
+    notes?: string;
     workflow?: WorkflowStep[];
     tripInformation?: TripInformation;
     civilInformation?: {

@@ -3,9 +3,8 @@
 
 import { useState, useMemo, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import Link from 'next/link';
 import Image from 'next/image';
-import type { Transaction, Passenger, WorkflowStep } from '@/types/live-processing';
+import type { Transaction, Passenger } from '@/types/live-processing';
 import { api } from '@/lib/api';
 
 import { GradientPageHeader } from '@/components/shared/gradient-page-header';
@@ -22,12 +21,8 @@ import {
   XCircle,
   AlertCircle,
   User,
-  ScanEye,
-  Fingerprint,
-  Plane,
   Loader2,
   ChevronRight,
-  IdCard,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
@@ -103,7 +98,7 @@ export default function TransactionDetailsPage() {
 
 
   const documentImages = useMemo(() => {
-    if (!transaction?.passenger) return [];
+    if (!transaction?.passportScan) return [];
     return [
       { name: 'Passport Photo', url: transaction.passportScan, hint: 'passport photo id' },
     ].filter(doc => doc.url);

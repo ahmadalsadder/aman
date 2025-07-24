@@ -174,7 +174,7 @@ export default function TransactionDetailsPage() {
     return 'Low';
   };
   const riskLevel = getRiskLevel(transaction.riskScore);
-  const passenger = transaction.passenger as Passenger;
+  const passenger = transaction?.passenger as Passenger | undefined;
 
   return (
     <div className="flex flex-col gap-6">
@@ -285,25 +285,27 @@ export default function TransactionDetailsPage() {
 
         {/* Right Column */}
         <div className="space-y-6 lg:col-span-4">
-          <Card>
-            <CardHeader className="items-center text-center">
-                <Avatar className="h-20 w-20 mb-2">
-                    <AvatarImage src={passenger.profilePicture} alt={passenger.firstName} data-ai-hint="portrait professional" />
-                    <AvatarFallback><User className="h-10 w-10"/></AvatarFallback>
-                </Avatar>
-                <CardTitle>{passenger.firstName} {passenger.lastName}</CardTitle>
-                <Button asChild size="sm" disabled>
-                  <Link href={`/${module}/passengers/${passenger.id}/edit`}>View Passenger Profile</Link>
-                </Button>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <Separator />
-              <DetailItem label="Passport Number" value={passenger.passportNumber} />
-              <DetailItem label="Nationality" value={passenger.nationality} />
-              <DetailItem label="Date of Birth" value={passenger.dateOfBirth} />
-              <DetailItem label="Gender" value={passenger.gender} />
-            </CardContent>
-          </Card>
+          {passenger && (
+            <Card>
+              <CardHeader className="items-center text-center">
+                  <Avatar className="h-20 w-20 mb-2">
+                      <AvatarImage src={passenger.profilePicture} alt={passenger.firstName} data-ai-hint="portrait professional" />
+                      <AvatarFallback><User className="h-10 w-10"/></AvatarFallback>
+                  </Avatar>
+                  <CardTitle>{passenger.firstName} {passenger.lastName}</CardTitle>
+                  <Button asChild size="sm" disabled>
+                    <Link href={`/${module}/passengers/${passenger.id}/edit`}>View Passenger Profile</Link>
+                  </Button>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <Separator />
+                <DetailItem label="Passport Number" value={passenger.passportNumber} />
+                <DetailItem label="Nationality" value={passenger.nationality} />
+                <DetailItem label="Date of Birth" value={passenger.dateOfBirth} />
+                <DetailItem label="Gender" value={passenger.gender} />
+              </CardContent>
+            </Card>
+          )}
            <Card>
             <CardHeader><CardTitle>Risk Assessment</CardTitle></CardHeader>
             <CardContent className="space-y-4 text-center">

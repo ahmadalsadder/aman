@@ -89,7 +89,7 @@ export function TransactionsPage({ module, title, description }: TransactionsPag
         setLoading(true);
         const [transactionsResult, desksResult] = await Promise.all([
             api.get<Transaction[]>('/data/transactions'),
-            api.get<OfficerDesk[]>('/data/officer-desks')
+            api.get<OfficerDesk[]>('/data/desks')
         ]);
         if (transactionsResult.isSuccess) {
             setTransactions(transactionsResult.data || []);

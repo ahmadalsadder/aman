@@ -30,6 +30,7 @@ import { LayoutDashboard } from 'lucide-react';
 import type { Module } from '@/types';
 import { TransactionStatsCards } from './transaction-stats-cards';
 import { Skeleton } from '../ui/skeleton';
+import { useAuth } from '@/hooks/use-auth';
 
 const statusColors: { [key: string]: string } = {
   Completed: 'bg-green-500/20 text-green-700 border-green-500/30',
@@ -71,6 +72,7 @@ export function TransactionsPage({ module, title, description }: TransactionsPag
   const [appliedFilters, setAppliedFilters] = useState(initialFilters);
   const [transactionToDelete, setTransactionToDelete] = useState<Transaction | null>(null);
   const { toast } = useToast();
+  const { hasPermission } = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -183,6 +185,7 @@ export function TransactionsPage({ module, title, description }: TransactionsPag
       id: 'actions',
       cell: ({ row }) => {
         const transaction = row.original;
+        const canDelete = hasPermission(['records:delete']);
         return (
           <div className="flex items-center gap-2">
             <Button asChild variant="ghost" size="icon" className="text-primary hover:text-primary/80">
@@ -195,9 +198,11 @@ export function TransactionsPage({ module, title, description }: TransactionsPag
                     <User className="h-4 w-4" />
                 </Link>
             </Button>
-            <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive/80" onClick={() => setTransactionToDelete(transaction)}>
-              <Trash2 className="h-4 w-4" />
-            </Button>
+            {canDelete && (
+                <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive/80" onClick={() => setTransactionToDelete(transaction)}>
+                <Trash2 className="h-4 w-4" />
+                </Button>
+            )}
           </div>
         );
       },

@@ -80,6 +80,12 @@ export const mockTransactions: Transaction[] = [
         irisMatch: 97,
         fingerprintMatch: 98,
       },
+      civilInformation: {
+        fileType: 'Visa',
+        nationalId: 'N/A',
+        fileNumber: 'V-987654',
+        fileExpiryDate: '2024-12-31'
+      },
       passenger: mockPassengers.find(p => p.id === 'P001'),
     },
     {

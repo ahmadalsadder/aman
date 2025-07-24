@@ -24,6 +24,8 @@ import {
   User,
   Loader2,
   ChevronRight,
+  ScanEye,
+  ScanFace,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
@@ -277,6 +279,23 @@ export default function TransactionDetailsPage() {
               )}
             </CardContent>
           </Card>
+          {transaction.biometricMatch && (
+            <Card>
+              <CardHeader><CardTitle>Biometric Match Results</CardTitle></CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium flex items-center gap-2"><ScanEye className="h-4 w-4 text-primary"/> IRIS Match</span>
+                  <span className="font-semibold text-primary">{transaction.biometricMatch?.irisMatch ?? 'N/A'}%</span>
+                </div>
+                <Progress value={transaction.biometricMatch?.irisMatch} />
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium flex items-center gap-2"><ScanFace className="h-4 w-4 text-primary"/> Face Match</span>
+                  <span className="font-semibold text-primary">{transaction.biometricMatch?.faceMatch ?? 'N/A'}%</span>
+                </div>
+                <Progress value={transaction.biometricMatch?.faceMatch} />
+              </CardContent>
+            </Card>
+          )}
         </div>
 
         {/* Right Column */}

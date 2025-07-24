@@ -75,6 +75,11 @@ export const mockTransactions: Transaction[] = [
         rightIris: 'https://placehold.co/400x400.png',
         fingerprint: 'https://placehold.co/400x400.png',
       },
+      biometricMatch: {
+        faceMatch: 99,
+        irisMatch: 97,
+        fingerprintMatch: 98,
+      },
       passenger: mockPassengers.find(p => p.id === 'P001'),
     },
     {

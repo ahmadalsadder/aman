@@ -110,6 +110,11 @@ export interface Passenger {
         rightIris: string | null;
         fingerprint: string | null;
     };
+    biometricMatch?: {
+      irisMatch?: number;
+      faceMatch?: number;
+      fingerprintMatch?: number;
+    };
   }
 
   export interface TestCase {

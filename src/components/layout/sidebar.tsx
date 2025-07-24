@@ -17,7 +17,8 @@ import {
   SidebarFooter,
   SidebarSeparator,
   SidebarMenuSub,
-  SidebarMenuSubButton
+  SidebarMenuSubButton,
+  SidebarMenuSubItem
 } from '@/components/ui/sidebar';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useTranslations } from 'next-intl';

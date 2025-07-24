@@ -4,7 +4,7 @@
 import { LiveProcessingFlow } from '@/components/transactions/live-processing-flow';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { DashboardHeader } from '@/components/layout/dashboard-header';
-import { Car, LayoutDashboard, RadioTower } from 'lucide-react';
+import { Car, LayoutDashboard, RadioTower, ArrowRightLeft } from 'lucide-react';
 
 export default function LandportLiveProcessingPage() {
   return (
@@ -14,6 +14,10 @@ export default function LandportLiveProcessingPage() {
           <BreadcrumbItem>
             <BreadcrumbLink href="/landport/dashboard" icon={LayoutDashboard}>Dashboard</BreadcrumbLink>
           </BreadcrumbItem>
+          <BreadcrumbSeparator />
+            <BreadcrumbItem>
+                <BreadcrumbLink href="/landport/transactions" icon={ArrowRightLeft}>Transactions</BreadcrumbLink>
+            </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbPage icon={RadioTower}>Live Processing</BreadcrumbPage>
@@ -29,5 +33,3 @@ export default function LandportLiveProcessingPage() {
     </div>
   );
 }
-
-    

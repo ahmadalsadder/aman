@@ -4,7 +4,7 @@
 import { LiveProcessingFlow } from '@/components/transactions/live-processing-flow';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { DashboardHeader } from '@/components/layout/dashboard-header';
-import { LayoutDashboard, RadioTower, Ship } from 'lucide-react';
+import { LayoutDashboard, RadioTower, Ship, ArrowRightLeft } from 'lucide-react';
 
 export default function SeaportLiveProcessingPage() {
   return (
@@ -13,6 +13,10 @@ export default function SeaportLiveProcessingPage() {
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink href="/seaport/dashboard" icon={LayoutDashboard}>Dashboard</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+           <BreadcrumbItem>
+            <BreadcrumbLink href="/seaport/transactions" icon={ArrowRightLeft}>Transactions</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
@@ -29,5 +33,3 @@ export default function SeaportLiveProcessingPage() {
     </div>
   );
 }
-
-    

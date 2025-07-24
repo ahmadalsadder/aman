@@ -714,5 +714,3 @@ export function LiveProcessingFlow({ module }: { module: Module }) {
     </div>
   );
 }
-
-    

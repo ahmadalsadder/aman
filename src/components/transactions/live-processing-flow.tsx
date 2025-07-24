@@ -49,7 +49,7 @@ import Link from 'next/link';
 import { api } from '@/lib/api';
 import { useTranslations } from 'next-intl';
 
-type ProcessingStep = 'upload_document' | 'confirm_new_passenger' | 'match_found' | 'capture_photo' | 'analyzing' | 'review' | 'completed';
+type ProcessingStep = 'upload_document' | 'confirm_new_passenger' | 'capture_photo' | 'analyzing' | 'review' | 'completed';
 type UpdateChoice = 'update_all' | 'update_images';
 type InternalWorkflowStatus = 'pending' | 'in-progress' | 'completed' | 'skipped' | 'failed';
 
@@ -61,8 +61,6 @@ const fileToDataUri = (file: File): Promise<string> => {
         reader.onerror = (error) => reject(error);
     });
 };
-
-const NATIONALITIES_REQUIRING_VISA = ['Jordan'];
 
 function ScanCard({ title, onScan, scannedImage, onClear, disabled, loading }: { title: string; onScan: (file: File) => void, scannedImage?: string | null, onClear: () => void, disabled?: boolean, loading?: boolean }) {
     const inputRef = useRef<HTMLInputElement>(null);
@@ -206,40 +204,6 @@ export function LiveProcessingFlow() {
     }
   }
 
-  const handleConfirmExtractedData = () => {
-    addLog(`Officer confirmed extracted data.`);
-    setCurrentStep('capture_photo');
-  }
-
-  const handleMatchDecision = (choice: UpdateChoice) => {
-    if (!existingPassenger || !extractedData) return;
-    
-    setUpdateChoice(choice);
-    addLog(`Officer selected option: ${choice}`);
-    
-    let passengerForNextStep: Partial<Passenger> = {};
-    const nationalityLabel = countries.find(c => c.value === extractedData.nationality)?.label || extractedData.nationality;
-    const passportCountryLabel = countries.find(c => c.value === extractedData.passportCountry)?.label || extractedData.passportCountry;
-
-    switch(choice) {
-        case 'update_all':
-            passengerForNextStep = {
-                ...existingPassenger,
-                ...extractedData,
-                nationality: nationalityLabel,
-                passportCountry: passportCountryLabel,
-                profilePicture: passportScan || '',
-            };
-            break;
-        case 'update_images':
-            passengerForNextStep = { ...existingPassenger, profilePicture: passportScan || '' };
-            break;
-    }
-    updateStepStatus('identity_confirmation', 'completed');
-    setSelectedPassenger(passengerForNextStep);
-    setCurrentStep('capture_photo');
-  };
-
   const handleCapture = (biometricType: keyof typeof biometricCaptures) => {
     if (videoRef.current && canvasRef.current) {
         const video = videoRef.current;
@@ -272,82 +236,56 @@ export function LiveProcessingFlow() {
 
   const handleStartAnalysis = async () => {
     if (!extractedData || !passportScan || !biometricCaptures.face) {
-        toast({ variant: 'destructive', title: t('toast.missingInfoTitle'), description: t('toast.missingInfoDescription') });
-        return;
+      toast({ variant: 'destructive', title: t('toast.missingInfoTitle'), description: t('toast.missingInfoDescription') });
+      return;
     }
     setCurrentStep('analyzing');
-    addLog('Starting AI analysis...');
-
+    addLog('Starting comprehensive analysis via API...');
+  
     try {
-        const newWorkflow = [
-            { id: 'doc_scan', name: t('workflow.docScan'), status: 'completed' as InternalWorkflowStatus, Icon: ScanLine },
-            { id: 'data_confirmation', name: t('workflow.identity'), status: 'completed' as InternalWorkflowStatus, Icon: UserCheck },
-            { id: 'biometric_capture', name: t('workflow.biometric'), status: 'completed' as InternalWorkflowStatus, Icon: Fingerprint },
-            { id: 'security_ai_checks', name: t('workflow.security'), status: 'in-progress' as InternalWorkflowStatus, Icon: ShieldAlert },
-            { id: 'officer_review', name: t('workflow.review'), status: 'pending' as InternalWorkflowStatus, Icon: User }
-        ];
-        setWorkflow(newWorkflow);
-        
-        // Here you would make the single, comprehensive API call.
-        // For now, we simulate the steps of the backend.
-
-        // 1. Check for existing passenger
-        const passengerResult = await api.get<{ airport: Passenger[], seaport: Passenger[], landport: Passenger[] }>(`/data/passengers`);
-        let existingMatch: Passenger | undefined;
-        if (passengerResult.isSuccess && passengerResult.data) {
-            const allPassengers = [...passengerResult.data.airport, ...passengerResult.data.seaport, ...passengerResult.data.landport];
-            existingMatch = allPassengers.find(p => p.passportNumber === extractedData.passportNumber);
-            if (existingMatch) {
-                setExistingPassenger(existingMatch);
-            }
-        }
-        
-        // 2. Visa Check
-        const countryLabel = countries.find(c => c.value === extractedData.nationality)?.label || extractedData.nationality;
-        const needsVisa = NATIONALITIES_REQUIRING_VISA.includes(countryLabel);
-        let isVisaValid = false;
-        if (needsVisa) {
-            const visaResult = await api.get<{ passportNumber: string, nationality: string, visaType: string, expiryDate: string }[]>(`/data/visa-database`);
-            if (visaResult.isSuccess && visaResult.data) {
-                const visaHolder = visaResult.data.find(v => v.passportNumber === extractedData.passportNumber && v.nationality === countryLabel);
-                isVisaValid = !!visaHolder;
-            }
-        }
-        setVisaCheckResult(needsVisa ? (isVisaValid ? 'valid' : 'invalid') : 'not_required');
-
-        // 3. Risk Assessment
-        const riskResult = await assessPassengerRisk({
-            passengerDetails: {
-                nationality: extractedData.nationality,
-                dateOfBirth: extractedData.dateOfBirth,
-                riskLevel: existingMatch?.riskLevel || 'Low',
-            },
-            passportPhotoDataUri: passportScan,
-            livePhotoDataUri: biometricCaptures.face,
-        });
-
-        // Combine alerts
-        if (needsVisa && !isVisaValid) {
-            riskResult.alerts.unshift(t('alert.visaRequired'));
-            riskResult.recommendation = 'Reject';
-            riskResult.riskScore = Math.max(riskResult.riskScore, 85);
-        }
-
-        updateStepStatus('security_ai_checks', 'completed');
+      const apiResponse = await api.post('/process-transaction', {
+        extractedData,
+        passportScan,
+        livePhoto: biometricCaptures.face,
+      });
+  
+      if (apiResponse.isSuccess && apiResponse.data) {
+        const { riskResult, existingPassenger, visaCheckResult, workflow } = apiResponse.data as any;
+  
+        // Set all the state from the single API response
         setAiResult(riskResult);
-        setCurrentStep('review');
-        if (riskResult.alerts.length > 0 && riskResult.recommendation === 'Reject') {
-            setFinalDecision('Rejected');
-        }
-        addLog('AI analysis complete.');
+        setExistingPassenger(existingPassenger || null);
+        setVisaCheckResult(visaCheckResult);
+        setWorkflow(workflow);
+  
+        if (existingPassenger) {
+            const nationalityLabel = countries.find(c => c.value === extractedData.nationality)?.label || extractedData.nationality;
+            const passportCountryLabel = countries.find(c => c.value === extractedData.passportCountry)?.label || extractedData.passportCountry;
 
+            setSelectedPassenger({
+                ...existingPassenger,
+                ...extractedData,
+                nationality: nationalityLabel,
+                passportCountry: passportCountryLabel,
+                profilePicture: passportScan || '',
+            });
+        }
+  
+        if (riskResult.alerts.length > 0 && riskResult.recommendation === 'Reject') {
+          setFinalDecision('Rejected');
+        }
+  
+        setCurrentStep('review');
+        addLog('API analysis complete. Ready for officer review.');
+      } else {
+        throw new Error(apiResponse.errors?.[0]?.message || 'API call failed');
+      }
     } catch (error) {
-        console.error("AI Analysis Error:", error);
-        toast({ variant: 'destructive', title: t('toast.analysisFailedTitle') });
-        updateStepStatus('security_ai_checks', 'failed');
-        setCurrentStep('capture_photo'); // Go back a step on failure
+      console.error("API Analysis Error:", error);
+      toast({ variant: 'destructive', title: t('toast.analysisFailedTitle') });
+      setCurrentStep('capture_photo'); // Go back a step on failure
     }
-  }
+  };
 
   const saveTransactionAndPassenger = useCallback(async (decision: 'Approved' | 'Rejected' | 'Manual Review', status: 'Completed' | 'Failed' | 'Pending', passengerToSave: Partial<Passenger>) => {
     if(!passengerToSave || (!aiResult && status !== 'Pending' && decision !== 'Manual Review') || !extractedData) {
@@ -522,7 +460,7 @@ export function LiveProcessingFlow() {
                             </CardContent>
                         </Card>
                         <div className="flex flex-col gap-2 sm:flex-row">
-                            <Button className="w-full" onClick={handleConfirmExtractedData}>
+                            <Button className="w-full" onClick={() => setCurrentStep('capture_photo')}>
                                 {t('common.confirmAndProceed')} <ChevronRight className="ml-2 h-4 w-4" />
                             </Button>
                             <Button variant="destructive" className="w-full" onClick={() => resetState()}>
@@ -764,5 +702,3 @@ export function LiveProcessingFlow() {
     </div>
   );
 }
-
-    

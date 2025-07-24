@@ -2,6 +2,9 @@
 import type { User } from '@/types';
 import { Result, ApiError } from '@/types/api/result';
 import { mockPassengers, mockTransactions, mockVisaDatabase } from './mock-data';
+import { assessPassengerRisk } from '@/ai/flows/assess-risk-flow';
+import { countries } from './countries';
+import { Fingerprint, ScanLine, UserCheck, ShieldAlert, User } from 'lucide-react';
 
 const users: User[] = [
   { 
@@ -65,6 +68,8 @@ const users: User[] = [
     permissions: ['records:view', 'reports:view']
   }
 ];
+
+const NATIONALITIES_REQUIRING_VISA = ['Jordan'];
 
 
 // Mock data for the main dashboard
@@ -453,6 +458,59 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
         // In a real backend, you'd save this to a database.
         // For the mock, we just confirm it was received.
         return Result.success(transactionData) as Result<T>;
+    }
+
+    if (method === 'POST' && url.pathname === '/api/process-transaction') {
+        const { extractedData, passportScan, livePhoto } = JSON.parse(body as string);
+    
+        // 1. Check for existing passenger
+        const allPassengers = [...mockPassengers];
+        const existingPassenger = allPassengers.find(p => p.passportNumber === extractedData.passportNumber) || null;
+    
+        // 2. Visa Check
+        const countryLabel = countries.find(c => c.value === extractedData.nationality)?.label || extractedData.nationality;
+        const needsVisa = NATIONALITIES_REQUIRING_VISA.includes(countryLabel);
+        let isVisaValid = false;
+        if (needsVisa) {
+            const visaHolder = mockVisaDatabase.find(v => v.passportNumber === extractedData.passportNumber && v.nationality === countryLabel);
+            isVisaValid = !!visaHolder;
+        }
+        const visaCheckResult = needsVisa ? (isVisaValid ? 'valid' : 'invalid') : 'not_required';
+    
+        // 3. Risk Assessment
+        const riskResult = await assessPassengerRisk({
+            passengerDetails: {
+                nationality: extractedData.nationality,
+                dateOfBirth: extractedData.dateOfBirth,
+                riskLevel: existingPassenger?.riskLevel || 'Low',
+            },
+            passportPhotoDataUri: passportScan,
+            livePhotoDataUri: livePhoto,
+        });
+    
+        // 4. Combine alerts & Define Workflow
+        if (visaCheckResult === 'invalid') {
+            riskResult.alerts.unshift("Visa Required - Not Found");
+            riskResult.recommendation = 'Reject';
+            riskResult.riskScore = Math.max(riskResult.riskScore, 85);
+        }
+
+        const workflow = [
+            { id: 'doc_scan', name: 'Document Scan', status: 'completed', Icon: ScanLine },
+            { id: 'data_confirmation', name: 'Identity Confirmation', status: 'completed', Icon: UserCheck },
+            { id: 'biometric_capture', name: 'Biometric Capture', status: 'completed', Icon: Fingerprint },
+            { id: 'security_ai_checks', name: 'Security & AI Checks', status: 'completed', Icon: ShieldAlert },
+            { id: 'officer_review', name: 'Officer Review', status: 'in-progress', Icon: User }
+        ];
+    
+        const responsePayload = {
+            riskResult,
+            existingPassenger,
+            visaCheckResult,
+            workflow,
+        };
+    
+        return Result.success(responsePayload) as Result<T>;
     }
     
     if (method === 'GET' && url.pathname === '/dashboard/main') {

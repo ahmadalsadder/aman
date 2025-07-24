@@ -1,3 +1,4 @@
+
 import type { User } from '../types';
 
 export const users: User[] = [
@@ -8,7 +9,10 @@ export const users: User[] = [
     role: 'admin', 
     token: 'fake-admin-token', 
     modules: ['dashboard', 'landport', 'seaport', 'airport', 'egate', 'analyst', 'shiftsupervisor', 'control-room', 'users', 'settings'],
-    permissions: ['records:view', 'records:create', 'records:edit', 'records:delete', 'users:manage', 'reports:view']
+    permissions: [
+        'records:view', 'records:create', 'records:edit', 'records:delete', 'users:manage', 'reports:view',
+        'page:airport:transactions:view', 'page:landport:transactions:view', 'page:seaport:transactions:view', 'page:gate-supervisor:transactions:view'
+    ]
   },
   { 
     id: '2', 
@@ -17,7 +21,7 @@ export const users: User[] = [
     role: 'auditor', 
     token: 'fake-auditor-token', 
     modules: ['landport', 'seaport'],
-    permissions: ['records:view', 'reports:view']
+    permissions: ['records:view', 'reports:view', 'page:landport:transactions:view', 'page:seaport:transactions:view']
   },
   { 
     id: '3', 
@@ -26,6 +30,6 @@ export const users: User[] = [
     role: 'viewer', 
     token: 'fake-viewer-token', 
     modules: ['airport'],
-    permissions: ['records:view']
+    permissions: ['records:view'] // This user can view records, but not the transactions page itself
   },
 ];

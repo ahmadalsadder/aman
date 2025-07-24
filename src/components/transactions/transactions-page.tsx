@@ -27,7 +27,7 @@ import { api } from '@/lib/api';
 import CalendarIcon from '@/components/icons/calendar-icon';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { LayoutDashboard } from 'lucide-react';
-import type { Module } from '@/types';
+import type { Module, Permission } from '@/types';
 import { TransactionStatsCards } from './transaction-stats-cards';
 import { Skeleton } from '../ui/skeleton';
 import { useAuth } from '@/hooks/use-auth';
@@ -76,7 +76,13 @@ export function TransactionsPage({ module, title, description }: TransactionsPag
   const { hasPermission } = useAuth();
   const t = useTranslations('Transactions');
 
+  const canViewPage = useMemo(() => hasPermission([`page:${module}:transactions:view` as Permission]), [hasPermission, module]);
+
   useEffect(() => {
+    if (!canViewPage) {
+        setLoading(false);
+        return;
+    }
     const fetchData = async () => {
         setLoading(true);
         const [transactionsResult, desksResult] = await Promise.all([
@@ -92,7 +98,7 @@ export function TransactionsPage({ module, title, description }: TransactionsPag
         setLoading(false);
     };
     fetchData();
-  }, []);
+  }, [canViewPage]);
   
   const handleDeleteTransaction = async () => {
     if (!transactionToDelete) return;
@@ -273,6 +279,18 @@ export function TransactionsPage({ module, title, description }: TransactionsPag
 
   const fromDate = subYears(new Date(), 10);
   const toDate = addYears(new Date(), 10);
+
+  if (!canViewPage) {
+    return (
+        <div className="flex h-full w-full flex-col items-center justify-center gap-4 text-center">
+            <AlertTriangle className="h-16 w-16 text-destructive" />
+            <h1 className="text-2xl font-bold">Access Denied</h1>
+            <p className="max-w-md text-muted-foreground">
+                You do not have permission to view this page.
+            </p>
+        </div>
+    );
+  }
 
   return (
     <div className="space-y-6">

@@ -27,14 +27,22 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import { cn } from '@/lib/utils';
 
 export default function AppSidebar() {
-  const { user } = useAuth();
+  const { user, hasPermission } = useAuth();
   const pathname = usePathname();
   const t = useTranslations('Navigation');
 
   const currentModule = pathname.split('/')[1] as any;
   const navItems = React.useMemo(() => {
-    return user ? getModuleNavItems(currentModule, user.role, t) : [];
-  }, [currentModule, user, t]);
+    if (!user) return [];
+    const allItems = getModuleNavItems(currentModule, user.role, t);
+    // Filter items based on permission
+    return allItems.filter(item => {
+        if (item.permission) {
+            return hasPermission([item.permission]);
+        }
+        return true;
+    });
+  }, [currentModule, user, t, hasPermission]);
 
   
   const [openCollapsibles, setOpenCollapsibles] = React.useState<Record<string, boolean>>({});

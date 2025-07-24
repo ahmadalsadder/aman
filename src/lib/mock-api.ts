@@ -1,5 +1,6 @@
 
 
+
 import type { User } from '@/types';
 import { Result, ApiError } from '@/types/api/result';
 import { mockPassengers, mockTransactions, mockVisaDatabase, mockOfficerDesks } from './mock-data';
@@ -432,6 +433,7 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
 
     const { method = 'GET', body } = options;
     const url = new URL(endpoint, 'http://mock.com'); // Base URL doesn't matter, just for parsing
+    const pathParts = url.pathname.split('/');
 
     console.log(`[Mock API] ${method} ${url.pathname}`);
 
@@ -468,6 +470,15 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
         return Result.success({ id }) as Result<T>;
     }
     
+    if (method === 'GET' && url.pathname.startsWith('/data/transactions/')) {
+        const id = pathParts[pathParts.length - 1];
+        const transaction = allTransactions.find(t => t.id === id);
+        if (transaction) {
+            return Result.success({ transaction }) as Result<T>;
+        }
+        return Result.failure([new ApiError('NOT_FOUND', `Transaction with id ${id} not found.`)]) as Result<T>;
+    }
+
     if (method === 'GET' && url.pathname === '/data/transactions') {
         return Result.success(allTransactions) as Result<T>;
     }

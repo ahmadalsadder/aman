@@ -46,6 +46,22 @@ export const getModuleNavItems = (module: Module, role: Role, t: any): NavItem[]
         icon: LayoutDashboard,
     });
     
+    // Add transaction processing for specific modules
+    if (['airport', 'landport', 'seaport', 'shiftsupervisor'].includes(module)) {
+        baseNav.push({
+            href: `${moduleBaseUrl}/transactions`,
+            label: t('transactions'),
+            icon: Activity,
+            children: [
+                {
+                    href: `${moduleBaseUrl}/live-processing`,
+                    label: t('liveProcessing'),
+                    icon: RadioTower,
+                }
+            ]
+        });
+    }
+
     // Add admin-specific items if the role is admin
     if (role === 'admin') {
          if (adminNavItems.users) {

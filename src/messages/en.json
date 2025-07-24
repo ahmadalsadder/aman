@@ -42,7 +42,9 @@
     "analyst": "Analyst",
     "shiftsupervisor": "Shift Supervisor",
     "control-room": "Control Room",
-    "backToPortals": "Back to Portals"
+    "backToPortals": "Back to Portals",
+    "transactions": "Transactions",
+    "liveProcessing": "Live Processing"
   },
   "ModulePage": {
     "verifyingAccess": "Verifying access...",

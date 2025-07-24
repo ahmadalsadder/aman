@@ -2,7 +2,7 @@
 'use client';
 import * as React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Ship, Anchor, UserCheck, Users as CruisePassengers, Globe, Clock, ArrowRight, ArrowLeft } from 'lucide-react';
+import { Ship, Anchor, UserCheck, Users as CruisePassengers, Globe, Clock, ArrowRight, ArrowLeft, Zap } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { ThroughputChart } from '@/components/charts/throughput-chart';
 import { RiskRuleTriggerChart } from '@/components/charts/risk-rule-trigger-chart';
@@ -16,6 +16,9 @@ import { DashboardHeader } from '@/components/layout/dashboard-header';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList } from '@/components/ui/breadcrumb';
 import PassengerTypeChart from '@/components/charts/passenger-type-chart';
 import { TravelerCategoryChart } from '@/components/charts/traveler-category-chart';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 export default function SeaportDashboardPage() {
     const t = useTranslations('SeaportDashboard');
@@ -91,13 +94,28 @@ export default function SeaportDashboardPage() {
 
   return (
     <div className="flex flex-col gap-8">
-      <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/seaport/dashboard">Dashboard</BreadcrumbLink>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
+      <div className="flex justify-between items-center">
+        <Breadcrumb>
+            <BreadcrumbList>
+            <BreadcrumbItem>
+                <BreadcrumbLink href="/seaport/dashboard">Dashboard</BreadcrumbLink>
+            </BreadcrumbItem>
+            </BreadcrumbList>
+        </Breadcrumb>
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button variant="outline">
+                    <Zap className="mr-2 h-4 w-4" />
+                    Quick Actions
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+                <DropdownMenuItem asChild>
+                    <Link href="/seaport/live-processing">Live Processing</Link>
+                </DropdownMenuItem>
+            </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
       <DashboardHeader
         title={t('title')}
         description={t('description')}

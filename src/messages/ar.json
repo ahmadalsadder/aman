@@ -42,7 +42,9 @@
     "analyst": "محلل",
     "shiftsupervisor": "مشرف الوردية",
     "control-room": "غرفة التحكم",
-    "backToPortals": "العودة إلى البوابات"
+    "backToPortals": "العودة إلى البوابات",
+    "transactions": "المعاملات",
+    "liveProcessing": "المعالجة المباشرة"
   },
   "ModulePage": {
     "verifyingAccess": "التحقق من الوصول...",

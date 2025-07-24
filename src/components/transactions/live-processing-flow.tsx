@@ -242,7 +242,7 @@ export function LiveProcessingFlow() {
     addLog('Starting comprehensive analysis via API...');
   
     try {
-      const apiResponse = await api.post('/process-transaction', {
+      const apiResponse = await api.post('/api/process-transaction', {
         extractedData,
         passportScan,
         livePhoto: biometricCaptures.face,
@@ -700,5 +700,7 @@ export function LiveProcessingFlow() {
     </div>
   );
 }
+
+    
 
     

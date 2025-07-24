@@ -1,4 +1,5 @@
 
+
 {
   "LoginPage": {
     "title": "Welcome to Guardian Gate",
@@ -45,7 +46,8 @@
     "backToPortals": "Back to Portals",
     "transactions": "Transactions",
     "liveProcessing": "Live Processing",
-    "allTransactions": "All Transactions"
+    "allTransactions": "All Transactions",
+    "officerDesks": "Officer Desks"
   },
   "ModulePage": {
     "verifyingAccess": "Verifying access...",
@@ -425,6 +427,94 @@
       "description": "The transaction has been successfully recorded.",
       "startNew": "Start New Transaction",
       "viewAll": "View All Transactions"
+    }
+  },
+  "OfficerDesks": {
+    "pageTitle": "Officer Desk Management",
+    "pageDescription": "Real-time status and configuration of all officer desks.",
+    "addDesk": "Add Desk",
+    "filterTitle": "Search & Filter Desks",
+    "filterPlaceholder": "Desk Name or Terminal...",
+    "port": "Port",
+    "terminal": "Terminal",
+    "movementType": "Movement Type",
+    "allTypes": "All Types",
+    "status": "Status",
+    "allStatuses": "All Statuses",
+    "reset": "Reset",
+    "search": "Search",
+    "noDesks": "No desks match the current filters.",
+    "totalDesks": "Total Desks",
+    "totalDesksDesc": "All configured desks",
+    "activeDesks": "Active Desks",
+    "activeDesksDesc": "Currently operational",
+    "inactiveDesks": "Inactive Desks",
+    "inactiveDesksDesc": "Temporarily inactive",
+    "closedDesks": "Closed Desks",
+    "closedDesksDesc": "Not operational",
+    "deskCard": {
+      "openMenu": "Open menu",
+      "viewDetails": "View details",
+      "editDesk": "Edit desk",
+      "deactivate": "Deactivate",
+      "activate": "Activate",
+      "delete": "Delete",
+      "ipAddress": "IP Address",
+      "macAddress": "MAC Address",
+      "lastUpdated": "Last Updated",
+      "workflow": "Workflow",
+      "riskProfile": "Risk Profile"
+    },
+    "detailsSheet": {
+      "title": "Desk Details",
+      "close": "Close"
+    },
+    "deleteDialog": {
+      "title": "Are you sure you want to delete this desk?",
+      "description": "This action cannot be undone. This will permanently delete the desk '{deskName}'.",
+      "cancel": "Cancel",
+      "confirm": "Yes, Delete Desk"
+    },
+    "form": {
+      "addTitle": "Add New Officer Desk",
+      "addDescription": "Configure a new desk for passenger processing.",
+      "editTitle": "Edit Officer Desk",
+      "editDescription": "Update the configuration for {deskName}.",
+      "deskInfo": "Desk Information",
+      "deskInfoDesc": "Basic identification and location.",
+      "deskName": "Desk Name",
+      "deskNamePlaceholder": "e.g., A-12",
+      "port": "Port",
+      "selectPort": "Select a port...",
+      "terminal": "Terminal",
+      "selectTerminal": "Select a terminal...",
+      "zone": "Zone",
+      "selectZone": "Select a zone...",
+      "technicalInfo": "Technical Information",
+      "technicalInfoDesc": "Network and hardware identifiers.",
+      "ipAddress": "IP Address",
+      "ipAddressPlaceholder": "e.g., 192.168.1.101",
+      "macAddress": "MAC Address",
+      "macAddressPlaceholder": "e.g., 00:1A:2B:3C:4D:5E",
+      "configInfo": "Configuration",
+      "configInfoDesc": "Operational parameters for this desk.",
+      "status": "Status",
+      "movementType": "Movement Type",
+      "workflow": "Workflow Profile",
+      "selectWorkflow": "Select a workflow...",
+      "riskProfile": "Risk Rule Profile",
+      "selectRiskProfile": "Select a risk profile...",
+      "cancel": "Cancel",
+      "save": "Save Changes",
+      "add": "Add Desk",
+      "toast": {
+        "updateSuccessTitle": "Desk Updated",
+        "updateSuccessDesc": "Desk '{deskName}' has been successfully updated.",
+        "addSuccessTitle": "Desk Added",
+        "addSuccessDesc": "New desk '{deskName}' has been successfully created.",
+        "errorTitle": "Operation Failed",
+        "errorDesc": "An error occurred. Please try again."
+      }
     }
   }
 }

@@ -1,12 +1,14 @@
 
+
 import type { User } from '@/types';
 import { Result, ApiError } from '@/types/api/result';
-import { mockPassengers, mockTransactions, mockVisaDatabase, mockOfficerDesks } from './mock-data';
+import { mockPassengers, mockTransactions, mockVisaDatabase, mockOfficerDesks, mockPorts, mockTerminals, mockZones, mockWorkflows, mockRiskProfiles, setMockOfficerDesks } from './mock-data';
 import { assessPassengerRisk } from '@/ai/flows/assess-risk-flow';
 import { countries } from './countries';
 import { Fingerprint, ScanLine, UserCheck, ShieldAlert, User } from 'lucide-react';
 import { extractPassportData } from '@/ai/flows/extract-passport-data-flow';
-import type { Transaction, OfficerDesk } from '@/types/live-processing';
+import type { Transaction } from '@/types/live-processing';
+import type { OfficerDesk } from '@/types/configuration';
 
 const users: User[] = [
   { 
@@ -29,7 +31,10 @@ const users: User[] = [
         'seaport:dashboard:view', 'seaport:dashboard:stats:view', 'seaport:dashboard:forecasts:view', 'seaport:dashboard:charts:view', 'seaport:dashboard:officer-performance:view',
         'egate:dashboard:view', 'egate:dashboard:stats:view', 'egate:dashboard:charts:view',
         'analyst:dashboard:view', 'analyst:dashboard:stats:view', 'analyst:dashboard:charts:view',
-        'control-room:dashboard:view', 'control-room:dashboard:stats:view', 'control-room:dashboard:forecasts:view', 'control-room:dashboard:charts:view', 'control-room:dashboard:officer-performance:view'
+        'control-room:dashboard:view', 'control-room:dashboard:stats:view', 'control-room:dashboard:forecasts:view', 'control-room:dashboard:charts:view', 'control-room:dashboard:officer-performance:view',
+        'airport:desks:view', 'airport:desks:create', 'airport:desks:edit', 'airport:desks:delete',
+        'landport:desks:view', 'landport:desks:create', 'landport:desks:edit', 'landport:desks:delete',
+        'seaport:desks:view', 'seaport:desks:create', 'seaport:desks:edit', 'seaport:desks:delete'
     ]
   },
   { 
@@ -445,6 +450,7 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
 
     console.log(`[Mock API] ${method} ${url.pathname}`);
 
+    // AUTH
     if (method === 'POST' && url.pathname === '/login') {
         const { email } = JSON.parse(body as string);
 
@@ -466,6 +472,7 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
         return Result.success(user) as Result<T>;
     }
 
+    // TRANSACTIONS
     if (method === 'POST' && url.pathname === '/data/transactions') {
         const transactionData = JSON.parse(body as string);
         allTransactions.push(transactionData);
@@ -491,10 +498,7 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
         return Result.success(allTransactions) as Result<T>;
     }
     
-    if (method === 'GET' && url.pathname === '/data/officer-desks') {
-        return Result.success(mockOfficerDesks) as Result<T>;
-    }
-
+    // LIVE PROCESSING
     if (method === 'POST' && url.pathname === '/api/process-transaction') {
         const { module, passportScan, livePhoto } = JSON.parse(body as string);
     
@@ -566,6 +570,82 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
         return Result.success(responsePayload) as Result<T>;
     }
     
+    // CONFIGURATION DATA
+    if(method === 'GET' && url.pathname === '/data/desks') {
+        const moduleType = url.searchParams.get('moduleType');
+        const allPorts = mockPorts.filter(p => p.type.toLowerCase() === moduleType);
+        const allTerminals = mockTerminals.filter(t => allPorts.some(p => p.id === t.portId));
+        
+        const desksForModule = mockOfficerDesks.filter(desk => allTerminals.some(t => t.id === desk.terminalId));
+
+        const enrichedDesks = desksForModule.map(desk => {
+            const terminal = mockTerminals.find(t => t.id === desk.terminalId);
+            const port = mockPorts.find(p => p.id === terminal?.portId);
+            const zone = mockZones.find(z => z.id === desk.zoneId);
+            return {
+                ...desk,
+                portId: port?.id,
+                portName: port?.name,
+                terminalName: terminal?.name,
+                zoneName: zone?.name,
+            };
+        });
+        return Result.success(enrichedDesks) as Result<T>;
+    }
+
+    if (method === 'POST' && url.pathname === '/data/desks/update-status') {
+        const { deskId, status } = JSON.parse(body as string);
+        const newDesks = mockOfficerDesks.map(desk => 
+            desk.id === deskId 
+            ? { ...desk, status, lastUpdatedAt: new Date().toISOString() } 
+            : desk
+        );
+        setMockOfficerDesks(newDesks);
+        const updatedDesk = newDesks.find(d => d.id === deskId);
+        return Result.success(updatedDesk) as Result<T>;
+    }
+
+    if (method === 'POST' && url.pathname === '/data/desks/save') {
+        let deskData = JSON.parse(body as string) as OfficerDesk;
+        const isNew = !deskData.id;
+        
+        if (isNew) {
+            deskData = { ...deskData, id: `DESK-NEW-${Date.now()}` };
+            const newDesks = [...mockOfficerDesks, deskData];
+            setMockOfficerDesks(newDesks);
+        } else {
+            const newDesks = mockOfficerDesks.map(d => d.id === deskData.id ? deskData : d);
+            setMockOfficerDesks(newDesks);
+        }
+        return Result.success(deskData) as Result<T>;
+    }
+    
+    if (method === 'POST' && url.pathname === '/data/desks/delete') {
+        const { id } = JSON.parse(body as string);
+        setMockOfficerDesks(mockOfficerDesks.filter(d => d.id !== id));
+        return Result.success({ id }) as Result<T>;
+    }
+
+    if (method === 'GET' && url.pathname === '/data/ports') {
+        const moduleType = url.searchParams.get('moduleType');
+        const portsForModule = mockPorts.filter(p => p.type.toLowerCase() === moduleType);
+        return Result.success(portsForModule) as Result<T>;
+    }
+    if (method === 'GET' && url.pathname === '/data/terminals') {
+        return Result.success(mockTerminals) as Result<T>;
+    }
+    if (method === 'GET' && url.pathname === '/data/zones') {
+        return Result.success(mockZones) as Result<T>;
+    }
+    if (method === 'GET' && url.pathname === '/data/workflows') {
+        return Result.success(mockWorkflows) as Result<T>;
+    }
+    if (method === 'GET' && url.pathname === '/data/risk-profiles') {
+        return Result.success(mockRiskProfiles) as Result<T>;
+    }
+
+
+    // DASHBOARD DATA
     if (method === 'GET' && url.pathname === '/dashboard/main') {
         return Result.success(mainDashboardData) as Result<T>;
     }

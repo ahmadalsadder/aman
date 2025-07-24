@@ -1,4 +1,5 @@
 
+
 {
   "LoginPage": {
     "title": "مرحبًا بك في بوابة الحماية",
@@ -45,7 +46,8 @@
     "backToPortals": "العودة إلى البوابات",
     "transactions": "المعاملات",
     "liveProcessing": "المعالجة المباشرة",
-    "allTransactions": "جميع المعاملات"
+    "allTransactions": "جميع المعاملات",
+    "officerDesks": "مكاتب الضباط"
   },
   "ModulePage": {
     "verifyingAccess": "التحقق من الوصول...",
@@ -425,6 +427,94 @@
       "description": "تم تسجيل المعاملة بنجاح.",
       "startNew": "بدء معاملة جديدة",
       "viewAll": "عرض كافة المعاملات"
+    }
+  },
+  "OfficerDesks": {
+    "pageTitle": "إدارة مكاتب الضباط",
+    "pageDescription": "الحالة والتكوين في الوقت الفعلي لجميع مكاتب الضباط.",
+    "addDesk": "إضافة مكتب",
+    "filterTitle": "بحث وتصفية المكاتب",
+    "filterPlaceholder": "اسم المكتب أو المحطة...",
+    "port": "المنفذ",
+    "terminal": "المحطة",
+    "movementType": "نوع الحركة",
+    "allTypes": "جميع الأنواع",
+    "status": "الحالة",
+    "allStatuses": "جميع الحالات",
+    "reset": "إعادة تعيين",
+    "search": "بحث",
+    "noDesks": "لا توجد مكاتب تطابق المرشحات الحالية.",
+    "totalDesks": "إجمالي المكاتب",
+    "totalDesksDesc": "جميع المكاتب المكونة",
+    "activeDesks": "المكاتب النشطة",
+    "activeDesksDesc": "تعمل حاليًا",
+    "inactiveDesks": "المكاتب غير النشطة",
+    "inactiveDesksDesc": "غير نشطة مؤقتًا",
+    "closedDesks": "المكاتب المغلقة",
+    "closedDesksDesc": "لا تعمل",
+    "deskCard": {
+      "openMenu": "فتح القائمة",
+      "viewDetails": "عرض التفاصيل",
+      "editDesk": "تحرير المكتب",
+      "deactivate": "إلغاء التنشيط",
+      "activate": "تنشيط",
+      "delete": "حذف",
+      "ipAddress": "عنوان IP",
+      "macAddress": "عنوان MAC",
+      "lastUpdated": "آخر تحديث",
+      "workflow": "سير العمل",
+      "riskProfile": "ملف تعريف المخاطر"
+    },
+    "detailsSheet": {
+      "title": "تفاصيل المكتب",
+      "close": "إغلاق"
+    },
+    "deleteDialog": {
+      "title": "هل أنت متأكد من أنك تريد حذف هذا المكتب؟",
+      "description": "لا يمكن التراجع عن هذا الإجراء. سيؤدي هذا إلى حذف المكتب '{deskName}' نهائيًا.",
+      "cancel": "إلغاء",
+      "confirm": "نعم، احذف المكتب"
+    },
+    "form": {
+      "addTitle": "إضافة مكتب ضابط جديد",
+      "addDescription": "تكوين مكتب جديد لمعالجة الركاب.",
+      "editTitle": "تحرير مكتب الضابط",
+      "editDescription": "تحديث التكوين لـ {deskName}.",
+      "deskInfo": "معلومات المكتب",
+      "deskInfoDesc": "تحديد الهوية والموقع الأساسي.",
+      "deskName": "اسم المكتب",
+      "deskNamePlaceholder": "على سبيل المثال، A-12",
+      "port": "المنفذ",
+      "selectPort": "اختر منفذًا...",
+      "terminal": "المحطة",
+      "selectTerminal": "اختر محطة...",
+      "zone": "المنطقة",
+      "selectZone": "اختر منطقة...",
+      "technicalInfo": "المعلومات الفنية",
+      "technicalInfoDesc": "معرفات الشبكة والأجهزة.",
+      "ipAddress": "عنوان IP",
+      "ipAddressPlaceholder": "على سبيل المثال، 192.168.1.101",
+      "macAddress": "عنوان MAC",
+      "macAddressPlaceholder": "على سبيل المثال، 00:1A:2B:3C:4D:5E",
+      "configInfo": "التكوين",
+      "configInfoDesc": "المعلمات التشغيلية لهذا المكتب.",
+      "status": "الحالة",
+      "movementType": "نوع الحركة",
+      "workflow": "ملف تعريف سير العمل",
+      "selectWorkflow": "اختر سير عمل...",
+      "riskProfile": "ملف تعريف قاعدة المخاطر",
+      "selectRiskProfile": "اختر ملف تعريف مخاطر...",
+      "cancel": "إلغاء",
+      "save": "حفظ التغييرات",
+      "add": "إضافة مكتب",
+      "toast": {
+        "updateSuccessTitle": "تم تحديث المكتب",
+        "updateSuccessDesc": "تم تحديث المكتب '{deskName}' بنجاح.",
+        "addSuccessTitle": "تمت إضافة المكتب",
+        "addSuccessDesc": "تم إنشاء المكتب الجديد '{deskName}' بنجاح.",
+        "errorTitle": "فشلت العملية",
+        "errorDesc": "حدث خطأ. يرجى المحاولة مرة أخرى."
+      }
     }
   }
 }

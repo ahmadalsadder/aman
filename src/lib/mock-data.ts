@@ -1,6 +1,8 @@
 
+
 import type { Passenger, Transaction, OfficerDesk } from "@/types/live-processing";
 import { Plane, Car, Ship } from "lucide-react";
+import type { Port, Terminal, Zone, Workflow, RiskProfile } from '@/types/configuration';
 
 export const mockPassengers: Passenger[] = [
     {
@@ -128,11 +130,46 @@ export const mockTransactions: Transaction[] = [
     }
 ];
 
-export const mockOfficerDesks: OfficerDesk[] = [
-    { id: 'D01', name: 'Desk 01' },
-    { id: 'D02', name: 'Desk 02' },
-    { id: 'D03', name: 'Desk 03' },
-    { id: 'D04', name: 'Desk 04' },
+export let mockOfficerDesks: OfficerDesk[] = [
+    { id: 'DESK-A1', name: 'Officer Desk A1', terminalId: 'TERM-DXB-1', zoneId: 'ZONE-A', ipAddress: '192.168.1.10', macAddress: '00:1A:2B:3C:4D:5E', status: 'Active', lastUpdatedAt: '2023-05-20T10:00:00Z', movementType: 'Entry', workflowId: 'WF-Standard', riskRuleId: 'RR-Low' },
+    { id: 'DESK-A2', name: 'Officer Desk A2', terminalId: 'TERM-DXB-1', zoneId: 'ZONE-A', ipAddress: '192.168.1.11', macAddress: '00:1A:2B:3C:4D:5F', status: 'Inactive', lastUpdatedAt: '2023-05-19T11:30:00Z', movementType: 'Bidirectional', workflowId: 'WF-Standard', riskRuleId: 'RR-Low' },
+    { id: 'DESK-B1', name: 'Officer Desk B1', terminalId: 'TERM-DXB-2', zoneId: 'ZONE-B', ipAddress: '192.168.2.20', macAddress: '11:22:33:44:55:66', status: 'Active', lastUpdatedAt: '2023-05-20T09:00:00Z', movementType: 'Exit', workflowId: 'WF-FastTrack', riskRuleId: 'RR-Med' },
+    { id: 'DESK-S1', name: 'Officer Desk S1', terminalId: 'TERM-PC-1', zoneId: 'ZONE-SA', ipAddress: '10.0.1.5', macAddress: 'AA:BB:CC:DD:EE:FF', status: 'Active', lastUpdatedAt: '2023-05-20T12:00:00Z', movementType: 'Bidirectional', workflowId: 'WF-Standard', riskRuleId: 'RR-Low' },
+    { id: 'DESK-L1', name: 'Officer Desk L1', terminalId: 'TERM-HE-1', zoneId: 'ZONE-LA', ipAddress: '172.16.0.100', macAddress: 'BB:CC:DD:EE:FF:00', status: 'Closed', lastUpdatedAt: '2023-04-10T15:00:00Z', movementType: 'Bidirectional', workflowId: 'WF-Standard', riskRuleId: 'RR-High' },
+];
+
+export const mockPorts: Port[] = [
+    { id: 'PORT-DXB', name: 'Dubai International Airport', type: 'Airport' },
+    { id: 'PORT-PC', name: 'Port Rashid', type: 'Seaport' },
+    { id: 'PORT-HE', name: 'Hatta Land Port', type: 'Landport' },
+];
+
+export const mockTerminals: Terminal[] = [
+    { id: 'TERM-DXB-1', name: 'Terminal 1', portId: 'PORT-DXB' },
+    { id: 'TERM-DXB-2', name: 'Terminal 2', portId: 'PORT-DXB' },
+    { id: 'TERM-DXB-3', name: 'Terminal 3', portId: 'PORT-DXB' },
+    { id: 'TERM-PC-1', name: 'Cruise Terminal 1', portId: 'PORT-PC' },
+    { id: 'TERM-PC-2', name: 'Cruise Terminal 2', portId: 'PORT-PC' },
+    { id: 'TERM-HE-1', name: 'Main Terminal', portId: 'PORT-HE' },
+];
+
+export const mockZones: Zone[] = [
+    { id: 'ZONE-A', name: 'Zone A', terminalId: 'TERM-DXB-1' },
+    { id: 'ZONE-B', name: 'Zone B', terminalId: 'TERM-DXB-2' },
+    { id: 'ZONE-SA', name: 'Arrivals', terminalId: 'TERM-PC-1' },
+    { id: 'ZONE-LA', name: 'Commercial Lanes', terminalId: 'TERM-HE-1' },
+];
+
+export const mockWorkflows: Workflow[] = [
+    { id: 'WF-Standard', name: 'Standard Processing' },
+    { id: 'WF-FastTrack', name: 'Fast Track' },
+    { id: 'WF-HighRisk', name: 'High-Risk Scrutiny' },
+];
+
+export const mockRiskProfiles: RiskProfile[] = [
+    { id: 'RR-Low', name: 'Low Risk Profile' },
+    { id: 'RR-Med', name: 'Medium Risk Profile' },
+    { id: 'RR-High', name: 'High Risk Profile' },
 ];
 
 
@@ -144,3 +181,7 @@ export const mockVisaDatabase: { passportNumber: string, nationality: string, vi
         expiryDate: "2025-06-30"
     }
 ];
+
+export const setMockOfficerDesks = (newDesks: OfficerDesk[]) => {
+    mockOfficerDesks = newDesks;
+};

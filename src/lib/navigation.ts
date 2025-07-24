@@ -1,6 +1,7 @@
 
+
 'use client';
-import { Shield, LayoutDashboard, BarChart3, Users, Settings, Activity, Ship, LandPlot, DoorOpen, PieChart, UserCog, RadioTower, Home, Plane, ArrowRightLeft } from 'lucide-react';
+import { Shield, LayoutDashboard, BarChart3, Users, Settings, Activity, Ship, LandPlot, DoorOpen, PieChart, UserCog, RadioTower, Home, Plane, ArrowRightLeft, Monitor } from 'lucide-react';
 import type { Role, Module, Permission } from '@/types';
 
 export interface NavItem {
@@ -67,6 +68,13 @@ export const getModuleNavItems = (module: Module, role: Role, t: any): NavItem[]
                     permission: `${module}:transactions:live` as Permission,
                 }
             ]
+        });
+
+        baseNav.push({
+            href: `${moduleBaseUrl}/officer-desks`,
+            label: t('officerDesks'),
+            icon: Monitor,
+            permission: `${module}:desks:view` as Permission,
         });
     }
 

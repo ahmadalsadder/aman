@@ -1,4 +1,5 @@
 
+
 {
   "LoginPage": {
     "title": "Bienvenido a Guardian Gate",
@@ -45,7 +46,8 @@
     "backToPortals": "Volver a los portales",
     "transactions": "Transacciones",
     "liveProcessing": "Procesamiento en vivo",
-    "allTransactions": "Todas las transacciones"
+    "allTransactions": "Todas las transacciones",
+    "officerDesks": "Escritorios de Oficial"
   },
   "ModulePage": {
     "verifyingAccess": "Verificando acceso...",
@@ -245,7 +247,7 @@
     "avgTimeDesc": "Minutos:Segundos",
     "pendingReview": "Revisión Pendiente",
     "pendingReviewDesc": "Requieren atención",
-    "deleteDialogTitle": "¿Está absolutamente seguro?",
+    "deleteDialogTitle": "¿Está absolutely seguro?",
     "deleteDialogDescription": "Esta acción no se puede deshacer. Esto eliminará permanentemente el registro de la transacción para {passengerName} (ID: {transactionId}).",
     "deleteDialogCancel": "Cancelar",
     "deleteDialogConfirm": "Sí, eliminar transacción",
@@ -425,6 +427,94 @@
       "description": "La transacción se ha registrado correctamente.",
       "startNew": "Iniciar nueva transacción",
       "viewAll": "Ver todas las transacciones"
+    }
+  },
+   "OfficerDesks": {
+    "pageTitle": "Gestión de Escritorios de Oficial",
+    "pageDescription": "Estado y configuración en tiempo real de todos los escritorios de oficiales.",
+    "addDesk": "Añadir Escritorio",
+    "filterTitle": "Buscar y Filtrar Escritorios",
+    "filterPlaceholder": "Nombre del Escritorio o Terminal...",
+    "port": "Puerto",
+    "terminal": "Terminal",
+    "movementType": "Tipo de Movimiento",
+    "allTypes": "Todos los Tipos",
+    "status": "Estado",
+    "allStatuses": "Todos los Estados",
+    "reset": "Reiniciar",
+    "search": "Buscar",
+    "noDesks": "No hay escritorios que coincidan con los filtros actuales.",
+    "totalDesks": "Escritorios Totales",
+    "totalDesksDesc": "Todos los escritorios configurados",
+    "activeDesks": "Escritorios Activos",
+    "activeDesksDesc": "Actualmente operativos",
+    "inactiveDesks": "Escritorios Inactivos",
+    "inactiveDesksDesc": "Temporalmente inactivos",
+    "closedDesks": "Escritorios Cerrados",
+    "closedDesksDesc": "No operativos",
+    "deskCard": {
+      "openMenu": "Abrir menú",
+      "viewDetails": "Ver detalles",
+      "editDesk": "Editar escritorio",
+      "deactivate": "Desactivar",
+      "activate": "Activar",
+      "delete": "Eliminar",
+      "ipAddress": "Dirección IP",
+      "macAddress": "Dirección MAC",
+      "lastUpdated": "Última Actualización",
+      "workflow": "Flujo de Trabajo",
+      "riskProfile": "Perfil de Riesgo"
+    },
+    "detailsSheet": {
+      "title": "Detalles del Escritorio",
+      "close": "Cerrar"
+    },
+    "deleteDialog": {
+      "title": "¿Está seguro de que desea eliminar este escritorio?",
+      "description": "Esta acción no se puede deshacer. Esto eliminará permanentemente el escritorio '{deskName}'.",
+      "cancel": "Cancelar",
+      "confirm": "Sí, Eliminar Escritorio"
+    },
+    "form": {
+      "addTitle": "Añadir Nuevo Escritorio de Oficial",
+      "addDescription": "Configurar un nuevo escritorio para el procesamiento de pasajeros.",
+      "editTitle": "Editar Escritorio de Oficial",
+      "editDescription": "Actualizar la configuración para {deskName}.",
+      "deskInfo": "Información del Escritorio",
+      "deskInfoDesc": "Identificación básica y ubicación.",
+      "deskName": "Nombre del Escritorio",
+      "deskNamePlaceholder": "p. ej., A-12",
+      "port": "Puerto",
+      "selectPort": "Seleccione un puerto...",
+      "terminal": "Terminal",
+      "selectTerminal": "Seleccione una terminal...",
+      "zone": "Zona",
+      "selectZone": "Seleccione una zona...",
+      "technicalInfo": "Información Técnica",
+      "technicalInfoDesc": "Identificadores de red y hardware.",
+      "ipAddress": "Dirección IP",
+      "ipAddressPlaceholder": "p. ej., 192.168.1.101",
+      "macAddress": "Dirección MAC",
+      "macAddressPlaceholder": "p. ej., 00:1A:2B:3C:4D:5E",
+      "configInfo": "Configuración",
+      "configInfoDesc": "Parámetros operativos para este escritorio.",
+      "status": "Estado",
+      "movementType": "Tipo de Movimiento",
+      "workflow": "Perfil de Flujo de Trabajo",
+      "selectWorkflow": "Seleccione un flujo de trabajo...",
+      "riskProfile": "Perfil de Regla de Riesgo",
+      "selectRiskProfile": "Seleccione un perfil de riesgo...",
+      "cancel": "Cancelar",
+      "save": "Guardar Cambios",
+      "add": "Añadir Escritorio",
+      "toast": {
+        "updateSuccessTitle": "Escritorio Actualizado",
+        "updateSuccessDesc": "El escritorio '{deskName}' ha sido actualizado exitosamente.",
+        "addSuccessTitle": "Escritorio Añadido",
+        "addSuccessDesc": "El nuevo escritorio '{deskName}' ha sido creado exitosamente.",
+        "errorTitle": "Operación Fallida",
+        "errorDesc": "Ocurrió un error. Por favor, inténtelo de nuevo."
+      }
     }
   }
 }

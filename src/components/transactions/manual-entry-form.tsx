@@ -25,6 +25,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Input } from '@/components/ui/input';
 import { countries } from '@/lib/countries';
 import { useTranslations } from 'next-intl';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const manualTransactionSchema = z.object({
   // Search and passenger data
@@ -324,4 +325,5 @@ export function ManualEntryForm() {
     </Form>
   );
 }
+
 

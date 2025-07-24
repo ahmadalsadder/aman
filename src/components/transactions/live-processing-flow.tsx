@@ -474,6 +474,11 @@ export function LiveProcessingFlow() {
     }
   };
 
+  const handleBackToCapture = () => {
+    setApprovedAlerts({});
+    setCurrentStep('capture_photo');
+  };
+
   useEffect(() => {
     let stream: MediaStream | null = null;
     const getCamera = async () => {
@@ -609,17 +614,20 @@ export function LiveProcessingFlow() {
                                 <Button className="w-full" variant="default" onClick={handleTransferToDutyManager}>
                                     <ShieldAlert className="mr-2 h-4 w-4" /> {t('matchFound.transfer')}
                                 </Button>
+                                <Button variant="destructive" className="w-full" onClick={() => resetState()}>
+                                    <XCircle className="mr-2 h-4 w-4" /> {t('common.cancelTransaction')}
+                                </Button>
                             </div>
                         ) : (
                              <div className="flex flex-col gap-2 sm:flex-row">
                                 <Button className="w-full" onClick={handleConfirmNewPassenger}>
                                     {t('common.confirmAndProceed')} <ChevronRight className="ml-2 h-4 w-4" />
                                 </Button>
+                                <Button variant="destructive" className="w-full" onClick={() => resetState()}>
+                                    <XCircle className="mr-2 h-4 w-4" /> {t('common.cancelTransaction')}
+                                </Button>
                              </div>
                         )}
-                        <Button variant="destructive" className="w-full" onClick={() => resetState()}>
-                             <XCircle className="mr-2 h-4 w-4" /> {t('common.cancelTransaction')}
-                        </Button>
                     </CardContent>
                 </motion.div>
             )
@@ -720,7 +728,7 @@ export function LiveProcessingFlow() {
                                     <AlertTitle>{t('alert.missingVisaTitle')}</AlertTitle>
                                     <AlertDescription>{t('alert.missingVisaDescription')}</AlertDescription>
                                 </Alert>
-                                <Button className="w-full" onClick={handleTransferToDutyManager}>
+                                <Button className="w-full" variant="default" onClick={handleTransferToDutyManager}>
                                     <ShieldAlert className="mr-2 h-4 w-4" /> {t('matchFound.transfer')}
                                 </Button>
                             </div>
@@ -742,7 +750,7 @@ export function LiveProcessingFlow() {
                             </>
                         )}
                         <div className="flex flex-col sm:flex-row gap-2">
-                            <Button variant="outline" className="w-full" onClick={() => setCurrentStep('capture_photo')}>
+                            <Button variant="outline" className="w-full" onClick={handleBackToCapture}>
                                 <ArrowLeft className="mr-2 h-4 w-4" />
                                 {t('review.backToCapture')}
                             </Button>

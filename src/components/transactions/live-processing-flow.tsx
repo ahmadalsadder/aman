@@ -360,6 +360,9 @@ export function LiveProcessingFlow() {
         updateStepStatus('security_ai_checks', 'completed');
         setAiResult(result);
         setCurrentStep('review');
+        if (result.alerts.length > 0) {
+            setFinalDecision('Rejected');
+        }
         addLog('AI analysis complete.');
     } catch (error) {
         console.error("AI Analysis Error:", error);
@@ -461,6 +464,16 @@ export function LiveProcessingFlow() {
     }
   };
 
+  const handleAcknowledgeAlert = (alert: string) => {
+    const newApprovedAlerts = { ...approvedAlerts, [alert]: true };
+    setApprovedAlerts(newApprovedAlerts);
+  
+    // Check if this was the last alert to be acknowledged
+    if (aiResult && Object.keys(newApprovedAlerts).length === aiResult.alerts.length) {
+      setFinalDecision('Approved');
+    }
+  };
+
   useEffect(() => {
     let stream: MediaStream | null = null;
     const getCamera = async () => {
@@ -536,19 +549,18 @@ export function LiveProcessingFlow() {
                                 </CardContent>
                             </Card>
                         </div>
-                        {visaCheckResult === 'invalid' && (
-                             <div className="space-y-4">
-                                <Alert variant="destructive">
-                                    <FileWarning className="h-4 w-4" />
-                                    <AlertTitle>{t('alert.missingVisaTitle')}</AlertTitle>
-                                    <AlertDescription>{t('alert.missingVisaDescription')}</AlertDescription>
-                                </Alert>
-                                <Button className="w-full" variant="default" onClick={handleTransferToDutyManager}>
-                                    <ShieldAlert className="mr-2 h-4 w-4" /> {t('matchFound.transfer')}
-                                </Button>
-                            </div>
-                        )}
-                        {visaCheckResult !== 'invalid' && (
+                        {visaCheckResult === 'invalid' ? (
+                            <div className="space-y-4">
+                               <Alert variant="destructive">
+                                   <FileWarning className="h-4 w-4" />
+                                   <AlertTitle>{t('alert.missingVisaTitle')}</AlertTitle>
+                                   <AlertDescription>{t('alert.missingVisaDescription')}</AlertDescription>
+                               </Alert>
+                               <Button className="w-full" variant="default" onClick={handleTransferToDutyManager}>
+                                   <ShieldAlert className="mr-2 h-4 w-4" /> {t('matchFound.transfer')}
+                               </Button>
+                           </div>
+                        ) : (
                             <div className="space-y-2 rounded-md border p-4">
                                <h4 className="font-semibold">{t('matchFound.chooseAction')}</h4>
                                <p className="text-sm text-muted-foreground">{t('matchFound.chooseActionDescription')}</p>
@@ -558,9 +570,9 @@ export function LiveProcessingFlow() {
                                </div>
                             </div>
                         )}
-                         <Button variant="destructive" className="w-full" onClick={() => resetState()}>
-                            <XCircle className="mr-2 h-4 w-4" /> {t('common.cancelTransaction')}
-                         </Button>
+                        <Button variant="destructive" className="w-full" onClick={() => resetState()}>
+                           <XCircle className="mr-2 h-4 w-4" /> {t('common.cancelTransaction')}
+                        </Button>
                     </CardContent>
                 </motion.div>
             )
@@ -587,8 +599,8 @@ export function LiveProcessingFlow() {
                                 <DetailItem label={t('common.expiryDate')} value={extractedData.passportExpiryDate} />
                             </CardContent>
                         </Card>
-                        {visaCheckResult === 'invalid' && (
-                            <div className="space-y-4">
+                        {visaCheckResult === 'invalid' ? (
+                           <div className="space-y-4">
                                 <Alert variant="destructive">
                                     <FileWarning className="h-4 w-4" />
                                     <AlertTitle>{t('alert.missingVisaTitle')}</AlertTitle>
@@ -598,8 +610,7 @@ export function LiveProcessingFlow() {
                                     <ShieldAlert className="mr-2 h-4 w-4" /> {t('matchFound.transfer')}
                                 </Button>
                             </div>
-                        )}
-                        {visaCheckResult !== 'invalid' && (
+                        ) : (
                              <div className="flex flex-col gap-2 sm:flex-row">
                                 <Button className="w-full" onClick={handleConfirmNewPassenger}>
                                     {t('common.confirmAndProceed')} <ChevronRight className="ml-2 h-4 w-4" />
@@ -680,19 +691,22 @@ export function LiveProcessingFlow() {
                                         <Label className="font-semibold">{t('review.alerts.title')}</Label>
                                         {aiResult.alerts.map((alert, i) => (
                                             <div key={`alert-${i}`} className="flex items-center gap-2">
-                                                <Alert variant={aiResult.riskScore > 50 ? 'destructive' : 'default'} className="flex-grow">
-                                                    <ShieldAlert className="h-4 w-4" />
-                                                    <AlertTitle>{alert}</AlertTitle>
+                                                <Alert variant={aiResult.riskScore > 50 ? 'destructive' : 'default'} className="flex-grow flex items-center justify-between">
+                                                    <div className="flex items-center">
+                                                        <ShieldAlert className="h-4 w-4" />
+                                                        <AlertTitle>{alert}</AlertTitle>
+                                                    </div>
+                                                    <Button
+                                                        size="sm"
+                                                        variant={approvedAlerts[alert] ? "secondary" : "outline"}
+                                                        onClick={() => handleAcknowledgeAlert(alert)}
+                                                        disabled={approvedAlerts[alert]}
+                                                        className="ml-4"
+                                                    >
+                                                        {approvedAlerts[alert] ? <CheckCircle2 className="mr-2 h-4 w-4 text-green-500" /> : <ShieldAlert className="mr-2 h-4 w-4" />}
+                                                        {approvedAlerts[alert] ? t('review.alerts.acknowledged') : t('review.alerts.acknowledge')}
+                                                    </Button>
                                                 </Alert>
-                                                <Button
-                                                    size="sm"
-                                                    variant={approvedAlerts[alert] ? "secondary" : "outline"}
-                                                    onClick={() => setApprovedAlerts(prev => ({...prev, [alert]: true}))}
-                                                    disabled={approvedAlerts[alert]}
-                                                >
-                                                    {approvedAlerts[alert] ? <CheckCircle2 className="mr-2 h-4 w-4 text-green-500" /> : <ShieldAlert className="mr-2 h-4 w-4" />}
-                                                    {approvedAlerts[alert] ? t('review.alerts.acknowledged') : t('review.alerts.acknowledge')}
-                                                </Button>
                                             </div>
                                         ))}
                                     </div>
@@ -712,6 +726,7 @@ export function LiveProcessingFlow() {
                             </div>
                         ) : (
                             <>
+                                <Textarea placeholder={t('review.notesPlaceholder')} value={officerNotes} onChange={(e) => setOfficerNotes(e.target.value)} />
                                 <RadioGroup onValueChange={(v) => setFinalDecision(v as any)} value={finalDecision}>
                                     <Label className="font-semibold">{t('review.finalDecision')}</Label>
                                     <div className="flex gap-4">
@@ -719,7 +734,6 @@ export function LiveProcessingFlow() {
                                         <Label htmlFor="reject" className="flex items-center gap-2 rounded-md border p-3 flex-1 has-[input:checked]:border-destructive"><RadioGroupItem value="Rejected" id="reject" /> {t('review.reject')}</Label>
                                     </div>
                                 </RadioGroup>
-                                <Textarea placeholder={t('review.notesPlaceholder')} value={officerNotes} onChange={(e) => setOfficerNotes(e.target.value)} />
                                 <div className="flex flex-col gap-2 sm:flex-row-reverse">
                                     <Button className="w-full sm:flex-1" onClick={handleCompleteTransaction} disabled={!finalDecision || !allAlertsAcknowledged}>
                                         {t('review.complete')}

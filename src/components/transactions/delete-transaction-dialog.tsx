@@ -12,6 +12,7 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import type { Transaction } from '@/types/live-processing';
+import { useTranslations } from 'next-intl';
 
 interface DeleteTransactionDialogProps {
   transaction: Transaction | null;
@@ -21,22 +22,22 @@ interface DeleteTransactionDialogProps {
 }
 
 export function DeleteTransactionDialog({ transaction, isOpen, onOpenChange, onConfirm }: DeleteTransactionDialogProps) {
+  const t = useTranslations('Transactions');
   if (!transaction) return null;
 
   return (
     <AlertDialog open={isOpen} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+          <AlertDialogTitle>{t('deleteDialogTitle')}</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete the transaction record
-            for <span className="font-bold">{transaction.passengerName}</span> (ID: <span className="font-mono">{transaction.id}</span>).
+            {t('deleteDialogDescription', { passengerName: transaction.passengerName, transactionId: transaction.id })}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel>{t('deleteDialogCancel')}</AlertDialogCancel>
           <AlertDialogAction onClick={onConfirm} className="bg-destructive hover:bg-destructive/90">
-            Yes, delete transaction
+            {t('deleteDialogConfirm')}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

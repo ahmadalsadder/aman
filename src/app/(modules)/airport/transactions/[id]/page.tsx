@@ -39,6 +39,7 @@ import { FlightDetailsCard } from '../components/flight-details-card';
 import { VehicleDetailsCard } from '@/app/(modules)/landport/transactions/components/vehicle-details-card';
 import { VesselDetailsCard } from '@/app/(modules)/seaport/transactions/components/vessel-details-card';
 import { CivilRecordCard } from '@/components/transactions/civil-record-card';
+import { useTranslations } from 'next-intl';
 
 const DetailItem = ({ label, value, children }: { label: string; value?: string | number | null; children?: React.ReactNode }) => (
   <div>
@@ -76,6 +77,7 @@ export default function TransactionDetailsPage() {
   const params = useParams<{ id: string, module: string }>();
   const router = useRouter();
   const transactionId = params.id;
+  const t = useTranslations('Transactions');
   
   const [transaction, setTransaction] = useState<Transaction | null>(null);
   const [loading, setLoading] = useState(true);
@@ -104,19 +106,19 @@ export default function TransactionDetailsPage() {
   const documentImages = useMemo(() => {
     if (!transaction?.passportScan) return [];
     return [
-      { name: 'Passport Photo', url: transaction.passportScan, hint: 'passport photo id' },
+      { name: t('docImagePassport'), url: transaction.passportScan, hint: 'passport photo id' },
     ].filter(doc => doc.url);
-  }, [transaction]);
+  }, [transaction, t]);
 
   const biometricImages = useMemo(() => {
     if (!transaction?.biometrics) return [];
     return [
-      { name: 'Face Scan', url: transaction.biometrics.face, hint: 'face scan' },
-      { name: 'Left Iris', url: transaction.biometrics.leftIris, hint: 'left iris scan' },
-      { name: 'Right Iris', url: transaction.biometrics.rightIris, hint: 'right iris scan' },
-      { name: 'Fingerprint', url: transaction.biometrics.fingerprint, hint: 'fingerprint scan' },
+      { name: t('docImageFace'), url: transaction.biometrics.face, hint: 'face scan' },
+      { name: t('docImageLeftIris'), url: transaction.biometrics.leftIris, hint: 'left iris scan' },
+      { name: t('docImageRightIris'), url: transaction.biometrics.rightIris, hint: 'right iris scan' },
+      { name: t('docImageFingerprint'), url: transaction.biometrics.fingerprint, hint: 'fingerprint scan' },
     ].filter(doc => doc.url);
-  }, [transaction]);
+  }, [transaction, t]);
   
   const allDocuments = useMemo(() => [...documentImages, ...biometricImages], [documentImages, biometricImages]);
 
@@ -179,7 +181,7 @@ export default function TransactionDetailsPage() {
     <div className="flex flex-col gap-6">
       <GradientPageHeader
         title={`Entry_${transaction.id}`}
-        description="Transaction Details"
+        description={t('detailTitle')}
         icon={FileText}
       >
         <div className="flex gap-2">
@@ -192,7 +194,7 @@ export default function TransactionDetailsPage() {
         {/* Left Column */}
         <div className="space-y-6 lg:col-span-3">
           <Card>
-            <CardHeader><CardTitle>Workflow Steps</CardTitle></CardHeader>
+            <CardHeader><CardTitle>{t('workflowSteps')}</CardTitle></CardHeader>
             <CardContent>
                <ul className="space-y-0">
                 {transaction.workflow?.map((step: any, index: number) => {
@@ -226,18 +228,18 @@ export default function TransactionDetailsPage() {
         {/* Middle Column */}
         <div className="space-y-6 lg:col-span-5">
           <Card>
-            <CardHeader><CardTitle>Document Details</CardTitle></CardHeader>
+            <CardHeader><CardTitle>{t('docDetails')}</CardTitle></CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center justify-center rounded-lg border bg-muted p-4 h-96">
                 {mainDocument?.url ? (
                   <Image src={mainDocument.url} alt={mainDocument.name} width={400} height={300} className="max-h-full w-auto object-contain" data-ai-hint={mainDocument.hint} />
                 ) : <p className="text-muted-foreground">No document selected</p>}
               </div>
-              <p className="text-center text-sm text-muted-foreground">{mainDocument?.name ? `${mainDocument.name} - Click thumbnail to view` : ''}</p>
+              <p className="text-center text-sm text-muted-foreground">{mainDocument?.name ? t('docImageClickToView', { name: mainDocument.name }) : ''}</p>
               
               {documentImages.length > 0 && (
                   <div className="space-y-2">
-                      <h4 className="font-medium text-sm text-muted-foreground">Document Images</h4>
+                      <h4 className="font-medium text-sm text-muted-foreground">{t('docImages')}</h4>
                       <div className="relative px-12">
                           <Carousel opts={{ align: 'start', loop: false }} className="w-full">
                               <CarouselContent>
@@ -260,7 +262,7 @@ export default function TransactionDetailsPage() {
               {biometricImages.length > 0 && (
                   <div className="space-y-2">
                       <Separator className="my-4" />
-                      <h4 className="font-medium text-sm text-muted-foreground">Biometric Images</h4>
+                      <h4 className="font-medium text-sm text-muted-foreground">{t('biometricImages')}</h4>
                        <div className="relative px-12">
                           <Carousel opts={{ align: 'start', loop: false }} className="w-full">
                               <CarouselContent>
@@ -283,15 +285,15 @@ export default function TransactionDetailsPage() {
           </Card>
           {transaction.biometricMatch && (
             <Card>
-              <CardHeader><CardTitle>Biometric Match Results</CardTitle></CardHeader>
+              <CardHeader><CardTitle>{t('biometricMatch')}</CardTitle></CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium flex items-center gap-2"><ScanEye className="h-4 w-4 text-primary"/> IRIS Match</span>
+                  <span className="text-sm font-medium flex items-center gap-2"><ScanEye className="h-4 w-4 text-primary"/> {t('irisMatch')}</span>
                   <span className="font-semibold text-primary">{transaction.biometricMatch?.irisMatch ?? 'N/A'}%</span>
                 </div>
                 <Progress value={transaction.biometricMatch?.irisMatch} />
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium flex items-center gap-2"><ScanFace className="h-4 w-4 text-primary"/> Face Match</span>
+                  <span className="text-sm font-medium flex items-center gap-2"><ScanFace className="h-4 w-4 text-primary"/> {t('faceMatch')}</span>
                   <span className="font-semibold text-primary">{transaction.biometricMatch?.faceMatch ?? 'N/A'}%</span>
                 </div>
                 <Progress value={transaction.biometricMatch?.faceMatch} />
@@ -311,38 +313,38 @@ export default function TransactionDetailsPage() {
                   </Avatar>
                   <CardTitle>{passenger.firstName} {passenger.lastName}</CardTitle>
                   <Button asChild size="sm" disabled>
-                    <Link href={`/${module}/passengers/${passenger.id}/edit`}>View Passenger Profile</Link>
+                    <Link href={`/${module}/passengers/${passenger.id}/edit`}>{t('viewProfile')}</Link>
                   </Button>
               </CardHeader>
               <CardContent className="space-y-4">
                 <Separator />
-                <DetailItem label="Passport Number" value={passenger.passportNumber} />
-                <DetailItem label="Nationality" value={passenger.nationality} />
-                <DetailItem label="Date of Birth" value={passenger.dateOfBirth} />
-                <DetailItem label="Gender" value={passenger.gender} />
+                <DetailItem label={t('labelPassport')} value={passenger.passportNumber} />
+                <DetailItem label={t('labelNationality')} value={passenger.nationality} />
+                <DetailItem label={t('labelDob')} value={passenger.dateOfBirth} />
+                <DetailItem label={t('labelGender')} value={passenger.gender} />
               </CardContent>
             </Card>
           )}
            
            <Card>
-            <CardHeader><CardTitle>Risk Assessment</CardTitle></CardHeader>
+            <CardHeader><CardTitle>{t('riskAssessment')}</CardTitle></CardHeader>
             <CardContent className="space-y-4 text-center">
-                <Badge className={cn("text-lg", riskBadge[riskLevel])}>{riskLevel} Risk ({transaction.riskScore})</Badge>
+                <Badge className={cn("text-lg", riskBadge[riskLevel])}>{t('riskLevel', {level: riskLevel, score: transaction.riskScore})}</Badge>
                 <Progress value={transaction.riskScore} />
-                <p className="text-sm text-muted-foreground">Processing Duration: {transaction.duration}</p>
+                <p className="text-sm text-muted-foreground">{t('processingDuration', {duration: transaction.duration})}</p>
                  <Separator />
                 <div className="text-left space-y-2 pt-2">
-                    <p className="text-sm font-medium">Triggered Rules:</p>
+                    <p className="text-sm font-medium">{t('triggeredRules')}</p>
                     <ul className="list-disc list-inside text-sm text-muted-foreground">
-                        {transaction.triggeredRules?.map((rule, i) => <li key={i}>{rule.alert}</li>) ?? <li>No rules triggered.</li>}
+                        {transaction.triggeredRules?.map((rule, i) => <li key={i}>{rule.alert}</li>) ?? <li>{t('noRules')}</li>}
                     </ul>
                 </div>
             </CardContent>
           </Card>
            <Card>
-            <CardHeader><CardTitle>Officer Notes</CardTitle></CardHeader>
+            <CardHeader><CardTitle>{t('officerNotes')}</CardTitle></CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground italic">"{transaction.notes || 'No notes provided.'}"</p>
+              <p className="text-sm text-muted-foreground italic">"{transaction.notes || t('noNotes')}"</p>
               {transaction.officerName && <p className="text-right text-xs font-semibold mt-2">- {transaction.officerName}</p>}
             </CardContent>
           </Card>
@@ -351,7 +353,7 @@ export default function TransactionDetailsPage() {
       
       <div className="flex justify-start items-center mt-4">
         <Button variant="outline" onClick={() => router.back()}>
-            <ArrowLeft className="mr-2 h-4 w-4"/> Back to Transactions
+            <ArrowLeft className="mr-2 h-4 w-4"/> {t('backToTransactions')}
         </Button>
       </div>
     </div>

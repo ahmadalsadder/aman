@@ -31,6 +31,7 @@ import type { Module } from '@/types';
 import { TransactionStatsCards } from './transaction-stats-cards';
 import { Skeleton } from '../ui/skeleton';
 import { useAuth } from '@/hooks/use-auth';
+import { useTranslations } from 'next-intl';
 
 const statusColors: { [key: string]: string } = {
   Completed: 'bg-green-500/20 text-green-700 border-green-500/30',
@@ -73,6 +74,7 @@ export function TransactionsPage({ module, title, description }: TransactionsPag
   const [transactionToDelete, setTransactionToDelete] = useState<Transaction | null>(null);
   const { toast } = useToast();
   const { hasPermission } = useAuth();
+  const t = useTranslations('Transactions');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -100,15 +102,15 @@ export function TransactionsPage({ module, title, description }: TransactionsPag
     if(result.isSuccess) {
         setTransactions(prev => prev.filter(t => t.id !== transactionToDelete.id));
         toast({
-            title: 'Transaction Deleted',
-            description: `Transaction ${transactionToDelete.id} has been deleted.`,
+            title: t('deleteSuccess'),
+            description: t('deleteSuccessDesc', {id: transactionToDelete.id}),
             variant: 'success',
         });
         setTransactionToDelete(null);
     } else {
         toast({
-            title: 'Delete Failed',
-            description: result.errors?.[0]?.message || 'There was an error deleting the transaction data.',
+            title: t('deleteError'),
+            description: result.errors?.[0]?.message || t('deleteErrorDesc'),
             variant: 'destructive',
         });
     }
@@ -136,12 +138,12 @@ export function TransactionsPage({ module, title, description }: TransactionsPag
     },
     {
       accessorKey: 'id',
-      header: 'Transaction ID',
+      header: t('columnId'),
       cell: ({row}) => <div className="font-mono text-xs">{row.original.id}</div>
     },
     {
       accessorKey: 'passengerName',
-      header: 'Passenger',
+      header: t('columnPassenger'),
        cell: ({ row }) => (
         <div className="flex flex-col">
           <span className="font-medium">{row.original.passengerName}</span>
@@ -151,29 +153,29 @@ export function TransactionsPage({ module, title, description }: TransactionsPag
     },
     {
       accessorKey: 'type',
-      header: 'Type',
+      header: t('columnType'),
       cell: ({row}) => <div className={cn("font-medium", typeColors[row.original.type])}>{row.original.type}</div>
     },
     {
       accessorKey: 'entranceType',
-      header: 'Entrance',
+      header: t('columnEntrance'),
     },
      {
       accessorKey: 'gate',
-      header: 'Gate/Desk',
+      header: t('columnGate'),
     },
     {
       accessorKey: 'dateTime',
-      header: 'Date/Time',
+      header: t('columnDateTime'),
     },
     {
       accessorKey: 'status',
-      header: 'Status',
+      header: t('columnStatus'),
       cell: ({ row }) => <Badge variant="outline" className={cn(statusColors[row.original.status as keyof typeof statusColors])}>{row.original.status}</Badge>,
     },
     {
       accessorKey: 'riskScore',
-      header: 'Risk Score',
+      header: t('columnRisk'),
       cell: ({row}) => (
           <div className="flex items-center gap-2">
               <Progress value={row.original.riskScore} className="h-2 w-20" />
@@ -293,7 +295,7 @@ export function TransactionsPage({ module, title, description }: TransactionsPag
         <div className="flex gap-2">
           <Button asChild className="bg-white font-semibold text-primary hover:bg-white/90">
               <Link href={`/${module}/transactions/live-processing`}>
-                  <PlusCircle className="mr-2 h-4 w-4" /> Process Transaction
+                  <PlusCircle className="mr-2 h-4 w-4" /> {t('processTransaction')}
               </Link>
           </Button>
         </div>
@@ -311,7 +313,7 @@ export function TransactionsPage({ module, title, description }: TransactionsPag
             <div className="flex w-full cursor-pointer items-center justify-between p-4">
               <div className="flex items-center gap-3">
                 <Filter className="h-5 w-5" />
-                <h2 className="text-lg font-semibold">Search & Filter Transactions</h2>
+                <h2 className="text-lg font-semibold">{t('filterTitle')}</h2>
               </div>
               <ChevronDown className="h-5 w-5 transition-transform duration-300 [&[data-state=open]]:rotate-180" />
             </div>
@@ -319,22 +321,22 @@ export function TransactionsPage({ module, title, description }: TransactionsPag
           <CollapsibleContent>
             <div className="p-6 pt-0">
               <div className="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                <Input placeholder="Transaction ID..." value={filters.id} onChange={(e) => handleUpdateFilter('id', e.target.value)} />
-                <Input placeholder="Passenger Name..." value={filters.passengerName} onChange={(e) => handleUpdateFilter('passengerName', e.target.value)} />
-                <Input placeholder="Passport Number..." value={filters.passportNumber} onChange={(e) => handleUpdateFilter('passportNumber', e.target.value)} />
+                <Input placeholder={t('filterId')} value={filters.id} onChange={(e) => handleUpdateFilter('id', e.target.value)} />
+                <Input placeholder={t('filterPassengerName')} value={filters.passengerName} onChange={(e) => handleUpdateFilter('passengerName', e.target.value)} />
+                <Input placeholder={t('filterPassportNumber')} value={filters.passportNumber} onChange={(e) => handleUpdateFilter('passportNumber', e.target.value)} />
 
                 <Select value={filters.type} onValueChange={(value) => handleUpdateFilter('type', value === 'all' ? '' : value)}>
-                  <SelectTrigger><SelectValue placeholder="Type" /></SelectTrigger>
+                  <SelectTrigger><SelectValue placeholder={t('filterType')} /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Types</SelectItem>
+                    <SelectItem value="all">{t('filterAllTypes')}</SelectItem>
                     {Object.keys(typeColors).map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}
                   </SelectContent>
                 </Select>
 
                 <Select value={filters.entranceType} onValueChange={(value) => handleUpdateFilter('entranceType', value === 'all' ? '' : value)}>
-                  <SelectTrigger><SelectValue placeholder="Entrance Type" /></SelectTrigger>
+                  <SelectTrigger><SelectValue placeholder={t('filterEntrance')} /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Entrance Types</SelectItem>
+                    <SelectItem value="all">{t('filterAllEntrances')}</SelectItem>
                     {uniqueEntranceTypes.map(e => <SelectItem key={e} value={e}>{e}</SelectItem>)}
                   </SelectContent>
                 </Select>
@@ -344,7 +346,7 @@ export function TransactionsPage({ module, title, description }: TransactionsPag
                     options={uniqueGates} 
                     value={filters.gate} 
                     onChange={(v) => handleUpdateFilter('gate', v)} 
-                    placeholder="Select E-Gate..."
+                    placeholder={t('filterGate')}
                   />
                 )}
                 
@@ -353,14 +355,14 @@ export function TransactionsPage({ module, title, description }: TransactionsPag
                     options={uniqueDesks} 
                     value={filters.deskId} 
                     onChange={(v) => handleUpdateFilter('deskId', v)} 
-                    placeholder="Select Officer Desk..."
+                    placeholder={t('filterDesk')}
                   />
                 )}
 
                 <Select value={filters.status} onValueChange={(value) => handleUpdateFilter('status', value === 'all' ? '' : value)}>
-                  <SelectTrigger><SelectValue placeholder="Status" /></SelectTrigger>
+                  <SelectTrigger><SelectValue placeholder={t('filterStatus')} /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Statuses</SelectItem>
+                    <SelectItem value="all">{t('filterAllStatuses')}</SelectItem>
                     {Object.keys(statusColors).map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}
                   </SelectContent>
                 </Select>
@@ -369,7 +371,7 @@ export function TransactionsPage({ module, title, description }: TransactionsPag
                   <PopoverTrigger asChild>
                     <Button variant={"outline"} className={cn("justify-start text-left font-normal", !filters.dateFrom && "text-muted-foreground")}>
                       <CalendarIcon className="mr-2 h-4 w-4" />
-                      {filters.dateFrom ? format(filters.dateFrom, "PPP") : <span>From Date</span>}
+                      {filters.dateFrom ? format(filters.dateFrom, "PPP") : <span>{t('filterFromDate')}</span>}
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0"><Calendar mode="single" selected={filters.dateFrom ?? undefined} onSelect={(date) => handleUpdateFilter('dateFrom', date || null)} disabled={(date) => date > new Date() || (filters.dateTo ? date > filters.dateTo : false)} initialFocus captionLayout="dropdown-nav" fromYear={fromDate.getFullYear()} toYear={toDate.getFullYear()} /></PopoverContent>
@@ -379,7 +381,7 @@ export function TransactionsPage({ module, title, description }: TransactionsPag
                   <PopoverTrigger asChild>
                     <Button variant={"outline"} className={cn("justify-start text-left font-normal", !filters.dateTo && "text-muted-foreground")}>
                       <CalendarIcon className="mr-2 h-4 w-4" />
-                      {filters.dateTo ? format(filters.dateTo, "PPP") : <span>To Date</span>}
+                      {filters.dateTo ? format(filters.dateTo, "PPP") : <span>{t('filterToDate')}</span>}
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0"><Calendar mode="single" selected={filters.dateTo ?? undefined} onSelect={(date) => handleUpdateFilter('dateTo', date || null)} disabled={(date) => date > new Date() || (filters.dateFrom ? date < filters.dateFrom : false)} initialFocus captionLayout="dropdown-nav" fromYear={fromDate.getFullYear()} toYear={toDate.getFullYear()} /></PopoverContent>
@@ -388,11 +390,11 @@ export function TransactionsPage({ module, title, description }: TransactionsPag
               <div className="mt-6 flex justify-end gap-2">
                 <Button onClick={clearFilters} variant="outline">
                     <X className="mr-2 h-4 w-4"/>
-                    Reset
+                    {t('reset')}
                 </Button>
                  <Button onClick={handleSearch}>
                     <Search className="mr-2 h-4 w-4"/>
-                    Search
+                    {t('search')}
                 </Button>
               </div>
             </div>
@@ -402,7 +404,7 @@ export function TransactionsPage({ module, title, description }: TransactionsPag
 
       <Card>
         <CardHeader>
-           <CardTitle>Transaction Records</CardTitle>
+           <CardTitle>{t('recordsTitle')}</CardTitle>
         </CardHeader>
         <CardContent>
            <DataTable

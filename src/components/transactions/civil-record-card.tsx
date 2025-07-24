@@ -4,6 +4,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import type { Transaction } from '@/types/live-processing';
 import { IdCard } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 const DetailItem = ({ label, value, children }: { label: string; value?: string | number | null; children?: React.ReactNode }) => (
     <div>
@@ -14,20 +15,21 @@ const DetailItem = ({ label, value, children }: { label: string; value?: string 
   );
 
 export function CivilRecordCard({ transaction }: { transaction: Transaction }) {
+    const t = useTranslations('Transactions');
     if (!transaction.civilInformation) return null;
 
     return (
         <Card>
             <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-base">
-                    <IdCard className="h-4 w-4" /> Civil Record
+                    <IdCard className="h-4 w-4" /> {t('civilRecord')}
                 </CardTitle>
             </CardHeader>
             <CardContent className="grid grid-cols-2 gap-4">
-                <DetailItem label="File Type" value={transaction.civilInformation.fileType} />
-                <DetailItem label="File Number" value={transaction.civilInformation.fileNumber} />
-                <DetailItem label="National ID" value={transaction.civilInformation.nationalId} />
-                <DetailItem label="File Expiry" value={transaction.civilInformation.fileExpiryDate} />
+                <DetailItem label={t('civilFileType')} value={transaction.civilInformation.fileType} />
+                <DetailItem label={t('civilFileNumber')} value={transaction.civilInformation.fileNumber} />
+                <DetailItem label={t('civilNationalId')} value={transaction.civilInformation.nationalId} />
+                <DetailItem label={t('civilFileExpiry')} value={transaction.civilInformation.fileExpiryDate} />
             </CardContent>
         </Card>
     );

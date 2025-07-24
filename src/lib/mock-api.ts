@@ -2,6 +2,7 @@
 
 
 
+
 import type { User } from '@/types';
 import { Result, ApiError } from '@/types/api/result';
 import { mockPassengers, mockTransactions, mockVisaDatabase, mockOfficerDesks } from './mock-data';
@@ -630,3 +631,5 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
 
     return Result.failure([new ApiError('NOT_FOUND', `Mock endpoint ${method} ${endpoint} not found.`)]) as Result<T>;
 }
+
+    

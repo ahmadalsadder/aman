@@ -25,7 +25,9 @@ export default function GateSupervisorLiveProcessingPage() {
         description="Real-time passenger processing workflow."
         icon={UserCog}
       />
-      <LiveProcessingFlow />
+      <LiveProcessingFlow module="gate-supervisor" />
     </div>
   );
 }
+
+    

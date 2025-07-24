@@ -638,7 +638,7 @@ export function LiveProcessingFlow({ module }: { module: Module }) {
                     <p className="text-muted-foreground">{t('completed.description')}</p>
                     <div className="flex gap-2 mt-4">
                         <Button onClick={resetState}><RefreshCw className="mr-2 h-4 w-4" /> {t('completed.startNew')}</Button>
-                        <Button variant="outline" asChild><Link href="/transactions">{t('completed.viewAll')}</Link></Button>
+                        <Button variant="outline" asChild><Link href={`/${module}/transactions`}>{t('completed.viewAll')}</Link></Button>
                     </div>
                 </motion.div>
             )
@@ -714,3 +714,5 @@ export function LiveProcessingFlow({ module }: { module: Module }) {
     </div>
   );
 }
+
+    

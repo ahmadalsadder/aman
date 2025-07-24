@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -100,10 +99,10 @@ export function OfficerDeskForm({
                     <CardDescription>{t('deskInfoDesc')}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <FormField control={form.control} name="name" render={({ field }) => ( <FormItem><FormLabel>{t('deskName')}</FormLabel><FormControl><Input placeholder={t('deskNamePlaceholder')} {...field} /></FormControl><FormMessage /></FormItem> )} />
-                  <FormField control={form.control} name="portId" render={({ field }) => ( <FormItem><FormLabel>{t('port')}</FormLabel><Combobox options={portOptions} value={field.value} onChange={field.onChange} placeholder={t('selectPort')} /><FormMessage /></FormItem> )} />
-                  <FormField control={form.control} name="terminalId" render={({ field }) => ( <FormItem><FormLabel>{t('terminal')}</FormLabel><Combobox options={terminalOptions} value={field.value} onChange={field.onChange} placeholder={t('selectTerminal')} disabled={!portId} /><FormMessage /></FormItem> )} />
-                  <FormField control={form.control} name="zoneId" render={({ field }) => ( <FormItem><FormLabel>{t('zone')}</FormLabel><Combobox options={zoneOptions} value={field.value} onChange={field.onChange} placeholder={t('selectZone')} disabled={!terminalId} /><FormMessage /></FormItem> )} />
+                  <FormField control={form.control} name="name" render={({ field }) => ( <FormItem><FormLabel required>{t('deskName')}</FormLabel><FormControl><Input placeholder={t('deskNamePlaceholder')} {...field} /></FormControl><FormMessage /></FormItem> )} />
+                  <FormField control={form.control} name="portId" render={({ field }) => ( <FormItem><FormLabel required>{t('port')}</FormLabel><Combobox options={portOptions} value={field.value} onChange={field.onChange} placeholder={t('selectPort')} /><FormMessage /></FormItem> )} />
+                  <FormField control={form.control} name="terminalId" render={({ field }) => ( <FormItem><FormLabel required>{t('terminal')}</FormLabel><Combobox options={terminalOptions} value={field.value} onChange={field.onChange} placeholder={t('selectTerminal')} disabled={!portId} /><FormMessage /></FormItem> )} />
+                  <FormField control={form.control} name="zoneId" render={({ field }) => ( <FormItem><FormLabel required>{t('zone')}</FormLabel><Combobox options={zoneOptions} value={field.value} onChange={field.onChange} placeholder={t('selectZone')} disabled={!terminalId} /><FormMessage /></FormItem> )} />
                 </CardContent>
               </Card>
             </div>
@@ -114,8 +113,8 @@ export function OfficerDeskForm({
                         <CardDescription>{t('technicalInfoDesc')}</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                        <FormField control={form.control} name="ipAddress" render={({ field }) => ( <FormItem><FormLabel>{t('ipAddress')}</FormLabel><FormControl><Input placeholder={t('ipAddressPlaceholder')} {...field} /></FormControl><FormMessage /></FormItem> )} />
-                        <FormField control={form.control} name="macAddress" render={({ field }) => ( <FormItem><FormLabel>{t('macAddress')}</FormLabel><FormControl><Input placeholder={t('macAddressPlaceholder')} {...field} /></FormControl><FormMessage /></FormItem> )} />
+                        <FormField control={form.control} name="ipAddress" render={({ field }) => ( <FormItem><FormLabel required>{t('ipAddress')}</FormLabel><FormControl><Input placeholder={t('ipAddressPlaceholder')} {...field} /></FormControl><FormMessage /></FormItem> )} />
+                        <FormField control={form.control} name="macAddress" render={({ field }) => ( <FormItem><FormLabel required>{t('macAddress')}</FormLabel><FormControl><Input placeholder={t('macAddressPlaceholder')} {...field} /></FormControl><FormMessage /></FormItem> )} />
                     </CardContent>
                 </Card>
                 <Card>
@@ -124,10 +123,10 @@ export function OfficerDeskForm({
                         <CardDescription>{t('configInfoDesc')}</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                        <FormField control={form.control} name="status" render={({ field }) => ( <FormItem><FormLabel>{t('status')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue /></SelectTrigger></FormControl><SelectContent><SelectItem value="Active">Active</SelectItem><SelectItem value="Inactive">Inactive</SelectItem><SelectItem value="Closed">Closed</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
-                        <FormField control={form.control} name="movementType" render={({ field }) => ( <FormItem><FormLabel>{t('movementType')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue /></SelectTrigger></FormControl><SelectContent><SelectItem value="Entry">Entry</SelectItem><SelectItem value="Exit">Exit</SelectItem><SelectItem value="Bidirectional">Bidirectional</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
-                        <FormField control={form.control} name="workflowId" render={({ field }) => ( <FormItem><FormLabel>{t('workflow')}</FormLabel><Combobox options={workflowOptions} value={field.value} onChange={field.onChange} placeholder={t('selectWorkflow')} /><FormMessage /></FormItem> )} />
-                        <FormField control={form.control} name="riskRuleId" render={({ field }) => ( <FormItem><FormLabel>{t('riskProfile')}</FormLabel><Combobox options={riskProfileOptions} value={field.value} onChange={field.onChange} placeholder={t('selectRiskProfile')} /><FormMessage /></FormItem> )} />
+                        <FormField control={form.control} name="status" render={({ field }) => ( <FormItem><FormLabel required>{t('status')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue /></SelectTrigger></FormControl><SelectContent><SelectItem value="Active">Active</SelectItem><SelectItem value="Inactive">Inactive</SelectItem><SelectItem value="Closed">Closed</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
+                        <FormField control={form.control} name="movementType" render={({ field }) => ( <FormItem><FormLabel required>{t('movementType')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue /></SelectTrigger></FormControl><SelectContent><SelectItem value="Entry">Entry</SelectItem><SelectItem value="Exit">Exit</SelectItem><SelectItem value="Bidirectional">Bidirectional</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
+                        <FormField control={form.control} name="workflowId" render={({ field }) => ( <FormItem><FormLabel required>{t('workflow')}</FormLabel><Combobox options={workflowOptions} value={field.value} onChange={field.onChange} placeholder={t('selectWorkflow')} /><FormMessage /></FormItem> )} />
+                        <FormField control={form.control} name="riskRuleId" render={({ field }) => ( <FormItem><FormLabel required>{t('riskProfile')}</FormLabel><Combobox options={riskProfileOptions} value={field.value} onChange={field.onChange} placeholder={t('selectRiskProfile')} /><FormMessage /></FormItem> )} />
                     </CardContent>
                 </Card>
             </div>

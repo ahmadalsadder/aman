@@ -100,7 +100,7 @@ export default function LoginPage() {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t('usernameLabel')}</FormLabel>
+                    <FormLabel required>{t('usernameLabel')}</FormLabel>
                     <FormControl>
                       <Input 
                         placeholder="officer.jones" 
@@ -118,7 +118,7 @@ export default function LoginPage() {
                 render={({ field }) => (
                   <FormItem>
                      <div className="flex items-center justify-between">
-                        <FormLabel>{t('passwordLabel')}</FormLabel>
+                        <FormLabel required>{t('passwordLabel')}</FormLabel>
                         <a href="#" className="text-sm font-medium text-primary hover:underline">
                             {t('forgotPassword')}
                         </a>

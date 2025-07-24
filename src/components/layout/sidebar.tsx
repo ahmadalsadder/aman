@@ -32,7 +32,10 @@ export default function AppSidebar() {
   const t = useTranslations('Navigation');
 
   const currentModule = pathname.split('/')[1] as any;
-  const navItems = user ? getModuleNavItems(currentModule, user.role, t) : [];
+  const navItems = React.useMemo(() => {
+    return user ? getModuleNavItems(currentModule, user.role, t) : [];
+  }, [currentModule, user, t]);
+
   
   const [openCollapsibles, setOpenCollapsibles] = React.useState<Record<string, boolean>>({});
 

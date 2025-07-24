@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
@@ -6,7 +7,8 @@ import { useRouter } from 'next/navigation';
 
 import type { Passenger, Transaction, WorkflowStep } from '@/types/live-processing';
 import { assessPassengerRisk, type AssessPassengerRiskOutput } from '@/ai/flows/assess-risk-flow';
-import { extractPassportData, type PassportDataOutput } from '@/ai/flows/extract-passport-data-flow';
+import { extractPassportData } from '@/ai/flows/extract-passport-data-flow';
+import type { PassportDataOutput } from '@/types/ai/passport-data';
 import { useAuth } from '@/hooks/use-auth';
 import { mockTransactions, mockPassengers, mockVisaDatabase } from '@/lib/mock-data';
 import { countries } from '@/lib/countries';
@@ -867,7 +869,7 @@ export function LiveProcessingFlow() {
                 {selectedPassenger && (
                     <Card className="animate-in fade-in-50 duration-500">
                         <CardHeader className="flex flex-row items-center gap-4">
-                            <Avatar className="h-16 w-16"><AvatarImage src={selectedPassenger.profilePicture || undefined} data-ai-hint="portrait professional" /><AvatarFallback><User /></AvatarFallback></Avatar>
+                            <Avatar className="h-16 w-16"><AvatarImage src={selectedPassenger.profilePicture} data-ai-hint="portrait professional" /><AvatarFallback><User /></AvatarFallback></Avatar>
                             <div><CardTitle>{selectedPassenger.firstName} {selectedPassenger.lastName}</CardTitle><CardDescription>{selectedPassenger.passportNumber}</CardDescription></div>
                         </CardHeader>
                         <CardContent className="space-y-2">

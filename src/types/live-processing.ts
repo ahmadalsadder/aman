@@ -1,4 +1,5 @@
 
+
 export interface Passenger {
     id: string;
     firstName: string;
@@ -93,14 +94,22 @@ export interface Passenger {
     finalDecision: 'Approved' | 'Rejected' | 'Manual Review';
     triggeredRules: { alert: string, acknowledged: boolean }[];
     officerNotes?: string;
-    workflowSteps?: WorkflowStep[];
+    workflow?: WorkflowStep[];
     tripInformation?: TripInformation;
     civilInformation?: {
       fileType?: 'Citizen' | 'Visa' | 'Residency';
       fileExpiryDate?: string;
       nationalId?: string;
       fileNumber?: string;
-    }
+    },
+    passenger?: Partial<Passenger>;
+    passportScan?: string | null;
+    biometrics?: {
+        face: string | null;
+        leftIris: string | null;
+        rightIris: string | null;
+        fingerprint: string | null;
+    };
   }
 
   export interface TestCase {

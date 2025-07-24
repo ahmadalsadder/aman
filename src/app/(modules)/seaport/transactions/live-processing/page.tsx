@@ -13,6 +13,10 @@ export default function SeaportLiveProcessingPage() {
             <BreadcrumbLink href="/seaport/dashboard">Dashboard</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
+           <BreadcrumbItem>
+            <BreadcrumbPage>Transactions</BreadcrumbPage>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbPage>Live Processing</BreadcrumbPage>
           </BreadcrumbItem>

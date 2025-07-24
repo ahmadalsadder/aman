@@ -47,14 +47,14 @@ export const getModuleNavItems = (module: Module, role: Role, t: any): NavItem[]
     });
     
     // Add transaction processing for specific modules
-    if (['airport', 'landport', 'seaport', 'shiftsupervisor'].includes(module)) {
+    if (['airport', 'landport', 'seaport', 'shiftsupervisor', 'gate-supervisor'].includes(module)) {
         baseNav.push({
-            href: `${moduleBaseUrl}/live-processing`, 
+            href: `${moduleBaseUrl}/transactions`, 
             label: t('transactions'),
             icon: Activity,
             children: [
                 {
-                    href: `${moduleBaseUrl}/live-processing`,
+                    href: `${moduleBaseUrl}/transactions/live-processing`,
                     label: t('liveProcessing'),
                     icon: RadioTower,
                 }

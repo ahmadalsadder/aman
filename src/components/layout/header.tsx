@@ -34,7 +34,7 @@ export default function Header() {
   
   const currentModule = pathname.split('/')[1] as Module;
 
-  const showQuickActions = ['airport', 'landport', 'seaport', 'shiftsupervisor'].includes(currentModule);
+  const showQuickActions = ['airport', 'landport', 'seaport', 'shiftsupervisor', 'gate-supervisor'].includes(currentModule);
 
   React.useEffect(() => {
     const handleLocaleChange = (event: CustomEvent) => {
@@ -79,7 +79,7 @@ export default function Header() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                     <DropdownMenuItem asChild>
-                        <Link href={`/${currentModule}/live-processing`} className="flex items-center gap-2">
+                        <Link href={`/${currentModule}/transactions/live-processing`} className="flex items-center gap-2">
                            <RadioTower className="h-4 w-4 text-primary animate-pulse" />
                            <span>Live Processing</span>
                         </Link>

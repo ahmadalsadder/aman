@@ -12,6 +12,7 @@ export type Permission =
 export interface User {
   id: string;
   name: string;
+  fullName?: string;
   email: string;
   role: Role;
   token: string;

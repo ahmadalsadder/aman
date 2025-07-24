@@ -63,7 +63,7 @@ export interface Passenger {
     riskScore: number;
     officerName: string;
     finalDecision: 'Approved' | 'Rejected' | 'Manual Review';
-    triggeredRules: string[];
+    triggeredRules: { alert: string, acknowledged: boolean }[];
     officerNotes?: string;
     workflowSteps: WorkflowStep[];
     tripInformation?: {

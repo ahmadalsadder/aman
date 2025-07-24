@@ -316,7 +316,12 @@
       "reject": "Rechazar",
       "notesPlaceholder": "Agregar notas del oficial (opcional)...",
       "complete": "Completar transacción",
-      "backToCapture": "Volver a la captura"
+      "backToCapture": "Volver a la captura",
+      "alerts": {
+        "title": "Alertas que requieren acuse de recibo",
+        "acknowledge": "Acusar recibo",
+        "acknowledged": "Recibido"
+      }
     },
     "completed": {
       "title": "Transacción completada",

@@ -316,7 +316,12 @@
       "reject": "رفض",
       "notesPlaceholder": "أضف ملاحظات الضابط (اختياري)...",
       "complete": "إكمال المعاملة",
-      "backToCapture": "العودة إلى الالتقاط"
+      "backToCapture": "العودة إلى الالتقاط",
+      "alerts": {
+        "title": "تنبيهات تتطلب إقرارًا بالاستلام",
+        "acknowledge": "إقرار بالاستلام",
+        "acknowledged": "تم الإقرار"
+      }
     },
     "completed": {
       "title": "اكتملت المعاملة",

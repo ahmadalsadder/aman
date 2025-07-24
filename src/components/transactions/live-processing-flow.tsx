@@ -155,6 +155,7 @@ export function LiveProcessingFlow() {
   const [aiResult, setAiResult] = useState<AssessPassengerRiskOutput | null>(null);
   const [finalDecision, setFinalDecision] = useState<'Approved' | 'Rejected' | ''>('');
   const [officerNotes, setOfficerNotes] = useState('');
+  const [approvedAlerts, setApprovedAlerts] = useState<Record<string, boolean>>({});
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -176,6 +177,7 @@ export function LiveProcessingFlow() {
     setAiResult(null);
     setFinalDecision('');
     setOfficerNotes('');
+    setApprovedAlerts({});
   }
   
   const updateStepStatus = useCallback((stepId: string, status: InternalWorkflowStatus) => {
@@ -374,7 +376,7 @@ export function LiveProcessingFlow() {
     }
     
     const riskScore = aiResult ? aiResult.riskScore : (visaCheckResult === 'invalid' ? 75 : 50);
-    const triggeredRules = aiResult ? aiResult.alerts : (visaCheckResult === 'invalid' ? [t('alert.visaRequired')] : []);
+    const triggeredRules = aiResult ? aiResult.alerts.map(alert => ({ alert, acknowledged: approvedAlerts[alert] || false })) : (visaCheckResult === 'invalid' ? [{alert: t('alert.visaRequired'), acknowledged: false}] : []);
     const finalNotes = officerNotes || (status === 'Pending' ? t('alert.escalatedNotes') : '');
     
     const finalWorkflow: WorkflowStep[] = workflow.map(step => ({
@@ -408,7 +410,7 @@ export function LiveProcessingFlow() {
         toast({ title: t('toast.saveFailedTitle'), description: result.errors?.[0]?.message || t('toast.saveFailedDescription'), variant: 'destructive' });
         return null;
     }
-  }, [updateChoice, extractedData, passportScan, biometricCaptures, workflow, officerNotes, user, aiResult, visaCheckResult, existingPassenger, t]);
+  }, [updateChoice, extractedData, passportScan, biometricCaptures, workflow, officerNotes, user, aiResult, visaCheckResult, approvedAlerts, t]);
 
   const handleCompleteTransaction = async () => {
     if(!finalDecision) {
@@ -486,6 +488,8 @@ export function LiveProcessingFlow() {
     transition: { duration: 0.3 }
   };
 
+  const allAlertsAcknowledged = aiResult ? aiResult.alerts.every(alert => approvedAlerts[alert]) : true;
+
   const renderContent = () => {
     switch (currentStep) {
         case 'upload_document':
@@ -539,7 +543,7 @@ export function LiveProcessingFlow() {
                                     <AlertTitle>{t('alert.missingVisaTitle')}</AlertTitle>
                                     <AlertDescription>{t('alert.missingVisaDescription')}</AlertDescription>
                                 </Alert>
-                                <Button className="w-full" onClick={handleTransferToDutyManager}>
+                                <Button className="w-full" variant="default" onClick={handleTransferToDutyManager}>
                                     <ShieldAlert className="mr-2 h-4 w-4" /> {t('matchFound.transfer')}
                                 </Button>
                             </div>
@@ -590,7 +594,7 @@ export function LiveProcessingFlow() {
                                     <AlertTitle>{t('alert.missingVisaTitle')}</AlertTitle>
                                     <AlertDescription>{t('alert.missingVisaDescription')}</AlertDescription>
                                 </Alert>
-                                <Button className="w-full" onClick={handleTransferToDutyManager}>
+                                <Button className="w-full" variant="default" onClick={handleTransferToDutyManager}>
                                     <ShieldAlert className="mr-2 h-4 w-4" /> {t('matchFound.transfer')}
                                 </Button>
                             </div>
@@ -673,11 +677,23 @@ export function LiveProcessingFlow() {
                                 <DetailItem label={t('review.assessmentSummary')} value={aiResult?.assessment} />
                                 {aiResult?.alerts && aiResult.alerts.length > 0 && (
                                     <div className="space-y-2">
+                                        <Label className="font-semibold">{t('review.alerts.title')}</Label>
                                         {aiResult.alerts.map((alert, i) => (
-                                            <Alert key={`alert-${i}`} variant={aiResult.riskScore > 50 ? 'destructive' : 'default'}>
-                                                <ShieldAlert className="h-4 w-4" />
-                                                <AlertTitle>{alert}</AlertTitle>
-                                            </Alert>
+                                            <div key={`alert-${i}`} className="flex items-center gap-2">
+                                                <Alert variant={aiResult.riskScore > 50 ? 'destructive' : 'default'} className="flex-grow">
+                                                    <ShieldAlert className="h-4 w-4" />
+                                                    <AlertTitle>{alert}</AlertTitle>
+                                                </Alert>
+                                                <Button
+                                                    size="sm"
+                                                    variant={approvedAlerts[alert] ? "secondary" : "outline"}
+                                                    onClick={() => setApprovedAlerts(prev => ({...prev, [alert]: true}))}
+                                                    disabled={approvedAlerts[alert]}
+                                                >
+                                                    {approvedAlerts[alert] ? <CheckCircle2 className="mr-2 h-4 w-4 text-green-500" /> : <ShieldAlert className="mr-2 h-4 w-4" />}
+                                                    {approvedAlerts[alert] ? t('review.alerts.acknowledged') : t('review.alerts.acknowledge')}
+                                                </Button>
+                                            </div>
                                         ))}
                                     </div>
                                 )}
@@ -705,7 +721,7 @@ export function LiveProcessingFlow() {
                                 </RadioGroup>
                                 <Textarea placeholder={t('review.notesPlaceholder')} value={officerNotes} onChange={(e) => setOfficerNotes(e.target.value)} />
                                 <div className="flex flex-col gap-2 sm:flex-row-reverse">
-                                    <Button className="w-full sm:flex-1" onClick={handleCompleteTransaction} disabled={!finalDecision}>
+                                    <Button className="w-full sm:flex-1" onClick={handleCompleteTransaction} disabled={!finalDecision || !allAlertsAcknowledged}>
                                         {t('review.complete')}
                                     </Button>
                                 </div>

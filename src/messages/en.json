@@ -316,7 +316,12 @@
       "reject": "Reject",
       "notesPlaceholder": "Add officer notes (optional)...",
       "complete": "Complete Transaction",
-      "backToCapture": "Back to Capture"
+      "backToCapture": "Back to Capture",
+      "alerts": {
+        "title": "Alerts Requiring Acknowledgment",
+        "acknowledge": "Acknowledge",
+        "acknowledged": "Acknowledged"
+      }
     },
     "completed": {
       "title": "Transaction Completed",

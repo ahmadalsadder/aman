@@ -209,6 +209,7 @@
   },
   "Transactions": {
     "processTransaction": "Process Transaction",
+    "manualEntry": "Manual Entry",
     "filterTitle": "Search & Filter Transactions",
     "filterId": "Transaction ID...",
     "filterPassengerName": "Passenger Name...",
@@ -302,6 +303,58 @@
     "voyageNumber": "Voyage Number",
     "berth": "Berth",
     "lastPortOfCall": "Last Port of Call"
+  },
+  "ManualEntry": {
+    "common": {
+      "cancel": "Cancel",
+      "completeTransaction": "Complete Transaction"
+    },
+    "toast": {
+        "passengerFoundTitle": "Passenger Found",
+        "passengerFoundDesc": "Passenger details have been pre-filled.",
+        "passengerNotFoundTitle": "Passenger Not Found",
+        "passengerNotFoundDesc": "No existing record found. Please fill in the details manually.",
+        "transactionRecordedTitle": "Transaction Recorded",
+        "transactionRecordedDesc": "Transaction for {passengerName} processed with decision: {decision}."
+    },
+    "passengerSearch": {
+      "title": "1. Find Passenger",
+      "description": "Search for an existing passenger by their passport number.",
+      "passportLabel": "Passport Number",
+      "passportPlaceholder": "Enter passport number..."
+    },
+    "passengerDetails": {
+      "title": "Passenger Details",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "passportNumber": "Passport Number",
+      "dob": "Date of Birth",
+      "nationality": "Nationality",
+      "selectNationality": "Select a nationality...",
+      "gender": "Gender"
+    },
+    "verification": {
+      "title": "2. Officer Verification",
+      "description": "Manually confirm all checks are complete.",
+      "transactionType": "Transaction Type",
+      "entry": "Entry",
+      "exit": "Exit",
+      "passportVerified": "Passport Verified",
+      "visaVerified": "Visa Verified",
+      "biometricsVerified": "Biometrics Verified"
+    },
+    "decision": {
+      "title": "3. Final Decision",
+      "description": "Record the final outcome and any relevant notes.",
+      "notesLabel": "Officer Notes",
+      "notesPlaceholder": "Add any relevant notes...",
+      "decisionLabel": "Final Decision",
+      "approve": "Approve",
+      "reject": "Reject",
+      "refer": "Refer to Supervisor (Manual Review)",
+      "highRiskTitle": "High Risk Passenger",
+      "highRiskDesc": "This passenger is flagged as high-risk. Proceed with caution and follow protocol."
+    }
   },
   "LiveProcessingFlow": {
     "toast": {

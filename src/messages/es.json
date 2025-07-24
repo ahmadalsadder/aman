@@ -209,6 +209,7 @@
   },
   "Transactions": {
     "processTransaction": "Procesar Transacción",
+    "manualEntry": "Entrada Manual",
     "filterTitle": "Buscar y Filtrar Transacciones",
     "filterId": "ID de Transacción...",
     "filterPassengerName": "Nombre del Pasajero...",
@@ -302,6 +303,58 @@
     "voyageNumber": "Número de Viaje",
     "berth": "Atraque",
     "lastPortOfCall": "Último Puerto de Escala"
+  },
+  "ManualEntry": {
+    "common": {
+      "cancel": "Cancelar",
+      "completeTransaction": "Completar Transacción"
+    },
+    "toast": {
+        "passengerFoundTitle": "Pasajero Encontrado",
+        "passengerFoundDesc": "Los detalles del pasajero se han rellenado previamente.",
+        "passengerNotFoundTitle": "Pasajero No Encontrado",
+        "passengerNotFoundDesc": "No se encontró ningún registro existente. Por favor, rellene los detalles manualmente.",
+        "transactionRecordedTitle": "Transacción Registrada",
+        "transactionRecordedDesc": "La transacción para {passengerName} se procesó con la decisión: {decision}."
+    },
+    "passengerSearch": {
+      "title": "1. Buscar Pasajero",
+      "description": "Buscar un pasajero existente por su número de pasaporte.",
+      "passportLabel": "Número de Pasaporte",
+      "passportPlaceholder": "Introduzca el número de pasaporte..."
+    },
+    "passengerDetails": {
+      "title": "Detalles del Pasajero",
+      "firstName": "Nombre",
+      "lastName": "Apellido",
+      "passportNumber": "Número de Pasaporte",
+      "dob": "Fecha de Nacimiento",
+      "nationality": "Nacionalidad",
+      "selectNationality": "Seleccione una nacionalidad...",
+      "gender": "Género"
+    },
+    "verification": {
+      "title": "2. Verificación del Oficial",
+      "description": "Confirmar manualmente que todas las comprobaciones están completas.",
+      "transactionType": "Tipo de Transacción",
+      "entry": "Entrada",
+      "exit": "Salida",
+      "passportVerified": "Pasaporte Verificado",
+      "visaVerified": "Visa Verificada",
+      "biometricsVerified": "Biometría Verificada"
+    },
+    "decision": {
+      "title": "3. Decisión Final",
+      "description": "Registrar el resultado final y cualquier nota relevante.",
+      "notesLabel": "Notas del Oficial",
+      "notesPlaceholder": "Añada cualquier nota relevante...",
+      "decisionLabel": "Decisión Final",
+      "approve": "Aprobar",
+      "reject": "Rechazar",
+      "refer": "Remitir al Supervisor (Revisión Manual)",
+      "highRiskTitle": "Pasajero de Alto Riesgo",
+      "highRiskDesc": "Este pasajero está marcado como de alto riesgo. Proceda con precaución y siga el protocolo."
+    }
   },
   "LiveProcessingFlow": {
     "toast": {

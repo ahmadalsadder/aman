@@ -472,6 +472,17 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
         return Result.success(user) as Result<T>;
     }
 
+    // PASSENGER
+    if (method === 'GET' && url.pathname === '/data/passenger-by-passport') {
+        const passportNumber = url.searchParams.get('passportNumber');
+        const passenger = mockPassengers.find(p => p.passportNumber === passportNumber);
+        if (passenger) {
+            return Result.success(passenger) as Result<T>;
+        }
+        return Result.failure([new ApiError('NOT_FOUND', `Passenger with passport ${passportNumber} not found.`)]) as Result<T>;
+    }
+
+
     // TRANSACTIONS
     if (method === 'POST' && url.pathname === '/data/transactions') {
         const transactionData = JSON.parse(body as string);

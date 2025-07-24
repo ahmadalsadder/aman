@@ -20,11 +20,25 @@ import { Separator } from '@/components/ui/separator';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Textarea } from '@/components/ui/textarea';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Loader2, User } from 'lucide-react';
+import { Loader2, User, Search } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Input } from '@/components/ui/input';
+import { countries } from '@/lib/countries';
+import { useTranslations } from 'next-intl';
 
 const manualTransactionSchema = z.object({
-  passengerId: z.string().min(1, "A passenger must be selected."),
+  // Search and passenger data
+  passportNumberSearch: z.string(),
+  passengerId: z.string().optional(),
+  firstName: z.string().min(1, "First name is required."),
+  lastName: z.string().min(1, "Last name is required."),
+  passportNumber: z.string().min(1, "Passport number is required."),
+  nationality: z.string().min(1, "Nationality is required."),
+  dateOfBirth: z.string().min(1, "Date of birth is required."),
+  gender: z.enum(['Male', 'Female', 'Other']),
+  
+  // Transaction data
+  transactionType: z.enum(['Entry', 'Exit']),
   passportVerified: z.boolean().refine(val => val === true, {
     message: "You must verify the passport."
   }),
@@ -50,72 +64,85 @@ const DetailItem = ({ label, value }: { label: string; value?: string | null }) 
 export function ManualEntryForm() {
   const router = useRouter();
   const { toast } = useToast();
+  const t = useTranslations('ManualEntry');
   const [isLoading, setIsLoading] = useState(false);
-  const [passengers, setPassengers] = useState<Passenger[]>([]);
-  const [selectedPassenger, setSelectedPassenger] = useState<Passenger | null>(null);
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchedPassenger, setSearchedPassenger] = useState<Passenger | null>(null);
 
-  useEffect(() => {
-    const fetchPassengers = async () => {
-        const result = await api.get<Passenger[]>('/data/passengers');
-        if (result.isSuccess && result.data) {
-            setPassengers(result.data);
-        }
-    };
-    fetchPassengers();
-  }, []);
-
-  const passengerOptions = useMemo(() => 
-    passengers.map(p => ({
-      value: p.id,
-      label: `${p.firstName} ${p.lastName} (${p.passportNumber})`
-    })), [passengers]);
-  
   const form = useForm<FormValues>({
     resolver: zodResolver(manualTransactionSchema),
     defaultValues: {
-      passengerId: '',
-      passportVerified: false,
-      visaVerified: false,
-      biometricsVerified: false,
-      officerNotes: '',
+        passportNumberSearch: '',
+        firstName: '',
+        lastName: '',
+        passportNumber: '',
+        nationality: '',
+        dateOfBirth: '',
+        gender: 'Male',
+        transactionType: 'Entry',
+        passportVerified: false,
+        visaVerified: false,
+        biometricsVerified: false,
+        officerNotes: '',
     },
   });
 
-  const passengerId = form.watch('passengerId');
+  const handleSearch = async () => {
+    const passportNumber = form.getValues('passportNumberSearch');
+    if (!passportNumber) return;
 
-  React.useEffect(() => {
-    if (passengerId) {
-      const passenger = passengers.find(p => p.id === passengerId) || null;
-      setSelectedPassenger(passenger);
-      // Reset verification status when passenger changes
-      form.resetField('passportVerified');
-      form.resetField('visaVerified');
-      form.resetField('biometricsVerified');
+    setIsSearching(true);
+    const result = await api.get<Passenger>(`/data/passenger-by-passport?passportNumber=${passportNumber}`);
+    
+    if (result.isSuccess && result.data) {
+        const passenger = result.data;
+        setSearchedPassenger(passenger);
+        form.reset({
+            ...form.getValues(),
+            passengerId: passenger.id,
+            firstName: passenger.firstName,
+            lastName: passenger.lastName,
+            passportNumber: passenger.passportNumber,
+            nationality: countries.find(c => c.label === passenger.nationality)?.value || '',
+            dateOfBirth: passenger.dateOfBirth,
+            gender: passenger.gender,
+        });
+        toast({ title: t('toast.passengerFoundTitle'), description: t('toast.passengerFoundDesc') });
     } else {
-      setSelectedPassenger(null);
+        setSearchedPassenger(null);
+        form.reset({
+            ...form.getValues(),
+            passengerId: undefined,
+            firstName: '',
+            lastName: '',
+            passportNumber: passportNumber, // Pre-fill the passport number
+            nationality: '',
+            dateOfBirth: '',
+        });
+        toast({ title: t('toast.passengerNotFoundTitle'), description: t('toast.passengerNotFoundDesc'), variant: 'default' });
     }
-  }, [passengerId, form, passengers]);
-
+    setIsSearching(false);
+  };
+  
   const needsVisaCheck = useMemo(() => {
-    if (!selectedPassenger) return false;
-    // Example logic: UAE nationals don't need visa check
-    return selectedPassenger.nationality !== 'United Arab Emirates';
-  }, [selectedPassenger]);
+    if (!searchedPassenger) return true; // Assume check needed for new entries
+    return searchedPassenger.nationality !== 'United Arab Emirates';
+  }, [searchedPassenger]);
+
 
   const onSubmit = (data: FormValues) => {
     setIsLoading(true);
     console.log("Manual Transaction Data:", data);
 
     // In a real app, you would submit this to a backend.
-    // For now, we'll just simulate a delay and show a success toast.
     setTimeout(() => {
       toast({
-        title: "Transaction Recorded",
-        description: `The transaction for ${selectedPassenger?.firstName} ${selectedPassenger?.lastName} has been processed with decision: ${data.finalDecision}.`,
+        title: t('toast.transactionRecordedTitle'),
+        description: t('toast.transactionRecordedDesc', { passengerName: `${data.firstName} ${data.lastName}`, decision: data.finalDecision }),
         variant: 'success',
       });
       setIsLoading(false);
-      router.push('/transactions');
+      router.back();
     }, 1000);
   };
 
@@ -127,71 +154,65 @@ export function ManualEntryForm() {
           <div className="lg:col-span-1 space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>1. Select Passenger</CardTitle>
-                <CardDescription>Find the passenger to process.</CardDescription>
+                <CardTitle>{t('passengerSearch.title')}</CardTitle>
+                <CardDescription>{t('passengerSearch.description')}</CardDescription>
               </CardHeader>
               <CardContent>
-                <FormField
-                  control={form.control}
-                  name="passengerId"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Passenger</FormLabel>
-                      <Combobox
-                        options={passengerOptions}
-                        value={field.value}
-                        onChange={field.onChange}
-                        placeholder="Select a passenger..."
-                        searchPlaceholder="Search by name or passport..."
-                        noResultsText="No passenger found."
-                      />
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                 <FormField
+                    control={form.control}
+                    name="passportNumberSearch"
+                    render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>{t('passengerSearch.passportLabel')}</FormLabel>
+                        <div className="flex gap-2">
+                            <FormControl>
+                                <Input placeholder={t('passengerSearch.passportPlaceholder')} {...field} />
+                            </FormControl>
+                            <Button type="button" onClick={handleSearch} disabled={isSearching || !field.value}>
+                                {isSearching ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
+                            </Button>
+                        </div>
+                        <FormMessage />
+                        </FormItem>
+                    )}
+                    />
               </CardContent>
             </Card>
 
-            {selectedPassenger && (
-              <Card className="animate-in fade-in-50 duration-500">
-                <CardHeader className="flex flex-row items-center gap-4">
-                  <Avatar className="h-16 w-16">
-                    <AvatarImage src={selectedPassenger.profilePicture} data-ai-hint="portrait professional" />
-                    <AvatarFallback><User /></AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <CardTitle>{selectedPassenger.firstName} {selectedPassenger.lastName}</CardTitle>
-                    <CardDescription>{selectedPassenger.passportNumber}</CardDescription>
-                  </div>
+            <Card>
+                <CardHeader>
+                    <CardTitle>{t('passengerDetails.title')}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <Separator />
-                  <DetailItem label="Nationality" value={selectedPassenger.nationality} />
-                  <DetailItem label="Date of Birth" value={selectedPassenger.dateOfBirth} />
-                  <DetailItem label="Risk Level" value={selectedPassenger.riskLevel} />
+                     <FormField control={form.control} name="firstName" render={({ field }) => ( <FormItem><FormLabel required>{t('passengerDetails.firstName')}</FormLabel><FormControl><Input {...field} disabled={!!searchedPassenger} /></FormControl><FormMessage /></FormItem> )} />
+                     <FormField control={form.control} name="lastName" render={({ field }) => ( <FormItem><FormLabel required>{t('passengerDetails.lastName')}</FormLabel><FormControl><Input {...field} disabled={!!searchedPassenger} /></FormControl><FormMessage /></FormItem> )} />
+                     <FormField control={form.control} name="passportNumber" render={({ field }) => ( <FormItem><FormLabel required>{t('passengerDetails.passportNumber')}</FormLabel><FormControl><Input {...field} disabled={!!searchedPassenger} /></FormControl><FormMessage /></FormItem> )} />
+                     <FormField control={form.control} name="dateOfBirth" render={({ field }) => ( <FormItem><FormLabel required>{t('passengerDetails.dob')}</FormLabel><FormControl><Input type="date" {...field} disabled={!!searchedPassenger} /></FormControl><FormMessage /></FormItem> )} />
+                     <FormField control={form.control} name="nationality" render={({ field }) => ( <FormItem><FormLabel required>{t('passengerDetails.nationality')}</FormLabel><Combobox options={countries} value={field.value} onChange={field.onChange} placeholder={t('passengerDetails.selectNationality')} disabled={!!searchedPassenger} /><FormMessage /></FormItem> )} />
+                     <FormField control={form.control} name="gender" render={({ field }) => ( <FormItem><FormLabel required>{t('passengerDetails.gender')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value} disabled={!!searchedPassenger}><FormControl><SelectTrigger><SelectValue /></SelectTrigger></FormControl><SelectContent><SelectItem value="Male">Male</SelectItem><SelectItem value="Female">Female</SelectItem><SelectItem value="Other">Other</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
                 </CardContent>
-              </Card>
-            )}
+            </Card>
           </div>
 
           {/* Right column: Verification & Decision */}
           <div className="lg:col-span-2 space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>2. Officer Verification</CardTitle>
-                <CardDescription>Manually confirm checks are complete.</CardDescription>
+                <CardTitle>{t('verification.title')}</CardTitle>
+                <CardDescription>{t('verification.description')}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
+                 <FormField control={form.control} name="transactionType" render={({ field }) => ( <FormItem><FormLabel required>{t('verification.transactionType')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue /></SelectTrigger></FormControl><SelectContent><SelectItem value="Entry">{t('verification.entry')}</SelectItem><SelectItem value="Exit">{t('verification.exit')}</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
                  <FormField
                     control={form.control}
                     name="passportVerified"
                     render={({ field }) => (
                       <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
                         <FormControl>
-                          <Checkbox checked={field.value} onCheckedChange={field.onChange} disabled={!selectedPassenger} />
+                          <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                         </FormControl>
                         <div className="space-y-1 leading-none">
-                          <FormLabel>Passport Verified</FormLabel>
+                          <FormLabel>{t('verification.passportVerified')}</FormLabel>
                           <FormMessage />
                         </div>
                       </FormItem>
@@ -204,10 +225,10 @@ export function ManualEntryForm() {
                       render={({ field }) => (
                         <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
                           <FormControl>
-                            <Checkbox checked={field.value} onCheckedChange={field.onChange} disabled={!selectedPassenger} />
+                            <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                           </FormControl>
                           <div className="space-y-1 leading-none">
-                            <FormLabel>Visa Verified</FormLabel>
+                            <FormLabel>{t('verification.visaVerified')}</FormLabel>
                             <FormMessage />
                           </div>
                         </FormItem>
@@ -220,10 +241,10 @@ export function ManualEntryForm() {
                     render={({ field }) => (
                       <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
                         <FormControl>
-                          <Checkbox checked={field.value} onCheckedChange={field.onChange} disabled={!selectedPassenger} />
+                          <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                         </FormControl>
                         <div className="space-y-1 leading-none">
-                          <FormLabel>Biometrics Verified</FormLabel>
+                          <FormLabel>{t('verification.biometricsVerified')}</FormLabel>
                            <FormMessage />
                         </div>
                       </FormItem>
@@ -234,8 +255,8 @@ export function ManualEntryForm() {
 
             <Card>
               <CardHeader>
-                <CardTitle>3. Final Decision</CardTitle>
-                <CardDescription>Record the final outcome and any notes.</CardDescription>
+                <CardTitle>{t('decision.title')}</CardTitle>
+                <CardDescription>{t('decision.description')}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <FormField
@@ -243,9 +264,9 @@ export function ManualEntryForm() {
                   name="officerNotes"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Officer Notes</FormLabel>
+                      <FormLabel>{t('decision.notesLabel')}</FormLabel>
                       <FormControl>
-                        <Textarea placeholder="Add any relevant notes..." {...field} disabled={!selectedPassenger} />
+                        <Textarea placeholder={t('decision.notesPlaceholder')} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -256,25 +277,24 @@ export function ManualEntryForm() {
                   name="finalDecision"
                   render={({ field }) => (
                     <FormItem className="space-y-3">
-                      <FormLabel>Final Decision</FormLabel>
+                      <FormLabel required>{t('decision.decisionLabel')}</FormLabel>
                       <FormControl>
                         <RadioGroup
                           onValueChange={field.onChange}
                           defaultValue={field.value}
                           className="flex flex-col space-y-1"
-                          disabled={!selectedPassenger}
                         >
                           <FormItem className="flex items-center space-x-3 space-y-0">
                             <FormControl><RadioGroupItem value="Approved" /></FormControl>
-                            <FormLabel className="font-normal">Approve Entry</FormLabel>
+                            <FormLabel className="font-normal">{t('decision.approve')}</FormLabel>
                           </FormItem>
                           <FormItem className="flex items-center space-x-3 space-y-0">
                             <FormControl><RadioGroupItem value="Rejected" /></FormControl>
-                            <FormLabel className="font-normal">Reject Entry</FormLabel>
+                            <FormLabel className="font-normal">{t('decision.reject')}</FormLabel>
                           </FormItem>
                           <FormItem className="flex items-center space-x-3 space-y-0">
                             <FormControl><RadioGroupItem value="Manual Review" /></FormControl>
-                            <FormLabel className="font-normal">Refer to Supervisor (Manual Review)</FormLabel>
+                            <FormLabel className="font-normal">{t('decision.refer')}</FormLabel>
                           </FormItem>
                         </RadioGroup>
                       </FormControl>
@@ -282,10 +302,10 @@ export function ManualEntryForm() {
                     </FormItem>
                   )}
                 />
-                 {selectedPassenger?.riskLevel === 'High' && (
+                 {searchedPassenger?.riskLevel === 'High' && (
                     <Alert variant="destructive">
-                        <AlertTitle>High Risk Passenger</AlertTitle>
-                        <AlertDescription>This passenger is flagged as high-risk. Proceed with caution and follow protocol.</AlertDescription>
+                        <AlertTitle>{t('decision.highRiskTitle')}</AlertTitle>
+                        <AlertDescription>{t('decision.highRiskDesc')}</AlertDescription>
                     </Alert>
                  )}
               </CardContent>
@@ -294,13 +314,14 @@ export function ManualEntryForm() {
         </div>
 
         <div className="flex justify-end gap-2">
-            <Button type="button" variant="outline" onClick={() => router.push('/transactions')}>Cancel</Button>
-            <Button type="submit" disabled={isLoading || !selectedPassenger}>
+            <Button type="button" variant="outline" onClick={() => router.back()}>{t('common.cancel')}</Button>
+            <Button type="submit" disabled={isLoading}>
                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Complete Transaction
+                {t('common.completeTransaction')}
             </Button>
         </div>
       </form>
     </Form>
   );
 }
+

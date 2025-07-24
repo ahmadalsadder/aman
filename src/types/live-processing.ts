@@ -39,6 +39,15 @@ export interface Passenger {
     timestamp: string;
     details?: Record<string, any>;
   }
+
+  export interface ProcessingWorkflowStep {
+    id: string;
+    name: string;
+    description: string;
+    duration: string; // e.g. "1.5s" or "manual"
+    status: 'pending' | 'in-progress' | 'completed' | 'skipped' | 'failed';
+    details?: React.ReactNode;
+  }
   
   export interface Transaction {
     id: string;
@@ -70,4 +79,18 @@ export interface Passenger {
       fileNumber?: string;
     }
   }
+
+  export interface TestCase {
+    id: string;
+    scenario: string;
+    passenger: Partial<Passenger>;
+    workflowTemplate: Omit<ProcessingWorkflowStep, 'status' | 'details'>[];
+    expectedOutcome: 'APPROVED' | 'REJECTED' | 'MANUAL_REVIEW';
+    finalRiskScore: number;
+    alerts: {
+        variant: 'default' | 'destructive';
+        title: string;
+        description: string;
+    }[];
+}
   

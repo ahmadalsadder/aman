@@ -61,8 +61,6 @@ const fileToDataUri = (file: File): Promise<string> => {
     });
 };
 
-const PASSENGERS_STORAGE_KEY = 'guardian-gate-passengers';
-const TRANSACTIONS_STORAGE_KEY = 'guardian-gate-transactions';
 const NATIONALITIES_REQUIRING_VISA = ['Jordan'];
 
 function ScanCard({ title, onScan, scannedImage, onClear, disabled, loading }: { title: string; onScan: (file: File) => void, scannedImage?: string | null, onClear: () => void, disabled?: boolean, loading?: boolean }) {
@@ -363,158 +361,56 @@ export function LiveProcessingFlow() {
     }
   }
 
-  const saveTransactionAndPassenger = useCallback((decision: 'Approved' | 'Rejected' | 'Manual Review', status: 'Completed' | 'Failed' | 'Pending', passengerToSave: Partial<Passenger>) => {
+  const saveTransactionAndPassenger = useCallback(async (decision: 'Approved' | 'Rejected' | 'Manual Review', status: 'Completed' | 'Failed' | 'Pending', passengerToSave: Partial<Passenger>) => {
     if(!passengerToSave || (!aiResult && status !== 'Pending' && decision !== 'Manual Review') || !extractedData) {
         toast({ variant: 'destructive', title: 'Missing Data', description: 'Cannot complete transaction due to missing data.' });
         return null;
     }
     
-    try {
-      let passengers: Passenger[] = [];
-      try {
-        const storedPassengers = localStorage.getItem(PASSENGERS_STORAGE_KEY);
-        // This is a temporary solution for the demo to work with mock data.
-        // In a real app, you would fetch this from the backend.
-        // passengers = storedPassengers ? JSON.parse(storedPassengers) : mockPassengers;
-      } catch (e) {
-        console.error("Failed to parse passengers from localStorage, falling back to mock.", e);
-        // passengers = mockPassengers;
-      }
-      
-      let finalPassengerRecord: Passenger;
+    const riskScore = aiResult ? aiResult.riskScore : (visaCheckResult === 'invalid' ? 75 : 50);
+    const triggeredRules = aiResult ? aiResult.alerts : (visaCheckResult === 'invalid' ? ['Visa Required - Not Found'] : []);
+    const finalNotes = officerNotes || (status === 'Pending' ? 'Passenger requires visa but none was found. Escalated to Duty Manager.' : '');
+    
+    const finalWorkflow: WorkflowStep[] = workflow.map(step => ({
+        id: step.id,
+        name: step.name,
+        status: step.status === 'in-progress' ? 'Pending' :
+                step.status === 'failed' ? 'Failed' :
+                step.status === 'skipped' ? 'Skipped' : 'Completed',
+        timestamp: new Date().toLocaleString(),
+    }));
 
-      const riskScore = aiResult ? aiResult.riskScore : (visaCheckResult === 'invalid' ? 75 : 50);
-      const triggeredRules = aiResult ? aiResult.alerts : (visaCheckResult === 'invalid' ? ['Visa Required - Not Found'] : []);
-      const finalNotes = officerNotes || (status === 'Pending' ? 'Passenger requires visa but none was found. Escalated to Duty Manager.' : '');
+    const transactionData = {
+        passenger: passengerToSave,
+        decision,
+        status,
+        riskScore,
+        triggeredRules,
+        notes: finalNotes,
+        workflow: finalWorkflow,
+        updateChoice: updateChoice,
+        biometrics: biometricCaptures,
+        passportScan: passportScan,
+        officer: user?.fullName,
+    };
+    
+    const result = await api.post('/data/transactions', transactionData);
 
-      const baseUpdate: Partial<Passenger> = {
-          lastEntry: new Date().toISOString().split('T')[0],
-          riskLevel: riskScore > 75 ? 'High' : riskScore > 40 ? 'Medium' : 'Low',
-          notes: finalNotes,
-      };
-
-      const newImages = {
-          passportPhotoUrl: passportScan,
-          personalPhotoUrl: biometricCaptures.face || passengerToSave.personalPhotoUrl,
-          profilePicture: biometricCaptures.face || passengerToSave.profilePicture,
-          faceScanUrl: biometricCaptures.face,
-          leftIrisScanUrl: biometricCaptures.leftIris,
-          rightIrisScanUrl: biometricCaptures.rightIris,
-          fingerprintUrl: biometricCaptures.fingerprint,
-      };
-
-      if (existingPassenger && updateChoice) {
-          const passengerIndex = passengers.findIndex(p => p.id === existingPassenger.id);
-          if (passengerIndex === -1) {
-              toast({ variant: 'destructive', title: 'Save Failed', description: 'Could not find the original passenger record to update.' });
-              return null;
-          }
-          
-          let recordToUpdate: Passenger = { ...passengers[passengerIndex], ...baseUpdate };
-
-          if (updateChoice === 'update_all') {
-              const nationalityLabel = countries.find(c => c.value === extractedData.nationality)?.label || extractedData.nationality;
-              const passportCountryLabel = countries.find(c => c.value === extractedData.passportCountry)?.label || extractedData.passportCountry;
-              recordToUpdate = { ...recordToUpdate, ...extractedData, nationality: nationalityLabel, passportCountry: passportCountryLabel, id: existingPassenger.id };
-          }
-          
-          const updatedRecord: Passenger = { ...recordToUpdate, ...newImages };
-
-          passengers[passengerIndex] = updatedRecord;
-          finalPassengerRecord = updatedRecord;
-
-      } else {
-          const nationalityLabel = countries.find(c => c.value === extractedData.nationality)?.label || extractedData.nationality;
-          const passportCountryLabel = countries.find(c => c.value === extractedData.passportCountry)?.label || extractedData.passportCountry;
-          
-          finalPassengerRecord = {
-              id: `P${Date.now()}`,
-              status: 'Active',
-              ...extractedData,
-              nationality: nationalityLabel,
-              passportCountry: passportCountryLabel,
-              ...baseUpdate,
-              ...newImages,
-          } as Passenger;
-          
-          const existingIndex = passengers.findIndex(p => p.id === finalPassengerRecord.id);
-          if (existingIndex > -1) {
-              passengers[existingIndex] = finalPassengerRecord;
-          } else {
-              passengers.push(finalPassengerRecord);
-          }
-      }
-
-      localStorage.setItem(PASSENGERS_STORAGE_KEY, JSON.stringify(passengers));
-      
-      const finalWorkflow: WorkflowStep[] = workflow.map(step => ({
-          id: step.id,
-          name: step.name,
-          status: step.status === 'in-progress' ? 'Pending' :
-                  step.status === 'failed' ? 'Failed' :
-                  step.status === 'skipped' ? 'Skipped' : 'Completed',
-          timestamp: new Date().toLocaleString(),
-      }));
-
-      const newTransaction: Transaction = {
-          id: `T${Date.now()}`,
-          passengerId: finalPassengerRecord!.id,
-          passengerName: `${finalPassengerRecord!.firstName} ${finalPassengerRecord!.lastName}`,
-          passportNumber: finalPassengerRecord!.passportNumber,
-          type: 'Entry',
-          gate: 'G-Live',
-          entranceType: 'Officer Desk',
-          dateTime: new Date().toISOString().replace('T', ' ').substring(0, 16),
-          status,
-          duration: 'N/A',
-          riskScore,
-          officerName: user?.fullName || 'Officer Live',
-          finalDecision: decision,
-          triggeredRules,
-          officerNotes: finalNotes,
-          workflowSteps: finalWorkflow,
-          tripInformation: {
-            flightNumber: 'EK202',
-            carrier: 'Emirates',
-            departureCountry: 'United Kingdom',
-            seatNumber: '32B'
-          },
-          civilInformation: {
-              fileType: passengerToSave.residencyFileNumber ? 'Residency' : passengerToSave.visaNumber ? 'Visa' : 'Citizen',
-              fileExpiryDate: passengerToSave.residencyFileNumber ? '2030-01-01' : passengerToSave.visaExpiryDate || '',
-              nationalId: passengerToSave.nationalId,
-              fileNumber: passengerToSave.residencyFileNumber,
-          }
-      };
-      
-      let transactions: Transaction[] = [];
-      try {
-        const storedTransactions = localStorage.getItem(TRANSACTIONS_STORAGE_KEY);
-        // transactions = storedTransactions ? JSON.parse(storedTransactions) : mockTransactions;
-      } catch (e) {
-        console.error("Failed to parse transactions from localStorage, falling back to mock.", e);
-        // transactions = mockTransactions;
-      }
-      
-      const updatedTransactions = [...transactions, newTransaction];
-      localStorage.setItem(TRANSACTIONS_STORAGE_KEY, JSON.stringify(updatedTransactions));
-
-      return newTransaction;
-
-    } catch (error) {
-        console.error('Failed to save to localStorage', error);
-        toast({ title: 'Save Failed', description: 'Could not save the transaction data.', variant: 'destructive' });
+    if (result.isSuccess) {
+        return result.data as Transaction;
+    } else {
+        toast({ title: 'Save Failed', description: result.errors?.[0]?.message || 'Could not save the transaction data.', variant: 'destructive' });
         return null;
     }
   }, [updateChoice, extractedData, passportScan, biometricCaptures, workflow, officerNotes, user, aiResult, visaCheckResult, existingPassenger]);
 
-  const handleCompleteTransaction = () => {
+  const handleCompleteTransaction = async () => {
     if(!finalDecision) {
         toast({ variant: 'destructive', title: 'Decision Required', description: 'Please select Approve or Reject.' });
         return;
     }
     const status = finalDecision === 'Approved' ? 'Completed' : 'Failed';
-    const transaction = saveTransactionAndPassenger(finalDecision, status, selectedPassenger!);
+    const transaction = await saveTransactionAndPassenger(finalDecision, status, selectedPassenger!);
     
     if (transaction) {
       updateStepStatus('officer_review', 'completed');
@@ -524,10 +420,9 @@ export function LiveProcessingFlow() {
     }
   }
   
-  const handleTransferToDutyManager = () => {
+  const handleTransferToDutyManager = async () => {
     let passengerRecord = selectedPassenger;
   
-    // If no passenger is selected yet (e.g., new passenger flow), create one from extracted data.
     if (!passengerRecord && extractedData) {
       const countryLabel = countries.find(c => c.value === extractedData.nationality)?.label || extractedData.nationality;
       const passportCountryLabel = countries.find(c => c.value === extractedData.passportCountry)?.label || extractedData.passportCountry;
@@ -548,8 +443,7 @@ export function LiveProcessingFlow() {
     }
   
     if (passengerRecord) {
-      // Pass the constructed passenger record directly
-      const transaction = saveTransactionAndPassenger('Manual Review', 'Pending', passengerRecord);
+      const transaction = await saveTransactionAndPassenger('Manual Review', 'Pending', passengerRecord);
       if (transaction) {
         toast({ title: "Transferred to Duty Manager", description: `Transaction ${transaction.id} sent for supervisor review.` });
         router.push('/duty-manager');

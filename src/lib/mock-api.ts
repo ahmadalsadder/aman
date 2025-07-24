@@ -86,6 +86,20 @@ const users: User[] = [
     token: 'fake-control-room-token',
     modules: ['control-room'],
     permissions: ['records:view', 'reports:view', 'control-room:dashboard:view']
+  },
+  {
+    id: '7',
+    name: 'Landport Officer',
+    fullName: 'Landport Officer',
+    email: 'officer.land@example.com',
+    role: 'officer',
+    token: 'fake-officer-token',
+    modules: ['landport'],
+    permissions: [
+        'records:view', 'records:create',
+        'landport:dashboard:view', 'landport:dashboard:stats:view', 'landport:dashboard:charts:view',
+        'landport:transactions:view', 'landport:transactions:live'
+    ]
   }
 ];
 

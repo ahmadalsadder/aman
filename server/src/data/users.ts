@@ -55,5 +55,18 @@ export const users: User[] = [
         'seaport:dashboard:view', 'seaport:dashboard:stats:view', 'seaport:dashboard:forecasts:view', 'seaport:dashboard:charts:view', 'seaport:dashboard:officer-performance:view',
         'control-room:dashboard:view', 'control-room:dashboard:stats:view', 'control-room:dashboard:forecasts:view', 'control-room:dashboard:charts:view', 'control-room:dashboard:officer-performance:view'
     ]
+  },
+  {
+    id: '7',
+    name: 'Landport Officer',
+    email: 'officer.land@example.com',
+    role: 'officer',
+    token: 'fake-officer-token',
+    modules: ['landport'],
+    permissions: [
+        'records:view', 'records:create',
+        'landport:dashboard:view', 'landport:dashboard:stats:view', 'landport:dashboard:charts:view',
+        'landport:transactions:view', 'landport:transactions:live'
+    ]
   }
 ];

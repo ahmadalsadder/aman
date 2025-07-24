@@ -544,10 +544,6 @@ export function LiveProcessingFlow({ module }: { module: Module }) {
                             </Card>
                         )}
 
-                        {tripInfo && module === 'airport' && <FlightDetailsCard details={tripInfo} />}
-                        {tripInfo && module === 'landport' && <VehicleDetailsCard details={tripInfo} />}
-                        {tripInfo && module === 'seaport' && <VesselDetailsCard details={tripInfo} />}
-
                         <Card className="bg-secondary/50">
                             <CardHeader><CardTitle className="text-lg">{t('review.aiAssessment')}</CardTitle></CardHeader>
                             <CardContent className="space-y-4">
@@ -701,6 +697,9 @@ export function LiveProcessingFlow({ module }: { module: Module }) {
                         </CardContent>
                     </Card>
                 )}
+                {tripInfo && module === 'airport' && <FlightDetailsCard details={tripInfo} />}
+                {tripInfo && module === 'landport' && <VehicleDetailsCard details={tripInfo} />}
+                {tripInfo && module === 'seaport' && <VesselDetailsCard details={tripInfo} />}
             </div>
         )}
 

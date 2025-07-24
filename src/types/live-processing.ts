@@ -48,6 +48,33 @@ export interface Passenger {
     status: 'pending' | 'in-progress' | 'completed' | 'skipped' | 'failed';
     details?: React.ReactNode;
   }
+
+  export type AirportTripInformation = {
+    type: 'airport';
+    flightNumber?: string;
+    carrier?: string;
+    departureCountry?: string;
+    seatNumber?: string;
+  };
+  
+  export type SeaportTripInformation = {
+    type: 'seaport';
+    vesselName?: string;
+    voyageNumber?: string;
+    berth?: string;
+    lastPortOfCall?: string;
+  };
+  
+  export type LandportTripInformation = {
+    type: 'landport';
+    vehiclePlateNumber?: string;
+    vehicleType?: 'Car' | 'Bus' | 'Truck';
+    laneNumber?: string;
+    vehicleMake?: string;
+  };
+  
+  export type TripInformation = AirportTripInformation | SeaportTripInformation | LandportTripInformation;
+  
   
   export interface Transaction {
     id: string;
@@ -66,12 +93,7 @@ export interface Passenger {
     triggeredRules: { alert: string, acknowledged: boolean }[];
     officerNotes?: string;
     workflowSteps: WorkflowStep[];
-    tripInformation?: {
-      flightNumber?: string;
-      carrier?: string;
-      departureCountry?: string;
-      seatNumber?: string;
-    };
+    tripInformation?: TripInformation;
     civilInformation?: {
       fileType?: 'Citizen' | 'Visa' | 'Residency';
       fileExpiryDate?: string;

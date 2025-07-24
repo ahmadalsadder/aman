@@ -5,6 +5,7 @@ import { mockPassengers, mockTransactions, mockVisaDatabase } from './mock-data'
 import { assessPassengerRisk } from '@/ai/flows/assess-risk-flow';
 import { countries } from './countries';
 import { Fingerprint, ScanLine, UserCheck, ShieldAlert, User } from 'lucide-react';
+import { extractPassportData } from '@/ai/flows/extract-passport-data-flow';
 
 const users: User[] = [
   { 
@@ -461,11 +462,16 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
     }
 
     if (method === 'POST' && url.pathname === '/api/process-transaction') {
-        const { extractedData, passportScan, livePhoto } = JSON.parse(body as string);
+        const { module, passportScan, livePhoto } = JSON.parse(body as string);
     
+        // 0. Extract Data
+        const extractedData = await extractPassportData({ passportPhotoDataUri: passportScan });
+        if (!extractedData) {
+            return Result.failure([new ApiError('EXTRACTION_FAILED', 'Could not extract data from passport.')]) as Result<T>;
+        }
+
         // 1. Check for existing passenger
-        const allPassengers = [...mockPassengers];
-        const existingPassenger = allPassengers.find(p => p.passportNumber === extractedData.passportNumber) || null;
+        const existingPassenger = mockPassengers.find(p => p.passportNumber === extractedData.passportNumber) || null;
     
         // 2. Visa Check
         const countryLabel = countries.find(c => c.value === extractedData.nationality)?.label || extractedData.nationality;
@@ -495,6 +501,17 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
             riskResult.riskScore = Math.max(riskResult.riskScore, 85);
         }
 
+        // 5. Get Trip Information
+        let tripInformation = {};
+        if (module === 'airport') {
+            tripInformation = { type: 'airport', flightNumber: 'EK202', carrier: 'Emirates', departureCountry: 'USA', seatNumber: '14A' };
+        } else if (module === 'landport') {
+            tripInformation = { type: 'landport', vehiclePlateNumber: 'AUH 12345', vehicleType: 'Car', laneNumber: '3', vehicleMake: 'Toyota' };
+        } else if (module === 'seaport') {
+            tripInformation = { type: 'seaport', vesselName: 'Symphony of the Seas', voyageNumber: 'SYM-004', berth: 'B2', lastPortOfCall: 'CYP' };
+        }
+
+
         const workflow = [
             { id: 'doc_scan', name: 'Document Scan', status: 'completed', Icon: ScanLine },
             { id: 'data_confirmation', name: 'Identity Confirmation', status: 'completed', Icon: UserCheck },
@@ -508,6 +525,8 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
             existingPassenger,
             visaCheckResult,
             workflow,
+            extractedData,
+            tripInformation,
         };
     
         return Result.success(responsePayload) as Result<T>;

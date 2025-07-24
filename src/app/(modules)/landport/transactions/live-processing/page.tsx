@@ -23,7 +23,7 @@ export default function LandportLiveProcessingPage() {
         </BreadcrumbList>
       </Breadcrumb>
       <h1 className="text-2xl font-bold">Live Officer Processing</h1>
-      <LiveProcessingFlow />
+      <LiveProcessingFlow module="landport" />
     </div>
   );
 }

@@ -5,9 +5,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
-import type { Passenger, Transaction, WorkflowStep } from '@/types/live-processing';
-import { assessPassengerRisk, type AssessPassengerRiskOutput } from '@/ai/flows/assess-risk-flow';
-import { extractPassportData, type PassportDataOutput } from '@/ai/flows/extract-passport-data-flow';
+import type { Passenger, Transaction, WorkflowStep, TripInformation } from '@/types/live-processing';
 import { useAuth } from '@/hooks/use-auth';
 import { countries } from '@/lib/countries';
 
@@ -48,6 +46,10 @@ import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
 import { api } from '@/lib/api';
 import { useTranslations } from 'next-intl';
+import type { Module } from '@/types';
+import { FlightDetailsCard } from '@/app/(modules)/airport/transactions/components/flight-details-card';
+import { VehicleDetailsCard } from '@/app/(modules)/landport/transactions/components/vehicle-details-card';
+import { VesselDetailsCard } from '@/app/(modules)/seaport/transactions/components/vessel-details-card';
 
 type ProcessingStep = 'upload_document' | 'confirm_new_passenger' | 'capture_photo' | 'analyzing' | 'review' | 'completed';
 type UpdateChoice = 'update_all' | 'update_images';
@@ -118,7 +120,7 @@ const DetailItem = ({ label, value }: { label: string; value?: string | null }) 
     <div><p className="text-xs text-muted-foreground">{label}</p><p className="text-sm font-medium">{value || 'N/A'}</p></div>
 );
 
-export function LiveProcessingFlow() {
+export function LiveProcessingFlow({ module }: { module: Module }) {
   const router = useRouter();
   const { toast } = useToast();
   const { user } = useAuth();
@@ -133,7 +135,7 @@ export function LiveProcessingFlow() {
   
   const [visaCheckResult, setVisaCheckResult] = useState<'valid' | 'invalid' | 'not_required' | null>(null);
 
-  const [extractedData, setExtractedData] = useState<PassportDataOutput | null>(null);
+  const [extractedData, setExtractedData] = useState<any | null>(null);
   const [passportScan, setPassportScan] = useState<string | null>(null);
   
   const [biometricCaptures, setBiometricCaptures] = useState<{
@@ -150,10 +152,11 @@ export function LiveProcessingFlow() {
 
   const [isScanning, setIsScanning] = useState(false);
   const [hasCameraPermission, setHasCameraPermission] = useState(false);
-  const [aiResult, setAiResult] = useState<AssessPassengerRiskOutput | null>(null);
+  const [aiResult, setAiResult] = useState<any | null>(null);
   const [finalDecision, setFinalDecision] = useState<'Approved' | 'Rejected' | ''>('');
   const [officerNotes, setOfficerNotes] = useState('');
   const [approvedAlerts, setApprovedAlerts] = useState<Record<string, boolean>>({});
+  const [tripInfo, setTripInfo] = useState<TripInformation | null>(null);
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -188,15 +191,26 @@ export function LiveProcessingFlow() {
     try {
         const dataUri = await fileToDataUri(file);
         setPassportScan(dataUri);
-        addLog(`Passport scan captured. Extracting data via AI...`);
-        
-        const result = await extractPassportData({ passportPhotoDataUri: dataUri });
-        setExtractedData(result);
+        // This is a simplified extraction for the UI before the full API call
+        // The real extraction happens in the AI flow.
+        const tempExtractedData = {
+          firstName: 'Scanning...',
+          lastName: '',
+          passportNumber: 'Reading MRZ...',
+          nationality: '',
+          dateOfBirth: '',
+          gender: '',
+          passportIssueDate: '',
+          passportExpiryDate: '',
+          passportCountry: ''
+        };
+        setExtractedData(tempExtractedData);
         
         setCurrentStep('confirm_new_passenger');
-        addLog(`Data extracted for passenger: ${result.firstName} ${result.lastName}`);
+        addLog(`Passport scan captured. Waiting for confirmation to proceed.`);
+
     } catch (error) {
-        console.error("Data Extraction Error:", error);
+        console.error("Data URI Error:", error);
         toast({ variant: 'destructive', title: t('toast.extractionFailedTitle'), description: t('toast.extractionFailedDescription') });
     } finally {
         setIsScanning(false);
@@ -234,7 +248,7 @@ export function LiveProcessingFlow() {
   }
 
   const handleStartAnalysis = async () => {
-    if (!extractedData || !passportScan || !biometricCaptures.face) {
+    if (!passportScan || !biometricCaptures.face) {
       toast({ variant: 'destructive', title: t('toast.missingInfoTitle'), description: t('toast.missingInfoDescription') });
       return;
     }
@@ -243,33 +257,34 @@ export function LiveProcessingFlow() {
   
     try {
       const apiResponse = await api.post('/api/process-transaction', {
-        extractedData,
+        module: module,
         passportScan,
         livePhoto: biometricCaptures.face,
       });
   
       if (apiResponse.isSuccess && apiResponse.data) {
-        const { riskResult, existingPassenger, visaCheckResult, workflow } = apiResponse.data as any;
+        const { riskResult, existingPassenger, visaCheckResult, workflow, extractedData, tripInformation } = apiResponse.data as any;
   
         setAiResult(riskResult);
+        setExtractedData(extractedData);
         setExistingPassenger(existingPassenger || null);
         setVisaCheckResult(visaCheckResult);
         setWorkflow(workflow);
+        setTripInfo(tripInformation || null);
   
-        if (existingPassenger) {
-            const nationalityLabel = countries.find(c => c.value === extractedData.nationality)?.label || extractedData.nationality;
-            const passportCountryLabel = countries.find(c => c.value === extractedData.passportCountry)?.label || extractedData.passportCountry;
+        let passengerForDisplay: Partial<Passenger> = {
+            ...extractedData,
+            nationality: countries.find(c => c.value === extractedData.nationality)?.label || extractedData.nationality,
+            passportCountry: countries.find(c => c.value === extractedData.passportCountry)?.label || extractedData.passportCountry,
+            profilePicture: passportScan || '',
+        };
 
-            setSelectedPassenger({
-                ...existingPassenger,
-                ...extractedData,
-                nationality: nationalityLabel,
-                passportCountry: passportCountryLabel,
-                profilePicture: passportScan || '',
-            });
+        if (existingPassenger) {
+            passengerForDisplay = { ...passengerForDisplay, ...existingPassenger };
         }
+        setSelectedPassenger(passengerForDisplay);
   
-        if (riskResult.alerts.length > 0 && riskResult.recommendation === 'Reject') {
+        if (riskResult.alerts.length > 0) {
           setFinalDecision('Rejected');
         }
   
@@ -292,7 +307,7 @@ export function LiveProcessingFlow() {
     }
     
     const riskScore = aiResult ? aiResult.riskScore : (visaCheckResult === 'invalid' ? 75 : 50);
-    const triggeredRules = aiResult ? aiResult.alerts.map(alert => ({ alert, acknowledged: approvedAlerts[alert] || false })) : (visaCheckResult === 'invalid' ? [{alert: t('alert.visaRequired'), acknowledged: false}] : []);
+    const triggeredRules = aiResult ? aiResult.alerts.map((alert: string) => ({ alert, acknowledged: approvedAlerts[alert] || false })) : (visaCheckResult === 'invalid' ? [{alert: t('alert.visaRequired'), acknowledged: false}] : []);
     const finalNotes = officerNotes || (status === 'Pending' ? t('alert.escalatedNotes') : '');
     
     const finalWorkflow: WorkflowStep[] = workflow.map(step => ({
@@ -316,6 +331,7 @@ export function LiveProcessingFlow() {
         biometrics: biometricCaptures,
         passportScan: passportScan,
         officer: user?.fullName,
+        tripInformation: tripInfo
     };
     
     const result = await api.post('/data/transactions', transactionData);
@@ -326,7 +342,7 @@ export function LiveProcessingFlow() {
         toast({ title: t('toast.saveFailedTitle'), description: result.errors?.[0]?.message || t('toast.saveFailedDescription'), variant: 'destructive' });
         return null;
     }
-  }, [updateChoice, extractedData, passportScan, biometricCaptures, workflow, officerNotes, user, aiResult, visaCheckResult, approvedAlerts, t]);
+  }, [updateChoice, extractedData, passportScan, biometricCaptures, workflow, officerNotes, user, aiResult, visaCheckResult, approvedAlerts, t, tripInfo]);
 
   const handleCompleteTransaction = async () => {
     if(!finalDecision) {
@@ -420,7 +436,7 @@ export function LiveProcessingFlow() {
     transition: { duration: 0.3 }
   };
 
-  const allAlertsAcknowledged = aiResult ? aiResult.alerts.every(alert => approvedAlerts[alert]) : true;
+  const allAlertsAcknowledged = aiResult ? aiResult.alerts.every((alert: string) => approvedAlerts[alert]) : true;
   const hardStop = visaCheckResult === 'invalid';
 
   const renderContent = () => {
@@ -534,6 +550,11 @@ export function LiveProcessingFlow() {
                                 </CardContent>
                             </Card>
                         )}
+
+                        {tripInfo && module === 'airport' && <FlightDetailsCard details={tripInfo} />}
+                        {tripInfo && module === 'landport' && <VehicleDetailsCard details={tripInfo} />}
+                        {tripInfo && module === 'seaport' && <VesselDetailsCard details={tripInfo} />}
+
                         <Card className="bg-secondary/50">
                             <CardHeader><CardTitle className="text-lg">{t('review.aiAssessment')}</CardTitle></CardHeader>
                             <CardContent className="space-y-4">
@@ -549,7 +570,7 @@ export function LiveProcessingFlow() {
                                 {aiResult?.alerts && aiResult.alerts.length > 0 && (
                                     <div className="space-y-2">
                                         <Label className="font-semibold">{t('review.alerts.title')}</Label>
-                                        {aiResult.alerts.map((alert, i) => (
+                                        {aiResult.alerts.map((alert: string, i: number) => (
                                             <div key={`alert-${i}`} className="flex items-center gap-2">
                                                 <Alert variant={aiResult.riskScore > 50 ? 'destructive' : 'default'} className="flex-grow flex items-center justify-between">
                                                     <div className="flex items-center">
@@ -700,7 +721,3 @@ export function LiveProcessingFlow() {
     </div>
   );
 }
-
-    
-
-    

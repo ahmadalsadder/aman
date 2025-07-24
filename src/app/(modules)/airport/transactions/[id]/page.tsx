@@ -333,5 +333,5 @@ export default function TransactionDetailsPage() {
         </Button>
       </div>
     </div>
-
-    
+  );
+}

@@ -1,6 +1,7 @@
 
+
 'use client';
-import { Shield, LayoutDashboard, BarChart3, Users, Settings, Activity, Ship, LandPlot, DoorOpen, PieChart, UserCog, RadioTower, Home, Plane } from 'lucide-react';
+import { Shield, LayoutDashboard, BarChart3, Users, Settings, Activity, Ship, LandPlot, DoorOpen, PieChart, UserCog, RadioTower, Home, Plane, ArrowRightLeft } from 'lucide-react';
 import type { Role, Module } from '@/types';
 
 export interface NavItem {
@@ -51,8 +52,13 @@ export const getModuleNavItems = (module: Module, role: Role, t: any): NavItem[]
         baseNav.push({
             href: `${moduleBaseUrl}/transactions`, 
             label: t('transactions'),
-            icon: Activity,
+            icon: ArrowRightLeft,
             children: [
+                {
+                    href: `${moduleBaseUrl}/transactions`,
+                    label: t('allTransactions'),
+                    icon: Activity,
+                },
                 {
                     href: `${moduleBaseUrl}/transactions/live-processing`,
                     label: t('liveProcessing'),

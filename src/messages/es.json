@@ -1,4 +1,5 @@
 
+
 {
   "LoginPage": {
     "title": "Bienvenido a Guardian Gate",
@@ -44,7 +45,8 @@
     "control-room": "Sala de control",
     "backToPortals": "Volver a los portales",
     "transactions": "Transacciones",
-    "liveProcessing": "Procesamiento en vivo"
+    "liveProcessing": "Procesamiento en vivo",
+    "allTransactions": "Todas las transacciones"
   },
   "ModulePage": {
     "verifyingAccess": "Verificando acceso...",

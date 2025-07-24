@@ -1,11 +1,13 @@
 
+
 import type { User } from '@/types';
 import { Result, ApiError } from '@/types/api/result';
-import { mockPassengers, mockTransactions, mockVisaDatabase } from './mock-data';
+import { mockPassengers, mockTransactions, mockVisaDatabase, mockOfficerDesks } from './mock-data';
 import { assessPassengerRisk } from '@/ai/flows/assess-risk-flow';
 import { countries } from './countries';
 import { Fingerprint, ScanLine, UserCheck, ShieldAlert, User } from 'lucide-react';
 import { extractPassportData } from '@/ai/flows/extract-passport-data-flow';
+import type { Transaction, OfficerDesk } from '@/types/live-processing';
 
 const users: User[] = [
   { 
@@ -421,6 +423,7 @@ const processingTimeDistributionData = [
     { name: '> 5m', value: 800 },
 ];
 
+let allTransactions: Transaction[] = [...mockTransactions];
 
 const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 
@@ -455,10 +458,22 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
 
     if (method === 'POST' && url.pathname === '/data/transactions') {
         const transactionData = JSON.parse(body as string);
-        console.log("Saving transaction:", transactionData);
-        // In a real backend, you'd save this to a database.
-        // For the mock, we just confirm it was received.
+        allTransactions.push(transactionData);
         return Result.success(transactionData) as Result<T>;
+    }
+
+    if (method === 'POST' && url.pathname === '/data/transactions/delete') {
+        const { id } = JSON.parse(body as string);
+        allTransactions = allTransactions.filter(t => t.id !== id);
+        return Result.success({ id }) as Result<T>;
+    }
+    
+    if (method === 'GET' && url.pathname === '/data/transactions') {
+        return Result.success(allTransactions) as Result<T>;
+    }
+    
+    if (method === 'GET' && url.pathname === '/data/officer-desks') {
+        return Result.success(mockOfficerDesks) as Result<T>;
     }
 
     if (method === 'POST' && url.pathname === '/api/process-transaction') {

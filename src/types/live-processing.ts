@@ -1,3 +1,4 @@
+
 export interface Passenger {
     id: string;
     firstName: string;
@@ -92,7 +93,7 @@ export interface Passenger {
     finalDecision: 'Approved' | 'Rejected' | 'Manual Review';
     triggeredRules: { alert: string, acknowledged: boolean }[];
     officerNotes?: string;
-    workflowSteps: WorkflowStep[];
+    workflowSteps?: WorkflowStep[];
     tripInformation?: TripInformation;
     civilInformation?: {
       fileType?: 'Citizen' | 'Visa' | 'Residency';
@@ -116,5 +117,8 @@ export interface Passenger {
     }[];
 }
   
-
+export interface OfficerDesk {
+    id: string;
+    name: string;
+}
     

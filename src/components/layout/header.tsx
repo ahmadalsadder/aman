@@ -1,7 +1,8 @@
+
 'use client';
 
-import { LogOut, User as UserIcon, Globe } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { LogOut, User as UserIcon, Globe, Zap } from 'lucide-react';
+import { useRouter, usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import * as React from 'react';
 
@@ -19,13 +20,20 @@ import {
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/hooks/use-auth';
+import Link from 'next/link';
+import type { Module } from '@/types';
 
 export default function Header() {
   const { user, logout } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
   const t = useTranslations('Header');
 
   const [currentLocale, setCurrentLocale] = React.useState('en');
+  
+  const currentModule = pathname.split('/')[1] as Module;
+
+  const showQuickActions = ['airport', 'landport', 'seaport', 'shiftsupervisor'].includes(currentModule);
 
   React.useEffect(() => {
     const handleLocaleChange = (event: CustomEvent) => {
@@ -60,6 +68,21 @@ export default function Header() {
         </div>
       </div>
       <div className="flex items-center gap-4">
+        {showQuickActions && (
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Button variant="outline">
+                        <Zap className="mr-2 h-4 w-4" />
+                        Quick Actions
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                    <DropdownMenuItem asChild>
+                        <Link href={`/${currentModule}/live-processing`}>Live Processing</Link>
+                    </DropdownMenuItem>
+                </DropdownMenuContent>
+            </DropdownMenu>
+        )}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon">

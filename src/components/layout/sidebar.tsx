@@ -1,10 +1,11 @@
+
 'use client';
 
 import * as React from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/use-auth';
-import { getModuleNavItems, getPortalNavItems, type NavItem } from '@/lib/navigation';
+import { getModuleNavItems, type NavItem } from '@/lib/navigation';
 import Logo from '@/components/logo';
 import {
   Sidebar,
@@ -15,10 +16,14 @@ import {
   SidebarMenuButton,
   SidebarFooter,
   SidebarSeparator,
+  SidebarMenuSub,
+  SidebarMenuSubButton
 } from '@/components/ui/sidebar';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useTranslations } from 'next-intl';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, ChevronDown } from 'lucide-react';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { cn } from '@/lib/utils';
 
 export default function AppSidebar() {
   const { user } = useAuth();
@@ -27,6 +32,8 @@ export default function AppSidebar() {
 
   const currentModule = pathname.split('/')[1] as any;
   const navItems = user ? getModuleNavItems(currentModule, user.role, t) : [];
+  
+  const [openCollapsibles, setOpenCollapsibles] = React.useState<Record<string, boolean>>({});
 
   const getInitials = (name: string) => {
     return name
@@ -35,6 +42,22 @@ export default function AppSidebar() {
       .join('')
       .toUpperCase();
   };
+
+  React.useEffect(() => {
+    const activeStates: Record<string, boolean> = {};
+    navItems.forEach(item => {
+        if (item.children) {
+            const isActive = item.children.some(child => pathname.startsWith(child.href));
+            activeStates[item.href] = isActive;
+        }
+    });
+    setOpenCollapsibles(activeStates);
+  }, [pathname, navItems]);
+
+  const toggleCollapsible = (href: string) => {
+    setOpenCollapsibles(prev => ({ ...prev, [href]: !prev[href] }));
+  };
+
 
   const shouldShowPortalsLink = user && user.modules && user.modules.length > 1;
   const moduleDashboardHref = currentModule ? `/${currentModule}/dashboard` : '/';
@@ -49,11 +72,45 @@ export default function AppSidebar() {
       </SidebarHeader>
       <SidebarContent>
         <SidebarMenu>
-          {navItems.map((item: NavItem) => (
-            <SidebarMenuItem key={item.label}>
+          {navItems.map((item: NavItem) => 
+            item.children ? (
+                <Collapsible key={item.href} open={openCollapsibles[item.href] || false} onOpenChange={() => toggleCollapsible(item.href)}>
+                    <SidebarMenuItem>
+                         <CollapsibleTrigger asChild>
+                            <SidebarMenuButton
+                                tooltip={{ children: item.label }}
+                                className="w-full justify-between"
+                            >
+                                <div className='flex items-center gap-2'>
+                                    <item.icon />
+                                    <span>{item.label}</span>
+                                </div>
+                                <ChevronDown className={cn("h-4 w-4 transition-transform", openCollapsibles[item.href] && "rotate-180")} />
+                            </SidebarMenuButton>
+                        </CollapsibleTrigger>
+                    </SidebarMenuItem>
+                    <CollapsibleContent>
+                        <SidebarMenuSub>
+                        {item.children.map(child => (
+                            <SidebarMenuSubItem key={child.href}>
+                                <SidebarMenuSubButton
+                                    asChild
+                                    isActive={pathname.startsWith(child.href)}
+                                >
+                                    <Link href={child.href}>
+                                        <span>{child.label}</span>
+                                    </Link>
+                                </SidebarMenuSubButton>
+                            </SidebarMenuSubItem>
+                        ))}
+                        </SidebarMenuSub>
+                    </CollapsibleContent>
+                </Collapsible>
+            ) : (
+            <SidebarMenuItem key={item.href}>
               <SidebarMenuButton
                 asChild
-                isActive={pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href))}
+                isActive={pathname === item.href || (item.href !== moduleDashboardHref && pathname.startsWith(item.href))}
                 tooltip={{ children: item.label }}
               >
                 <Link href={item.href}>

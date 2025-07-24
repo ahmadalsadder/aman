@@ -17,9 +17,6 @@ import { useAuth } from '@/hooks/use-auth';
 import { ForecastCard } from '@/components/forecast-card';
 import { DashboardHeader } from '@/components/layout/dashboard-header';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList } from '@/components/ui/breadcrumb';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
 
 export default function AirportDashboardPage() {
   const t = useTranslations('AirportDashboard');
@@ -103,19 +100,6 @@ export default function AirportDashboardPage() {
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <Button variant="outline">
-                    <Zap className="mr-2 h-4 w-4" />
-                    Quick Actions
-                </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-                <DropdownMenuItem asChild>
-                    <Link href="/airport/live-processing">Live Processing</Link>
-                </DropdownMenuItem>
-            </DropdownMenuContent>
-        </DropdownMenu>
       </div>
       <DashboardHeader
         title={t('title')}

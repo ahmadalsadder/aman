@@ -16,9 +16,6 @@ import { DashboardHeader } from '@/components/layout/dashboard-header';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList } from '@/components/ui/breadcrumb';
 import PassengerTypeChart from '@/components/charts/passenger-type-chart';
 import { ProcessingTimeDistributionChart } from '@/components/charts/processing-time-distribution-chart';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
 
 export default function LandportDashboardPage() {
     const t = useTranslations('LandportDashboard');
@@ -102,19 +99,6 @@ export default function LandportDashboardPage() {
             </BreadcrumbItem>
             </BreadcrumbList>
         </Breadcrumb>
-         <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <Button variant="outline">
-                    <Zap className="mr-2 h-4 w-4" />
-                    Quick Actions
-                </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-                <DropdownMenuItem asChild>
-                    <Link href="/landport/live-processing">Live Processing</Link>
-                </DropdownMenuItem>
-            </DropdownMenuContent>
-        </DropdownMenu>
        </div>
       <DashboardHeader 
         title={t('title')}

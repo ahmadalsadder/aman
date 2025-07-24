@@ -20,9 +20,6 @@ import { OfficerProcessingTimeChart } from '@/components/charts/officer-processi
 import { OfficerDecisionChart } from '@/components/charts/officer-decision-chart';
 import { ForecastCard } from '@/components/forecast-card';
 import { TransactionAnalysisTabs } from '@/components/charts/transaction-analysis-tabs';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
 
 export default function GateSupervisorDashboardPage() {
     const t = useTranslations('GateSupervisorDashboard');
@@ -110,19 +107,6 @@ export default function GateSupervisorDashboardPage() {
             </BreadcrumbItem>
             </BreadcrumbList>
         </Breadcrumb>
-         <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <Button variant="outline">
-                    <Zap className="mr-2 h-4 w-4" />
-                    Quick Actions
-                </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-                <DropdownMenuItem asChild>
-                    <Link href="/gate-supervisor/live-processing">Live Processing</Link>
-                </DropdownMenuItem>
-            </DropdownMenuContent>
-        </DropdownMenu>
       </div>
       <DashboardHeader 
         title={t('title')}

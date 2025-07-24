@@ -48,6 +48,7 @@
     "allTransactions": "Todas las transacciones",
     "officerDesks": "Escritorios de Oficial",
     "gateManagement": "Gestión de Puertas",
+    "dutyManager": "Gerente de Turno",
     "logout": "Cerrar sesión"
   },
   "ModulePage": {
@@ -710,6 +711,31 @@
             "errorDesc": "Ocurrió un error. Por favor, inténtelo de nuevo.",
             "loadError": "Error al cargar los datos de la puerta. Por favor, inténtelo de nuevo más tarde."
         }
+    }
+  },
+  "DutyManager": {
+    "title": "Gerente de Turno",
+    "description": "Revise y actúe sobre las transacciones pendientes de revisión del supervisor.",
+    "pendingTransactions": "Transacciones Pendientes",
+    "accessDenied": {
+      "title": "Acceso Denegado",
+      "description": "No tiene permiso para ver esta página."
+    },
+    "stats": {
+      "totalPending": "Total de Pendientes",
+      "totalPendingDesc": "Requieren revisión inmediata",
+      "highRisk": "Alto Riesgo",
+      "highRiskDesc": "Transacciones con puntuación de riesgo >75",
+      "mediumRisk": "Riesgo Medio",
+      "mediumRiskDesc": "Transacciones con puntuación de riesgo 41-75"
+    },
+    "columns": {
+      "id": "ID de Transacción",
+      "passenger": "Pasajero",
+      "type": "Tipo",
+      "dateTime": "Fecha/Hora",
+      "riskScore": "Puntuación de Riesgo",
+      "escalatedBy": "Escalado por"
     }
   }
 }

@@ -48,6 +48,7 @@
     "allTransactions": "جميع المعاملات",
     "officerDesks": "مكاتب الضباط",
     "gateManagement": "إدارة البوابات",
+    "dutyManager": "مدير المناوبة",
     "logout": "تسجيل الخروج"
   },
   "ModulePage": {
@@ -710,6 +711,31 @@
         "errorDesc": "حدث خطأ. يرجى المحاولة مرة أخرى.",
         "loadError": "فشل تحميل بيانات البوابة. يرجى المحاولة مرة أخرى لاحقًا."
       }
+    }
+  },
+   "DutyManager": {
+    "title": "مدير المناوبة",
+    "description": "مراجعة واتخاذ إجراء بشأن المعاملات التي تنتظر مراجعة المشرف.",
+    "pendingTransactions": "المعاملات المعلقة",
+    "accessDenied": {
+      "title": "تم رفض الوصول",
+      "description": "ليس لديك إذن لعرض هذه الصفحة."
+    },
+    "stats": {
+      "totalPending": "إجمالي المعاملات المعلقة",
+      "totalPendingDesc": "تتطلب مراجعة فورية",
+      "highRisk": "عالية المخاطر",
+      "highRiskDesc": "المعاملات ذات درجة مخاطر >75",
+      "mediumRisk": "متوسطة المخاطر",
+      "mediumRiskDesc": "المعاملات ذات درجة مخاطر 41-75"
+    },
+    "columns": {
+      "id": "معرف المعاملة",
+      "passenger": "المسافر",
+      "type": "النوع",
+      "dateTime": "التاريخ/الوقت",
+      "riskScore": "درجة المخاطرة",
+      "escalatedBy": "تصعيد بواسطة"
     }
   }
 }

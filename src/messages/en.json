@@ -48,6 +48,7 @@
     "allTransactions": "All Transactions",
     "officerDesks": "Officer Desks",
     "gateManagement": "Gate Management",
+    "dutyManager": "Duty Manager",
     "logout": "Log out"
   },
   "ModulePage": {
@@ -710,6 +711,31 @@
             "errorDesc": "An error occurred. Please try again.",
             "loadError": "Failed to load gate data. Please try again later."
         }
+    }
+  },
+  "DutyManager": {
+    "title": "Duty Manager",
+    "description": "Review and action transactions pending supervisor review.",
+    "pendingTransactions": "Pending Transactions",
+    "accessDenied": {
+      "title": "Access Denied",
+      "description": "You do not have permission to view this page."
+    },
+    "stats": {
+      "totalPending": "Total Pending",
+      "totalPendingDesc": "Require immediate review",
+      "highRisk": "High-Risk",
+      "highRiskDesc": "Transactions with risk score >75",
+      "mediumRisk": "Medium-Risk",
+      "mediumRiskDesc": "Transactions with risk score 41-75"
+    },
+    "columns": {
+      "id": "Transaction ID",
+      "passenger": "Passenger",
+      "type": "Type",
+      "dateTime": "Date/Time",
+      "riskScore": "Risk Score",
+      "escalatedBy": "Escalated By"
     }
   }
 }

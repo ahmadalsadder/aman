@@ -18,7 +18,7 @@ const users: User[] = [
     email: 'admin@example.com', 
     role: 'admin', 
     token: 'fake-admin-token', 
-    modules: ['dashboard', 'landport', 'seaport', 'airport', 'egate', 'analyst', 'shiftsupervisor', 'control-room', 'users', 'settings'],
+    modules: ['dashboard', 'landport', 'seaport', 'airport', 'egate', 'analyst', 'shiftsupervisor', 'control-room', 'users', 'settings', 'duty-manager'],
     permissions: [
         'users:manage', 'reports:view',
         'airport:records:view', 'airport:records:create', 'airport:records:edit', 'airport:records:delete',
@@ -35,7 +35,8 @@ const users: User[] = [
         'control-room:dashboard:view', 'control-room:dashboard:stats:view', 'control-room:dashboard:forecasts:view', 'control-room:dashboard:charts:view', 'control-room:dashboard:officer-performance:view',
         'airport:desks:view', 'airport:desks:create', 'airport:desks:edit', 'airport:desks:delete',
         'landport:desks:view', 'landport:desks:create', 'landport:desks:edit', 'landport:desks:delete',
-        'seaport:desks:view', 'seaport:desks:create', 'seaport:desks:edit', 'seaport:desks:delete'
+        'seaport:desks:view', 'seaport:desks:create', 'seaport:desks:edit', 'seaport:desks:delete',
+        'duty-manager:view'
     ]
   },
   { 
@@ -65,7 +66,7 @@ const users: User[] = [
     email: 'supervisor@example.com',
     role: 'shiftsupervisor',
     token: 'fake-supervisor-token',
-    modules: ['airport', 'landport', 'seaport', 'control-room'],
+    modules: ['airport', 'landport', 'seaport', 'control-room', 'duty-manager'],
     permissions: [
         'reports:view', 
         'airport:records:view', 'airport:records:edit',
@@ -76,7 +77,8 @@ const users: User[] = [
         'airport:dashboard:view', 'airport:dashboard:stats:view', 'airport:dashboard:forecasts:view', 'airport:dashboard:charts:view', 'airport:dashboard:officer-performance:view',
         'landport:dashboard:view', 'landport:dashboard:stats:view', 'landport:dashboard:forecasts:view', 'landport:dashboard:charts:view', 'landport:dashboard:officer-performance:view',
         'seaport:dashboard:view', 'seaport:dashboard:stats:view', 'seaport:dashboard:forecasts:view', 'seaport:dashboard:charts:view', 'seaport:dashboard:officer-performance:view',
-        'control-room:dashboard:view', 'control-room:dashboard:stats:view', 'control-room:dashboard:forecasts:view', 'control-room:dashboard:charts:view', 'control-room:dashboard:officer-performance:view'
+        'control-room:dashboard:view', 'control-room:dashboard:stats:view', 'control-room:dashboard:forecasts:view', 'control-room:dashboard:charts:view', 'control-room:dashboard:officer-performance:view',
+        'duty-manager:view'
     ]
   },
   {
@@ -502,6 +504,11 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
         return Result.success({ id }) as Result<T>;
     }
     
+    if (method === 'GET' && url.pathname.startsWith('/data/transactions/pending')) {
+        const pending = allTransactions.filter(t => t.status === 'Pending');
+        return Result.success(pending) as Result<T>;
+    }
+
     if (method === 'GET' && url.pathname.startsWith('/data/transactions/')) {
         const id = pathParts[pathParts.length - 1];
         const transaction = allTransactions.find(t => t.id === id);

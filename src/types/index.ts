@@ -2,7 +2,7 @@
 
 
 export type Role = 'admin' | 'auditor' | 'viewer' | 'shiftsupervisor' | 'control-room' | 'analyst' | 'officer';
-export type Module = 'landport' | 'seaport' | 'airport' | 'egate' | 'analyst' | 'shiftsupervisor' | 'control-room';
+export type Module = 'landport' | 'seaport' | 'airport' | 'egate' | 'analyst' | 'shiftsupervisor' | 'control-room' | 'duty-manager';
 export type Permission = 
   // Module-specific record permissions
   | 'airport:records:view' | 'airport:records:create' | 'airport:records:edit' | 'airport:records:delete'
@@ -18,6 +18,7 @@ export type Permission =
   // Other permissions
   | 'users:manage'
   | 'reports:view'
+  | 'duty-manager:view'
   // Page-level view permissions
   | 'airport:dashboard:view'
   | 'landport:dashboard:view'

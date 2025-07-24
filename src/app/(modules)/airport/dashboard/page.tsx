@@ -224,7 +224,7 @@ export default function AirportDashboardPage() {
           </CardHeader>
           <CardContent>
             <p className="mb-4">{t('actionsDescription')}</p>
-            <CreateRecordButton />
+            <CreateRecordButton module="airport" />
           </CardContent>
         </Card>
        </div>

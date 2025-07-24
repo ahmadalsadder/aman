@@ -194,7 +194,7 @@ export function TransactionsPage({ module, title, description }: TransactionsPag
       id: 'actions',
       cell: ({ row }) => {
         const transaction = row.original;
-        const canDelete = hasPermission(['records:delete']);
+        const canDelete = hasPermission([`${module}:records:delete` as Permission]);
         return (
           <div className="flex items-center gap-2">
             <Button asChild variant="ghost" size="icon" className="text-primary hover:text-primary/80">

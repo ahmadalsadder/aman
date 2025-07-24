@@ -3,10 +3,14 @@
 export type Role = 'admin' | 'auditor' | 'viewer' | 'shiftsupervisor' | 'control-room' | 'analyst' | 'officer';
 export type Module = 'landport' | 'seaport' | 'airport' | 'egate' | 'analyst' | 'shiftsupervisor' | 'control-room';
 export type Permission = 
-  | 'records:view'
-  | 'records:create'
-  | 'records:edit'
-  | 'records:delete'
+  // Module-specific record permissions
+  | 'airport:records:view' | 'airport:records:create' | 'airport:records:edit' | 'airport:records:delete'
+  | 'landport:records:view' | 'landport:records:create' | 'landport:records:edit' | 'landport:records:delete'
+  | 'seaport:records:view' | 'seaport:records:create' | 'seaport:records:edit' | 'seaport:records:delete'
+  | 'egate:records:view' | 'egate:records:create' | 'egate:records:edit' | 'egate:records:delete'
+  | 'analyst:records:view' | 'analyst:records:create' | 'analyst:records:edit' | 'analyst:records:delete'
+  | 'control-room:records:view' | 'control-room:records:create' | 'control-room:records:edit' | 'control-room:records:delete'
+  // Other permissions
   | 'users:manage'
   | 'reports:view'
   // Page-level view permissions

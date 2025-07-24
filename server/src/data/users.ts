@@ -10,7 +10,10 @@ export const users: User[] = [
     token: 'fake-admin-token', 
     modules: ['dashboard', 'landport', 'seaport', 'airport', 'egate', 'analyst', 'shiftsupervisor', 'control-room', 'users', 'settings'],
     permissions: [
-        'records:view', 'records:create', 'records:edit', 'records:delete', 'users:manage', 'reports:view',
+        'users:manage', 'reports:view',
+        'airport:records:view', 'airport:records:create', 'airport:records:edit', 'airport:records:delete',
+        'landport:records:view', 'landport:records:create', 'landport:records:edit', 'landport:records:delete',
+        'seaport:records:view', 'seaport:records:create', 'seaport:records:edit', 'seaport:records:delete',
         'airport:transactions:view', 'landport:transactions:view', 'seaport:transactions:view',
         'airport:transactions:live', 'landport:transactions:live', 'seaport:transactions:live',
         'airport:dashboard:view', 'airport:dashboard:stats:view', 'airport:dashboard:forecasts:view', 'airport:dashboard:charts:view', 'airport:dashboard:officer-performance:view',
@@ -28,7 +31,7 @@ export const users: User[] = [
     role: 'auditor', 
     token: 'fake-auditor-token', 
     modules: ['landport', 'seaport'],
-    permissions: ['records:view', 'reports:view', 'landport:transactions:view', 'seaport:transactions:view', 'landport:dashboard:view', 'seaport:dashboard:view']
+    permissions: ['reports:view', 'landport:transactions:view', 'seaport:transactions:view', 'landport:dashboard:view', 'seaport:dashboard:view', 'landport:records:view', 'seaport:records:view']
   },
   { 
     id: '3', 
@@ -37,7 +40,7 @@ export const users: User[] = [
     role: 'viewer', 
     token: 'fake-viewer-token', 
     modules: ['airport'],
-    permissions: ['records:view', 'airport:dashboard:view', 'airport:dashboard:stats:view']
+    permissions: ['airport:records:view', 'airport:dashboard:view', 'airport:dashboard:stats:view']
   },
   {
     id: '4',
@@ -47,7 +50,10 @@ export const users: User[] = [
     token: 'fake-supervisor-token',
     modules: ['airport', 'landport', 'seaport', 'control-room'],
     permissions: [
-        'records:view', 'records:edit', 'reports:view', 
+        'reports:view', 
+        'airport:records:view', 'airport:records:edit',
+        'landport:records:view', 'landport:records:edit',
+        'seaport:records:view', 'seaport:records:edit',
         'airport:transactions:view', 'landport:transactions:view', 'seaport:transactions:view', 
         'airport:transactions:live', 'landport:transactions:live', 'seaport:transactions:live',
         'airport:dashboard:view', 'airport:dashboard:stats:view', 'airport:dashboard:forecasts:view', 'airport:dashboard:charts:view', 'airport:dashboard:officer-performance:view',
@@ -64,7 +70,7 @@ export const users: User[] = [
     token: 'fake-officer-token',
     modules: ['landport'],
     permissions: [
-        'records:view', 'records:create',
+        'landport:records:view', 'landport:records:create',
         'landport:dashboard:view', 'landport:dashboard:stats:view', 'landport:dashboard:charts:view',
         'landport:transactions:view', 'landport:transactions:live'
     ]

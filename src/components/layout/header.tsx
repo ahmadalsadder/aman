@@ -22,6 +22,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/hooks/use-auth';
 import Link from 'next/link';
 import type { Module } from '@/types';
+import { cn } from '@/lib/utils';
 
 export default function Header() {
   const { user, logout } = useAuth();
@@ -72,7 +73,7 @@ export default function Header() {
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button variant="outline">
-                        <Zap className="mr-2 h-4 w-4" />
+                        <Zap className="mr-2 h-4 w-4 text-green-500 animate-pulse" />
                         Quick Actions
                     </Button>
                 </DropdownMenuTrigger>

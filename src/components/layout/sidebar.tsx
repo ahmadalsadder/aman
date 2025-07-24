@@ -18,7 +18,7 @@ import {
   SidebarSeparator,
   SidebarMenuSub,
   SidebarMenuSubButton,
-  SidebarMenuSubItem
+  SidebarMenuSubItem,
 } from '@/components/ui/sidebar';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useTranslations } from 'next-intl';
@@ -101,7 +101,8 @@ export default function AppSidebar() {
                                     asChild
                                     isActive={pathname.startsWith(child.href)}
                                 >
-                                    <Link href={child.href}>
+                                    <Link href={child.href} className='flex items-center gap-2'>
+                                        <child.icon className="h-4 w-4 text-primary" />
                                         <span>{child.label}</span>
                                     </Link>
                                 </SidebarMenuSubButton>

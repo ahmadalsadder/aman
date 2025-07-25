@@ -8,15 +8,16 @@ export const users: User[] = [
     email: 'admin@example.com', 
     role: 'admin', 
     token: 'fake-admin-token', 
-    modules: ['dashboard', 'landport', 'seaport', 'airport', 'egate', 'analyst', 'shiftsupervisor', 'control-room', 'users', 'settings'],
+    modules: ['landport', 'seaport', 'airport', 'egate', 'analyst', 'shiftsupervisor', 'control-room', 'users', 'settings', 'duty-manager'],
     permissions: [
         'users:manage', 'reports:view',
         'airport:records:view', 'airport:records:create', 'airport:records:edit', 'airport:records:delete',
         'landport:records:view', 'landport:records:create', 'landport:records:edit', 'landport:records:delete',
         'seaport:records:view', 'seaport:records:create', 'seaport:records:edit', 'seaport:records:delete',
+        'egate:records:view', 'egate:records:create', 'egate:records:edit', 'egate:records:delete',
         'airport:transactions:view', 'landport:transactions:view', 'seaport:transactions:view',
         'airport:transactions:live', 'landport:transactions:live', 'seaport:transactions:live',
-        'airport:dashboard:view', 'airport:dashboard:stats:view', 'airport:dashboard:charts:view', 'airport:dashboard:officer-performance:view', 'airport:prediction:view',
+        'airport:dashboard:view', 'airport:dashboard:stats:view', 'airport:dashboard:officer-performance:view', 'airport:prediction:view',
         'landport:dashboard:view', 'landport:dashboard:stats:view', 'landport:dashboard:charts:view', 'landport:dashboard:officer-performance:view', 'landport:prediction:view',
         'seaport:dashboard:view', 'seaport:dashboard:stats:view', 'seaport:dashboard:charts:view', 'seaport:dashboard:officer-performance:view', 'seaport:prediction:view',
         'egate:dashboard:view', 'egate:dashboard:stats:view', 'egate:dashboard:charts:view', 'egate:prediction:view',
@@ -24,7 +25,8 @@ export const users: User[] = [
         'control-room:dashboard:view', 'control-room:dashboard:stats:view', 'control-room:dashboard:forecasts:view', 'control-room:dashboard:charts:view', 'control-room:dashboard:officer-performance:view',
         'airport:desks:view', 'airport:desks:create', 'airport:desks:edit', 'airport:desks:delete',
         'landport:desks:view', 'landport:desks:create', 'landport:desks:edit', 'landport:desks:delete',
-        'seaport:desks:view', 'seaport:desks:create', 'seaport:desks:edit', 'seaport:desks:delete'
+        'seaport:desks:view', 'seaport:desks:create', 'seaport:desks:edit', 'seaport:desks:delete',
+        'duty-manager:view'
     ]
   },
   { 
@@ -51,7 +53,7 @@ export const users: User[] = [
     email: 'supervisor@example.com',
     role: 'shiftsupervisor',
     token: 'fake-supervisor-token',
-    modules: ['airport', 'landport', 'seaport', 'control-room'],
+    modules: ['airport', 'landport', 'seaport', 'control-room', 'duty-manager'],
     permissions: [
         'reports:view', 
         'airport:records:view', 'airport:records:edit',
@@ -62,7 +64,8 @@ export const users: User[] = [
         'airport:dashboard:view', 'airport:dashboard:stats:view', 'airport:dashboard:charts:view', 'airport:dashboard:officer-performance:view', 'airport:prediction:view',
         'landport:dashboard:view', 'landport:dashboard:stats:view', 'landport:dashboard:charts:view', 'landport:dashboard:officer-performance:view', 'landport:prediction:view',
         'seaport:dashboard:view', 'seaport:dashboard:stats:view', 'seaport:dashboard:charts:view', 'seaport:dashboard:officer-performance:view', 'seaport:prediction:view',
-        'control-room:dashboard:view', 'control-room:dashboard:stats:view', 'control-room:dashboard:forecasts:view', 'control-room:dashboard:charts:view', 'control-room:dashboard:officer-performance:view'
+        'control-room:dashboard:view', 'control-room:dashboard:stats:view', 'control-room:dashboard:forecasts:view', 'control-room:dashboard:charts:view', 'control-room:dashboard:officer-performance:view',
+        'duty-manager:view'
     ]
   },
   {

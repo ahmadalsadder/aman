@@ -2,7 +2,7 @@
 
 import type { User } from '@/types';
 import { Result, ApiError } from '@/types/api/result';
-import { getMockPassengers, getMockTransactions, mockVisaDatabase, getMockOfficerDesks, mockPorts, mockTerminals, mockZones, mockWorkflows, mockRiskProfiles, setMockOfficerDesks, getMockGates, setMockGates, getMockMedia, setMockMedia, getMockWhitelist, setMockWhitelist, getMockBlacklist, setMockBlacklist, setMockPassengers } from './mock-data';
+import { getMockPassengers, getMockTransactions, mockVisaDatabase, getMockOfficerDesks, mockPorts, mockTerminals, mockZones, mockWorkflows, mockRiskProfiles, setMockOfficerDesks, getMockGates, setMockGates, getMockMedia, setMockMedia, getMockWhitelist, setMockBlacklist, setMockPassengers } from './mock-data';
 import { assessPassengerRisk } from '@/ai/flows/assess-risk-flow';
 import { countries } from './countries';
 import { Fingerprint, ScanLine, UserCheck, ShieldAlert, User } from 'lucide-react';
@@ -469,6 +469,73 @@ const seaportTravelerCategoriesData = [
     { name: 'Residents', value: 800 },
     { name: 'Crew', value: 450 },
 ];
+
+const predictionData = {
+    stats: {
+      passengers: { total: 12500, change: 5.2 },
+      vehicles: { total: 4300, change: -2.1 },
+      vessels: { total: 18, change: 10.0 },
+      processingTime: { avg: '2m 15s', change: 3.5 },
+      staff: { recommended: 62, change: 8.0 },
+    },
+    passengerFlow: {
+      air: [
+        { hour: '08:00', predicted: 450 },
+        { hour: '10:00', predicted: 620 },
+        { hour: '12:00', predicted: 580 },
+        { hour: '14:00', predicted: 710 },
+        { hour: '16:00', predicted: 950 },
+      ],
+      land: [
+        { hour: '08:00', predicted: 210 },
+        { hour: '10:00', predicted: 300 },
+        { hour: '12:00', predicted: 280 },
+        { hour: '14:00', predicted: 350 },
+        { hour: '16:00', predicted: 420 },
+      ],
+      sea: [
+        { hour: '08:00', predicted: 80 },
+        { hour: '10:00', predicted: 120 },
+        { hour: '12:00', predicted: 110 },
+        { hour: '14:00', predicted: 150 },
+        { hour: '16:00', predicted: 180 },
+      ],
+    },
+    processingVelocity: [
+        { type: 'Citizen', time: 35 },
+        { type: 'Resident', time: 60 },
+        { type: 'Visitor (Visa)', time: 150 },
+        { type: 'Visitor (No Visa)', time: 90 },
+        { type: 'Crew', time: 75 },
+    ],
+    queueDynamics: [
+        { time: '08:00', current: 25, historical: 22 },
+        { time: '10:00', current: 40, historical: 35 },
+        { time: '12:00', current: 35, historical: 38 },
+        { time: '14:00', current: 50, historical: 45 },
+        { time: '16:00', current: 65, historical: 60 },
+    ],
+    flightSchedule: {
+        arrivals: [
+            { id: 'EK201', from: 'JFK', time: '08:30', gate: 'A12', status: 'On Time' },
+            { id: 'BA105', from: 'LHR', time: '08:45', gate: 'B05', status: 'On Time' },
+            { id: 'AF672', from: 'CDG', time: '09:10', gate: 'A14', status: 'Delayed' },
+        ],
+        departures: [
+            { id: 'EK202', to: 'JFK', time: '09:00', gate: 'A15', status: 'Boarding' },
+            { id: 'QF002', to: 'SYD', time: '09:20', gate: 'C22', status: 'On Time' },
+        ]
+    },
+    vesselSchedule: {
+        arrivals: [
+            { id: 'MSC Bellissima', from: 'DOH', time: '07:00', berth: 'T1-B2', status: 'On Time' },
+            { id: 'Costa Toscana', from: 'MCT', time: '08:30', berth: 'T1-B3', status: 'Expected' },
+        ],
+        departures: [
+            { id: 'MSC Opera', to: 'BAH', time: '14:00', berth: 'T1-B1', status: 'On Time' },
+        ]
+    }
+};
 
 let allTransactions: Transaction[] = [...getMockTransactions()];
 
@@ -954,7 +1021,6 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
     }
 
     if (method === 'GET' && url.pathname === '/dashboard/prediction') {
-        const predictionData = {};
         return Result.success(predictionData) as Result<T>;
     }
     

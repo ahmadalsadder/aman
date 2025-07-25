@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import type { ColumnDef } from '@tanstack/react-table';
 import type { BlacklistEntry } from '@/types/live-processing';
 import { DataTable } from '@/components/shared/data-table';
@@ -14,7 +14,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
-import { MoreHorizontal, Eye, Trash2, ShieldOff, Filter, ChevronDown, X, Search, User, PlusCircle, FilePenLine, AlertTriangle, LayoutDashboard } from 'lucide-react';
+import { MoreHorizontal, Eye, Trash2, ShieldOff, Filter, ChevronDown, X, Search, User, PlusCircle, FilePenLine, LayoutDashboard } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -27,7 +27,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import type { Module, Permission } from '@/types';
 import { useAuth } from '@/hooks/use-auth';
-import { Skeleton } from '@/components/ui/skeleton';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 
 const categoryColors: { [key: string]: string } = {
@@ -53,11 +52,10 @@ interface BlacklistPageProps {
 export function BlacklistPage({ module, blacklist, loading, onDeleteEntry }: BlacklistPageProps) {
   const router = useRouter();
   const { hasPermission } = useAuth();
-
-  const canView = hasPermission([`${module}:blacklist:view` as Permission]);
-  const canCreate = hasPermission([`${module}:blacklist:create` as Permission]);
-  const canEdit = hasPermission([`${module}:blacklist:edit` as Permission]);
-  const canDelete = hasPermission([`${module}:blacklist:delete` as Permission]);
+  
+  const canCreate = useMemo(() => hasPermission([`${module}:blacklist:create` as Permission]), [hasPermission, module]);
+  const canEdit = useMemo(() => hasPermission([`${module}:blacklist:edit` as Permission]), [hasPermission, module]);
+  const canDelete = useMemo(() => hasPermission([`${module}:blacklist:delete` as Permission]), [hasPermission, module]);
   
   const [entryToView, setEntryToView] = useState<BlacklistEntry | null>(null);
   const [entryToDelete, setEntryToDelete] = useState<BlacklistEntry | null>(null);
@@ -134,26 +132,6 @@ export function BlacklistPage({ module, blacklist, loading, onDeleteEntry }: Bla
       ),
     },
   ];
-
-  if (loading) {
-    return <div className="space-y-6">
-        <Skeleton className="h-24" />
-        <Skeleton className="h-48" />
-        <Skeleton className="h-96" />
-    </div>;
-  }
-
-  if (!canView) {
-    return (
-        <div className="flex h-full w-full flex-col items-center justify-center gap-4 text-center">
-            <AlertTriangle className="h-16 w-16 text-destructive" />
-            <h1 className="text-2xl font-bold">Access Denied</h1>
-            <p className="max-w-md text-muted-foreground">
-                You do not have permission to view the blacklist for this module.
-            </p>
-        </div>
-    );
-  }
 
   return (
     <div className="space-y-6">

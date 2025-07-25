@@ -130,29 +130,36 @@ export function BlacklistForm({ entryToEdit, passenger, onSave, isLoading }: Bla
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-            <Card>
-                <CardHeader>
-                    <CardTitle>Passenger &amp; Document Details</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                     {passenger && (
-                        <Alert>
-                            <Info className="h-4 w-4" />
-                            <AlertTitle>{t('details.linkedTitle')}</AlertTitle>
-                            <AlertDescription>{t('details.linkedDesc', { name: `${passenger.firstName} ${passenger.lastName}` })}</AlertDescription>
-                        </Alert>
-                    )}
-                    <FormField control={form.control} name="name" render={({ field }) => ( <FormItem><FormLabel required>Full Name (English)</FormLabel><FormControl><Input {...field} disabled={!!passenger} /></FormControl><FormMessage /></FormItem> )} />
-                    <FormField control={form.control} name="localizedName" render={({ field }) => ( <FormItem><FormLabel>Full Name (Localized)</FormLabel><FormControl><Input {...field} disabled={!!passenger} /></FormControl><FormMessage /></FormItem> )} />
-                    <FormField control={form.control} name="passportNumber" render={({ field }) => ( <FormItem><FormLabel required>Passport Number</FormLabel><FormControl><Input {...field} disabled={!!passenger} /></FormControl><FormMessage /></FormItem> )} />
-                    <FormField control={form.control} name="nationality" render={({ field }) => ( <FormItem><FormLabel required>Nationality</FormLabel><Combobox options={countries} value={countryValue('nationality')} onChange={field.onChange} placeholder="Select nationality..." disabled={!!passenger} /><FormMessage /></FormItem> )} />
-                    <FormField control={form.control} name="passportCountry" render={({ field }) => ( <FormItem><FormLabel required>Passport Issuing Country</FormLabel><Combobox options={countries} value={countryValue('passportCountry')} onChange={field.onChange} placeholder="Select issuing country..." disabled={!!passenger} /><FormMessage /></FormItem> )} />
-                    <div className="grid grid-cols-2 gap-4">
-                        <FormField control={form.control} name="passportIssueDate" render={({ field }) => ( <FormItem><FormLabel required>Passport Issue Date</FormLabel><Popover><PopoverTrigger asChild><FormControl><Button variant={"outline"} className={cn("w-full justify-start text-left font-normal", !field.value && "text-muted-foreground")} disabled={!!passenger}><CalendarIcon className="mr-2 h-4 w-4" />{field.value ? format(field.value, 'PPP') : <span>Pick a date</span>}</Button></FormControl></PopoverTrigger><PopoverContent className="w-auto p-0"><Calendar mode="single" selected={field.value} onSelect={field.onChange} disabled={(date) => date > new Date()} initialFocus /></PopoverContent></Popover><FormMessage /></FormItem> )} />
-                        <FormField control={form.control} name="passportExpiryDate" render={({ field }) => ( <FormItem><FormLabel required>Passport Expiry Date</FormLabel><Popover><PopoverTrigger asChild><FormControl><Button variant={"outline"} className={cn("w-full justify-start text-left font-normal", !field.value && "text-muted-foreground")} disabled={!!passenger}><CalendarIcon className="mr-2 h-4 w-4" />{field.value ? format(field.value, 'PPP') : <span>Pick a date</span>}</Button></FormControl></PopoverTrigger><PopoverContent className="w-auto p-0"><Calendar mode="single" selected={field.value} onSelect={field.onChange} disabled={(date) => date < new Date()} initialFocus /></PopoverContent></Popover><FormMessage /></FormItem> )} />
-                    </div>
-                </CardContent>
-            </Card>
+            <div className="space-y-6">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Passenger &amp; Document Details</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        {passenger && (
+                            <Alert>
+                                <Info className="h-4 w-4" />
+                                <AlertTitle>{t('details.linkedTitle')}</AlertTitle>
+                                <AlertDescription>{t('details.linkedDesc', { name: `${passenger.firstName} ${passenger.lastName}` })}</AlertDescription>
+                            </Alert>
+                        )}
+                        <FormField control={form.control} name="name" render={({ field }) => ( <FormItem><FormLabel required>Full Name (English)</FormLabel><FormControl><Input {...field} disabled={!!passenger} /></FormControl><FormMessage /></FormItem> )} />
+                        <FormField control={form.control} name="localizedName" render={({ field }) => ( <FormItem><FormLabel>Full Name (Localized)</FormLabel><FormControl><Input {...field} disabled={!!passenger} /></FormControl><FormMessage /></FormItem> )} />
+                        <FormField control={form.control} name="passportNumber" render={({ field }) => ( <FormItem><FormLabel required>Passport Number</FormLabel><FormControl><Input {...field} disabled={!!passenger} /></FormControl><FormMessage /></FormItem> )} />
+                        <FormField control={form.control} name="nationality" render={({ field }) => ( <FormItem><FormLabel required>Nationality</FormLabel><Combobox options={countries} value={countryValue('nationality')} onChange={field.onChange} placeholder="Select nationality..." disabled={!!passenger} /><FormMessage /></FormItem> )} />
+                        <FormField control={form.control} name="passportCountry" render={({ field }) => ( <FormItem><FormLabel required>Passport Issuing Country</FormLabel><Combobox options={countries} value={countryValue('passportCountry')} onChange={field.onChange} placeholder="Select issuing country..." disabled={!!passenger} /><FormMessage /></FormItem> )} />
+                        <div className="grid grid-cols-2 gap-4">
+                            <FormField control={form.control} name="passportIssueDate" render={({ field }) => ( <FormItem><FormLabel required>Passport Issue Date</FormLabel><Popover><PopoverTrigger asChild><FormControl><Button variant={"outline"} className={cn("w-full justify-start text-left font-normal", !field.value && "text-muted-foreground")} disabled={!!passenger}><CalendarIcon className="mr-2 h-4 w-4" />{field.value ? format(field.value, 'PPP') : <span>Pick a date</span>}</Button></FormControl></PopoverTrigger><PopoverContent className="w-auto p-0"><Calendar mode="single" selected={field.value} onSelect={field.onChange} disabled={(date) => date > new Date()} initialFocus /></PopoverContent></Popover><FormMessage /></FormItem> )} />
+                            <FormField control={form.control} name="passportExpiryDate" render={({ field }) => ( <FormItem><FormLabel required>Passport Expiry Date</FormLabel><Popover><PopoverTrigger asChild><FormControl><Button variant={"outline"} className={cn("w-full justify-start text-left font-normal", !field.value && "text-muted-foreground")} disabled={!!passenger}><CalendarIcon className="mr-2 h-4 w-4" />{field.value ? format(field.value, 'PPP') : <span>Pick a date</span>}</Button></FormControl></PopoverTrigger><PopoverContent className="w-auto p-0"><Calendar mode="single" selected={field.value} onSelect={field.onChange} disabled={(date) => date < new Date()} initialFocus /></PopoverContent></Popover><FormMessage /></FormItem> )} />
+                        </div>
+                         <AttachmentUploader 
+                            configs={attachmentConfigs}
+                            onFilesChange={handleAttachmentsChange}
+                            initialFiles={{ attachmentUrl: entryToEdit?.attachmentUrl || '' }}
+                        />
+                    </CardContent>
+                </Card>
+            </div>
             <div className="space-y-6">
                 <Card>
                     <CardHeader>
@@ -173,16 +180,6 @@ export function BlacklistForm({ entryToEdit, passenger, onSave, isLoading }: Bla
                             <FormField control={form.control} name="validUntil" render={({ field }) => ( <FormItem><FormLabel>Valid Until</FormLabel><Popover><PopoverTrigger asChild><FormControl><Button variant={"outline"} className={cn("w-full justify-start text-left font-normal", !field.value && "text-muted-foreground")}><CalendarIcon className="mr-2 h-4 w-4" />{field.value ? format(field.value, 'PPP') : <span>Pick a date</span>}</Button></FormControl></PopoverTrigger><PopoverContent className="w-auto p-0"><Calendar mode="single" selected={field.value} onSelect={field.onChange} disabled={(date) => date < (form.getValues('validFrom') || new Date())} initialFocus /></PopoverContent></Popover><FormMessage /></FormItem> )} />
                          </div>
                      </CardContent>
-                </Card>
-                <Card>
-                    <CardHeader><CardTitle>Supporting Evidence</CardTitle></CardHeader>
-                    <CardContent>
-                        <AttachmentUploader 
-                            configs={attachmentConfigs}
-                            onFilesChange={handleAttachmentsChange}
-                            initialFiles={{ attachmentUrl: entryToEdit?.attachmentUrl || '' }}
-                        />
-                    </CardContent>
                 </Card>
             </div>
         </div>

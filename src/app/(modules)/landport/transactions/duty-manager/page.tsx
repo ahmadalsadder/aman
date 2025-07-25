@@ -1,6 +1,10 @@
 
 'use client';
 
-import DutyManagerPage from '@/app/(modules)/airport/transactions/duty-manager/page';
+import { DutyManagerPageComponent } from "@/components/transactions/duty-manager-page";
 
-export default DutyManagerPage;
+export default function LandportDutyManagerPage() {
+    return <DutyManagerPageComponent module="landport" />;
+}
+
+    

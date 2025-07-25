@@ -43,14 +43,11 @@ interface DutyManagerPageProps {
 }
 
 export function DutyManagerPageComponent({ module, transactions, loading }: DutyManagerPageProps) {
-  const { hasPermission } = useAuth();
   const t = useTranslations('DutyManager');
   const tNav = useTranslations('Navigation');
   const tTransactions = useTranslations('Transactions');
   const [filters, setFilters] = useState(initialFilters);
   const [appliedFilters, setAppliedFilters] = useState(initialFilters);
-
-  const canView = hasPermission(['duty-manager:view']);
 
   const filteredTransactions = useMemo(() => {
     return transactions.filter(t => {
@@ -160,16 +157,6 @@ export function DutyManagerPageComponent({ module, transactions, loading }: Duty
     </div>;
   }
   
-  if (!canView) {
-    return (
-        <div className="flex h-full w-full flex-col items-center justify-center gap-4 text-center">
-            <AlertTriangle className="h-16 w-16 text-destructive" />
-            <h1 className="text-2xl font-bold">{t('accessDenied.title')}</h1>
-            <p className="max-w-md text-muted-foreground">{t('accessDenied.description')}</p>
-        </div>
-    );
-  }
-
   const handleUpdateFilter = (key: keyof typeof filters, value: any) => {
     setFilters(prev => ({ ...prev, [key]: value }));
   };

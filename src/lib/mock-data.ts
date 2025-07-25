@@ -134,8 +134,6 @@ const mockTransactionsInit: Transaction[] = [
     }
 ];
 
-let allTransactions: Transaction[] = [...mockTransactionsInit];
-
 let mockOfficerDesks: OfficerDesk[] = [
     { id: 'DESK-A1', name: 'Officer Desk A1', terminalId: 'TERM-DXB-1', zoneId: 'ZONE-A', ipAddress: '192.168.1.10', macAddress: '00:1A:2B:3C:4D:5E', status: 'Active', lastUpdatedAt: '2023-05-20T10:00:00Z', movementType: 'Entry', workflowId: 'WF-Standard', riskRuleId: 'RR-Low' },
     { id: 'DESK-A2', name: 'Officer Desk A2', terminalId: 'TERM-DXB-1', zoneId: 'ZONE-A', ipAddress: '192.168.1.11', macAddress: '00:1A:2B:3C:4D:5F', status: 'Inactive', lastUpdatedAt: '2023-05-19T11:30:00Z', movementType: 'Bidirectional', workflowId: 'WF-Standard', riskRuleId: 'RR-Low' },
@@ -178,7 +176,6 @@ export const mockRiskProfiles: RiskProfile[] = [
     { id: 'RR-High', name: 'High Risk Profile' },
 ];
 
-
 export const mockVisaDatabase: { passportNumber: string, nationality: string, visaType: string, expiryDate: string }[] = [
     {
         passportNumber: "J98765432",
@@ -196,41 +193,41 @@ let mockGates: Gate[] = [
 ];
 
 let mockMedia: Media[] = [
-    { 
-        id: 'MEDIA-001', 
-        name: 'Entry Greeting', 
-        localizedName: 'تحية الدخول', 
-        type: 'Audio', 
-        status: 'Active', 
-        description: 'Standard welcome audio for all entry points.', 
-        lastModified: '2023-05-15', 
+    {
+        id: 'MEDIA-001',
+        name: 'Entry Greeting',
+        localizedName: 'تحية الدخول',
+        type: 'Audio',
+        status: 'Active',
+        description: 'Standard welcome audio for all entry points.',
+        lastModified: '2023-05-15',
         createdBy: 'Admin User',
         mediaFiles: [
             { id: 'F001', language: 'English', fileName: 'entry_greeting_en.mp3', fileType: 'audio/mpeg', fileUrl: '/audio/entry_greeting_en.mp3' },
             { id: 'F002', language: 'Arabic', fileName: 'entry_greeting_ar.mp3', fileType: 'audio/mpeg', fileUrl: '/audio/entry_greeting_ar.mp3' },
         ]
     },
-    { 
-        id: 'MEDIA-002', 
-        name: 'Prohibited Items', 
-        localizedName: 'الأصناف الممنوعة', 
-        type: 'Video', 
-        status: 'Active', 
-        description: 'Security video displaying prohibited items.', 
-        lastModified: '2023-05-10', 
+    {
+        id: 'MEDIA-002',
+        name: 'Prohibited Items',
+        localizedName: 'الأصناف الممنوعة',
+        type: 'Video',
+        status: 'Active',
+        description: 'Security video displaying prohibited items.',
+        lastModified: '2023-05-10',
         createdBy: 'Admin User',
         mediaFiles: [
             { id: 'F003', language: 'English', fileName: 'prohibited_items.mp4', fileType: 'video/mp4', fileUrl: '/video/prohibited_items.mp4' },
         ]
     },
-    { 
-        id: 'MEDIA-003', 
-        name: 'E-Gate Instructions', 
-        localizedName: 'تعليمات البوابة الإلكترونية', 
-        type: 'Image', 
-        status: 'Inactive', 
-        description: 'Visual guide for using the e-gates.', 
-        lastModified: '2023-04-20', 
+    {
+        id: 'MEDIA-003',
+        name: 'E-Gate Instructions',
+        localizedName: 'تعليمات البوابة الإلكترونية',
+        type: 'Image',
+        status: 'Inactive',
+        description: 'Visual guide for using the e-gates.',
+        lastModified: '2023-04-20',
         createdBy: 'Admin User',
         mediaFiles: [
             { id: 'F004', language: 'English', fileName: 'egate_instructions_en.png', fileType: 'image/png', fileUrl: '/images/egate_instructions.png' },
@@ -259,7 +256,7 @@ export const daysOfWeek: DayOfWeek[] = [
     { id: 'saturday', label: 'Saturday' },
     { id: 'sunday', label: 'Sunday' },
 ];
-  
+
 export const mockShifts: Shift[] = [
     { id: 'S001', name: 'Morning Shift', startTime: '08:00', endTime: '16:00', days: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'], status: 'Active', lastModified: '2023-05-20' },
     { id: 'S002', name: 'Evening Shift', startTime: '16:00', endTime: '00:00', days: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'], status: 'Active', lastModified: '2023-05-20' },
@@ -267,14 +264,48 @@ export const mockShifts: Shift[] = [
     { id: 'S004', name: 'Weekend Day', startTime: '09:00', endTime: '21:00', days: ['saturday', 'sunday'], status: 'Active', lastModified: '2023-05-19' },
 ];
 
+let allTransactions: Transaction[] = [...mockTransactionsInit];
+
+// Getters and setters should come after data definitions
+export const getMockPassengers = () => mockPassengers;
+export const getMockTransactions = () => allTransactions;
+export const getMockOfficerDesks = () => mockOfficerDesks;
+export const getMockGates = () => mockGates;
+export const getMockMedia = () => mockMedia;
+export const getMockWhitelist = () => mockWhitelist;
+export const getMockBlacklist = () => mockBlacklist;
+
+// Setters
+export const setMockPassengers = (newPassengers: Passenger[]) => {
+    mockPassengers = newPassengers;
+};
+export const setMockTransactions = (newTransactions: Transaction[]) => {
+    allTransactions = newTransactions;
+};
+export const setMockOfficerDesks = (newDesks: OfficerDesk[]) => {
+    mockOfficerDesks = newDesks;
+};
+export const setMockGates = (newGates: Gate[]) => {
+    mockGates = newGates;
+};
+export const setMockMedia = (newMedia: Media[]) => {
+    mockMedia = newMedia;
+};
+export const setMockWhitelist = (newWhitelist: WhitelistEntry[]) => {
+    mockWhitelist = newWhitelist;
+};
+export const setMockBlacklist = (newBlacklist: BlacklistEntry[]) => {
+    mockBlacklist = newBlacklist;
+};
+
 const users: User[] = [
-  { 
-    id: '1', 
-    name: 'Admin User', 
+  {
+    id: '1',
+    name: 'Admin User',
     fullName: 'Admin User',
-    email: 'admin@example.com', 
-    role: 'admin', 
-    token: 'fake-admin-token', 
+    email: 'admin@example.com',
+    role: 'admin',
+    token: 'fake-admin-token',
     modules: ['landport', 'seaport', 'airport', 'egate', 'analyst', 'control-room', 'users', 'settings', 'duty-manager'],
     permissions: [
         'users:manage', 'reports:view',
@@ -326,23 +357,23 @@ const users: User[] = [
         'duty-manager:view'
     ]
   },
-  { 
-    id: '2', 
-    name: 'Auditor User', 
+  {
+    id: '2',
+    name: 'Auditor User',
     fullName: 'Auditor User',
-    email: 'auditor@example.com', 
-    role: 'auditor', 
-    token: 'fake-auditor-token', 
+    email: 'auditor@example.com',
+    role: 'auditor',
+    token: 'fake-auditor-token',
     modules: ['landport', 'seaport'],
     permissions: ['reports:view', 'landport:transactions:view', 'seaport:transactions:view', 'landport:dashboard:view', 'seaport:dashboard:view', 'landport:civil-records:view', 'seaport:civil-records:view']
   },
-  { 
-    id: '3', 
-    name: 'Viewer User', 
+  {
+    id: '3',
+    name: 'Viewer User',
     fullName: 'Viewer User',
-    email: 'viewer@example.com', 
-    role: 'viewer', 
-    token: 'fake-viewer-token', 
+    email: 'viewer@example.com',
+    role: 'viewer',
+    token: 'fake-viewer-token',
     modules: ['airport'],
     permissions: ['airport:civil-records:view', 'airport:dashboard:view', 'airport:dashboard:stats:view']
   },
@@ -355,21 +386,18 @@ const users: User[] = [
     token: 'fake-supervisor-token',
     modules: ['airport', 'landport', 'seaport', 'control-room', 'duty-manager'],
     permissions: [
-        'reports:view', 
+        'reports:view',
         'airport:civil-records:view',
         'landport:civil-records:view',
         'seaport:civil-records:view',
-        'airport:transactions:view', 'landport:transactions:view', 'seaport:transactions:view', 
+        'airport:transactions:view', 'landport:transactions:view', 'seaport:transactions:view',
         'airport:transactions:live', 'landport:transactions:live', 'seaport:transactions:live',
         'airport:dashboard:view', 'airport:dashboard:stats:view', 'airport:prediction:view', 'airport:dashboard:charts:view', 'airport:dashboard:officer-performance:view',
-        'airport:workload:view',
         'landport:dashboard:view', 'landport:dashboard:stats:view', 'landport:prediction:view', 'landport:dashboard:charts:view', 'landport:dashboard:officer-performance:view',
-        'landport:workload:view',
         'seaport:dashboard:view', 'seaport:dashboard:stats:view', 'seaport:prediction:view', 'seaport:dashboard:charts:view', 'seaport:dashboard:officer-performance:view',
-        'seaport:workload:view',
         'control-room:dashboard:view', 'control-room:dashboard:stats:view', 'control-room:dashboard:charts:view', 'control-room:dashboard:officer-performance:view',
         'duty-manager:view',
-        // Granular permissions for editing across modules they supervise
+        'airport:workload:view', 'landport:workload:view', 'seaport:workload:view',
         'airport:passengers:edit', 'airport:whitelist:edit', 'airport:blacklist:edit',
         'landport:passengers:edit', 'landport:whitelist:edit', 'landport:blacklist:edit',
         'seaport:passengers:edit', 'seaport:whitelist:edit', 'seaport:blacklist:edit',
@@ -780,38 +808,6 @@ const predictionData = {
             { id: 'MSC Opera', to: 'BAH', time: '14:00', berth: 'T1-B1', status: 'On Time' },
         ]
     }
-};
-
-// Getters and setters should come after data definitions
-export const getMockPassengers = () => mockPassengers;
-export const getMockTransactions = () => allTransactions;
-export const getMockOfficerDesks = () => mockOfficerDesks;
-export const getMockGates = () => mockGates;
-export const getMockMedia = () => mockMedia;
-export const getMockWhitelist = () => mockWhitelist;
-export const getMockBlacklist = () => mockBlacklist;
-
-// Setters
-export const setMockPassengers = (newPassengers: Passenger[]) => {
-    mockPassengers = newPassengers;
-};
-export const setMockTransactions = (newTransactions: Transaction[]) => {
-    allTransactions = newTransactions;
-};
-export const setMockOfficerDesks = (newDesks: OfficerDesk[]) => {
-    mockOfficerDesks = newDesks;
-};
-export const setMockGates = (newGates: Gate[]) => {
-    mockGates = newGates;
-};
-export const setMockMedia = (newMedia: Media[]) => {
-    mockMedia = newMedia;
-};
-export const setMockWhitelist = (newWhitelist: WhitelistEntry[]) => {
-    mockWhitelist = newWhitelist;
-};
-export const setMockBlacklist = (newBlacklist: BlacklistEntry[]) => {
-    mockBlacklist = newBlacklist;
 };
 
 // This export is needed for the mockApi to work.

@@ -5,11 +5,12 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetFo
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
-import type { BlacklistEntry, WhitelistEntry } from '@/types/live-processing';
+import type { WhitelistEntry } from '@/types/live-processing';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { User } from 'lucide-react';
-import type { Module } from '@/types';
+import type { Module, Permission } from '@/types';
+import { useAuth } from '@/hooks/use-auth';
 
 const statusColors: { [key: string]: string } = {
   Active: 'bg-green-500/20 text-green-700 border-green-500/30',
@@ -33,7 +34,10 @@ interface WhitelistDetailsSheetProps {
 }
 
 export function WhitelistDetailsSheet({ entry, isOpen, onOpenChange, module }: WhitelistDetailsSheetProps) {
+    const { hasPermission } = useAuth();
     if (!entry) return null;
+    
+    const canViewPassenger = hasPermission([`${module}:passengers:edit` as Permission]);
 
     return (
         <Sheet open={isOpen} onOpenChange={onOpenChange}>
@@ -55,9 +59,9 @@ export function WhitelistDetailsSheet({ entry, isOpen, onOpenChange, module }: W
                     <DetailItem label="Added By" value={entry.addedBy} />
                 </div>
                 <SheetFooter className="mt-4">
-                    {entry.passengerId && (
+                    {entry.passengerId && canViewPassenger && (
                         <Button asChild variant="outline">
-                            <Link href={`/${module}/passengers/${entry.passengerId}/edit`}>
+                            <Link href={`/${module}/passengers/edit/${entry.passengerId}`}>
                                 <User className="mr-2 h-4 w-4" />
                                 View Full Profile
                             </Link>

@@ -3,7 +3,7 @@
 
 import { useState, useMemo, useEffect } from 'react';
 import type { ColumnDef } from '@tanstack/react-table';
-import type { Shift, DayOfWeek, Module } from '@/types';
+import type { Shift, DayOfWeek, Module, Permission } from '@/types';
 import { mockShifts, daysOfWeek } from '@/lib/mock-data';
 import { DataTable } from '@/components/shared/data-table';
 import { GradientPageHeader } from '@/components/shared/gradient-page-header';
@@ -29,6 +29,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ShiftDetailsSheet } from '@/components/workloads/shift-details-sheet';
 import { DeleteShiftDialog } from '@/components/workloads/delete-shift-dialog';
+import { useAuth } from '@/hooks/use-auth';
 
 const SHIFTS_STORAGE_KEY = 'guardian-gate-shifts';
 
@@ -51,6 +52,7 @@ export function ShiftManagementPage({ module }: ShiftManagementPageProps) {
   const [shifts, setShifts] = useState<Shift[]>([]);
   const { toast } = useToast();
   const router = useRouter();
+  const { hasPermission } = useAuth();
 
   const [filters, setFilters] = useState(initialFilters);
   const [appliedFilters, setAppliedFilters] = useState(initialFilters);

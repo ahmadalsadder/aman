@@ -165,17 +165,6 @@ export function PassengerForm({ passengerToEdit }: PassengerFormProps) {
                     <FormField control={form.control} name="nationalId" render={({ field }) => ( <FormItem><FormLabel>{t('passport.nationalId')}</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
                 </CardContent>
              </Card>
-             <Card>
-                <CardHeader>
-                    <CardTitle>{t('visa.title')}</CardTitle>
-                </CardHeader>
-                 <CardContent className="space-y-4">
-                    <FormField control={form.control} name="visaNumber" render={({ field }) => ( <FormItem><FormLabel>{t('visa.visaNo')}</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
-                    <FormField control={form.control} name="visaType" render={({ field }) => ( <FormItem><FormLabel>{t('visa.visaType')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue placeholder={t('visa.selectVisaType')}/></SelectTrigger></FormControl><SelectContent><SelectItem value="Tourism">{t('visa.tourism')}</SelectItem><SelectItem value="Work">{t('visa.work')}</SelectItem><SelectItem value="Residency">{t('visa.residency')}</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
-                    <FormField control={form.control} name="visaExpiryDate" render={({ field }) => ( <FormItem><FormLabel>{t('visa.visaExpiry')}</FormLabel><FormControl><Input type="date" {...field} /></FormControl><FormMessage /></FormItem> )} />
-                    <FormField control={form.control} name="residencyFileNumber" render={({ field }) => ( <FormItem><FormLabel>{t('visa.residencyNo')}</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
-                 </CardContent>
-             </Card>
           </div>
            <div className="space-y-6 lg:col-span-1">
              <Card>
@@ -194,6 +183,17 @@ export function PassengerForm({ passengerToEdit }: PassengerFormProps) {
                         outputType='base64'
                     />
                 </CardContent>
+             </Card>
+            <Card>
+                <CardHeader>
+                    <CardTitle>{t('visa.title')}</CardTitle>
+                </CardHeader>
+                 <CardContent className="space-y-4">
+                    <FormField control={form.control} name="visaNumber" render={({ field }) => ( <FormItem><FormLabel>{t('visa.visaNo')}</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
+                    <FormField control={form.control} name="visaType" render={({ field }) => ( <FormItem><FormLabel>{t('visa.visaType')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue placeholder={t('visa.selectVisaType')}/></SelectTrigger></FormControl><SelectContent><SelectItem value="Tourism">{t('visa.tourism')}</SelectItem><SelectItem value="Work">{t('visa.work')}</SelectItem><SelectItem value="Residency">{t('visa.residency')}</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
+                    <FormField control={form.control} name="visaExpiryDate" render={({ field }) => ( <FormItem><FormLabel>{t('visa.visaExpiry')}</FormLabel><FormControl><Input type="date" {...field} /></FormControl><FormMessage /></FormItem> )} />
+                    <FormField control={form.control} name="residencyFileNumber" render={({ field }) => ( <FormItem><FormLabel>{t('visa.residencyNo')}</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
+                 </CardContent>
              </Card>
            </div>
         </div>

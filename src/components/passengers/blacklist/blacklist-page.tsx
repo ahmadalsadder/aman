@@ -18,7 +18,6 @@ import { MoreHorizontal, Eye, Trash2, ShieldOff, Filter, ChevronDown, X, Search,
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { useToast } from '@/hooks/use-toast';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -28,7 +27,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import type { Module, Permission } from '@/types';
 import { useAuth } from '@/hooks/use-auth';
-import { api } from '@/lib/api';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 
@@ -49,10 +47,10 @@ interface BlacklistPageProps {
     module: Module;
     blacklist: BlacklistEntry[];
     loading: boolean;
+    onDeleteEntry: (entryId: string) => Promise<boolean>;
 }
 
-export function BlacklistPage({ module, blacklist, loading }: BlacklistPageProps) {
-  const { toast } = useToast();
+export function BlacklistPage({ module, blacklist, loading, onDeleteEntry }: BlacklistPageProps) {
   const router = useRouter();
   const { hasPermission } = useAuth();
 
@@ -61,34 +59,16 @@ export function BlacklistPage({ module, blacklist, loading }: BlacklistPageProps
   const canEdit = hasPermission([`${module}:blacklist:edit` as Permission]);
   const canDelete = hasPermission([`${module}:blacklist:delete` as Permission]);
   
-  const [currentBlacklist, setCurrentBlacklist] = useState<BlacklistEntry[]>(blacklist);
   const [entryToView, setEntryToView] = useState<BlacklistEntry | null>(null);
   const [entryToDelete, setEntryToDelete] = useState<BlacklistEntry | null>(null);
   const [filters, setFilters] = useState(initialFilters);
   const [appliedFilters, setAppliedFilters] = useState(initialFilters);
 
-  useEffect(() => {
-    setCurrentBlacklist(blacklist);
-  }, [blacklist]);
-
-  const handleDeleteEntry = async () => {
+  const handleConfirmDelete = async () => {
     if (!entryToDelete) return;
-    const result = await api.post('/data/blacklist/delete', { id: entryToDelete.id });
-    
-    if (result.isSuccess) {
-      setCurrentBlacklist(prev => prev.filter(r => r.id !== entryToDelete.id));
-      toast({
-        title: 'Entry Deleted',
-        description: `Blacklist entry for "${entryToDelete.name}" has been permanently deleted.`,
-        variant: 'info',
-      });
+    const success = await onDeleteEntry(entryToDelete.id);
+    if (success) {
       setEntryToDelete(null);
-    } else {
-      toast({
-        title: 'Delete Failed',
-        description: 'There was an error deleting the blacklist entry.',
-        variant: 'destructive',
-      });
     }
   };
   
@@ -103,22 +83,22 @@ export function BlacklistPage({ module, blacklist, loading }: BlacklistPageProps
   };
   
   const filteredData = useMemo(() => {
-    return currentBlacklist.filter(item => {
+    return blacklist.filter(item => {
       const nameLower = appliedFilters.name.toLowerCase();
       if (nameLower && !item.name.toLowerCase().includes(nameLower)) return false;
       if (appliedFilters.nationality && item.nationality !== appliedFilters.nationality) return false;
       if (appliedFilters.category && item.category !== appliedFilters.category) return false;
       return true;
     });
-  }, [currentBlacklist, appliedFilters]);
+  }, [blacklist, appliedFilters]);
 
   const uniqueNationalities = useMemo(() => {
-    return Array.from(new Set(currentBlacklist.map(item => item.nationality)));
-  }, [currentBlacklist]);
+    return Array.from(new Set(blacklist.map(item => item.nationality)));
+  }, [blacklist]);
 
   const uniqueCategories = useMemo(() => {
-    return Array.from(new Set(currentBlacklist.map(item => item.category)));
-  }, [currentBlacklist]);
+    return Array.from(new Set(blacklist.map(item => item.category)));
+  }, [blacklist]);
 
   const columns: ColumnDef<BlacklistEntry>[] = [
     { accessorKey: 'id', header: 'ID' },
@@ -177,7 +157,7 @@ export function BlacklistPage({ module, blacklist, loading }: BlacklistPageProps
 
   return (
     <div className="space-y-6">
-       <Breadcrumb>
+      <Breadcrumb>
         <BreadcrumbList>
             <BreadcrumbItem>
                 <BreadcrumbLink href={`/${module}/dashboard`} icon={LayoutDashboard}>Dashboard</BreadcrumbLink>
@@ -246,7 +226,7 @@ export function BlacklistPage({ module, blacklist, loading }: BlacklistPageProps
         isOpen={!!entryToView}
         onOpenChange={(isOpen) => !isOpen && setEntryToView(null)}
       />
-      <DeleteBlacklistDialog entry={entryToDelete} isOpen={!!entryToDelete} onOpenChange={(isOpen) => !isOpen && setEntryToDelete(null)} onConfirm={handleDeleteEntry} />
+      <DeleteBlacklistDialog entry={entryToDelete} isOpen={!!entryToDelete} onOpenChange={(isOpen) => !isOpen && setEntryToDelete(null)} onConfirm={handleConfirmDelete} />
     </div>
   );
 }

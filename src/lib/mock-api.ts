@@ -497,7 +497,7 @@ let allTransactions: Transaction[] = [...mockTransactions];
 const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 
 export async function mockApi<T>(endpoint: string, options: RequestInit = {}): Promise<Result<T>> {
-    await delay(500); // Simulate network latency
+   // await delay(500); // Simulate network latency
 
     const { method = 'GET', body } = options;
     const url = new URL(endpoint, 'http://mock.com'); // Base URL doesn't matter, just for parsing

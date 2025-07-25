@@ -1,3 +1,4 @@
+
 'use client';
 
 import { flagEdgeCaseResponse } from '@/ai/flows/flag-edge-case-responses';
@@ -46,6 +47,8 @@ const getAuthInfo = (): Partial<User> => {
   return {};
 };
 
+type ApiOptions = Omit<RequestInit, 'method' | 'body'>;
+
 
 async function performApiCall<T>(endpoint: string, options: RequestInit = {}): Promise<Result<T>> {
   showLoaderGlobally();
@@ -93,9 +96,18 @@ async function performApiCall<T>(endpoint: string, options: RequestInit = {}): P
 }
 
 export const api = {
-    get: <T>(endpoint: string, options: Omit<RequestInit, 'method' | 'body'> = {}) => 
+    get: <T>(endpoint: string, options: ApiOptions = {}) => 
         performApiCall<T>(endpoint, { ...options, method: 'GET' }),
-    post: <T>(endpoint: string, body: any, options: Omit<RequestInit, 'method' | 'body'> = {}) => 
+    
+    post: <T>(endpoint: string, body: any, options: ApiOptions = {}) => 
         performApiCall<T>(endpoint, { ...options, method: 'POST', body: JSON.stringify(body) }),
-    // Add other methods like put, delete if needed
+
+    put: <T>(endpoint: string, body: any, options: ApiOptions = {}) =>
+        performApiCall<T>(endpoint, { ...options, method: 'PUT', body: JSON.stringify(body) }),
+
+    patch: <T>(endpoint: string, body: any, options: ApiOptions = {}) =>
+        performApiCall<T>(endpoint, { ...options, method: 'PATCH', body: JSON.stringify(body) }),
+
+    delete: <T>(endpoint: string, options: ApiOptions = {}) =>
+        performApiCall<T>(endpoint, { ...options, method: 'DELETE' }),
 };

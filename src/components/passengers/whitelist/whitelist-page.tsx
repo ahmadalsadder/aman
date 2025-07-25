@@ -29,6 +29,7 @@ import { useRouter } from 'next/navigation';
 import type { Module, Permission } from '@/types';
 import { useAuth } from '@/hooks/use-auth';
 import { api } from '@/lib/api';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const statusColors: { [key: string]: string } = {
   Active: 'bg-green-500/20 text-green-700 border-green-500/30',
@@ -44,10 +45,11 @@ const initialFilters = {
 
 interface WhitelistPageProps {
     module: Module;
+    whitelist: WhitelistEntry[];
+    loading: boolean;
 }
 
-export function WhitelistPage({ module }: WhitelistPageProps) {
-  const [whitelist, setWhitelist] = useState<WhitelistEntry[]>([]);
+export function WhitelistPage({ module, whitelist, loading }: WhitelistPageProps) {
   const { toast } = useToast();
   const router = useRouter();
   const { hasPermission } = useAuth();
@@ -57,21 +59,15 @@ export function WhitelistPage({ module }: WhitelistPageProps) {
   const canEdit = hasPermission([`${module}:whitelist:edit` as Permission]);
   const canDelete = hasPermission([`${module}:whitelist:delete` as Permission]);
 
+  const [currentWhitelist, setCurrentWhitelist] = useState<WhitelistEntry[]>(whitelist);
   const [entryToView, setEntryToView] = useState<WhitelistEntry | null>(null);
   const [entryToDelete, setEntryToDelete] = useState<WhitelistEntry | null>(null);
   const [filters, setFilters] = useState(initialFilters);
   const [appliedFilters, setAppliedFilters] = useState(initialFilters);
 
   useEffect(() => {
-    if(!canView) return;
-    const fetchWhitelist = async () => {
-        const result = await api.get<WhitelistEntry[]>('/data/whitelist');
-        if (result.isSuccess && result.data) {
-            setWhitelist(result.data);
-        }
-    };
-    fetchWhitelist();
-  }, [canView]);
+    setCurrentWhitelist(whitelist);
+  }, [whitelist]);
 
   const handleDeleteEntry = async () => {
     if (!entryToDelete) return;
@@ -79,7 +75,7 @@ export function WhitelistPage({ module }: WhitelistPageProps) {
     const result = await api.post<WhitelistEntry>('/data/whitelist/delete', { id: entryToDelete.id });
     
     if (result.isSuccess) {
-      setWhitelist(prev => prev.filter(r => r.id !== entryToDelete.id));
+      setCurrentWhitelist(prev => prev.filter(r => r.id !== entryToDelete.id));
       toast({
         title: 'Entry Deleted',
         description: `Whitelist entry for "${entryToDelete.name}" has been permanently deleted.`,
@@ -106,22 +102,22 @@ export function WhitelistPage({ module }: WhitelistPageProps) {
   };
   
   const filteredData = useMemo(() => {
-    return whitelist.filter(item => {
+    return currentWhitelist.filter(item => {
       const nameLower = appliedFilters.name.toLowerCase();
       if (nameLower && !item.name.toLowerCase().includes(nameLower)) return false;
       if (appliedFilters.nationality && item.nationality !== appliedFilters.nationality) return false;
       if (appliedFilters.status && item.status !== appliedFilters.status) return false;
       return true;
     });
-  }, [whitelist, appliedFilters]);
+  }, [currentWhitelist, appliedFilters]);
 
   const uniqueNationalities = useMemo(() => {
-    return Array.from(new Set(whitelist.map(item => item.nationality)));
-  }, [whitelist]);
+    return Array.from(new Set(currentWhitelist.map(item => item.nationality)));
+  }, [currentWhitelist]);
 
   const uniqueStatuses = useMemo(() => {
-    return Array.from(new Set(whitelist.map(item => item.status)));
-  }, [whitelist]);
+    return Array.from(new Set(currentWhitelist.map(item => item.status)));
+  }, [currentWhitelist]);
 
   const columns: ColumnDef<WhitelistEntry>[] = [
     { accessorKey: 'id', header: 'ID' },
@@ -157,6 +153,14 @@ export function WhitelistPage({ module }: WhitelistPageProps) {
       ),
     },
   ];
+
+  if (loading) {
+    return <div className="space-y-6">
+        <Skeleton className="h-24" />
+        <Skeleton className="h-48" />
+        <Skeleton className="h-96" />
+    </div>;
+  }
 
   if (!canView) {
     return (

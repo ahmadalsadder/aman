@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
@@ -64,14 +63,15 @@ const initialFilters = {
 
 interface PassengersPageProps {
   module: Module | 'admin';
+  passengers: Passenger[];
+  loading: boolean;
 }
 
-export function PassengersPage({ module }: PassengersPageProps) {
-  const [passengers, setPassengers] = useState<Passenger[]>([]);
+export function PassengersPage({ module, passengers, loading }: PassengersPageProps) {
   const { toast } = useToast();
   const router = useRouter();
-  const [loading, setLoading] = useState(true);
   const { hasPermission } = useAuth();
+  const [currentPassengers, setCurrentPassengers] = useState<Passenger[]>(passengers);
 
   const [passengerToView, setPassengerToView] = useState<Passenger | null>(null);
   const [passengerToDelete, setPassengerToDelete] = useState<Passenger | null>(null);
@@ -89,27 +89,16 @@ export function PassengersPage({ module }: PassengersPageProps) {
 
 
   useEffect(() => {
-    if (!canViewPage) {
-        setLoading(false);
-        return;
-    }
-    setLoading(true);
-    const endpoint = module === 'admin' ? '/data/passengers' : `/data/passengers?module=${module}`;
-    api.get<Passenger[]>(endpoint).then(result => {
-        if(result.isSuccess && result.data) {
-            setPassengers(result.data);
-        }
-        setLoading(false);
-    });
-  }, [module, canViewPage]);
+    setCurrentPassengers(passengers);
+  }, [passengers]);
 
   const passengerStats = useMemo(() => {
-    const total = passengers.length;
-    const active = passengers.filter(p => p.status === 'Active').length;
-    const flagged = passengers.filter(p => p.status === 'Flagged').length;
-    const highRisk = passengers.filter(p => p.riskLevel === 'High').length;
+    const total = currentPassengers.length;
+    const active = currentPassengers.filter(p => p.status === 'Active').length;
+    const flagged = currentPassengers.filter(p => p.status === 'Flagged').length;
+    const highRisk = currentPassengers.filter(p => p.riskLevel === 'High').length;
     return { total, active, flagged, highRisk };
-  }, [passengers]);
+  }, [currentPassengers]);
 
   const fromDate = subYears(new Date(), 100);
   const toDate = addYears(new Date(), 10);
@@ -128,12 +117,12 @@ export function PassengersPage({ module }: PassengersPageProps) {
   };
   
   const uniqueNationalities = useMemo(() => {
-    const nationalities = new Set(passengers.map(p => p.nationality));
+    const nationalities = new Set(currentPassengers.map(p => p.nationality));
     return Array.from(nationalities).sort().map(n => ({ value: n, label: n }));
-  }, [passengers]);
+  }, [currentPassengers]);
 
   const filteredData = useMemo<PassengerTableData[]>(() => {
-    return passengers
+    return currentPassengers
       .map(p => ({ ...p, fullName: `${p.firstName} ${p.lastName}` }))
       .filter(p => {
         const nameLower = appliedFilters.name.toLowerCase();
@@ -156,7 +145,7 @@ export function PassengersPage({ module }: PassengersPageProps) {
 
         return true;
       });
-  }, [passengers, appliedFilters]);
+  }, [currentPassengers, appliedFilters]);
   
   const handleDeletePassenger = async () => {
     if (!passengerToDelete) return;
@@ -164,7 +153,7 @@ export function PassengersPage({ module }: PassengersPageProps) {
     const result = await api.post('/data/passengers/delete', { id: passengerToDelete.id });
 
     if(result.isSuccess) {
-        setPassengers(prev => prev.filter(p => p.id !== passengerToDelete.id));
+        setCurrentPassengers(prev => prev.filter(p => p.id !== passengerToDelete.id));
         toast({
             title: 'Passenger Deleted',
             description: `${passengerToDelete.firstName} ${passengerToDelete.lastName}'s record has been deleted.`,

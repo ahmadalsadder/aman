@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
@@ -30,6 +29,7 @@ import { useRouter } from 'next/navigation';
 import type { Module, Permission } from '@/types';
 import { useAuth } from '@/hooks/use-auth';
 import { api } from '@/lib/api';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const categoryColors: { [key: string]: string } = {
   'No-Fly': 'bg-red-500/20 text-red-700 border-red-500/30',
@@ -46,48 +46,36 @@ const initialFilters = {
 
 interface BlacklistPageProps {
     module: Module;
+    blacklist: BlacklistEntry[];
+    loading: boolean;
 }
 
-export function BlacklistPage({ module }: BlacklistPageProps) {
-  const [blacklist, setBlacklist] = useState<BlacklistEntry[]>([]);
+export function BlacklistPage({ module, blacklist, loading }: BlacklistPageProps) {
   const { toast } = useToast();
   const router = useRouter();
   const { hasPermission } = useAuth();
-  const [loading, setLoading] = useState(true);
 
   const canView = hasPermission([`${module}:blacklist:view` as Permission]);
   const canCreate = hasPermission([`${module}:blacklist:create` as Permission]);
   const canEdit = hasPermission([`${module}:blacklist:edit` as Permission]);
   const canDelete = hasPermission([`${module}:blacklist:delete` as Permission]);
   
+  const [currentBlacklist, setCurrentBlacklist] = useState<BlacklistEntry[]>(blacklist);
   const [entryToView, setEntryToView] = useState<BlacklistEntry | null>(null);
   const [entryToDelete, setEntryToDelete] = useState<BlacklistEntry | null>(null);
   const [filters, setFilters] = useState(initialFilters);
   const [appliedFilters, setAppliedFilters] = useState(initialFilters);
 
   useEffect(() => {
-    if (!canView) {
-        setLoading(false);
-        return;
-    }
-
-    const fetchBlacklist = async () => {
-        setLoading(true);
-        const result = await api.get<BlacklistEntry[]>('/data/blacklist');
-        if (result.isSuccess && result.data) {
-            setBlacklist(result.data);
-        }
-        setLoading(false);
-    }
-    fetchBlacklist();
-  }, [canView]);
+    setCurrentBlacklist(blacklist);
+  }, [blacklist]);
 
   const handleDeleteEntry = async () => {
     if (!entryToDelete) return;
     const result = await api.post('/data/blacklist/delete', { id: entryToDelete.id });
     
     if (result.isSuccess) {
-      setBlacklist(prev => prev.filter(r => r.id !== entryToDelete.id));
+      setCurrentBlacklist(prev => prev.filter(r => r.id !== entryToDelete.id));
       toast({
         title: 'Entry Deleted',
         description: `Blacklist entry for "${entryToDelete.name}" has been permanently deleted.`,
@@ -114,22 +102,22 @@ export function BlacklistPage({ module }: BlacklistPageProps) {
   };
   
   const filteredData = useMemo(() => {
-    return blacklist.filter(item => {
+    return currentBlacklist.filter(item => {
       const nameLower = appliedFilters.name.toLowerCase();
       if (nameLower && !item.name.toLowerCase().includes(nameLower)) return false;
       if (appliedFilters.nationality && item.nationality !== appliedFilters.nationality) return false;
       if (appliedFilters.category && item.category !== appliedFilters.category) return false;
       return true;
     });
-  }, [blacklist, appliedFilters]);
+  }, [currentBlacklist, appliedFilters]);
 
   const uniqueNationalities = useMemo(() => {
-    return Array.from(new Set(blacklist.map(item => item.nationality)));
-  }, [blacklist]);
+    return Array.from(new Set(currentBlacklist.map(item => item.nationality)));
+  }, [currentBlacklist]);
 
   const uniqueCategories = useMemo(() => {
-    return Array.from(new Set(blacklist.map(item => item.category)));
-  }, [blacklist]);
+    return Array.from(new Set(currentBlacklist.map(item => item.category)));
+  }, [currentBlacklist]);
 
   const columns: ColumnDef<BlacklistEntry>[] = [
     { accessorKey: 'id', header: 'ID' },
@@ -165,6 +153,14 @@ export function BlacklistPage({ module }: BlacklistPageProps) {
       ),
     },
   ];
+
+  if (loading) {
+    return <div className="space-y-6">
+        <Skeleton className="h-24" />
+        <Skeleton className="h-48" />
+        <Skeleton className="h-96" />
+    </div>;
+  }
 
   if (!canView) {
     return (

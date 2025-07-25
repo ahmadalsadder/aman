@@ -38,63 +38,40 @@ const initialFilters = {
 interface OfficerDesksPageProps {
     module: Module;
     moduleName: string;
+    desks: OfficerDesk[];
+    ports: Port[];
+    terminals: Terminal[];
+    loading: boolean;
 }
 
-export function OfficerDesksPage({ module, moduleName }: OfficerDesksPageProps) {
+export function OfficerDesksPage({ module, moduleName, desks, ports, terminals, loading }: OfficerDesksPageProps) {
     const { toast } = useToast();
     const router = useRouter();
     const { hasPermission } = useAuth();
     const t = useTranslations('OfficerDesks');
-
-    const [loading, setLoading] = useState(true);
-    const [desks, setDesks] = useState<OfficerDesk[]>([]);
-    const [ports, setPorts] = useState<Port[]>([]);
-    const [terminals, setTerminals] = useState<Terminal[]>([]);
     
+    const [currentDesks, setCurrentDesks] = useState<OfficerDesk[]>(desks);
     const [deskToView, setDeskToView] = useState<OfficerDesk | null>(null);
     const [deskToDelete, setDeskToDelete] = useState<OfficerDesk | null>(null);
 
     const [filters, setFilters] = useState(initialFilters);
     const [appliedFilters, setAppliedFilters] = useState(initialFilters);
 
-    const canView = useMemo(() => hasPermission([`${module}:desks:view`]), [hasPermission, module]);
-    const canCreate = useMemo(() => hasPermission([`${module}:desks:create`]), [hasPermission, module]);
-    const canEdit = useMemo(() => hasPermission([`${module}:desks:edit`]), [hasPermission, module]);
-    const canDelete = useMemo(() => hasPermission([`${module}:desks:delete`]), [hasPermission, module]);
-
-    const moduleType = module.charAt(0).toUpperCase() + module.slice(1);
+    const canView = useMemo(() => hasPermission([`${module}:desks:view` as Permission]), [hasPermission, module]);
+    const canCreate = useMemo(() => hasPermission([`${module}:desks:create` as Permission]), [hasPermission, module]);
+    const canEdit = useMemo(() => hasPermission([`${module}:desks:edit` as Permission]), [hasPermission, module]);
+    const canDelete = useMemo(() => hasPermission([`${module}:desks:delete` as Permission]), [hasPermission, module]);
 
     useEffect(() => {
-        if (!canView) {
-            setLoading(false);
-            return;
-        }
-
-        const fetchData = async () => {
-            setLoading(true);
-            const [desksResult, portsResult, terminalsResult] = await Promise.all([
-                api.get<OfficerDesk[]>(`/data/desks?moduleType=${module}`),
-                api.get<Port[]>(`/data/ports?moduleType=${module}`),
-                api.get<Terminal[]>('/data/terminals'),
-            ]);
-
-            if (desksResult.isSuccess) setDesks(desksResult.data || []);
-            if (portsResult.isSuccess) setPorts(portsResult.data || []);
-            if (terminalsResult.isSuccess) setTerminals(terminalsResult.data || []);
-            
-            setLoading(false);
-        };
-
-        fetchData();
-    }, [canView, module]);
-
+        setCurrentDesks(desks);
+    }, [desks]);
 
     const handleToggleStatus = async (deskId: string, currentStatus: 'Active' | 'Inactive' | 'Closed') => {
         const newStatus = currentStatus === 'Active' ? 'Inactive' : 'Active';
         const result = await api.post<OfficerDesk>('/data/desks/update-status', { deskId, status: newStatus });
 
         if (result.isSuccess && result.data) {
-            setDesks(desks.map(d => d.id === deskId ? result.data! : d));
+            setCurrentDesks(currentDesks.map(d => d.id === deskId ? result.data! : d));
             toast({
                 title: t('deskCard.activate'),
                 description: `Desk "${result.data.name}" has been set to ${result.data.status.toLowerCase()}.`,
@@ -109,7 +86,7 @@ export function OfficerDesksPage({ module, moduleName }: OfficerDesksPageProps) 
         const result = await api.post('/data/desks/delete', { id: deskToDelete.id });
     
         if (result.isSuccess) {
-            setDesks(prev => prev.filter(d => d.id !== deskToDelete.id));
+            setCurrentDesks(prev => prev.filter(d => d.id !== deskToDelete.id));
             toast({
                 title: t('deleteDialog.title'),
                 description: `Desk has been permanently deleted.`,
@@ -127,8 +104,8 @@ export function OfficerDesksPage({ module, moduleName }: OfficerDesksPageProps) 
 
     const portOptions = useMemo(() => ports.map(p => ({ value: p.id, label: p.name })), [ports]);
     const terminalOptions = useMemo(() => terminals.filter(t => !filters.portId || t.portId === filters.portId).map(t => ({ value: t.id, label: t.name })), [terminals, filters.portId]);
-    const uniqueMovementTypes = useMemo(() => Array.from(new Set(desks.map(g => g.movementType))), [desks]);
-    const uniqueStatuses = useMemo(() => Array.from(new Set(desks.map(g => g.status))), [desks]);
+    const uniqueMovementTypes = useMemo(() => Array.from(new Set(currentDesks.map(g => g.movementType))), [currentDesks]);
+    const uniqueStatuses = useMemo(() => Array.from(new Set(currentDesks.map(g => g.status))), [currentDesks]);
 
     const handleUpdateFilter = (key: keyof typeof filters, value: any) => setFilters(prev => ({ ...prev, [key]: value }));
     const handleSearch = () => setAppliedFilters(filters);
@@ -138,7 +115,7 @@ export function OfficerDesksPage({ module, moduleName }: OfficerDesksPageProps) 
     };
 
     const filteredDesks = useMemo(() => {
-        return desks.filter(desk => {
+        return currentDesks.filter(desk => {
             const nameLower = appliedFilters.name.toLowerCase();
             if (nameLower && !desk.name.toLowerCase().includes(nameLower) && !desk.terminalName?.toLowerCase().includes(nameLower)) return false;
             if (appliedFilters.portId && desk.portId !== appliedFilters.portId) return false;
@@ -147,7 +124,7 @@ export function OfficerDesksPage({ module, moduleName }: OfficerDesksPageProps) 
             if (appliedFilters.status && desk.status !== appliedFilters.status) return false;
             return true;
         });
-    }, [desks, appliedFilters]);
+    }, [currentDesks, appliedFilters]);
 
     if (loading) {
         return <div className="space-y-6">
@@ -195,7 +172,7 @@ export function OfficerDesksPage({ module, moduleName }: OfficerDesksPageProps) 
                 )}
             </GradientPageHeader>
             
-            <DeskStatsCards desks={desks} />
+            <DeskStatsCards desks={currentDesks} />
 
             <Card>
                 <Collapsible>
@@ -235,7 +212,7 @@ export function OfficerDesksPage({ module, moduleName }: OfficerDesksPageProps) 
                     key={desk.id} 
                     desk={desk} 
                     onView={() => setDeskToView(desk)}
-                    onEdit={() => router.push(`/${module}/officer-desks/${desk.id}/edit`)}
+                    onEdit={() => router.push(`/${module}/officer-desks/edit/${desk.id}`)}
                     onDelete={() => setDeskToDelete(desk)}
                     onToggleStatus={handleToggleStatus}
                     canEdit={canEdit}

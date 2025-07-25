@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import React, { useState, useMemo, useEffect } from 'react';
@@ -52,7 +51,7 @@ const formSchema = z.object({
   
   visaNumber: z.string().optional(),
   visaType: z.enum(['Tourism', 'Work', 'Residency']).optional(),
-  visaExpiryDate: z.string().optional(),
+  visaExpiryDate: z.date().optional(),
   residencyFileNumber: z.string().optional(),
 
   status: z.enum(['Active', 'Inactive', 'Flagged', 'Blocked']),
@@ -98,7 +97,7 @@ export function PassengerForm({ passengerToEdit }: PassengerFormProps) {
           dateOfBirth: parseDateString(passengerToEdit.dateOfBirth),
           passportIssueDate: parseDateString(passengerToEdit.passportIssueDate),
           passportExpiryDate: parseDateString(passengerToEdit.passportExpiryDate),
-          visaExpiryDate: passengerToEdit.visaExpiryDate || '',
+          visaExpiryDate: parseDateString(passengerToEdit.visaExpiryDate),
           personalPhotoUrl: passengerToEdit.profilePicture, 
           passportPhotoUrl: passengerToEdit.passportPhotoUrl 
         }
@@ -107,7 +106,7 @@ export function PassengerForm({ passengerToEdit }: PassengerFormProps) {
           nationality: '', dateOfBirth: undefined, gender: 'Male', status: 'Active',
           riskLevel: 'Low', passportIssueDate: undefined, passportExpiryDate: undefined,
           passportCountry: '', visaNumber: '', visaType: undefined,
-          visaExpiryDate: '', residencyFileNumber: '', nationalId: '',
+          visaExpiryDate: undefined, residencyFileNumber: '', nationalId: '',
           passportPhotoUrl: '', personalPhotoUrl: '',
         },
   });
@@ -130,6 +129,7 @@ export function PassengerForm({ passengerToEdit }: PassengerFormProps) {
       dateOfBirth: format(data.dateOfBirth, 'yyyy-MM-dd'),
       passportIssueDate: data.passportIssueDate ? format(data.passportIssueDate, 'yyyy-MM-dd') : undefined,
       passportExpiryDate: data.passportExpiryDate ? format(data.passportExpiryDate, 'yyyy-MM-dd') : undefined,
+      visaExpiryDate: data.visaExpiryDate ? format(data.visaExpiryDate, 'yyyy-MM-dd') : undefined,
     };
     
     const result = await api.post<Passenger>('/data/passengers/save', payload);
@@ -157,10 +157,8 @@ export function PassengerForm({ passengerToEdit }: PassengerFormProps) {
   const nextStep = async () => {
     const currentStepFields = steps[currentStep].fields as (keyof PassengerFormValues)[];
     const isValid = await form.trigger(currentStepFields);
-    if (isValid) {
-        if (currentStep < steps.length - 1) {
-            setCurrentStep(prev => prev + 1);
-        }
+    if (isValid && currentStep < steps.length - 1) {
+        setCurrentStep(prev => prev + 1);
     }
   };
 
@@ -240,7 +238,7 @@ export function PassengerForm({ passengerToEdit }: PassengerFormProps) {
                              <CardContent className="space-y-4">
                                 <FormField control={form.control} name="visaNumber" render={({ field }) => ( <FormItem><FormLabel>{t('visa.visaNo')}</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
                                 <FormField control={form.control} name="visaType" render={({ field }) => ( <FormItem><FormLabel>{t('visa.visaType')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue placeholder={t('visa.selectVisaType')}/></SelectTrigger></FormControl><SelectContent><SelectItem value="Tourism">{t('visa.tourism')}</SelectItem><SelectItem value="Work">{t('visa.work')}</SelectItem><SelectItem value="Residency">{t('visa.residency')}</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
-                                <FormField control={form.control} name="visaExpiryDate" render={({ field }) => ( <FormItem><FormLabel>{t('visa.visaExpiry')}</FormLabel><FormControl><Input type="date" {...field} /></FormControl><FormMessage /></FormItem> )} />
+                                <FormField control={form.control} name="visaExpiryDate" render={({ field }) => ( <FormItem className="flex flex-col"><FormLabel>{t('visa.visaExpiry')}</FormLabel><Popover><PopoverTrigger asChild><FormControl><Button variant={"outline"} className={cn("w-full pl-3 text-left font-normal", !field.value && "text-muted-foreground")}><CalendarIcon className="mr-2 h-4 w-4" />{field.value ? (format(field.value, "PPP")) : (<span>Pick a date</span>)}</Button></FormControl></PopoverTrigger><PopoverContent className="w-auto p-0" align="start"><Calendar mode="single" selected={field.value} onSelect={field.onChange} disabled={(date) => date < new Date()} initialFocus /></PopoverContent></Popover><FormMessage /></FormItem> )} />
                                 <FormField control={form.control} name="residencyFileNumber" render={({ field }) => ( <FormItem><FormLabel>{t('visa.residencyNo')}</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
                              </CardContent>
                          </Card>
@@ -283,7 +281,3 @@ export function PassengerForm({ passengerToEdit }: PassengerFormProps) {
     </>
   );
 }
-
-
-
-

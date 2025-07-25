@@ -61,6 +61,13 @@ const getModuleSubNav = (module: Module, t: any): NavItem[] => {
             permission: `${module}:transactions:view` as Permission,
             children: transactionChildren
         });
+        
+        subNav.push({
+            href: `${moduleBaseUrl}/transactions/duty-manager`,
+            label: t('dutyManager'),
+            icon: ShieldAlert,
+            permission: 'duty-manager:view',
+        });
 
         subNav.push({
             href: `${moduleBaseUrl}/officer-desks`,
@@ -144,15 +151,6 @@ export const getSidebarNavItems = (role: Role, modules: Module[], t: any): NavIt
             });
         }
     });
-
-    if (modules.includes('duty-manager')) {
-        nav.push({
-            href: '/airport/transactions/duty-manager',
-            label: t('dutyManager'),
-            icon: ShieldAlert,
-            permission: 'duty-manager:view',
-        });
-    }
     
     // Add admin-specific items if the role is admin
     if (role === 'admin') {

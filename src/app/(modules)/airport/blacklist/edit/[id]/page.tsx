@@ -13,6 +13,7 @@ import { api } from '@/lib/api';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAuth } from '@/hooks/use-auth';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
+import { format } from 'date-fns';
 
 export default function EditBlacklistPage() {
     const router = useRouter();
@@ -24,6 +25,7 @@ export default function EditBlacklistPage() {
     
     const [entry, setEntry] = useState<BlacklistEntry | null>(null);
     const [loading, setLoading] = useState(true);
+    const [isSaving, setIsSaving] = useState(false);
     const id = params.id;
     const module = 'airport';
     const canEdit = hasPermission([`${module}:blacklist:edit`]);
@@ -49,16 +51,25 @@ export default function EditBlacklistPage() {
 
     const handleSave = async (formData: BlacklistFormValues) => {
         if (!entry) return;
-        setLoading(true);
+        setIsSaving(true);
+        
+        const updatedEntryData: Partial<BlacklistEntry> = {
+            ...formData,
+            id: entry.id,
+            validFrom: formData.validFrom ? format(formData.validFrom, 'yyyy-MM-dd') : undefined,
+            validUntil: formData.validUntil ? format(formData.validUntil, 'yyyy-MM-dd') : undefined,
+            passportIssueDate: formData.passportIssueDate ? format(formData.passportIssueDate, 'yyyy-MM-dd') : undefined,
+            passportExpiryDate: formData.passportExpiryDate ? format(formData.passportExpiryDate, 'yyyy-MM-dd') : undefined,
+        };
 
-        const result = await api.post<BlacklistEntry>('/data/blacklist/save', { id: entry.id, ...formData });
+        const result = await api.post<BlacklistEntry>('/data/blacklist/save', updatedEntryData);
 
         if (result.isSuccess) {
             toast({ title: t('toast.updateSuccessTitle'), description: t('toast.updateSuccessDesc', { name: result.data!.name }), variant: 'success' });
             router.push(`/${module}/blacklist`);
         } else {
             toast({ title: t('toast.errorTitle'), description: result.errors?.[0]?.message || t('toast.errorDesc'), variant: 'destructive' });
-            setIsLoading(false);
+            setIsSaving(false);
         }
     };
 
@@ -104,7 +115,7 @@ export default function EditBlacklistPage() {
                 </BreadcrumbList>
             </Breadcrumb>
             <GradientPageHeader title={t('editTitle')} description={t('editDescription', { name: entry.name })} icon={FilePenLine} />
-            <BlacklistForm onSave={handleSave} isLoading={loading} entryToEdit={entry} />
+            <BlacklistForm onSave={handleSave} isLoading={isSaving} entryToEdit={entry} />
         </div>
     );
 }

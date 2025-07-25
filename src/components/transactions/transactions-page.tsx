@@ -193,6 +193,7 @@ export function TransactionsPage({ module, title, description }: TransactionsPag
     },
     {
       id: 'actions',
+      enableHiding: false,
       cell: ({ row }) => {
         const transaction = row.original;
         const canDelete = hasPermission([`${module}:records:delete` as Permission]);

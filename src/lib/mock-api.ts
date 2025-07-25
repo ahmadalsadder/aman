@@ -2,12 +2,12 @@
 
 import type { User } from '@/types';
 import { Result, ApiError } from '@/types/api/result';
-import { mockPassengers, mockTransactions, mockVisaDatabase, mockOfficerDesks, mockPorts, mockTerminals, mockZones, mockWorkflows, mockRiskProfiles, setMockOfficerDesks, mockGates, setMockGates, mockMedia, setMockMedia } from './mock-data';
+import { mockPassengers, mockTransactions, mockVisaDatabase, mockOfficerDesks, mockPorts, mockTerminals, mockZones, mockWorkflows, mockRiskProfiles, setMockOfficerDesks, mockGates, setMockGates, mockMedia, setMockMedia, mockWhitelist, setMockWhitelist, mockBlacklist, setMockBlacklist } from './mock-data';
 import { assessPassengerRisk } from '@/ai/flows/assess-risk-flow';
 import { countries } from './countries';
 import { Fingerprint, ScanLine, UserCheck, ShieldAlert, User } from 'lucide-react';
 import { extractPassportData } from '@/ai/flows/extract-passport-data-flow';
-import type { Transaction, Gate, CivilRecord, Media } from '@/types/live-processing';
+import type { Transaction, Gate, CivilRecord, Media, BlacklistEntry, WhitelistEntry } from '@/types/live-processing';
 import type { OfficerDesk } from '@/types/configuration';
 
 const users: User[] = [
@@ -31,7 +31,7 @@ const users: User[] = [
         'landport:dashboard:view', 'landport:dashboard:stats:view', 'landport:prediction:view', 'landport:dashboard:charts:view', 'landport:dashboard:officer-performance:view',
         'seaport:dashboard:view', 'seaport:dashboard:stats:view', 'seaport:prediction:view', 'seaport:dashboard:charts:view', 'seaport:dashboard:officer-performance:view',
         'egate:dashboard:view', 'egate:dashboard:stats:view', 'egate:prediction:view', 'egate:dashboard:charts:view', 'egate:media:view', 'egate:media:create', 'egate:media:edit', 'egate:media:delete',
-        'analyst:dashboard:view', 'analyst:dashboard:stats:view', 'analyst:dashboard:charts:view',
+        'analyst:dashboard:view', 'analyst:dashboard:stats:view', 'analyst:dashboard:charts:view', 'analyst:records:create', 'analyst:records:edit', 'analyst:records:delete',
         'control-room:dashboard:view', 'control-room:dashboard:stats:view', 'control-room:dashboard:charts:view', 'control-room:dashboard:officer-performance:view',
         'airport:desks:view', 'airport:desks:create', 'airport:desks:edit', 'airport:desks:delete',
         'landport:desks:view', 'landport:desks:create', 'landport:desks:edit', 'landport:desks:delete',
@@ -89,7 +89,7 @@ const users: User[] = [
     role: 'analyst',
     token: 'fake-analyst-token',
     modules: ['analyst'],
-    permissions: ['analyst:records:view', 'reports:view', 'analyst:dashboard:view']
+    permissions: ['analyst:records:view', 'reports:view', 'analyst:dashboard:view', 'analyst:records:create', 'analyst:records:edit', 'analyst:records:delete']
   },
   {
     id: '6',
@@ -753,6 +753,47 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
         const { id } = JSON.parse(body as string);
         setMockMedia(mockMedia.filter(m => m.id !== id));
         return Result.success({ id }) as Result<T>;
+    }
+    
+    // Whitelist
+    if (method === 'POST' && url.pathname === '/data/whitelist/save') {
+        const entryData = JSON.parse(body as string) as WhitelistEntry;
+        const isNew = !entryData.id;
+        let updatedEntry: WhitelistEntry;
+        if (isNew) {
+            updatedEntry = { ...entryData, id: `WL-NEW-${Date.now()}` };
+            setMockWhitelist([...mockWhitelist, updatedEntry]);
+        } else {
+            updatedEntry = { ...entryData };
+            setMockWhitelist(mockWhitelist.map(e => e.id === entryData.id ? updatedEntry : e));
+        }
+        return Result.success(updatedEntry) as Result<T>;
+    }
+    if (method === 'GET' && url.pathname.startsWith('/data/whitelist/')) {
+        const id = pathParts[pathParts.length - 1];
+        const entry = mockWhitelist.find(e => e.id === id);
+        return entry ? Result.success({ entry }) as Result<T> : Result.failure([new ApiError('NOT_FOUND', 'Entry not found')]) as Result<T>;
+    }
+
+
+    // Blacklist
+    if (method === 'POST' && url.pathname === '/data/blacklist/save') {
+        const entryData = JSON.parse(body as string) as BlacklistEntry;
+        const isNew = !entryData.id;
+        let updatedEntry: BlacklistEntry;
+        if (isNew) {
+            updatedEntry = { ...entryData, id: `BL-NEW-${Date.now()}` };
+            setMockBlacklist([...mockBlacklist, updatedEntry]);
+        } else {
+            updatedEntry = { ...entryData };
+            setMockBlacklist(mockBlacklist.map(e => e.id === entryData.id ? updatedEntry : e));
+        }
+        return Result.success(updatedEntry) as Result<T>;
+    }
+     if (method === 'GET' && url.pathname.startsWith('/data/blacklist/')) {
+        const id = pathParts[pathParts.length - 1];
+        const entry = mockBlacklist.find(e => e.id === id);
+        return entry ? Result.success({ entry }) as Result<T> : Result.failure([new ApiError('NOT_FOUND', 'Entry not found')]) as Result<T>;
     }
 
 

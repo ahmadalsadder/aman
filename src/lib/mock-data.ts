@@ -233,13 +233,13 @@ export let mockMedia: Media[] = [
     },
 ];
 
-export const mockWhitelist: WhitelistEntry[] = [
+export let mockWhitelist: WhitelistEntry[] = [
   { id: 'WL-001', passengerId: 'P001', name: 'John Doe', nationality: 'United States', status: 'Active', dateAdded: '2023-01-15', validUntil: '2025-01-14', addedBy: 'Admin User', reason: 'Diplomatic Staff' },
   { id: 'WL-002', passengerId: 'P002', name: 'Jane Smith', nationality: 'United Kingdom', status: 'Active', dateAdded: '2022-11-20', validUntil: '2024-11-19', addedBy: 'Admin User', reason: 'Frequent Business Traveler' },
   { id: 'WL-003', passengerId: 'P003', name: 'Wei Chen', nationality: 'China', status: 'Revoked', dateAdded: '2023-03-01', validUntil: '2024-03-01', addedBy: 'Admin User', reason: 'Temporary clearance for conference' },
 ];
 
-export const mockBlacklist: BlacklistEntry[] = [
+export let mockBlacklist: BlacklistEntry[] = [
     { id: 'BL-001', passengerId: 'P003', name: 'Wei Chen', nationality: 'China', reason: 'International No-Fly List Match', category: 'No-Fly', dateAdded: '2023-01-10', addedBy: 'Interpol Feed' },
     { id: 'BL-002', name: 'Unknown Male', nationality: 'Syrian Arab Republic', reason: 'Attempted use of fraudulent document', category: 'Wanted', dateAdded: '2023-04-22', addedBy: 'Admin User', notes: 'Subject fled during secondary screening.' },
 ];
@@ -254,4 +254,12 @@ export const setMockGates = (newGates: Gate[]) => {
 
 export const setMockMedia = (newMedia: Media[]) => {
     mockMedia = newMedia;
-}
+};
+
+export const setMockWhitelist = (newWhitelist: WhitelistEntry[]) => {
+    mockWhitelist = newWhitelist;
+};
+
+export const setMockBlacklist = (newBlacklist: BlacklistEntry[]) => {
+    mockBlacklist = newBlacklist;
+};

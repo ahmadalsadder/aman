@@ -37,12 +37,15 @@ export type Permission =
   // Component-level view permissions
   | 'airport:dashboard:stats:view'
   | 'airport:dashboard:charts:view'
+  | 'airport:dashboard:forecasts:view'
   | 'airport:dashboard:officer-performance:view'
   | 'landport:dashboard:stats:view'
   | 'landport:dashboard:charts:view'
+  | 'landport:dashboard:forecasts:view'
   | 'landport:dashboard:officer-performance:view'
   | 'seaport:dashboard:stats:view'
   | 'seaport:dashboard:charts:view'
+  | 'seaport:dashboard:forecasts:view'
   | 'seaport:dashboard:officer-performance:view'
   | 'egate:dashboard:stats:view'
   | 'egate:dashboard:charts:view'
@@ -50,6 +53,7 @@ export type Permission =
   | 'analyst:dashboard:charts:view'
   | 'control-room:dashboard:stats:view'
   | 'control-room:dashboard:charts:view'
+  | 'control-room:dashboard:forecasts:view'
   | 'control-room:dashboard:officer-performance:view'
   // Action-level permissions
   | 'airport:transactions:live'

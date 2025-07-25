@@ -1,4 +1,3 @@
-
 'use client';
 
 import { BlacklistForm, type BlacklistFormValues } from '@/components/passengers/blacklist/blacklist-form';
@@ -7,72 +6,88 @@ import { useToast } from '@/hooks/use-toast';
 import { useRouter, useParams, usePathname } from 'next/navigation';
 import type { BlacklistEntry } from '@/types/live-processing';
 import { useState, useEffect } from 'react';
-import { Loader2, FilePenLine } from 'lucide-react';
+import { Loader2, FilePenLine, ShieldOff, AlertTriangle, LayoutDashboard } from 'lucide-react';
+import { api } from '@/lib/api';
+import { useAuth } from '@/hooks/use-auth';
+import type { Module, Permission } from '@/types';
+import { useTranslations } from 'next-intl';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 
-const BLACKLIST_STORAGE_KEY = 'guardian-gate-blacklist';
 
 export default function EditBlacklistPage() {
     const router = useRouter();
     const pathname = usePathname();
-    const module = pathname.split('/')[1] || 'analyst';
+    const module = pathname.split('/')[1] as Module || 'analyst';
     const params = useParams<{ id: string }>();
     const { toast } = useToast();
+    const { hasPermission } = useAuth();
+    const t = useTranslations('BlacklistPage.form');
+    const tNav = useTranslations('Navigation');
+    
     const [entry, setEntry] = useState<BlacklistEntry | null>(null);
     const [loading, setLoading] = useState(true);
     const id = params.id;
 
+    const canEdit = hasPermission([`${module}:records:edit` as Permission]);
+
     useEffect(() => {
-        try {
-            const storedBlacklist = localStorage.getItem(BLACKLIST_STORAGE_KEY);
-            if (storedBlacklist) {
-                const blacklist: BlacklistEntry[] = JSON.parse(storedBlacklist);
-                const foundEntry = blacklist.find(p => p.id === id);
-                setEntry(foundEntry || null);
-            }
-        } catch (error) {
-             toast({
-                title: "Error",
-                description: "Could not load blacklist data.",
-                variant: "destructive",
-            });
-        } finally {
+        if (!id || !canEdit) {
             setLoading(false);
+            return;
         }
-    }, [id, toast]);
 
-    const handleSave = (formData: BlacklistFormValues) => {
+        const fetchEntry = async () => {
+            setLoading(true);
+            const result = await api.get<{ entry: BlacklistEntry }>(`/data/blacklist/${id}`);
+            if (result.isSuccess && result.data) {
+                setEntry(result.data.entry);
+            } else {
+                toast({
+                    title: t('toast.loadError'),
+                    variant: "destructive",
+                });
+            }
+            setLoading(false);
+        };
+        fetchEntry();
+    }, [id, toast, canEdit, t]);
+
+    const handleSave = async (formData: BlacklistFormValues) => {
         if (!entry) return;
+        setLoading(true);
 
-        try {
-            const storedBlacklist = localStorage.getItem(BLACKLIST_STORAGE_KEY);
-            const blacklist: BlacklistEntry[] = storedBlacklist ? JSON.parse(storedBlacklist) : [];
-            
-            const updatedEntry: BlacklistEntry = { ...entry, ...formData };
-            const updatedBlacklist = blacklist.map(p => p.id === updatedEntry.id ? updatedEntry : p);
-            localStorage.setItem(BLACKLIST_STORAGE_KEY, JSON.stringify(updatedBlacklist));
-            
+        const result = await api.post<BlacklistEntry>('/data/blacklist/save', { ...formData, id: entry.id });
+
+        if (result.isSuccess) {
             toast({
-                title: 'Entry Updated',
-                description: `"${updatedEntry.name}"'s record has been successfully updated.`,
+                title: t('toast.updateSuccessTitle'),
+                description: t('toast.updateSuccessDesc', { name: result.data!.name }),
                 variant: 'success',
             });
             router.push(`/${module}/blacklist`);
         } catch (error) {
             toast({
-                title: 'Update Failed',
-                description: 'There was an error saving the blacklist data.',
+                title: t('toast.errorTitle'),
+                description: t('toast.errorDesc'),
                 variant: 'destructive',
             });
+            setLoading(false);
         }
     };
 
-    if (loading) {
-        return (
-            <div className="flex h-full w-full items-center justify-center">
-                 <div className="flex flex-col items-center gap-4">
-                    <Loader2 className="h-8 w-8 animate-spin" />
-                    <p>Loading blacklist entry...</p>
-                </div>
+     if (loading) {
+        return <Skeleton className="h-96 w-full" />;
+    }
+
+    if (!canEdit) {
+         return (
+            <div className="flex h-full w-full flex-col items-center justify-center gap-4 text-center">
+                <AlertTriangle className="h-16 w-16 text-destructive" />
+                <h1 className="text-2xl font-bold">Access Denied</h1>
+                <p className="max-w-md text-muted-foreground">
+                    You do not have permission to edit blacklist entries.
+                </p>
             </div>
         );
     }
@@ -81,7 +96,7 @@ export default function EditBlacklistPage() {
         return (
              <div className="flex h-full w-full items-center justify-center">
                  <div className="flex flex-col items-center gap-4 text-destructive">
-                    <p>Entry not found.</p>
+                    <p>{t('toast.loadError')}</p>
                 </div>
             </div>
         )
@@ -89,12 +104,27 @@ export default function EditBlacklistPage() {
 
     return (
         <div className="space-y-6">
+            <Breadcrumb>
+                <BreadcrumbList>
+                    <BreadcrumbItem>
+                        <BreadcrumbLink href={`/${module}/dashboard`} icon={LayoutDashboard}>{tNav('dashboard')}</BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                        <BreadcrumbLink href={`/${module}/blacklist`} icon={ShieldOff}>{tNav('blacklist')}</BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                        <BreadcrumbPage icon={FilePenLine}>{t('editTitle')}</BreadcrumbPage>
+                    </BreadcrumbItem>
+                </BreadcrumbList>
+            </Breadcrumb>
             <GradientPageHeader
-                title="Edit Blacklist Entry"
-                description={`Editing the record for ${entry.name}.`}
+                title={t('editTitle')}
+                description={t('editDescription', { name: entry.name })}
                 icon={FilePenLine}
             />
-            <BlacklistForm onSave={handleSave} entryToEdit={entry} />
+            <BlacklistForm onSave={handleSave} entryToEdit={entry} isLoading={loading} />
         </div>
     );
 }

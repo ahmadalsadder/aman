@@ -15,6 +15,8 @@ import { countries } from '@/lib/countries';
 import { AttachmentUploader } from '@/components/shared/attachment-uploader';
 import type { BlacklistEntry } from '@/types/live-processing';
 import { Textarea } from '@/components/ui/textarea';
+import { useTranslations } from 'next-intl';
+import { Loader2 } from 'lucide-react';
 
 const formSchema = z.object({
   passengerId: z.string().optional(),
@@ -22,7 +24,6 @@ const formSchema = z.object({
   nationality: z.string().min(1, 'Nationality is required'),
   category: z.enum(['No-Fly', 'Wanted', 'Financial', 'Other']),
   reason: z.string().min(1, 'Reason for blacklisting is required'),
-  addedBy: z.string().min(1, 'Added by information is required'),
   notes: z.string().optional(),
   attachmentUrl: z.string().optional(),
 });
@@ -37,6 +38,7 @@ interface BlacklistFormProps {
 
 export function BlacklistForm({ entryToEdit, onSave, isLoading }: BlacklistFormProps) {
   const router = useRouter();
+  const t = useTranslations('BlacklistPage.form');
 
   const form = useForm<BlacklistFormValues>({
     resolver: zodResolver(formSchema),
@@ -46,15 +48,14 @@ export function BlacklistForm({ entryToEdit, onSave, isLoading }: BlacklistFormP
       nationality: '',
       category: 'Other',
       reason: '',
-      addedBy: '',
       notes: '',
       attachmentUrl: '',
     },
   });
 
   const attachmentConfigs = useMemo(() => [
-    { name: 'attachmentUrl', label: 'Supporting Document', allowedMimeTypes: ['image/jpeg', 'image/png', 'application/pdf'], maxSize: 5 * 1024 * 1024 },
-  ], []);
+    { name: 'attachmentUrl', label: t('attachments.documentLabel'), allowedMimeTypes: ['image/jpeg', 'image/png', 'application/pdf'], maxSize: 5 * 1024 * 1024 },
+  ], [t]);
 
   const handleAttachmentsChange = (files: Record<string, any>) => {
     form.setValue('attachmentUrl', files.attachmentUrl?.content || '');
@@ -66,29 +67,28 @@ export function BlacklistForm({ entryToEdit, onSave, isLoading }: BlacklistFormP
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
             <Card>
                 <CardHeader>
-                    <CardTitle>Blacklist Entry Details</CardTitle>
-                    <CardDescription>Enter the information for the individual to be blacklisted.</CardDescription>
+                    <CardTitle>{t('details.title')}</CardTitle>
+                    <CardDescription>{t('details.description')}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                    <FormField control={form.control} name="name" render={({ field }) => ( <FormItem><FormLabel required>Full Name</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
-                    <FormField control={form.control} name="passengerId" render={({ field }) => ( <FormItem><FormLabel>Passenger ID (Optional)</FormLabel><FormControl><Input {...field} placeholder='Enter if known' /></FormControl><FormMessage /></FormItem> )} />
-                    <FormField control={form.control} name="nationality" render={({ field }) => ( <FormItem><FormLabel required>Nationality</FormLabel><Combobox options={countries} {...field} /><FormMessage /></FormItem> )} />
-                    <FormField control={form.control} name="reason" render={({ field }) => ( <FormItem><FormLabel required>Reason for Blacklisting</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormItem> )} />
-                    <FormField control={form.control} name="notes" render={({ field }) => ( <FormItem><FormLabel>Notes (Optional)</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormItem> )} />
+                    <FormField control={form.control} name="name" render={({ field }) => ( <FormItem><FormLabel required>{t('details.name')}</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
+                    <FormField control={form.control} name="passengerId" render={({ field }) => ( <FormItem><FormLabel>{t('details.passengerId')}</FormLabel><FormControl><Input {...field} placeholder={t('details.passengerIdPlaceholder')} /></FormControl><FormMessage /></FormItem> )} />
+                    <FormField control={form.control} name="nationality" render={({ field }) => ( <FormItem><FormLabel required>{t('details.nationality')}</FormLabel><Combobox options={countries} {...field} placeholder={t('details.selectNationality')} /><FormMessage /></FormItem> )} />
+                    <FormField control={form.control} name="reason" render={({ field }) => ( <FormItem><FormLabel required>{t('details.reason')}</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormItem> )} />
+                    <FormField control={form.control} name="notes" render={({ field }) => ( <FormItem><FormLabel>{t('details.notes')}</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormItem> )} />
                 </CardContent>
             </Card>
             <div className="space-y-6">
                 <Card>
                     <CardHeader>
-                        <CardTitle>Category & Source</CardTitle>
+                        <CardTitle>{t('category.title')}</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                        <FormField control={form.control} name="category" render={({ field }) => ( <FormItem><FormLabel required>Category</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue/></SelectTrigger></FormControl><SelectContent><SelectItem value="No-Fly">No-Fly</SelectItem><SelectItem value="Wanted">Wanted</SelectItem><SelectItem value="Financial">Financial</SelectItem><SelectItem value="Other">Other</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
-                        <FormField control={form.control} name="addedBy" render={({ field }) => ( <FormItem><FormLabel required>Added By / Source</FormLabel><FormControl><Input {...field} placeholder="e.g., Interpol, Local Police" /></FormControl><FormMessage /></FormItem> )} />
+                        <FormField control={form.control} name="category" render={({ field }) => ( <FormItem><FormLabel required>{t('category.category')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue/></SelectTrigger></FormControl><SelectContent><SelectItem value="No-Fly">{t('category.noFly')}</SelectItem><SelectItem value="Wanted">{t('category.wanted')}</SelectItem><SelectItem value="Financial">{t('category.financial')}</SelectItem><SelectItem value="Other">{t('category.other')}</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
                     </CardContent>
                 </Card>
                 <Card>
-                    <CardHeader><CardTitle>Attachment</CardTitle></CardHeader>
+                    <CardHeader><CardTitle>{t('attachments.title')}</CardTitle></CardHeader>
                     <CardContent>
                         <AttachmentUploader 
                             configs={attachmentConfigs}
@@ -100,8 +100,11 @@ export function BlacklistForm({ entryToEdit, onSave, isLoading }: BlacklistFormP
             </div>
         </div>
         <div className="flex justify-end gap-2">
-            <Button type="button" variant="outline" onClick={() => router.back()}>Cancel</Button>
-            <Button type="submit" disabled={isLoading}>Save Entry</Button>
+            <Button type="button" variant="outline" onClick={() => router.back()}>{t('common.cancel')}</Button>
+            <Button type="submit" disabled={isLoading}>
+                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                {t('common.save')}
+            </Button>
         </div>
       </form>
     </Form>

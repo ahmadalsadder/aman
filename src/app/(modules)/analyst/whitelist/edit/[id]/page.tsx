@@ -1,4 +1,3 @@
-
 'use client';
 
 import { WhitelistForm, type WhitelistFormValues } from '@/components/passengers/whitelist/whitelist-form';
@@ -7,72 +6,89 @@ import { useToast } from '@/hooks/use-toast';
 import { useRouter, useParams, usePathname } from 'next/navigation';
 import type { WhitelistEntry } from '@/types/live-processing';
 import { useState, useEffect } from 'react';
-import { Loader2, FilePenLine } from 'lucide-react';
+import { Loader2, FilePenLine, ListChecks, AlertTriangle, LayoutDashboard } from 'lucide-react';
+import { api } from '@/lib/api';
+import { useAuth } from '@/hooks/use-auth';
+import type { Module, Permission } from '@/types';
+import { useTranslations } from 'next-intl';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 
-const WHITELIST_STORAGE_KEY = 'guardian-gate-whitelist';
 
 export default function EditWhitelistPage() {
     const router = useRouter();
     const pathname = usePathname();
-    const module = pathname.split('/')[1] || 'analyst';
+    const module = pathname.split('/')[1] as Module | 'analyst';
     const params = useParams<{ id: string }>();
     const { toast } = useToast();
+    const { hasPermission } = useAuth();
+    const t = useTranslations('WhitelistPage.form');
+    const tNav = useTranslations('Navigation');
+    
     const [entry, setEntry] = useState<WhitelistEntry | null>(null);
     const [loading, setLoading] = useState(true);
     const id = params.id;
 
+    const canEdit = hasPermission([`${module}:records:edit` as Permission]);
+
     useEffect(() => {
-        try {
-            const storedWhitelist = localStorage.getItem(WHITELIST_STORAGE_KEY);
-            if (storedWhitelist) {
-                const whitelist: WhitelistEntry[] = JSON.parse(storedWhitelist);
-                const foundEntry = whitelist.find(p => p.id === id);
-                setEntry(foundEntry || null);
-            }
-        } catch (error) {
-             toast({
-                title: "Error",
-                description: "Could not load whitelist data.",
-                variant: "destructive",
-            });
-        } finally {
+        if (!id || !canEdit) {
             setLoading(false);
+            return;
         }
-    }, [id, toast]);
 
-    const handleSave = (formData: WhitelistFormValues) => {
+        const fetchEntry = async () => {
+            setLoading(true);
+            const result = await api.get<{ entry: WhitelistEntry }>(`/data/whitelist/${id}`);
+            if (result.isSuccess && result.data) {
+                setEntry(result.data.entry);
+            } else {
+                toast({
+                    title: t('toast.loadError'),
+                    variant: "destructive",
+                });
+            }
+            setLoading(false);
+        };
+        fetchEntry();
+    }, [id, toast, canEdit, t]);
+
+
+    const handleSave = async (formData: WhitelistFormValues) => {
         if (!entry) return;
+        setLoading(true);
+        
+        const result = await api.post<WhitelistEntry>('/data/whitelist/save', { ...formData, id: entry.id });
 
-        try {
-            const storedWhitelist = localStorage.getItem(WHITELIST_STORAGE_KEY);
-            const whitelist: WhitelistEntry[] = storedWhitelist ? JSON.parse(storedWhitelist) : [];
-            
-            const updatedEntry: WhitelistEntry = { ...entry, ...formData };
-            const updatedWhitelist = whitelist.map(p => p.id === updatedEntry.id ? updatedEntry : p);
-            localStorage.setItem(WHITELIST_STORAGE_KEY, JSON.stringify(updatedWhitelist));
-            
+        if (result.isSuccess) {
             toast({
-                title: 'Entry Updated',
-                description: `"${updatedEntry.name}"'s record has been successfully updated.`,
+                title: t('toast.updateSuccessTitle'),
+                description: t('toast.updateSuccessDesc', { name: result.data!.name }),
                 variant: 'success',
             });
             router.push(`/${module}/whitelist`);
         } catch (error) {
             toast({
-                title: 'Update Failed',
-                description: 'There was an error saving the whitelist data.',
+                title: t('toast.errorTitle'),
+                description: t('toast.errorDesc'),
                 variant: 'destructive',
             });
+            setLoading(false);
         }
     };
 
     if (loading) {
-        return (
-            <div className="flex h-full w-full items-center justify-center">
-                 <div className="flex flex-col items-center gap-4">
-                    <Loader2 className="h-8 w-8 animate-spin" />
-                    <p>Loading whitelist entry...</p>
-                </div>
+        return <Skeleton className="h-96 w-full" />;
+    }
+
+    if (!canEdit) {
+         return (
+            <div className="flex h-full w-full flex-col items-center justify-center gap-4 text-center">
+                <AlertTriangle className="h-16 w-16 text-destructive" />
+                <h1 className="text-2xl font-bold">Access Denied</h1>
+                <p className="max-w-md text-muted-foreground">
+                    You do not have permission to edit whitelist entries.
+                </p>
             </div>
         );
     }
@@ -81,7 +97,7 @@ export default function EditWhitelistPage() {
         return (
              <div className="flex h-full w-full items-center justify-center">
                  <div className="flex flex-col items-center gap-4 text-destructive">
-                    <p>Entry not found.</p>
+                    <p>{t('toast.loadError')}</p>
                 </div>
             </div>
         )
@@ -89,12 +105,27 @@ export default function EditWhitelistPage() {
 
     return (
         <div className="space-y-6">
+             <Breadcrumb>
+                <BreadcrumbList>
+                    <BreadcrumbItem>
+                        <BreadcrumbLink href={`/${module}/dashboard`} icon={LayoutDashboard}>{tNav('dashboard')}</BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                        <BreadcrumbLink href={`/${module}/whitelist`} icon={ListChecks}>{tNav('whitelist')}</BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                        <BreadcrumbPage icon={FilePenLine}>{t('editTitle')}</BreadcrumbPage>
+                    </BreadcrumbItem>
+                </BreadcrumbList>
+            </Breadcrumb>
             <GradientPageHeader
-                title="Edit Whitelist Entry"
-                description={`Editing the record for ${entry.name}.`}
+                title={t('editTitle')}
+                description={t('editDescription', { name: entry.name })}
                 icon={FilePenLine}
             />
-            <WhitelistForm onSave={handleSave} entryToEdit={entry} />
+            <WhitelistForm onSave={handleSave} entryToEdit={entry} isLoading={loading} />
         </div>
     );
 }

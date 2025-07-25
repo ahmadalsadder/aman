@@ -15,11 +15,8 @@ import { countries } from '@/lib/countries';
 import { AttachmentUploader } from '@/components/shared/attachment-uploader';
 import type { WhitelistEntry } from '@/types/live-processing';
 import { Textarea } from '@/components/ui/textarea';
-import { Calendar } from '@/components/ui/calendar';
-import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
-import { cn } from '@/lib/utils';
-import { CalendarIcon } from 'lucide-react';
-import { format } from 'date-fns';
+import { useTranslations } from 'next-intl';
+import { Loader2 } from 'lucide-react';
 
 const formSchema = z.object({
   passengerId: z.string().min(1, 'Passenger ID is required. Use "N/A" if not applicable.'),
@@ -27,7 +24,6 @@ const formSchema = z.object({
   nationality: z.string().min(1, 'Nationality is required'),
   status: z.enum(['Active', 'Expired', 'Revoked']),
   validUntil: z.string().min(1, 'Valid until date is required'),
-  addedBy: z.string().min(1, 'Added by information is required'),
   reason: z.string().min(1, 'Reason for whitelisting is required'),
   attachmentUrl: z.string().optional(),
 });
@@ -42,6 +38,7 @@ interface WhitelistFormProps {
 
 export function WhitelistForm({ entryToEdit, onSave, isLoading }: WhitelistFormProps) {
   const router = useRouter();
+  const t = useTranslations('WhitelistPage.form');
 
   const form = useForm<WhitelistFormValues>({
     resolver: zodResolver(formSchema),
@@ -51,15 +48,14 @@ export function WhitelistForm({ entryToEdit, onSave, isLoading }: WhitelistFormP
       nationality: '',
       status: 'Active',
       validUntil: '',
-      addedBy: '',
       reason: '',
       attachmentUrl: '',
     },
   });
 
   const attachmentConfigs = useMemo(() => [
-    { name: 'attachmentUrl', label: 'Supporting Document', allowedMimeTypes: ['image/jpeg', 'image/png', 'application/pdf'], maxSize: 5 * 1024 * 1024 },
-  ], []);
+    { name: 'attachmentUrl', label: t('attachments.documentLabel'), allowedMimeTypes: ['image/jpeg', 'image/png', 'application/pdf'], maxSize: 5 * 1024 * 1024 },
+  ], [t]);
 
   const handleAttachmentsChange = (files: Record<string, any>) => {
     form.setValue('attachmentUrl', files.attachmentUrl?.content || '');
@@ -71,29 +67,28 @@ export function WhitelistForm({ entryToEdit, onSave, isLoading }: WhitelistFormP
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
             <Card>
                 <CardHeader>
-                    <CardTitle>Whitelist Entry Details</CardTitle>
-                    <CardDescription>Enter the information for the individual to be whitelisted.</CardDescription>
+                    <CardTitle>{t('details.title')}</CardTitle>
+                    <CardDescription>{t('details.description')}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                    <FormField control={form.control} name="name" render={({ field }) => ( <FormItem><FormLabel required>Full Name</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
-                    <FormField control={form.control} name="passengerId" render={({ field }) => ( <FormItem><FormLabel required>Passenger ID</FormLabel><FormControl><Input {...field} placeholder='Enter "N/A" if not applicable' /></FormControl><FormMessage /></FormItem> )} />
-                    <FormField control={form.control} name="nationality" render={({ field }) => ( <FormItem><FormLabel required>Nationality</FormLabel><Combobox options={countries} {...field} /><FormMessage /></FormItem> )} />
-                    <FormField control={form.control} name="reason" render={({ field }) => ( <FormItem><FormLabel required>Reason for Whitelisting</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormItem> )} />
+                    <FormField control={form.control} name="name" render={({ field }) => ( <FormItem><FormLabel required>{t('details.name')}</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
+                    <FormField control={form.control} name="passengerId" render={({ field }) => ( <FormItem><FormLabel required>{t('details.passengerId')}</FormLabel><FormControl><Input {...field} placeholder={t('details.passengerIdPlaceholder')} /></FormControl><FormMessage /></FormItem> )} />
+                    <FormField control={form.control} name="nationality" render={({ field }) => ( <FormItem><FormLabel required>{t('details.nationality')}</FormLabel><Combobox options={countries} {...field} placeholder={t('details.selectNationality')} /><FormMessage /></FormItem> )} />
+                    <FormField control={form.control} name="reason" render={({ field }) => ( <FormItem><FormLabel required>{t('details.reason')}</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormItem> )} />
                 </CardContent>
             </Card>
             <div className="space-y-6">
                 <Card>
                     <CardHeader>
-                        <CardTitle>Status & Validity</CardTitle>
+                        <CardTitle>{t('validity.title')}</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                        <FormField control={form.control} name="status" render={({ field }) => ( <FormItem><FormLabel required>Status</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue/></SelectTrigger></FormControl><SelectContent><SelectItem value="Active">Active</SelectItem><SelectItem value="Expired">Expired</SelectItem><SelectItem value="Revoked">Revoked</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
-                        <FormField control={form.control} name="validUntil" render={({ field }) => ( <FormItem><FormLabel required>Valid Until</FormLabel><FormControl><Input type="date" {...field} /></FormControl><FormMessage /></FormItem> )} />
-                        <FormField control={form.control} name="addedBy" render={({ field }) => ( <FormItem><FormLabel required>Added By</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
+                        <FormField control={form.control} name="status" render={({ field }) => ( <FormItem><FormLabel required>{t('validity.status')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue/></SelectTrigger></FormControl><SelectContent><SelectItem value="Active">{t('validity.active')}</SelectItem><SelectItem value="Expired">{t('validity.expired')}</SelectItem><SelectItem value="Revoked">{t('validity.revoked')}</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
+                        <FormField control={form.control} name="validUntil" render={({ field }) => ( <FormItem><FormLabel required>{t('validity.validUntil')}</FormLabel><FormControl><Input type="date" {...field} /></FormControl><FormMessage /></FormItem> )} />
                     </CardContent>
                 </Card>
                 <Card>
-                    <CardHeader><CardTitle>Attachment</CardTitle></CardHeader>
+                    <CardHeader><CardTitle>{t('attachments.title')}</CardTitle></CardHeader>
                     <CardContent>
                         <AttachmentUploader 
                             configs={attachmentConfigs}
@@ -105,8 +100,11 @@ export function WhitelistForm({ entryToEdit, onSave, isLoading }: WhitelistFormP
             </div>
         </div>
         <div className="flex justify-end gap-2">
-            <Button type="button" variant="outline" onClick={() => router.back()}>Cancel</Button>
-            <Button type="submit" disabled={isLoading}>Save Entry</Button>
+            <Button type="button" variant="outline" onClick={() => router.back()}>{t('common.cancel')}</Button>
+            <Button type="submit" disabled={isLoading}>
+                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                {t('common.save')}
+            </Button>
         </div>
       </form>
     </Form>

@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React, { useState, useMemo, useEffect } from 'react';
@@ -42,8 +43,8 @@ const formSchema = z.object({
   passportNumber: z.string().min(1, 'Passport number is required'),
   nationality: z.string().min(1, 'Nationality is required'),
   passportCountry: z.string().optional(),
-  passportIssueDate: z.string().optional(),
-  passportExpiryDate: z.string().optional(),
+  passportIssueDate: z.date().optional(),
+  passportExpiryDate: z.date().optional(),
   nationalId: z.string().optional(),
 
   passportPhotoUrl: z.string().optional(),
@@ -67,8 +68,8 @@ interface PassengerFormProps {
 const steps = [
     { id: 'personal', label: 'Personal', fields: ['firstName', 'lastName', 'dateOfBirth', 'gender'] },
     { id: 'passport', label: 'Passport', fields: ['passportNumber', 'nationality'] },
-    { id: 'visa', label: 'Visa/Residency', fields: [] },
     { id: 'photos', label: 'Photos', fields: [] },
+    { id: 'visa', label: 'Visa/Residency', fields: [] },
     { id: 'status', label: 'Status & Review', fields: ['status', 'riskLevel'] },
 ];
 
@@ -85,11 +86,19 @@ export function PassengerForm({ passengerToEdit }: PassengerFormProps) {
     resolver: zodResolver(formSchema),
     mode: 'onChange',
     defaultValues: passengerToEdit
-      ? { ...passengerToEdit, dateOfBirth: new Date(passengerToEdit.dateOfBirth), personalPhotoUrl: passengerToEdit.profilePicture, passportPhotoUrl: passengerToEdit.passportPhotoUrl }
+      ? { 
+          ...passengerToEdit, 
+          dateOfBirth: new Date(passengerToEdit.dateOfBirth),
+          passportIssueDate: passengerToEdit.passportIssueDate ? new Date(passengerToEdit.passportIssueDate) : undefined,
+          passportExpiryDate: passengerToEdit.passportExpiryDate ? new Date(passengerToEdit.passportExpiryDate) : undefined,
+          visaExpiryDate: passengerToEdit.visaExpiryDate || '',
+          personalPhotoUrl: passengerToEdit.profilePicture, 
+          passportPhotoUrl: passengerToEdit.passportPhotoUrl 
+        }
       : {
           firstName: '', lastName: '', localizedName: '', passportNumber: '',
           nationality: '', dateOfBirth: undefined, gender: 'Male', status: 'Active',
-          riskLevel: 'Low', passportIssueDate: '', passportExpiryDate: '',
+          riskLevel: 'Low', passportIssueDate: undefined, passportExpiryDate: undefined,
           passportCountry: '', visaNumber: '', visaType: undefined,
           visaExpiryDate: '', residencyFileNumber: '', nationalId: '',
           passportPhotoUrl: '', personalPhotoUrl: '',
@@ -112,6 +121,8 @@ export function PassengerForm({ passengerToEdit }: PassengerFormProps) {
       ...data,
       profilePicture: data.personalPhotoUrl,
       dateOfBirth: format(data.dateOfBirth, 'yyyy-MM-dd'),
+      passportIssueDate: data.passportIssueDate ? format(data.passportIssueDate, 'yyyy-MM-dd') : undefined,
+      passportExpiryDate: data.passportExpiryDate ? format(data.passportExpiryDate, 'yyyy-MM-dd') : undefined,
     };
     
     const result = await api.post<Passenger>('/data/passengers/save', payload);
@@ -146,7 +157,7 @@ export function PassengerForm({ passengerToEdit }: PassengerFormProps) {
 
   const prevStep = () => {
     if (currentStep > 0) {
-        setCurrentStep(prev => prev - 1);
+        setCurrentStep(prev => prev + 1);
     }
   };
   
@@ -189,24 +200,13 @@ export function PassengerForm({ passengerToEdit }: PassengerFormProps) {
                                 <FormField control={form.control} name="passportNumber" render={({ field }) => ( <FormItem><FormLabel required>{t('passport.passportNo')}</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
                                 <FormField control={form.control} name="nationality" render={({ field }) => ( <FormItem><FormLabel required>{t('passport.nationality')}</FormLabel><Combobox options={countries} {...field} placeholder={t('passport.selectNationality')} /><FormMessage /></FormItem> )} />
                                 <FormField control={form.control} name="passportCountry" render={({ field }) => ( <FormItem><FormLabel>{t('passport.issuingCountry')}</FormLabel><Combobox options={countries} {...field} placeholder={t('passport.selectIssuingCountry')} /><FormMessage /></FormItem> )} />
-                                <FormField control={form.control} name="passportIssueDate" render={({ field }) => ( <FormItem><FormLabel>{t('passport.issueDate')}</FormLabel><FormControl><Input type="date" {...field} /></FormControl><FormMessage /></FormItem> )} />
-                                <FormField control={form.control} name="passportExpiryDate" render={({ field }) => ( <FormItem><FormLabel>{t('passport.expiryDate')}</FormLabel><FormControl><Input type="date" {...field} /></FormControl><FormMessage /></FormItem> )} />
+                                <FormField control={form.control} name="passportIssueDate" render={({ field }) => ( <FormItem className="flex flex-col"><FormLabel>{t('passport.issueDate')}</FormLabel><Popover><PopoverTrigger asChild><FormControl><Button variant={"outline"} className={cn("w-full pl-3 text-left font-normal", !field.value && "text-muted-foreground")}><CalendarIcon className="mr-2 h-4 w-4" />{field.value ? (format(field.value, "PPP")) : (<span>Pick a date</span>)}</Button></FormControl></PopoverTrigger><PopoverContent className="w-auto p-0" align="start"><Calendar mode="single" selected={field.value} onSelect={field.onChange} disabled={(date) => date > new Date()} initialFocus /></PopoverContent></Popover><FormMessage /></FormItem> )} />
+                                <FormField control={form.control} name="passportExpiryDate" render={({ field }) => ( <FormItem className="flex flex-col"><FormLabel>{t('passport.expiryDate')}</FormLabel><Popover><PopoverTrigger asChild><FormControl><Button variant={"outline"} className={cn("w-full pl-3 text-left font-normal", !field.value && "text-muted-foreground")}><CalendarIcon className="mr-2 h-4 w-4" />{field.value ? (format(field.value, "PPP")) : (<span>Pick a date</span>)}</Button></FormControl></PopoverTrigger><PopoverContent className="w-auto p-0" align="start"><Calendar mode="single" selected={field.value} onSelect={field.onChange} disabled={(date) => date < new Date()} initialFocus /></PopoverContent></Popover><FormMessage /></FormItem> )} />
                                 <FormField control={form.control} name="nationalId" render={({ field }) => ( <FormItem><FormLabel>{t('passport.nationalId')}</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
                             </CardContent>
                          </Card>
                     )}
                     {currentStep === 2 && (
-                        <Card>
-                            <CardHeader><CardTitle>{t('visa.title')}</CardTitle></CardHeader>
-                             <CardContent className="space-y-4">
-                                <FormField control={form.control} name="visaNumber" render={({ field }) => ( <FormItem><FormLabel>{t('visa.visaNo')}</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
-                                <FormField control={form.control} name="visaType" render={({ field }) => ( <FormItem><FormLabel>{t('visa.visaType')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue placeholder={t('visa.selectVisaType')}/></SelectTrigger></FormControl><SelectContent><SelectItem value="Tourism">{t('visa.tourism')}</SelectItem><SelectItem value="Work">{t('visa.work')}</SelectItem><SelectItem value="Residency">{t('visa.residency')}</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
-                                <FormField control={form.control} name="visaExpiryDate" render={({ field }) => ( <FormItem><FormLabel>{t('visa.visaExpiry')}</FormLabel><FormControl><Input type="date" {...field} /></FormControl><FormMessage /></FormItem> )} />
-                                <FormField control={form.control} name="residencyFileNumber" render={({ field }) => ( <FormItem><FormLabel>{t('visa.residencyNo')}</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
-                             </CardContent>
-                         </Card>
-                    )}
-                    {currentStep === 3 && (
                          <Card>
                             <CardHeader>
                                 <CardTitle>{t('photos.title')}</CardTitle>
@@ -223,6 +223,17 @@ export function PassengerForm({ passengerToEdit }: PassengerFormProps) {
                                     outputType='base64'
                                 />
                             </CardContent>
+                         </Card>
+                    )}
+                    {currentStep === 3 && (
+                        <Card>
+                            <CardHeader><CardTitle>{t('visa.title')}</CardTitle></CardHeader>
+                             <CardContent className="space-y-4">
+                                <FormField control={form.control} name="visaNumber" render={({ field }) => ( <FormItem><FormLabel>{t('visa.visaNo')}</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
+                                <FormField control={form.control} name="visaType" render={({ field }) => ( <FormItem><FormLabel>{t('visa.visaType')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue placeholder={t('visa.selectVisaType')}/></SelectTrigger></FormControl><SelectContent><SelectItem value="Tourism">{t('visa.tourism')}</SelectItem><SelectItem value="Work">{t('visa.work')}</SelectItem><SelectItem value="Residency">{t('visa.residency')}</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
+                                <FormField control={form.control} name="visaExpiryDate" render={({ field }) => ( <FormItem><FormLabel>{t('visa.visaExpiry')}</FormLabel><FormControl><Input type="date" {...field} /></FormControl><FormMessage /></FormItem> )} />
+                                <FormField control={form.control} name="residencyFileNumber" render={({ field }) => ( <FormItem><FormLabel>{t('visa.residencyNo')}</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
+                             </CardContent>
                          </Card>
                     )}
                     {currentStep === 4 && (
@@ -263,4 +274,5 @@ export function PassengerForm({ passengerToEdit }: PassengerFormProps) {
     </>
   );
 }
+
 

@@ -96,6 +96,18 @@ export function PredictionPage({ module }: PredictionPageProps) {
             </div>
         );
     }
+    
+    if (!data) {
+        return (
+             <div className="flex h-full w-full flex-col items-center justify-center gap-4 text-center">
+                <AlertTriangle className="h-16 w-16 text-destructive" />
+                <h1 className="text-2xl font-bold">Error</h1>
+                <p className="max-w-md text-muted-foreground">
+                    Could not load prediction data. Please try again later.
+                </p>
+            </div>
+        )
+    }
 
     return (
         <div className="space-y-6">

@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
@@ -6,7 +7,7 @@ import type { Transaction } from '@/types/live-processing';
 import { DataTable } from '@/components/shared/data-table';
 import { GradientPageHeader } from '@/components/shared/gradient-page-header';
 import { Button } from '@/components/ui/button';
-import { ShieldAlert, Eye, User, Printer, AlertTriangle, LayoutDashboard, Search, X, Filter, ChevronDown } from 'lucide-react';
+import { ShieldAlert, Eye, User, Printer, AlertTriangle, LayoutDashboard, Search, X, Filter, ChevronDown, ArrowRightLeft } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Progress } from '@/components/ui/progress';
 import Link from 'next/link';
@@ -23,6 +24,8 @@ import CalendarIcon from '@/components/icons/calendar-icon';
 import { format, isValid, parse } from 'date-fns';
 import { Calendar } from '@/components/ui/calendar';
 import { Skeleton } from '@/components/ui/skeleton';
+import { usePathname } from 'next/navigation';
+import type { Module } from '@/types';
 
 const riskColors: { [key: string]: { text: string; bg: string; border: string; } } = {
   High: { text: 'text-red-700 dark:text-red-300', bg: 'bg-red-500/10', border: 'border-red-500/20' },
@@ -44,6 +47,8 @@ export default function DutyManagerPage() {
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState(initialFilters);
   const [appliedFilters, setAppliedFilters] = useState(initialFilters);
+  const pathname = usePathname();
+  const module = useMemo(() => pathname.split('/')[1] as Module, [pathname]);
 
   const canView = hasPermission(['duty-manager:view']);
 
@@ -141,16 +146,16 @@ export default function DutyManagerPage() {
       id: 'actions',
       cell: ({ row }) => {
         const transaction = row.original;
-        const module = transaction.tripInformation?.type || 'airport';
+        const transactionModule = transaction.tripInformation?.type || 'airport';
         return (
           <div className="flex items-center gap-2">
             <Button asChild variant="ghost" size="icon" className="text-primary hover:text-primary/80">
-              <Link href={`/${module}/transactions/${transaction.id}`}>
+              <Link href={`/${transactionModule}/transactions/${transaction.id}`}>
                 <Eye className="h-4 w-4" />
               </Link>
             </Button>
             <Button asChild variant="ghost" size="icon" className="text-primary hover:text-primary/80" disabled>
-                <Link href={`/${module}/passengers/${transaction.passengerId}/edit`}>
+                <Link href={`/${transactionModule}/passengers/${transaction.passengerId}/edit`}>
                     <User className="h-4 w-4" />
                 </Link>
             </Button>
@@ -196,7 +201,10 @@ export default function DutyManagerPage() {
         <Breadcrumb>
             <BreadcrumbList>
                 <BreadcrumbItem>
-                    <BreadcrumbLink href="/airport/dashboard" icon={LayoutDashboard}>{tNav('dashboard')}</BreadcrumbLink>
+                    <BreadcrumbLink href={`/${module}/dashboard`} icon={LayoutDashboard}>{tNav('dashboard')}</BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbItem>
+                    <BreadcrumbLink href={`/${module}/transactions`} icon={ArrowRightLeft}>{tNav('transactions')}</BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbItem>
                     <BreadcrumbPage icon={ShieldAlert}>{t('title')}</BreadcrumbPage>

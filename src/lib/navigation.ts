@@ -39,11 +39,33 @@ const getModuleSubNav = (module: Module, t: any): NavItem[] => {
     });
     
     if (['airport', 'landport', 'seaport'].includes(module)) {
+        const transactionChildren: NavItem[] = [
+            {
+                href: `${moduleBaseUrl}/transactions`,
+                label: t('allTransactions'),
+                icon: ArrowRightLeft,
+                permission: `${module}:transactions:view` as Permission,
+            },
+            {
+                href: `${moduleBaseUrl}/transactions/live-processing`,
+                label: t('liveProcessing'),
+                icon: RadioTower,
+                permission: `${module}:transactions:live` as Permission,
+            },
+            {
+                href: `${moduleBaseUrl}/transactions/duty-manager`,
+                label: t('dutyManager'),
+                icon: ShieldAlert,
+                permission: 'duty-manager:view',
+            }
+        ];
+
         subNav.push({
             href: `${moduleBaseUrl}/transactions`, 
             label: t('transactions'),
             icon: ArrowRightLeft,
             permission: `${module}:transactions:view` as Permission,
+            children: transactionChildren
         });
 
         subNav.push({
@@ -107,15 +129,6 @@ const getModuleSubNav = (module: Module, t: any): NavItem[] => {
         );
     }
 
-     if (['airport', 'landport', 'seaport', 'control-room'].includes(module)) {
-        subNav.push({
-            href: '/duty-manager',
-            label: t('dutyManager'),
-            icon: ShieldAlert,
-            permission: 'duty-manager:view',
-        });
-    }
-
     return subNav;
 }
 
@@ -123,7 +136,9 @@ const getModuleSubNav = (module: Module, t: any): NavItem[] => {
 export const getSidebarNavItems = (role: Role, modules: Module[], t: any): NavItem[] => {
     const nav: NavItem[] = [];
 
-    modules.forEach(moduleKey => {
+    const navigableModules = modules.filter(m => m !== 'duty-manager');
+
+    navigableModules.forEach(moduleKey => {
         const moduleInfo = allModules[moduleKey];
         if (moduleInfo) {
             nav.push({

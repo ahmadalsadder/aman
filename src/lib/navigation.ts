@@ -1,6 +1,6 @@
 
 'use client';
-import { Shield, LayoutDashboard, BarChart3, Users, Settings, Activity, Ship, LandPlot, DoorOpen, PieChart, UserCog, RadioTower, Home, Plane, ArrowRightLeft, Monitor, ClipboardList, AlertTriangle, ShieldAlert, BrainCircuit, IdCard } from 'lucide-react';
+import { Shield, LayoutDashboard, BarChart3, Users, Settings, Activity, Ship, LandPlot, DoorOpen, PieChart, UserCog, RadioTower, Home, Plane, ArrowRightLeft, Monitor, ClipboardList, AlertTriangle, ShieldAlert, BrainCircuit, IdCard, Music } from 'lucide-react';
 import type { Role, Module, Permission } from '@/types';
 
 export interface NavItem {
@@ -68,6 +68,12 @@ const getModuleSubNav = (module: Module, t: any): NavItem[] => {
             label: t('gateManagement'),
             icon: ClipboardList,
             permission: 'egate:records:view'
+        });
+        subNav.push({
+            href: '/egate/media-management',
+            label: t('mediaManagement'),
+            icon: Music,
+            permission: 'egate:media:view'
         });
     }
 

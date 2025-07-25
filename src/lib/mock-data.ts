@@ -1,6 +1,6 @@
 
 
-import type { Passenger, Transaction, OfficerDesk, Gate } from "@/types/live-processing";
+import type { Passenger, Transaction, OfficerDesk, Gate, Media } from "@/types/live-processing";
 import { Plane, Car, Ship } from "lucide-react";
 import type { Port, Terminal, Zone, Workflow, RiskProfile } from '@/types/configuration';
 
@@ -189,6 +189,12 @@ export let mockGates: Gate[] = [
     { id: 'EGATE-04', code: 'C-05', name: 'Exit Gate', terminalName: 'Terminal 1', type: 'Exit', status: 'Offline', ipAddress: '192.168.1.55', macAddress: 'A1:B2:C3:D4:E5:F9', lastMaintenance: '2023-03-20', lastModified: '2023-05-10', currentLoad: 0, passengerCount: 0, avgProcessingTime: 'N/A', equipment: [{ name: 'Passport Reader', status: 'offline' }, { name: 'Biometric Scanner', status: 'offline' }], exitConfig: { workflowId: 'WF-Standard', riskProfileId: 'RR-Low', capacity: 25 } },
 ];
 
+export let mockMedia: Media[] = [
+    { id: 'MEDIA-001', name: 'Entry Greeting', localizedName: 'تحية الدخول', type: 'Audio', status: 'Active', url: '/audio/entry_greeting.mp3', description: 'Standard welcome audio for all entry points.', lastModified: '2023-05-15', createdBy: 'Admin User' },
+    { id: 'MEDIA-002', name: 'Prohibited Items', localizedName: 'الأصناف الممنوعة', type: 'Video', status: 'Active', url: '/video/prohibited_items.mp4', description: 'Security video displaying prohibited items.', lastModified: '2023-05-10', createdBy: 'Admin User' },
+    { id: 'MEDIA-003', name: 'E-Gate Instructions', localizedName: 'تعليمات البوابة الإلكترونية', type: 'Image', status: 'Inactive', url: '/images/egate_instructions.png', description: 'Visual guide for using the e-gates.', lastModified: '2023-04-20', createdBy: 'Admin User' },
+];
+
 
 export const setMockOfficerDesks = (newDesks: OfficerDesk[]) => {
     mockOfficerDesks = newDesks;
@@ -197,3 +203,7 @@ export const setMockOfficerDesks = (newDesks: OfficerDesk[]) => {
 export const setMockGates = (newGates: Gate[]) => {
     mockGates = newGates;
 };
+
+export const setMockMedia = (newMedia: Media[]) => {
+    mockMedia = newMedia;
+}

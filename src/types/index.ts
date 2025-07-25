@@ -1,6 +1,5 @@
 
 
-
 export type Role = 'admin' | 'auditor' | 'viewer' | 'shiftsupervisor' | 'control-room' | 'analyst' | 'officer';
 export type Module = 'landport' | 'seaport' | 'airport' | 'egate' | 'analyst' | 'shiftsupervisor' | 'control-room' | 'duty-manager';
 export type Permission = 
@@ -19,6 +18,7 @@ export type Permission =
   | 'users:manage'
   | 'reports:view'
   | 'duty-manager:view'
+  | 'egate:media:view'
   // Page-level view permissions
   | 'airport:dashboard:view'
   | 'landport:dashboard:view'

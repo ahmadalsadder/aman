@@ -1,6 +1,5 @@
 
 
-
 import type { Port, Terminal, Zone, Workflow, RiskProfile } from './configuration';
 
 export interface Passenger {
@@ -178,6 +177,18 @@ export interface Gate {
       capacity: number;
     };
   }
+
+export interface Media {
+  id: string;
+  name: string;
+  localizedName?: string;
+  type: 'Audio' | 'Image' | 'Video';
+  status: 'Active' | 'Inactive';
+  url: string;
+  description: string;
+  lastModified: string;
+  createdBy: string;
+}
 
 export { Port, Terminal, Zone, Workflow, RiskProfile };
     

@@ -68,8 +68,8 @@ interface PassengerFormProps {
 const steps = [
     { id: 'personal', label: 'Personal', fields: ['firstName', 'lastName', 'dateOfBirth', 'gender'] },
     { id: 'passport', label: 'Passport', fields: ['passportNumber', 'nationality'] },
-    { id: 'visa', label: 'Visa/Residency', fields: [] },
     { id: 'photos', label: 'Photos', fields: [] },
+    { id: 'visa', label: 'Visa/Residency', fields: [] },
     { id: 'status', label: 'Status & Review', fields: ['status', 'riskLevel'] },
 ];
 
@@ -179,7 +179,7 @@ export function PassengerForm({ passengerToEdit }: PassengerFormProps) {
     <>
       <Stepper steps={steps} currentStep={currentStep} />
        <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSave)} className="mt-8 space-y-8">
+        <form onSubmit={(e) => e.preventDefault()} className="mt-8 space-y-8">
             <AnimatePresence mode="wait">
                 <motion.div
                     key={currentStep}
@@ -215,17 +215,6 @@ export function PassengerForm({ passengerToEdit }: PassengerFormProps) {
                         </Card>
                     )}
                     {currentStep === 2 && (
-                         <Card>
-                            <CardHeader><CardTitle>{t('visa.title')}</CardTitle></CardHeader>
-                            <CardContent className="space-y-4">
-                                <FormField control={form.control} name="visaNumber" render={({ field }) => ( <FormItem><FormLabel>{t('visa.visaNo')}</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
-                                <FormField control={form.control} name="visaType" render={({ field }) => ( <FormItem><FormLabel>{t('visa.visaType')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue placeholder={t('visa.selectVisaType')}/></SelectTrigger></FormControl><SelectContent><SelectItem value="Tourism">{t('visa.tourism')}</SelectItem><SelectItem value="Work">{t('visa.work')}</SelectItem><SelectItem value="Residency">{t('visa.residency')}</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
-                                <FormField control={form.control} name="visaExpiryDate" render={({ field }) => ( <FormItem className="flex flex-col"><FormLabel>{t('visa.visaExpiry')}</FormLabel><Popover><PopoverTrigger asChild><FormControl><Button variant={"outline"} className={cn("w-full pl-3 text-left font-normal", !field.value && "text-muted-foreground")}><CalendarIcon className="mr-2 h-4 w-4" />{field.value ? (format(field.value, "PPP")) : (<span>Pick a date</span>)}</Button></FormControl></PopoverTrigger><PopoverContent className="w-auto p-0" align="start"><Calendar mode="single" selected={field.value} onSelect={field.onChange} disabled={(date) => date < new Date()} initialFocus /></PopoverContent></Popover><FormMessage /></FormItem> )} />
-                                <FormField control={form.control} name="residencyFileNumber" render={({ field }) => ( <FormItem><FormLabel>{t('visa.residencyNo')}</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
-                            </CardContent>
-                        </Card>
-                    )}
-                    {currentStep === 3 && (
                         <Card>
                             <CardHeader>
                                 <CardTitle>{t('photos.title')}</CardTitle>
@@ -244,6 +233,17 @@ export function PassengerForm({ passengerToEdit }: PassengerFormProps) {
                             </CardContent>
                         </Card>
                     )}
+                    {currentStep === 3 && (
+                         <Card>
+                            <CardHeader><CardTitle>{t('visa.title')}</CardTitle></CardHeader>
+                            <CardContent className="space-y-4">
+                                <FormField control={form.control} name="visaNumber" render={({ field }) => ( <FormItem><FormLabel>{t('visa.visaNo')}</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
+                                <FormField control={form.control} name="visaType" render={({ field }) => ( <FormItem><FormLabel>{t('visa.visaType')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue placeholder={t('visa.selectVisaType')}/></SelectTrigger></FormControl><SelectContent><SelectItem value="Tourism">{t('visa.tourism')}</SelectItem><SelectItem value="Work">{t('visa.work')}</SelectItem><SelectItem value="Residency">{t('visa.residency')}</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
+                                <FormField control={form.control} name="visaExpiryDate" render={({ field }) => ( <FormItem className="flex flex-col"><FormLabel>{t('visa.visaExpiry')}</FormLabel><Popover><PopoverTrigger asChild><FormControl><Button variant={"outline"} className={cn("w-full pl-3 text-left font-normal", !field.value && "text-muted-foreground")}><CalendarIcon className="mr-2 h-4 w-4" />{field.value ? (format(field.value, "PPP")) : (<span>Pick a date</span>)}</Button></FormControl></PopoverTrigger><PopoverContent className="w-auto p-0" align="start"><Calendar mode="single" selected={field.value} onSelect={field.onChange} disabled={(date) => date < new Date()} initialFocus /></PopoverContent></Popover><FormMessage /></FormItem> )} />
+                                <FormField control={form.control} name="residencyFileNumber" render={({ field }) => ( <FormItem><FormLabel>{t('visa.residencyNo')}</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
+                            </CardContent>
+                        </Card>
+                    )}
                     {currentStep === 4 && (
                         <Card>
                             <CardHeader><CardTitle>{t('status.title')}</CardTitle></CardHeader>
@@ -255,34 +255,33 @@ export function PassengerForm({ passengerToEdit }: PassengerFormProps) {
                     )}
                 </motion.div>
             </AnimatePresence>
-
-            <div className="flex justify-between items-center gap-4 pt-8 border-t">
-                <div className="flex gap-2">
-                    <Button type="button" variant="destructive" onClick={() => router.back()}>
-                        <XCircle className="mr-2 h-4 w-4" />
-                        {t('common.cancel')}
-                    </Button>
-                    <Button type="button" variant="outline" onClick={prevStep} disabled={currentStep === 0}>
-                        <ArrowLeft className="mr-2 h-4 w-4" />
-                        {t('common.back')}
-                    </Button>
-                </div>
-                <div>
-                    {currentStep < steps.length - 1 ? (
-                        <Button type="button" onClick={nextStep}>
-                            {t('common.next')}
-                            <ArrowRight className="ml-2 h-4 w-4" />
-                        </Button>
-                    ) : (
-                        <Button type="submit" disabled={isLoading}>
-                            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                            {passengerToEdit ? t('common.save') : t('common.add')}
-                        </Button>
-                    )}
-                </div>
-            </div>
         </form>
        </Form>
+        <div className="flex justify-between items-center gap-4 pt-8 border-t">
+            <div className="flex gap-2">
+                <Button type="button" variant="destructive" onClick={() => router.back()}>
+                    <XCircle className="mr-2 h-4 w-4" />
+                    {t('common.cancel')}
+                </Button>
+                <Button type="button" variant="outline" onClick={prevStep} disabled={currentStep === 0}>
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    {t('common.back')}
+                </Button>
+            </div>
+            <div>
+                {currentStep < steps.length - 1 ? (
+                    <Button type="button" onClick={nextStep}>
+                        {t('common.next')}
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                ) : (
+                    <Button type="button" disabled={isLoading} onClick={form.handleSubmit(onSave)}>
+                        {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                        {passengerToEdit ? t('common.save') : t('common.add')}
+                    </Button>
+                )}
+            </div>
+        </div>
     </>
   );
 }

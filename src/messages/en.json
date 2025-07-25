@@ -489,7 +489,7 @@
       "viewAll": "View All Transactions"
     }
   },
-   "OfficerDesks": {
+  "OfficerDesks": {
     "pageTitle": "Officer Desk Management",
     "pageDescription": "Real-time status and configuration of all officer desks.",
     "addDesk": "Add Desk",
@@ -716,7 +716,7 @@
         }
     }
   },
-  "DutyManager": {
+   "DutyManager": {
     "title": "Duty Manager",
     "description": "Review and action transactions pending supervisor review.",
     "pendingTransactions": "Pending Transactions",

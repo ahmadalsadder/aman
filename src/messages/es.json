@@ -489,7 +489,7 @@
       "viewAll": "Ver todas las transacciones"
     }
   },
-   "OfficerDesks": {
+  "OfficerDesks": {
     "pageTitle": "Gestión de Escritorios de Oficial",
     "pageDescription": "Estado y configuración en tiempo real de todos los escritorios de oficiales.",
     "addDesk": "Añadir Escritorio",

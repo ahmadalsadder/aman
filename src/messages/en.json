@@ -51,7 +51,8 @@
     "gateManagement": "Gate Management",
     "dutyManager": "Duty Manager",
     "logout": "Log out",
-    "predictiveAnalytics": "Predictive Analytics"
+    "predictiveAnalytics": "Predictive Analytics",
+    "civilRecords": "Civil Records"
   },
   "ModulePage": {
     "verifyingAccess": "Verifying access...",
@@ -784,6 +785,57 @@
       "status": "Status",
       "gate": "Gate",
       "berth": "Berth"
+    }
+  },
+  "CivilRecords": {
+    "title": "Civil Records",
+    "description": "Search and view civil records for all individuals in the system.",
+    "filterTitle": "Search & Filter Records",
+    "filterEnglishName": "English Name...",
+    "filterLocalizedName": "Localized Name...",
+    "filterDocumentNumber": "Document Number...",
+    "filterNationality": "Nationality",
+    "searchNationality": "Search nationality...",
+    "noNationality": "No nationality found.",
+    "filterPersonType": "Person Type",
+    "allTypes": "All Types",
+    "citizen": "Citizen",
+    "resident": "Resident",
+    "visitor": "Visitor",
+    "fromDate": "From Date",
+    "toDate": "To Date",
+    "reset": "Reset",
+    "search": "Search",
+    "recordsTitle": "Record Results",
+    "columnName": "Name",
+    "columnPersonType": "Person Type",
+    "columnDocumentNumber": "Document Number",
+    "columnNationality": "Nationality",
+    "columnLastEntry": "Last Entry Date",
+    "noResults": "No records match the current filters.",
+    "details": {
+      "title": "Civil Record Details",
+      "close": "Close",
+      "personalInfo": "Personal Information",
+      "status": "Status",
+      "riskLevel": "Risk Level",
+      "gender": "Gender",
+      "dob": "Date of Birth",
+      "documentInfo": "Document Information",
+      "passportNo": "Passport No.",
+      "passportCountry": "Issuing Country",
+      "passportIssue": "Issue Date",
+      "passportExpiry": "Expiry Date",
+      "nationalId": "National ID",
+      "visaInfo": "Visa / Residency Information",
+      "visaNo": "Visa No.",
+      "visaType": "Visa Type",
+      "visaExpiry": "Visa Expiry",
+      "residencyNo": "Residency File No."
+    },
+     "accessDenied": {
+      "title": "Access Denied",
+      "description": "You do not have permission to view civil records for this module."
     }
   }
 }

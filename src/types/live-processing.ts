@@ -1,11 +1,13 @@
 
 
+
 import type { Port, Terminal, Zone, Workflow, RiskProfile } from './configuration';
 
 export interface Passenger {
     id: string;
     firstName: string;
     lastName: string;
+    localizedName?: string;
     passportNumber: string;
     nationality: string;
     dateOfBirth: string;
@@ -31,11 +33,17 @@ export interface Passenger {
   
     // Optional additional info
     visaNumber?: string;
+    visaType?: 'Tourism' | 'Work' | 'Residency';
     visaExpiryDate?: string;
     residencyFileNumber?: string;
     nationalId?: string;
   }
   
+  export type CivilRecord = Passenger & {
+    documentType: 'Citizen' | 'Resident' | 'Visitor';
+    documentNumber: string;
+  };
+
   export interface WorkflowStep {
     id: string;
     name: string;

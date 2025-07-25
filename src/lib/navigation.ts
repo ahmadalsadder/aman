@@ -1,6 +1,6 @@
 
 'use client';
-import { Shield, LayoutDashboard, BarChart3, Users, Settings, Activity, Ship, LandPlot, DoorOpen, PieChart, UserCog, RadioTower, Home, Plane, ArrowRightLeft, Monitor, ClipboardList, AlertTriangle, ShieldAlert, BrainCircuit } from 'lucide-react';
+import { Shield, LayoutDashboard, BarChart3, Users, Settings, Activity, Ship, LandPlot, DoorOpen, PieChart, UserCog, RadioTower, Home, Plane, ArrowRightLeft, Monitor, ClipboardList, AlertTriangle, ShieldAlert, BrainCircuit, IdCard } from 'lucide-react';
 import type { Role, Module, Permission } from '@/types';
 
 export interface NavItem {
@@ -50,6 +50,15 @@ const getModuleSubNav = (module: Module, t: any): NavItem[] => {
             label: t('officerDesks'),
             icon: Monitor,
             permission: `${module}:desks:view` as Permission,
+        });
+    }
+
+    if (module === 'egate' || ['airport', 'landport', 'seaport'].includes(module)) {
+        subNav.push({
+            href: `${moduleBaseUrl}/civil-records`,
+            label: t('civilRecords'),
+            icon: IdCard,
+            permission: `${module}:records:view` as Permission,
         });
     }
 

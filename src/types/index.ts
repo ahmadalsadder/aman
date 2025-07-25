@@ -1,5 +1,6 @@
 
 
+
 export type Role = 'admin' | 'auditor' | 'viewer' | 'shiftsupervisor' | 'control-room' | 'analyst' | 'officer';
 export type Module = 'landport' | 'seaport' | 'airport' | 'egate' | 'analyst' | 'shiftsupervisor' | 'control-room' | 'duty-manager';
 export type Permission = 
@@ -47,7 +48,6 @@ export type Permission =
   | 'analyst:dashboard:stats:view'
   | 'analyst:dashboard:charts:view'
   | 'control-room:dashboard:stats:view'
-  | 'control-room:dashboard:forecasts:view'
   | 'control-room:dashboard:charts:view'
   | 'control-room:dashboard:officer-performance:view'
   // Action-level permissions

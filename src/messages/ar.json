@@ -51,7 +51,8 @@
     "gateManagement": "إدارة البوابات",
     "dutyManager": "مدير المناوبة",
     "logout": "تسجيل الخروج",
-    "predictiveAnalytics": "التحليلات التنبؤية"
+    "predictiveAnalytics": "التحليلات التنبؤية",
+    "civilRecords": "السجلات المدنية"
   },
   "ModulePage": {
     "verifyingAccess": "التحقق من الوصول...",
@@ -784,6 +785,57 @@
       "status": "الحالة",
       "gate": "البوابة",
       "berth": "الرصيف"
+    }
+  },
+  "CivilRecords": {
+    "title": "السجلات المدنية",
+    "description": "بحث وعرض السجلات المدنية لجميع الأفراد في النظام.",
+    "filterTitle": "بحث وتصفية السجلات",
+    "filterEnglishName": "الاسم بالإنجليزية...",
+    "filterLocalizedName": "الاسم المحلي...",
+    "filterDocumentNumber": "رقم الوثيقة...",
+    "filterNationality": "الجنسية",
+    "searchNationality": "بحث عن جنسية...",
+    "noNationality": "لم يتم العثور على جنسية.",
+    "filterPersonType": "نوع الشخص",
+    "allTypes": "كل الأنواع",
+    "citizen": "مواطن",
+    "resident": "مقيم",
+    "visitor": "زائر",
+    "fromDate": "من تاريخ",
+    "toDate": "إلى تاريخ",
+    "reset": "إعادة تعيين",
+    "search": "بحث",
+    "recordsTitle": "نتائج السجلات",
+    "columnName": "الاسم",
+    "columnPersonType": "نوع الشخص",
+    "columnDocumentNumber": "رقم الوثيقة",
+    "columnNationality": "الجنسية",
+    "columnLastEntry": "تاريخ آخر دخول",
+    "noResults": "لا توجد سجلات تطابق المرشحات الحالية.",
+    "details": {
+      "title": "تفاصيل السجل المدني",
+      "close": "إغلاق",
+      "personalInfo": "المعلومات الشخصية",
+      "status": "الحالة",
+      "riskLevel": "مستوى المخاطرة",
+      "gender": "الجنس",
+      "dob": "تاريخ الميلاد",
+      "documentInfo": "معلومات الوثيقة",
+      "passportNo": "رقم الجواز",
+      "passportCountry": "بلد الإصدار",
+      "passportIssue": "تاريخ الإصدار",
+      "passportExpiry": "تاريخ انتهاء الصلاحية",
+      "nationalId": "الرقم القومي",
+      "visaInfo": "معلومات التأشيرة / الإقامة",
+      "visaNo": "رقم التأشيرة",
+      "visaType": "نوع التأشيرة",
+      "visaExpiry": "انتهاء صلاحية التأشيرة",
+      "residencyNo": "رقم ملف الإقامة"
+    },
+    "accessDenied": {
+      "title": "تم رفض الوصول",
+      "description": "ليس لديك إذن لعرض السجلات المدنية لهذا الوحدة."
     }
   }
 }

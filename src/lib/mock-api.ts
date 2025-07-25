@@ -7,7 +7,7 @@ import { assessPassengerRisk } from '@/ai/flows/assess-risk-flow';
 import { countries } from './countries';
 import { Fingerprint, ScanLine, UserCheck, ShieldAlert, User } from 'lucide-react';
 import { extractPassportData } from '@/ai/flows/extract-passport-data-flow';
-import type { Transaction, Gate } from '@/types/live-processing';
+import type { Transaction, Gate, CivilRecord } from '@/types/live-processing';
 import type { OfficerDesk } from '@/types/configuration';
 
 const users: User[] = [
@@ -494,11 +494,7 @@ const predictionData = {
 
 let allTransactions: Transaction[] = [...mockTransactions];
 
-const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
-
 export async function mockApi<T>(endpoint: string, options: RequestInit = {}): Promise<Result<T>> {
-    await delay(500); // Simulate network latency
-
     const { method = 'GET', body } = options;
     const url = new URL(endpoint, 'http://mock.com'); // Base URL doesn't matter, just for parsing
     const pathParts = url.pathname.split('/');
@@ -530,6 +526,35 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
     // COUNTRIES
     if (method === 'GET' && url.pathname === '/data/countries') {
         return Result.success(countries) as Result<T>;
+    }
+    
+    // CIVIL RECORDS
+    if (method === 'GET' && url.pathname === '/data/civil-records') {
+        const getDocumentType = (passenger: User): CivilRecord['documentType'] => {
+            if (passenger.nationality === 'United Arab Emirates') return 'Citizen';
+            if (passenger.visaType === 'Residency' || passenger.residencyFileNumber) return 'Resident';
+            return 'Visitor';
+        };
+
+        const getDocumentNumber = (passenger: User, type: CivilRecord['documentType']): string => {
+            switch(type) {
+                case 'Citizen': return passenger.nationalId || passenger.passportNumber;
+                case 'Resident': return passenger.residencyFileNumber || passenger.passportNumber;
+                case 'Visitor': return passenger.visaNumber || passenger.passportNumber;
+                default: return passenger.passportNumber;
+            }
+        }
+        
+        const civilRecords = mockPassengers.map(p => {
+            const docType = getDocumentType(p as any);
+            return {
+                ...p,
+                documentType: docType,
+                documentNumber: getDocumentNumber(p as any, docType),
+            }
+        });
+
+        return Result.success(civilRecords) as Result<T>;
     }
 
     // PASSENGER

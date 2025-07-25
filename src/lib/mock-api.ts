@@ -2,7 +2,7 @@
 
 import type { User } from '@/types';
 import { Result, ApiError } from '@/types/api/result';
-import { getMockPassengers, getMockTransactions, mockVisaDatabase, getMockOfficerDesks, mockPorts, mockTerminals, mockZones, mockWorkflows, mockRiskProfiles, setMockOfficerDesks, getMockGates, setMockGates, getMockMedia, setMockMedia, getMockWhitelist, setMockBlacklist, setMockPassengers } from './mock-data';
+import { getMockPassengers, getMockTransactions, mockVisaDatabase, getMockOfficerDesks, mockPorts, mockTerminals, mockZones, mockWorkflows, mockRiskProfiles, setMockOfficerDesks, getMockGates, setMockGates, getMockMedia, setMockMedia, getMockWhitelist, getMockBlacklist, setMockPassengers, setMockWhitelist, setMockBlacklist } from './mock-data';
 import { assessPassengerRisk } from '@/ai/flows/assess-risk-flow';
 import { countries } from './countries';
 import { Fingerprint, ScanLine, UserCheck, ShieldAlert, User } from 'lucide-react';
@@ -478,29 +478,13 @@ const predictionData = {
       processingTime: { avg: '2m 15s', change: 3.5 },
       staff: { recommended: 62, change: 8.0 },
     },
-    passengerFlow: {
-      air: [
-        { hour: '08:00', predicted: 450 },
-        { hour: '10:00', predicted: 620 },
-        { hour: '12:00', predicted: 580 },
-        { hour: '14:00', predicted: 710 },
-        { hour: '16:00', predicted: 950 },
-      ],
-      land: [
-        { hour: '08:00', predicted: 210 },
-        { hour: '10:00', predicted: 300 },
-        { hour: '12:00', predicted: 280 },
-        { hour: '14:00', predicted: 350 },
-        { hour: '16:00', predicted: 420 },
-      ],
-      sea: [
-        { hour: '08:00', predicted: 80 },
-        { hour: '10:00', predicted: 120 },
-        { hour: '12:00', predicted: 110 },
-        { hour: '14:00', predicted: 150 },
-        { hour: '16:00', predicted: 180 },
-      ],
-    },
+    passengerFlow: [
+        { hour: '08:00', air: 450, land: 210, sea: 80, egate: 300 },
+        { hour: '10:00', air: 620, land: 300, sea: 120, egate: 450 },
+        { hour: '12:00', air: 580, land: 280, sea: 110, egate: 400 },
+        { hour: '14:00', air: 710, land: 350, sea: 150, egate: 550 },
+        { hour: '16:00', air: 950, land: 420, sea: 180, egate: 700 },
+    ],
     processingVelocity: [
         { type: 'Citizen', time: 35 },
         { type: 'Resident', time: 60 },
@@ -1021,6 +1005,10 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
     }
 
     if (method === 'GET' && url.pathname === '/dashboard/prediction') {
+        const module = url.searchParams.get('module');
+        if (module && (predictionData as any)[module]) {
+            return Result.success((predictionData as any)[module]) as Result<T>;
+        }
         return Result.success(predictionData) as Result<T>;
     }
     

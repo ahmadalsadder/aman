@@ -290,7 +290,7 @@ export function AttachmentUploader({
   configs,
   initialFiles = {},
   onFilesChange,
-  outputType = 'base64',
+  outputType = 'bytes',
   disabled = false,
 }: AttachmentUploaderProps) {
   const [files, setFiles] = useState<Record<string, FileData | null>>(() => {

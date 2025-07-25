@@ -19,7 +19,7 @@ const riskLevelColors = {
 const statusColors = {
   Active: 'bg-blue-500/20 text-blue-700 border-blue-500/30',
   Inactive: 'bg-gray-500/20 text-gray-700 border-gray-500/30',
-  Watchlisted: 'bg-purple-500/20 text-purple-700 border-purple-500/30',
+  Flagged: 'bg-purple-500/20 text-purple-700 border-purple-500/30',
   Blocked: 'bg-zinc-500/20 text-zinc-700 border-zinc-500/30',
 };
 

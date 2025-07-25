@@ -11,7 +11,7 @@ export interface Passenger {
     nationality: string;
     dateOfBirth: string;
     gender: 'Male' | 'Female' | 'Other';
-    status: 'Active' | 'Inactive' | 'Watchlisted';
+    status: 'Active' | 'Inactive' | 'Flagged' | 'Blocked';
     riskLevel: 'Low' | 'Medium' | 'High';
     lastEntry?: string;
     notes?: string;

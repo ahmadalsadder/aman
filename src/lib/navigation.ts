@@ -1,6 +1,5 @@
 
 
-
 'use client';
 import { Shield, LayoutDashboard, BarChart3, Users, Settings, Activity, Ship, LandPlot, DoorOpen, PieChart, UserCog, RadioTower, Home, Plane, ArrowRightLeft, Monitor, ClipboardList, AlertTriangle, ShieldAlert, BrainCircuit, IdCard, Music, ListChecks, ShieldOff, UserPlus, FilePenLine, CalendarDays } from 'lucide-react';
 import type { Role, Module, Permission } from '@/types';
@@ -131,20 +130,11 @@ const getModuleSubNav = (module: Module, t: any): NavItem[] => {
     }
 
     if (['airport', 'landport', 'seaport', 'egate'].includes(module)) {
-        const workloadChildren: NavItem[] = [
-             {
-                href: `${moduleBaseUrl}/workload/shift-management`,
-                label: t('shiftManagement'),
-                icon: CalendarDays,
-                permission: `${module}:workload:view` as Permission,
-            },
-        ];
         subNav.push({
-            href: `${moduleBaseUrl}/workload`,
-            label: t('workloads'),
-            icon: Settings,
+            href: `${moduleBaseUrl}/workloads`,
+            label: t('shiftManagement'),
+            icon: CalendarDays,
             permission: `${module}:workload:view` as Permission,
-            children: workloadChildren
         });
     }
 

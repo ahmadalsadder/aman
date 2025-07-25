@@ -1,4 +1,3 @@
-
 'use client';
 import { useMemo } from 'react';
 import { ShiftManagementPage } from '@/components/workloads/shift-management/shift-management-page';
@@ -6,9 +5,9 @@ import { useAuth } from '@/hooks/use-auth';
 import type { Permission } from '@/types';
 import { AlertTriangle } from 'lucide-react';
 
-export default function SeaportShiftManagementPage() {
+export default function LandportShiftManagementPage() {
     const { hasPermission } = useAuth();
-    const canView = useMemo(() => hasPermission(['seaport:workload:view' as Permission]), [hasPermission]);
+    const canView = useMemo(() => hasPermission(['landport:workload:view' as Permission]), [hasPermission]);
 
     if (!canView) {
         return (
@@ -22,5 +21,5 @@ export default function SeaportShiftManagementPage() {
         );
     }
 
-    return <ShiftManagementPage module="seaport" />;
+    return <ShiftManagementPage module="landport" />;
 }

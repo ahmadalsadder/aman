@@ -53,9 +53,9 @@ export function ShiftManagementPage({ module, shifts, loading, onDeleteShift, on
   const router = useRouter();
   const { hasPermission } = useAuth();
 
-  const canCreate = useMemo(() => hasPermission([`${module}:workload:view`]), [hasPermission, module]);
-  const canEdit = useMemo(() => hasPermission([`${module}:workload:view`]), [hasPermission, module]);
-  const canDelete = useMemo(() => hasPermission([`${module}:workload:view`]), [hasPermission, module]);
+  const canCreate = useMemo(() => hasPermission([`${module}:workload:view` as Permission]), [hasPermission, module]);
+  const canEdit = useMemo(() => hasPermission([`${module}:workload:view` as Permission]), [hasPermission, module]);
+  const canDelete = useMemo(() => hasPermission([`${module}:workload:view` as Permission]), [hasPermission, module]);
 
   const [filters, setFilters] = useState(initialFilters);
   const [appliedFilters, setAppliedFilters] = useState(initialFilters);

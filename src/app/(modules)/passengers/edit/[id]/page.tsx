@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { PassengerForm, type PassengerFormValues } from '@/components/passengers/passenger-form';
@@ -6,26 +7,39 @@ import { GradientPageHeader } from '@/components/shared/gradient-page-header';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter, useParams, usePathname } from 'next/navigation';
 import type { Passenger } from '@/types/live-processing';
-import { useState, useEffect } from 'react';
-import { Loader2, FilePenLine, User, LayoutDashboard } from 'lucide-react';
+import { useState, useEffect, useMemo } from 'react';
+import { Loader2, FilePenLine, User, LayoutDashboard, AlertTriangle } from 'lucide-react';
 import { api } from '@/lib/api';
 import { useTranslations } from 'next-intl';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
+import { useAuth } from '@/hooks/use-auth';
+import type { Permission } from '@/types';
 
 export default function EditPassengerPage() {
     const router = useRouter();
     const params = useParams<{ id: string }>();
     const pathname = usePathname();
-    const module = pathname.split('/')[1] || 'passengers';
     const { toast } = useToast();
+    const { hasPermission } = useAuth();
     const t = useTranslations('PassengerForm');
     const tNav = useTranslations('Navigation');
+    
+    const module = pathname.split('/')[1] || 'passengers';
     const [passenger, setPassenger] = useState<Passenger | null>(null);
     const [loading, setLoading] = useState(true);
     const id = params.id;
+    
+    const canEdit = useMemo(() => {
+        return ['airport', 'landport', 'seaport', 'egate'].some(m => 
+            hasPermission([`${m}:passengers:edit` as Permission])
+        );
+    }, [hasPermission]);
 
     useEffect(() => {
-        if (!id) return;
+        if (!id || !canEdit) {
+            setLoading(false);
+            return;
+        };
 
         const fetchPassenger = async () => {
             setLoading(true);
@@ -42,7 +56,7 @@ export default function EditPassengerPage() {
             setLoading(false);
         };
         fetchPassenger();
-    }, [id, toast, t]);
+    }, [id, toast, t, canEdit]);
 
     const handleSave = async (formData: PassengerFormValues) => {
         if (!passenger) return;
@@ -81,6 +95,18 @@ export default function EditPassengerPage() {
         );
     }
     
+    if (!canEdit) {
+        return (
+            <div className="flex h-full w-full flex-col items-center justify-center gap-4 text-center">
+                <AlertTriangle className="h-16 w-16 text-destructive" />
+                <h1 className="text-2xl font-bold">Access Denied</h1>
+                <p className="max-w-md text-muted-foreground">
+                    You do not have permission to edit passenger records.
+                </p>
+            </div>
+        );
+    }
+
     if (!passenger) {
         return (
              <div className="flex h-full w-full items-center justify-center">

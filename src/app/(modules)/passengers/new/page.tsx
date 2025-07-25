@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { PassengerForm, type PassengerFormValues } from '@/components/passengers/passenger-form';
@@ -6,18 +7,23 @@ import { GradientPageHeader } from '@/components/shared/gradient-page-header';
 import type { Passenger } from '@/types/live-processing';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter, usePathname } from 'next/navigation';
-import { UserPlus, LayoutDashboard, User } from 'lucide-react';
+import { UserPlus, LayoutDashboard, User, AlertTriangle } from 'lucide-react';
 import { api } from '@/lib/api';
 import { useTranslations } from 'next-intl';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
+import { useAuth } from '@/hooks/use-auth';
+import type { Permission } from '@/types';
 
 export default function AddPassengerPage() {
     const router = useRouter();
     const pathname = usePathname();
     const module = pathname.split('/')[1] || 'passengers';
     const { toast } = useToast();
+    const { hasPermission } = useAuth();
     const t = useTranslations('PassengerForm');
     const tNav = useTranslations('Navigation');
+    
+    const canCreate = hasPermission(['airport:passengers:create', 'landport:passengers:create', 'seaport:passengers:create', 'egate:passengers:create']);
 
     const handleSave = async (formData: PassengerFormValues) => {
         const newPassenger: Omit<Passenger, 'id'> = {
@@ -36,7 +42,7 @@ export default function AddPassengerPage() {
                 description: t('toast.addSuccessDesc', { name: `${result.data.firstName} ${result.data.lastName}` }),
                 variant: 'success',
             });
-            router.push(`/${module}/passengers`);
+            router.push(`/${module === 'passengers' ? 'airport' : module}/passengers`);
         } else {
              toast({
                 title: t('toast.errorTitle'),
@@ -45,6 +51,18 @@ export default function AddPassengerPage() {
             });
         }
     };
+
+    if (!canCreate) {
+        return (
+            <div className="flex h-full w-full flex-col items-center justify-center gap-4 text-center">
+                <AlertTriangle className="h-16 w-16 text-destructive" />
+                <h1 className="text-2xl font-bold">Access Denied</h1>
+                <p className="max-w-md text-muted-foreground">
+                    You do not have permission to create new passenger records.
+                </p>
+            </div>
+        );
+    }
 
     return (
         <div className="space-y-6">

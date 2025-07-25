@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
@@ -27,10 +28,11 @@ import { useRouter } from 'next/navigation';
 import { Combobox } from '@/components/ui/combobox';
 import { TransactionStatsCard } from '@/components/transactions/transaction-stats-card';
 import { countries } from '@/lib/countries';
-import type { Module } from '@/types';
+import type { Module, Permission } from '@/types';
 import CalendarIcon from '../icons/calendar-icon';
 import { api } from '@/lib/api';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useAuth } from '@/hooks/use-auth';
 
 const riskLevelColors = {
   Low: 'bg-green-500/20 text-green-700 border-green-500/30',
@@ -69,16 +71,27 @@ export function PassengersPage({ module }: PassengersPageProps) {
   const { toast } = useToast();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const { hasPermission } = useAuth();
 
   const [passengerToView, setPassengerToView] = useState<Passenger | null>(null);
   const [passengerToDelete, setPassengerToDelete] = useState<Passenger | null>(null);
 
   const [filters, setFilters] = useState(initialFilters);
   const [appliedFilters, setAppliedFilters] = useState(initialFilters);
+  
+  const viewPermission = useMemo(() => (module === 'admin' ? ['airport:passengers:view', 'landport:passengers:view', 'seaport:passengers:view', 'egate:passengers:view'] : [`${module}:passengers:view`]) as Permission[], [module]);
+  const canViewPage = viewPermission.some(p => hasPermission([p]));
+  const canCreate = hasPermission([`${module === 'admin' ? 'airport' : module}:passengers:create` as Permission]);
+  const canEdit = hasPermission([`${module === 'admin' ? 'airport' : module}:passengers:edit` as Permission]);
+  const canDelete = hasPermission([`${module === 'admin' ? 'airport' : module}:passengers:delete` as Permission]);
+
 
   useEffect(() => {
+    if (!canViewPage) {
+        setLoading(false);
+        return;
+    }
     setLoading(true);
-    // In a real app, you'd fetch based on the module
     const endpoint = module === 'admin' ? '/data/passengers' : `/data/passengers?module=${module}`;
     api.get<Passenger[]>(endpoint).then(result => {
         if(result.isSuccess && result.data) {
@@ -86,7 +99,7 @@ export function PassengersPage({ module }: PassengersPageProps) {
         }
         setLoading(false);
     });
-  }, [module]);
+  }, [module, canViewPage]);
 
   const passengerStats = useMemo(() => {
     const total = passengers.length;
@@ -228,14 +241,18 @@ export function PassengersPage({ module }: PassengersPageProps) {
             <Button variant="ghost" size="icon" className="text-primary hover:text-primary/80" onClick={() => setPassengerToView(passenger)}>
               <Eye className="h-4 w-4" />
             </Button>
-            <Button asChild variant="ghost" size="icon" className="text-yellow-500 hover:text-yellow-500/80">
-              <Link href={`/passengers/${passenger.id}/edit`}>
-                <FilePenLine className="h-4 w-4" />
-              </Link>
-            </Button>
-            <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive/80" onClick={() => setPassengerToDelete(passenger)}>
-              <Trash2 className="h-4 w-4" />
-            </Button>
+            {canEdit && (
+                <Button asChild variant="ghost" size="icon" className="text-yellow-500 hover:text-yellow-500/80">
+                <Link href={`/passengers/${passenger.id}/edit`}>
+                    <FilePenLine className="h-4 w-4" />
+                </Link>
+                </Button>
+            )}
+            {canDelete && (
+                <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive/80" onClick={() => setPassengerToDelete(passenger)}>
+                <Trash2 className="h-4 w-4" />
+                </Button>
+            )}
           </div>
         );
       },
@@ -259,11 +276,13 @@ export function PassengersPage({ module }: PassengersPageProps) {
         description="View, search, and manage all passenger records."
         icon={Users}
       >
-        <Button asChild className="bg-white font-semibold text-primary hover:bg-white/90">
-            <Link href="/passengers/new">
-                <PlusCircle className="mr-2 h-4 w-4" /> Add Passenger
-            </Link>
-        </Button>
+        {canCreate && (
+            <Button asChild className="bg-white font-semibold text-primary hover:bg-white/90">
+                <Link href="/passengers/new">
+                    <PlusCircle className="mr-2 h-4 w-4" /> Add Passenger
+                </Link>
+            </Button>
+        )}
       </GradientPageHeader>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">

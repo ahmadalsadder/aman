@@ -21,23 +21,47 @@ const users: User[] = [
     modules: ['landport', 'seaport', 'airport', 'egate', 'analyst', 'control-room', 'users', 'settings', 'duty-manager'],
     permissions: [
         'users:manage', 'reports:view',
-        'airport:records:view', 'airport:records:create', 'airport:records:edit', 'airport:records:delete',
-        'landport:records:view', 'landport:records:create', 'landport:records:edit', 'landport:records:delete',
-        'seaport:records:view', 'seaport:records:create', 'seaport:records:edit', 'seaport:records:delete',
-        'egate:records:view', 'egate:records:create', 'egate:records:edit', 'egate:records:delete',
-        'airport:civil-records:view', 'landport:civil-records:view', 'seaport:civil-records:view', 'egate:civil-records:view',
-        'analyst:records:view', 'analyst:records:create', 'analyst:records:edit', 'analyst:records:delete',
-        'airport:transactions:view', 'landport:transactions:view', 'seaport:transactions:view',
-        'airport:transactions:live', 'landport:transactions:live', 'seaport:transactions:live',
+        // Airport
+        'airport:passengers:view', 'airport:passengers:create', 'airport:passengers:edit', 'airport:passengers:delete',
+        'airport:whitelist:view', 'airport:whitelist:create', 'airport:whitelist:edit', 'airport:whitelist:delete',
+        'airport:blacklist:view', 'airport:blacklist:create', 'airport:blacklist:edit', 'airport:blacklist:delete',
+        'airport:records:create',
+        'airport:civil-records:view',
+        'airport:transactions:view',
+        'airport:transactions:live',
         'airport:dashboard:view', 'airport:dashboard:stats:view', 'airport:prediction:view', 'airport:dashboard:charts:view', 'airport:dashboard:officer-performance:view',
+        'airport:desks:view', 'airport:desks:create', 'airport:desks:edit', 'airport:desks:delete',
+        // Landport
+        'landport:passengers:view', 'landport:passengers:create', 'landport:passengers:edit', 'landport:passengers:delete',
+        'landport:whitelist:view', 'landport:whitelist:create', 'landport:whitelist:edit', 'landport:whitelist:delete',
+        'landport:blacklist:view', 'landport:blacklist:create', 'landport:blacklist:edit', 'landport:blacklist:delete',
+        'landport:records:create',
+        'landport:civil-records:view',
+        'landport:transactions:view',
+        'landport:transactions:live',
         'landport:dashboard:view', 'landport:dashboard:stats:view', 'landport:prediction:view', 'landport:dashboard:charts:view', 'landport:dashboard:officer-performance:view',
+        'landport:desks:view', 'landport:desks:create', 'landport:desks:edit', 'landport:desks:delete',
+        // Seaport
+        'seaport:passengers:view', 'seaport:passengers:create', 'seaport:passengers:edit', 'seaport:passengers:delete',
+        'seaport:whitelist:view', 'seaport:whitelist:create', 'seaport:whitelist:edit', 'seaport:whitelist:delete',
+        'seaport:blacklist:view', 'seaport:blacklist:create', 'seaport:blacklist:edit', 'seaport:blacklist:delete',
+        'seaport:records:create',
+        'seaport:civil-records:view',
+        'seaport:transactions:view',
+        'seaport:transactions:live',
         'seaport:dashboard:view', 'seaport:dashboard:stats:view', 'seaport:prediction:view', 'seaport:dashboard:charts:view', 'seaport:dashboard:officer-performance:view',
+        'seaport:desks:view', 'seaport:desks:create', 'seaport:desks:edit', 'seaport:desks:delete',
+        // E-Gate
+        'egate:passengers:view', 'egate:passengers:create', 'egate:passengers:edit', 'egate:passengers:delete',
+        'egate:whitelist:view', 'egate:whitelist:create', 'egate:whitelist:edit', 'egate:whitelist:delete',
+        'egate:blacklist:view', 'egate:blacklist:create', 'egate:blacklist:edit', 'egate:blacklist:delete',
+        'egate:records:create', 'egate:records:edit', 'egate:records:delete',
+        'egate:civil-records:view',
         'egate:dashboard:view', 'egate:dashboard:stats:view', 'egate:prediction:view', 'egate:dashboard:charts:view', 'egate:media:view', 'egate:media:create', 'egate:media:edit', 'egate:media:delete',
+        // Other Modules
+        'analyst:records:view', 'analyst:records:create', 'analyst:records:edit', 'analyst:records:delete',
         'analyst:dashboard:view', 'analyst:dashboard:stats:view', 'analyst:dashboard:charts:view',
         'control-room:dashboard:view', 'control-room:dashboard:stats:view', 'control-room:dashboard:charts:view', 'control-room:dashboard:officer-performance:view',
-        'airport:desks:view', 'airport:desks:create', 'airport:desks:edit', 'airport:desks:delete',
-        'landport:desks:view', 'landport:desks:create', 'landport:desks:edit', 'landport:desks:delete',
-        'seaport:desks:view', 'seaport:desks:create', 'seaport:desks:edit', 'seaport:desks:delete',
         'duty-manager:view'
     ]
   },
@@ -71,16 +95,20 @@ const users: User[] = [
     modules: ['airport', 'landport', 'seaport', 'control-room', 'duty-manager'],
     permissions: [
         'reports:view', 
-        'airport:civil-records:view', 'airport:records:edit',
-        'landport:civil-records:view', 'landport:records:edit',
-        'seaport:civil-records:view', 'seaport:records:edit',
+        'airport:civil-records:view',
+        'landport:civil-records:view',
+        'seaport:civil-records:view',
         'airport:transactions:view', 'landport:transactions:view', 'seaport:transactions:view', 
         'airport:transactions:live', 'landport:transactions:live', 'seaport:transactions:live',
         'airport:dashboard:view', 'airport:dashboard:stats:view', 'airport:prediction:view', 'airport:dashboard:charts:view', 'airport:dashboard:officer-performance:view',
         'landport:dashboard:view', 'landport:dashboard:stats:view', 'landport:prediction:view', 'landport:dashboard:charts:view', 'landport:dashboard:officer-performance:view',
         'seaport:dashboard:view', 'seaport:dashboard:stats:view', 'seaport:prediction:view', 'seaport:dashboard:charts:view', 'seaport:dashboard:officer-performance:view',
         'control-room:dashboard:view', 'control-room:dashboard:stats:view', 'control-room:dashboard:charts:view', 'control-room:dashboard:officer-performance:view',
-        'duty-manager:view'
+        'duty-manager:view',
+        // Granular permissions for editing across modules they supervise
+        'airport:passengers:edit', 'airport:whitelist:edit', 'airport:blacklist:edit',
+        'landport:passengers:edit', 'landport:whitelist:edit', 'landport:blacklist:edit',
+        'seaport:passengers:edit', 'seaport:whitelist:edit', 'seaport:blacklist:edit',
     ]
   },
   {
@@ -910,6 +938,7 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
     }
 
     if (method === 'GET' && url.pathname === '/dashboard/prediction') {
+        const predictionData = {};
         return Result.success(predictionData) as Result<T>;
     }
     

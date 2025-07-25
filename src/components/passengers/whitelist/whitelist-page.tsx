@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
@@ -15,7 +16,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
-import { MoreHorizontal, Eye, Trash2, ListChecks, Filter, ChevronDown, X, Search, User, PlusCircle, FilePenLine } from 'lucide-react';
+import { MoreHorizontal, Eye, Trash2, ListChecks, Filter, ChevronDown, X, Search, User, PlusCircle, FilePenLine, AlertTriangle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -27,7 +28,9 @@ import { DeleteWhitelistDialog } from '@/components/passengers/whitelist/delete-
 import { WhitelistDetailsSheet } from '@/components/passengers/whitelist/whitelist-details-sheet';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import type { Module } from '@/types';
+import type { Module, Permission } from '@/types';
+import { useAuth } from '@/hooks/use-auth';
+
 
 const WHITELIST_STORAGE_KEY = 'guardian-gate-whitelist';
 
@@ -44,20 +47,27 @@ const initialFilters = {
 };
 
 interface WhitelistPageProps {
-    module: Module | 'analyst';
+    module: Module;
 }
 
 export function WhitelistPage({ module }: WhitelistPageProps) {
   const [whitelist, setWhitelist] = useState<WhitelistEntry[]>([]);
   const { toast } = useToast();
   const router = useRouter();
+  const { hasPermission } = useAuth();
   
+  const canView = hasPermission([`${module}:whitelist:view` as Permission]);
+  const canCreate = hasPermission([`${module}:whitelist:create` as Permission]);
+  const canEdit = hasPermission([`${module}:whitelist:edit` as Permission]);
+  const canDelete = hasPermission([`${module}:whitelist:delete` as Permission]);
+
   const [entryToView, setEntryToView] = useState<WhitelistEntry | null>(null);
   const [entryToDelete, setEntryToDelete] = useState<WhitelistEntry | null>(null);
   const [filters, setFilters] = useState(initialFilters);
   const [appliedFilters, setAppliedFilters] = useState(initialFilters);
 
   useEffect(() => {
+    if(!canView) return;
     try {
       const storedWhitelist = localStorage.getItem(WHITELIST_STORAGE_KEY);
       if (storedWhitelist) {
@@ -70,7 +80,7 @@ export function WhitelistPage({ module }: WhitelistPageProps) {
       console.error('Failed to access whitelist from localStorage', error);
       setWhitelist(mockWhitelist);
     }
-  }, []);
+  }, [canView]);
 
   const handleDeleteEntry = () => {
     if (!entryToDelete) return;
@@ -141,26 +151,44 @@ export function WhitelistPage({ module }: WhitelistPageProps) {
                     </Link>
                 </DropdownMenuItem>
             )}
-             <DropdownMenuItem onClick={() => router.push(`/${module}/whitelist/edit/${row.original.id}`)}>
-                <FilePenLine className="mr-2 h-4 w-4 text-yellow-500" />
-                <span>Edit Entry</span>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-destructive focus:text-destructive" onClick={() => setEntryToDelete(row.original)}><Trash2 className="mr-2 h-4 w-4" /><span>Delete</span></DropdownMenuItem>
+             {canEdit && (
+                <DropdownMenuItem onClick={() => router.push(`/${module}/whitelist/edit/${row.original.id}`)}>
+                    <FilePenLine className="mr-2 h-4 w-4 text-yellow-500" />
+                    <span>Edit Entry</span>
+                </DropdownMenuItem>
+             )}
+            {canDelete && <>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem className="text-destructive focus:text-destructive" onClick={() => setEntryToDelete(row.original)}><Trash2 className="mr-2 h-4 w-4" /><span>Delete</span></DropdownMenuItem>
+            </>}
           </DropdownMenuContent>
         </DropdownMenu>
       ),
     },
   ];
 
+  if (!canView) {
+    return (
+        <div className="flex h-full w-full flex-col items-center justify-center gap-4 text-center">
+            <AlertTriangle className="h-16 w-16 text-destructive" />
+            <h1 className="text-2xl font-bold">Access Denied</h1>
+            <p className="max-w-md text-muted-foreground">
+                You do not have permission to view the whitelist for this module.
+            </p>
+        </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       <GradientPageHeader title="Passenger Whitelist" description="Manage individuals with special clearance." icon={ListChecks}>
-        <Button asChild className="bg-white font-semibold text-primary hover:bg-white/90">
-            <Link href={`/${module}/whitelist/add`}>
-                <PlusCircle className="mr-2 h-4 w-4" /> Add to Whitelist
-            </Link>
-        </Button>
+        {canCreate && (
+            <Button asChild className="bg-white font-semibold text-primary hover:bg-white/90">
+                <Link href={`/${module}/whitelist/add`}>
+                    <PlusCircle className="mr-2 h-4 w-4" /> Add to Whitelist
+                </Link>
+            </Button>
+        )}
       </GradientPageHeader>
       
        <Card>

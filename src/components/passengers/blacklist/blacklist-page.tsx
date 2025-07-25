@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
@@ -15,7 +16,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
-import { MoreHorizontal, Eye, Trash2, ShieldOff, Filter, ChevronDown, X, Search, User, PlusCircle, FilePenLine } from 'lucide-react';
+import { MoreHorizontal, Eye, Trash2, ShieldOff, Filter, ChevronDown, X, Search, User, PlusCircle, FilePenLine, AlertTriangle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -27,7 +28,8 @@ import { DeleteBlacklistDialog } from '@/components/passengers/blacklist/delete-
 import { BlacklistDetailsSheet } from '@/components/passengers/blacklist/blacklist-details-sheet';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import type { Module } from '@/types';
+import type { Module, Permission } from '@/types';
+import { useAuth } from '@/hooks/use-auth';
 
 const BLACKLIST_STORAGE_KEY = 'guardian-gate-blacklist';
 
@@ -45,13 +47,19 @@ const initialFilters = {
 };
 
 interface BlacklistPageProps {
-    module: Module | 'analyst';
+    module: Module;
 }
 
 export function BlacklistPage({ module }: BlacklistPageProps) {
   const [blacklist, setBlacklist] = useState<BlacklistEntry[]>([]);
   const { toast } = useToast();
   const router = useRouter();
+  const { hasPermission } = useAuth();
+
+  const canView = hasPermission([`${module}:blacklist:view` as Permission]);
+  const canCreate = hasPermission([`${module}:blacklist:create` as Permission]);
+  const canEdit = hasPermission([`${module}:blacklist:edit` as Permission]);
+  const canDelete = hasPermission([`${module}:blacklist:delete` as Permission]);
   
   const [entryToView, setEntryToView] = useState<BlacklistEntry | null>(null);
   const [entryToDelete, setEntryToDelete] = useState<BlacklistEntry | null>(null);
@@ -59,6 +67,7 @@ export function BlacklistPage({ module }: BlacklistPageProps) {
   const [appliedFilters, setAppliedFilters] = useState(initialFilters);
 
   useEffect(() => {
+    if (!canView) return;
     try {
       const storedBlacklist = localStorage.getItem(BLACKLIST_STORAGE_KEY);
       if (storedBlacklist) {
@@ -71,7 +80,7 @@ export function BlacklistPage({ module }: BlacklistPageProps) {
       console.error('Failed to access blacklist from localStorage', error);
       setBlacklist(mockBlacklist);
     }
-  }, []);
+  }, [canView]);
 
   const handleDeleteEntry = () => {
     if (!entryToDelete) return;
@@ -142,26 +151,44 @@ export function BlacklistPage({ module }: BlacklistPageProps) {
                     </Link>
                 </DropdownMenuItem>
             )}
-             <DropdownMenuItem onClick={() => router.push(`/${module}/blacklist/edit/${row.original.id}`)}>
-                <FilePenLine className="mr-2 h-4 w-4 text-yellow-500" />
-                <span>Edit Entry</span>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-destructive focus:text-destructive" onClick={() => setEntryToDelete(row.original)}><Trash2 className="mr-2 h-4 w-4" /><span>Delete</span></DropdownMenuItem>
+             {canEdit && (
+                <DropdownMenuItem onClick={() => router.push(`/${module}/blacklist/edit/${row.original.id}`)}>
+                    <FilePenLine className="mr-2 h-4 w-4 text-yellow-500" />
+                    <span>Edit Entry</span>
+                </DropdownMenuItem>
+             )}
+            {canDelete && <>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem className="text-destructive focus:text-destructive" onClick={() => setEntryToDelete(row.original)}><Trash2 className="mr-2 h-4 w-4" /><span>Delete</span></DropdownMenuItem>
+            </>}
           </DropdownMenuContent>
         </DropdownMenu>
       ),
     },
   ];
 
+  if (!canView) {
+    return (
+        <div className="flex h-full w-full flex-col items-center justify-center gap-4 text-center">
+            <AlertTriangle className="h-16 w-16 text-destructive" />
+            <h1 className="text-2xl font-bold">Access Denied</h1>
+            <p className="max-w-md text-muted-foreground">
+                You do not have permission to view the blacklist for this module.
+            </p>
+        </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       <GradientPageHeader title="Passenger Blacklist" description="Manage individuals flagged for security risks." icon={ShieldOff}>
-        <Button asChild className="bg-white font-semibold text-primary hover:bg-white/90">
-            <Link href={`/${module}/blacklist/add`}>
-                <PlusCircle className="mr-2 h-4 w-4" /> Add to Blacklist
-            </Link>
-        </Button>
+        {canCreate && (
+            <Button asChild className="bg-white font-semibold text-primary hover:bg-white/90">
+                <Link href={`/${module}/blacklist/add`}>
+                    <PlusCircle className="mr-2 h-4 w-4" /> Add to Blacklist
+                </Link>
+            </Button>
+        )}
       </GradientPageHeader>
       
        <Card>

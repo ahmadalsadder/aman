@@ -1,15 +1,38 @@
 
 
 export type Role = 'admin' | 'auditor' | 'viewer' | 'shiftsupervisor' | 'control-room' | 'analyst' | 'officer';
-export type Module = 'landport' | 'seaport' | 'airport' | 'egate' | 'analyst' | 'shiftsupervisor' | 'control-room';
+export type Module = 'landport' | 'seaport' | 'airport' | 'egate' | 'analyst' | 'shiftsupervisor' | 'control-room' | 'duty-manager' | 'users' | 'settings' | 'passengers';
 export type Permission = 
+  // Passenger permissions
+  | 'airport:passengers:view' | 'airport:passengers:create' | 'airport:passengers:edit' | 'airport:passengers:delete'
+  | 'landport:passengers:view' | 'landport:passengers:create' | 'landport:passengers:edit' | 'landport:passengers:delete'
+  | 'seaport:passengers:view' | 'seaport:passengers:create' | 'seaport:passengers:edit' | 'seaport:passengers:delete'
+  | 'egate:passengers:view' | 'egate:passengers:create' | 'egate:passengers:edit' | 'egate:passengers:delete'
+
+  // Whitelist permissions
+  | 'airport:whitelist:view' | 'airport:whitelist:create' | 'airport:whitelist:edit' | 'airport:whitelist:delete'
+  | 'landport:whitelist:view' | 'landport:whitelist:create' | 'landport:whitelist:edit' | 'landport:whitelist:delete'
+  | 'seaport:whitelist:view' | 'seaport:whitelist:create' | 'seaport:whitelist:edit' | 'seaport:whitelist:delete'
+  | 'egate:whitelist:view' | 'egate:whitelist:create' | 'egate:whitelist:edit' | 'egate:whitelist:delete'
+
+  // Blacklist permissions
+  | 'airport:blacklist:view' | 'airport:blacklist:create' | 'airport:blacklist:edit' | 'airport:blacklist:delete'
+  | 'landport:blacklist:view' | 'landport:blacklist:create' | 'landport:blacklist:edit' | 'landport:blacklist:delete'
+  | 'seaport:blacklist:view' | 'seaport:blacklist:create' | 'seaport:blacklist:edit' | 'seaport:blacklist:delete'
+  | 'egate:blacklist:view' | 'egate:blacklist:create' | 'egate:blacklist:edit' | 'egate:blacklist:delete'
+
   // Module-specific record permissions
-  | 'airport:civil-records:view' | 'airport:records:create' | 'airport:records:edit' | 'airport:records:delete'
-  | 'landport:civil-records:view' | 'landport:records:create' | 'landport:records:edit' | 'landport:records:delete'
-  | 'seaport:civil-records:view' | 'seaport:records:create' | 'seaport:records:edit' | 'seaport:records:delete'
-  | 'egate:civil-records:view' | 'egate:records:create' | 'egate:records:edit' | 'egate:records:delete'
+  | 'airport:records:create'
+  | 'landport:records:create'
+  | 'seaport:records:create'
+  | 'egate:records:create' | 'egate:records:edit' | 'egate:records:delete'
   | 'analyst:records:view' | 'analyst:records:create' | 'analyst:records:edit' | 'analyst:records:delete'
   | 'control-room:records:view' | 'control-room:records:create' | 'control-room:records:edit' | 'control-room:records:delete'
+  | 'airport:civil-records:view' 
+  | 'landport:civil-records:view'
+  | 'seaport:civil-records:view'
+  | 'egate:civil-records:view'
+
   // Desk configuration permissions
   | 'airport:desks:view' | 'airport:desks:create' | 'airport:desks:edit' | 'airport:desks:delete'
   | 'landport:desks:view' | 'landport:desks:create' | 'landport:desks:edit' | 'landport:desks:delete'
@@ -102,11 +125,15 @@ export interface OfficerDesk {
     movementType: 'Entry' | 'Exit' | 'Bidirectional';
     workflowId: string;
     riskRuleId: string;
-
+    // These will be enriched for display purposes
     portId?: string;
     portName?: string;
     terminalName?: string;
     zoneName?: string;
+    connectedMachines: string[];
+    createdAt: string;
+    createdBy: string;
+    lastUpdatedBy: string;
 }
 
 export interface Workflow {

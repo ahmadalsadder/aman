@@ -13,7 +13,8 @@ import { api } from '@/lib/api';
 import { useTranslations } from 'next-intl';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { useAuth } from '@/hooks/use-auth';
-import type { Permission } from '@/types';
+import type { Permission, Module } from '@/types';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function EditPassengerPage() {
     const router = useRouter();
@@ -24,7 +25,7 @@ export default function EditPassengerPage() {
     const t = useTranslations('PassengerForm');
     const tNav = useTranslations('Navigation');
     
-    const module = pathname.split('/')[1] || 'passengers';
+    const module = useMemo(() => (pathname.split('/')[1] || 'airport') as Module, [pathname]);
     const [passenger, setPassenger] = useState<Passenger | null>(null);
     const [loading, setLoading] = useState(true);
     const id = params.id;
@@ -58,38 +59,12 @@ export default function EditPassengerPage() {
         fetchPassenger();
     }, [id, toast, t, canEdit]);
 
-    const handleSave = async (formData: PassengerFormValues) => {
-        if (!passenger) return;
-
-        const updatedPassenger: Passenger = {
-            ...passenger,
-            ...formData,
-            profilePicture: formData.personalPhotoUrl || passenger.profilePicture,
-        };
-        
-        const result = await api.post('/data/passengers/save', updatedPassenger);
-        if (result.isSuccess) {
-            toast({
-                title: t('toast.updateSuccessTitle'),
-                description: t('toast.updateSuccessDesc', { name: `${updatedPassenger.firstName} ${updatedPassenger.lastName}` }),
-                variant: 'success',
-            });
-            router.push(`/${module === 'passengers' ? 'airport' : module}/passengers`);
-        } else {
-            toast({
-                title: t('toast.errorTitle'),
-                description: result.errors?.[0]?.message || t('toast.errorDesc'),
-                variant: 'destructive',
-            });
-        }
-    };
-
     if (loading) {
         return (
             <div className="flex h-full w-full items-center justify-center">
-                 <div className="flex flex-col items-center gap-4">
-                    <Loader2 className="h-8 w-8 animate-spin" />
-                    <p>{t('loading')}</p>
+                <div className="space-y-6 w-full">
+                    <Skeleton className="h-24" />
+                    <Skeleton className="h-96" />
                 </div>
             </div>
         );
@@ -117,11 +92,6 @@ export default function EditPassengerPage() {
         )
     }
 
-    const passengerForForm = {
-        ...passenger,
-        personalPhotoUrl: passenger.profilePicture,
-    };
-
     return (
         <div className="space-y-6">
              <Breadcrumb>
@@ -144,7 +114,7 @@ export default function EditPassengerPage() {
                 description={t('editDescription', { name: `${passenger.firstName} ${passenger.lastName}` })}
                 icon={FilePenLine}
             />
-            <PassengerForm onSave={handleSave} passengerToEdit={passengerForForm} />
+            <PassengerForm passengerToEdit={passenger} />
         </div>
     );
 }

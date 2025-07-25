@@ -1,12 +1,13 @@
 
 'use client';
 
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import type { Passenger } from '@/types/live-processing';
+import type { Module } from '@/types';
 import { countries } from '@/lib/countries';
 
 import { Button } from '@/components/ui/button';
@@ -17,8 +18,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Combobox } from '@/components/ui/combobox';
 import { AttachmentUploader } from '@/components/shared/attachment-uploader';
 import { useTranslations } from 'next-intl';
+import { Loader2 } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+import { api } from '@/lib/api';
 
 const formSchema = z.object({
+  id: z.string().optional(),
   firstName: z.string().min(1, 'First name is required'),
   lastName: z.string().min(1, 'Last name is required'),
   localizedName: z.string().optional(),
@@ -43,49 +48,83 @@ const formSchema = z.object({
 export type PassengerFormValues = z.infer<typeof formSchema>;
 
 interface PassengerFormProps {
-  passengerToEdit?: Partial<PassengerFormValues>;
-  onSave: (data: PassengerFormValues) => void;
-  isLoading?: boolean;
+  passengerToEdit?: Passenger;
 }
 
-export function PassengerForm({ passengerToEdit, onSave, isLoading }: PassengerFormProps) {
+export function PassengerForm({ passengerToEdit }: PassengerFormProps) {
   const router = useRouter();
+  const pathname = usePathname();
+  const module = useMemo(() => (pathname.split('/')[1] || 'airport') as Module, [pathname]);
+  const { toast } = useToast();
   const t = useTranslations('PassengerForm');
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<PassengerFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: passengerToEdit || {
-      firstName: '',
-      lastName: '',
-      localizedName: '',
-      passportNumber: '',
-      nationality: '',
-      dateOfBirth: '',
-      gender: 'Male',
-      status: 'Active',
-      riskLevel: 'Low',
-      passportIssueDate: '',
-      passportExpiryDate: '',
-      passportCountry: '',
-      visaNumber: '',
-      visaType: undefined,
-      visaExpiryDate: '',
-      residencyFileNumber: '',
-      nationalId: '',
-      passportPhotoUrl: '',
-      personalPhotoUrl: '',
-    },
+    defaultValues: passengerToEdit
+      ? { ...passengerToEdit, personalPhotoUrl: passengerToEdit.profilePicture, passportPhotoUrl: passengerToEdit.passportPhotoUrl }
+      : {
+          firstName: '',
+          lastName: '',
+          localizedName: '',
+          passportNumber: '',
+          nationality: '',
+          dateOfBirth: '',
+          gender: 'Male',
+          status: 'Active',
+          riskLevel: 'Low',
+          passportIssueDate: '',
+          passportExpiryDate: '',
+          passportCountry: '',
+          visaNumber: '',
+          visaType: undefined,
+          visaExpiryDate: '',
+          residencyFileNumber: '',
+          nationalId: '',
+          passportPhotoUrl: '',
+          personalPhotoUrl: '',
+        },
   });
 
   const photoAttachmentConfigs = useMemo(() => [
-    { name: 'passportPhotoUrl', label: t('photos.passportLabel'), allowedMimeTypes: ['image/jpeg', 'image/png'], maxSize: 2 * 1024 * 1024, required: true },
-    { name: 'personalPhotoUrl', label: t('photos.personalLabel'), allowedMimeTypes: ['image/jpeg', 'image/png'], maxSize: 2 * 1024 * 1024, required: true },
+    { name: 'passportPhotoUrl', label: t('photos.passportLabel'), allowedMimeTypes: ['image/jpeg', 'image/png'], maxSize: 2 * 1024 * 1024 },
+    { name: 'personalPhotoUrl', label: t('photos.personalLabel'), allowedMimeTypes: ['image/jpeg', 'image/png'], maxSize: 2 * 1024 * 1024 },
   ], [t]);
 
   const handleAttachmentsChange = (files: Record<string, any>) => {
-    form.setValue('passportPhotoUrl', files.passportPhotoUrl?.content || '');
-    form.setValue('personalPhotoUrl', files.personalPhotoUrl?.content || '');
+    if (files.passportPhotoUrl) form.setValue('passportPhotoUrl', files.passportPhotoUrl?.content || '');
+    if (files.personalPhotoUrl) form.setValue('personalPhotoUrl', files.personalPhotoUrl?.content || '');
   };
+
+  const onSave = async (data: PassengerFormValues) => {
+    setIsLoading(true);
+    const payload = {
+      ...data,
+      profilePicture: data.personalPhotoUrl,
+    };
+    
+    const result = await api.post<Passenger>('/data/passengers/save', payload);
+
+    if (result.isSuccess && result.data) {
+        const isEditing = !!data.id;
+        toast({
+            title: isEditing ? t('toast.updateSuccessTitle') : t('toast.addSuccessTitle'),
+            description: isEditing 
+              ? t('toast.updateSuccessDesc', { name: `${result.data.firstName} ${result.data.lastName}` })
+              : t('toast.addSuccessDesc', { name: `${result.data.firstName} ${result.data.lastName}` }),
+            variant: 'success',
+        });
+        router.push(`/${module === 'passengers' ? 'airport' : module}/passengers`);
+    } else {
+        toast({
+            title: t('toast.errorTitle'),
+            description: result.errors?.[0]?.message || t('toast.errorDesc'),
+            variant: 'destructive',
+        });
+        setIsLoading(false);
+    }
+  };
+
 
   return (
     <Form {...form}>
@@ -149,8 +188,8 @@ export function PassengerForm({ passengerToEdit, onSave, isLoading }: PassengerF
                         configs={photoAttachmentConfigs}
                         onFilesChange={handleAttachmentsChange}
                         initialFiles={{
-                            passportPhotoUrl: passengerToEdit?.passportPhotoUrl || '',
-                            personalPhotoUrl: passengerToEdit?.personalPhotoUrl || '',
+                            passportPhotoUrl: passengerToEdit?.passportPhotoUrl || null,
+                            personalPhotoUrl: passengerToEdit?.profilePicture || null,
                         }}
                         outputType='base64'
                     />
@@ -159,8 +198,11 @@ export function PassengerForm({ passengerToEdit, onSave, isLoading }: PassengerF
            </div>
         </div>
         <div className="flex justify-end gap-2">
-            <Button type="button" variant="outline" onClick={() => router.back()}>{t('common.cancel')}</Button>
-            <Button type="submit">{passengerToEdit ? t('common.save') : t('common.add')}</Button>
+            <Button type="button" variant="outline" onClick={() => router.back()} disabled={isLoading}>{t('common.cancel')}</Button>
+            <Button type="submit" disabled={isLoading}>
+                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                {passengerToEdit ? t('common.save') : t('common.add')}
+            </Button>
         </div>
       </form>
     </Form>

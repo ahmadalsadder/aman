@@ -6,7 +6,6 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useRouter } from 'next/navigation';
-import { useToast } from '@/hooks/use-toast';
 import type { Passenger } from '@/types/live-processing';
 import { countries } from '@/lib/countries';
 
@@ -17,6 +16,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Combobox } from '@/components/ui/combobox';
 import { AttachmentUploader } from '@/components/shared/attachment-uploader';
+import { useTranslations } from 'next-intl';
 
 const formSchema = z.object({
   firstName: z.string().min(1, 'First name is required'),
@@ -50,6 +50,7 @@ interface PassengerFormProps {
 
 export function PassengerForm({ passengerToEdit, onSave, isLoading }: PassengerFormProps) {
   const router = useRouter();
+  const t = useTranslations('PassengerForm');
 
   const form = useForm<PassengerFormValues>({
     resolver: zodResolver(formSchema),
@@ -77,9 +78,9 @@ export function PassengerForm({ passengerToEdit, onSave, isLoading }: PassengerF
   });
 
   const photoAttachmentConfigs = useMemo(() => [
-    { name: 'passportPhotoUrl', label: 'Passport Photo', allowedMimeTypes: ['image/jpeg', 'image/png'], maxSize: 2 * 1024 * 1024, required: true },
-    { name: 'personalPhotoUrl', label: 'Personal Photo', allowedMimeTypes: ['image/jpeg', 'image/png'], maxSize: 2 * 1024 * 1024, required: true },
-  ], []);
+    { name: 'passportPhotoUrl', label: t('photos.passportLabel'), allowedMimeTypes: ['image/jpeg', 'image/png'], maxSize: 2 * 1024 * 1024, required: true },
+    { name: 'personalPhotoUrl', label: t('photos.personalLabel'), allowedMimeTypes: ['image/jpeg', 'image/png'], maxSize: 2 * 1024 * 1024, required: true },
+  ], [t]);
 
   const handleAttachmentsChange = (files: Record<string, any>) => {
     form.setValue('passportPhotoUrl', files.passportPhotoUrl?.content || '');
@@ -93,55 +94,55 @@ export function PassengerForm({ passengerToEdit, onSave, isLoading }: PassengerF
           <div className="space-y-6 lg:col-span-1">
              <Card>
                 <CardHeader>
-                    <CardTitle>Personal Details</CardTitle>
+                    <CardTitle>{t('details.title')}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                    <FormField control={form.control} name="firstName" render={({ field }) => ( <FormItem><FormLabel required>First Name</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
-                    <FormField control={form.control} name="lastName" render={({ field }) => ( <FormItem><FormLabel required>Last Name</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
-                    <FormField control={form.control} name="localizedName" render={({ field }) => ( <FormItem><FormLabel>Localized Name</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
-                    <FormField control={form.control} name="dateOfBirth" render={({ field }) => ( <FormItem><FormLabel required>Date of Birth</FormLabel><FormControl><Input type="date" {...field} /></FormControl><FormMessage /></FormItem> )} />
-                    <FormField control={form.control} name="gender" render={({ field }) => ( <FormItem><FormLabel required>Gender</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue/></SelectTrigger></FormControl><SelectContent><SelectItem value="Male">Male</SelectItem><SelectItem value="Female">Female</SelectItem><SelectItem value="Other">Other</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
+                    <FormField control={form.control} name="firstName" render={({ field }) => ( <FormItem><FormLabel required>{t('details.firstName')}</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
+                    <FormField control={form.control} name="lastName" render={({ field }) => ( <FormItem><FormLabel required>{t('details.lastName')}</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
+                    <FormField control={form.control} name="localizedName" render={({ field }) => ( <FormItem><FormLabel>{t('details.localizedName')}</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
+                    <FormField control={form.control} name="dateOfBirth" render={({ field }) => ( <FormItem><FormLabel required>{t('details.dob')}</FormLabel><FormControl><Input type="date" {...field} /></FormControl><FormMessage /></FormItem> )} />
+                    <FormField control={form.control} name="gender" render={({ field }) => ( <FormItem><FormLabel required>{t('details.gender')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue/></SelectTrigger></FormControl><SelectContent><SelectItem value="Male">{t('details.male')}</SelectItem><SelectItem value="Female">{t('details.female')}</SelectItem><SelectItem value="Other">{t('details.other')}</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
                 </CardContent>
              </Card>
              <Card>
-                <CardHeader><CardTitle>Status & Risk</CardTitle></CardHeader>
+                <CardHeader><CardTitle>{t('status.title')}</CardTitle></CardHeader>
                 <CardContent className="space-y-4">
-                    <FormField control={form.control} name="status" render={({ field }) => ( <FormItem><FormLabel required>Status</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue/></SelectTrigger></FormControl><SelectContent><SelectItem value="Active">Active</SelectItem><SelectItem value="Inactive">Inactive</SelectItem><SelectItem value="Flagged">Flagged</SelectItem><SelectItem value="Blocked">Blocked</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
-                    <FormField control={form.control} name="riskLevel" render={({ field }) => ( <FormItem><FormLabel required>Risk Level</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue/></SelectTrigger></FormControl><SelectContent><SelectItem value="Low">Low</SelectItem><SelectItem value="Medium">Medium</SelectItem><SelectItem value="High">High</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
+                    <FormField control={form.control} name="status" render={({ field }) => ( <FormItem><FormLabel required>{t('status.status')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue/></SelectTrigger></FormControl><SelectContent><SelectItem value="Active">{t('status.active')}</SelectItem><SelectItem value="Inactive">{t('status.inactive')}</SelectItem><SelectItem value="Flagged">{t('status.flagged')}</SelectItem><SelectItem value="Blocked">{t('status.blocked')}</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
+                    <FormField control={form.control} name="riskLevel" render={({ field }) => ( <FormItem><FormLabel required>{t('status.riskLevel')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue/></SelectTrigger></FormControl><SelectContent><SelectItem value="Low">{t('status.low')}</SelectItem><SelectItem value="Medium">{t('status.medium')}</SelectItem><SelectItem value="High">{t('status.high')}</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
                 </CardContent>
              </Card>
           </div>
            <div className="space-y-6 lg:col-span-1">
              <Card>
                 <CardHeader>
-                    <CardTitle>Passport & Nationality</CardTitle>
+                    <CardTitle>{t('passport.title')}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                    <FormField control={form.control} name="passportNumber" render={({ field }) => ( <FormItem><FormLabel required>Passport Number</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
-                    <FormField control={form.control} name="nationality" render={({ field }) => ( <FormItem><FormLabel required>Nationality</FormLabel><Combobox options={countries} {...field} /><FormMessage /></FormItem> )} />
-                    <FormField control={form.control} name="passportCountry" render={({ field }) => ( <FormItem><FormLabel>Issuing Country</FormLabel><Combobox options={countries} {...field} /><FormMessage /></FormItem> )} />
-                    <FormField control={form.control} name="passportIssueDate" render={({ field }) => ( <FormItem><FormLabel>Issue Date</FormLabel><FormControl><Input type="date" {...field} /></FormControl><FormMessage /></FormItem> )} />
-                    <FormField control={form.control} name="passportExpiryDate" render={({ field }) => ( <FormItem><FormLabel>Expiry Date</FormLabel><FormControl><Input type="date" {...field} /></FormControl><FormMessage /></FormItem> )} />
-                    <FormField control={form.control} name="nationalId" render={({ field }) => ( <FormItem><FormLabel>National ID</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
+                    <FormField control={form.control} name="passportNumber" render={({ field }) => ( <FormItem><FormLabel required>{t('passport.passportNo')}</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
+                    <FormField control={form.control} name="nationality" render={({ field }) => ( <FormItem><FormLabel required>{t('passport.nationality')}</FormLabel><Combobox options={countries} {...field} placeholder={t('passport.selectNationality')} /><FormMessage /></FormItem> )} />
+                    <FormField control={form.control} name="passportCountry" render={({ field }) => ( <FormItem><FormLabel>{t('passport.issuingCountry')}</FormLabel><Combobox options={countries} {...field} placeholder={t('passport.selectIssuingCountry')} /><FormMessage /></FormItem> )} />
+                    <FormField control={form.control} name="passportIssueDate" render={({ field }) => ( <FormItem><FormLabel>{t('passport.issueDate')}</FormLabel><FormControl><Input type="date" {...field} /></FormControl><FormMessage /></FormItem> )} />
+                    <FormField control={form.control} name="passportExpiryDate" render={({ field }) => ( <FormItem><FormLabel>{t('passport.expiryDate')}</FormLabel><FormControl><Input type="date" {...field} /></FormControl><FormMessage /></FormItem> )} />
+                    <FormField control={form.control} name="nationalId" render={({ field }) => ( <FormItem><FormLabel>{t('passport.nationalId')}</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
                 </CardContent>
              </Card>
              <Card>
                 <CardHeader>
-                    <CardTitle>Visa & Residency</CardTitle>
+                    <CardTitle>{t('visa.title')}</CardTitle>
                 </CardHeader>
                  <CardContent className="space-y-4">
-                    <FormField control={form.control} name="visaNumber" render={({ field }) => ( <FormItem><FormLabel>Visa Number</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
-                    <FormField control={form.control} name="visaType" render={({ field }) => ( <FormItem><FormLabel>Visa Type</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue placeholder="Select visa type..."/></SelectTrigger></FormControl><SelectContent><SelectItem value="Tourism">Tourism</SelectItem><SelectItem value="Work">Work</SelectItem><SelectItem value="Residency">Residency</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
-                    <FormField control={form.control} name="visaExpiryDate" render={({ field }) => ( <FormItem><FormLabel>Visa Expiry Date</FormLabel><FormControl><Input type="date" {...field} /></FormControl><FormMessage /></FormItem> )} />
-                    <FormField control={form.control} name="residencyFileNumber" render={({ field }) => ( <FormItem><FormLabel>Residency File No.</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
+                    <FormField control={form.control} name="visaNumber" render={({ field }) => ( <FormItem><FormLabel>{t('visa.visaNo')}</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
+                    <FormField control={form.control} name="visaType" render={({ field }) => ( <FormItem><FormLabel>{t('visa.visaType')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue placeholder={t('visa.selectVisaType')}/></SelectTrigger></FormControl><SelectContent><SelectItem value="Tourism">{t('visa.tourism')}</SelectItem><SelectItem value="Work">{t('visa.work')}</SelectItem><SelectItem value="Residency">{t('visa.residency')}</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
+                    <FormField control={form.control} name="visaExpiryDate" render={({ field }) => ( <FormItem><FormLabel>{t('visa.visaExpiry')}</FormLabel><FormControl><Input type="date" {...field} /></FormControl><FormMessage /></FormItem> )} />
+                    <FormField control={form.control} name="residencyFileNumber" render={({ field }) => ( <FormItem><FormLabel>{t('visa.residencyNo')}</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
                  </CardContent>
              </Card>
           </div>
            <div className="space-y-6 lg:col-span-1">
              <Card>
                 <CardHeader>
-                    <CardTitle>Photos & Attachments</CardTitle>
-                    <CardDescription>Upload passenger photos.</CardDescription>
+                    <CardTitle>{t('photos.title')}</CardTitle>
+                    <CardDescription>{t('photos.description')}</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <AttachmentUploader 
@@ -158,8 +159,8 @@ export function PassengerForm({ passengerToEdit, onSave, isLoading }: PassengerF
            </div>
         </div>
         <div className="flex justify-end gap-2">
-            <Button type="button" variant="outline" onClick={() => router.back()}>Cancel</Button>
-            <Button type="submit">Save Changes</Button>
+            <Button type="button" variant="outline" onClick={() => router.back()}>{t('common.cancel')}</Button>
+            <Button type="submit">{passengerToEdit ? t('common.save') : t('common.add')}</Button>
         </div>
       </form>
     </Form>

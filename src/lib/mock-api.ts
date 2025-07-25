@@ -2,12 +2,12 @@
 
 import type { User } from '@/types';
 import { Result, ApiError } from '@/types/api/result';
-import { mockPassengers, mockTransactions, mockVisaDatabase, mockOfficerDesks, mockPorts, mockTerminals, mockZones, mockWorkflows, mockRiskProfiles, setMockOfficerDesks, mockGates, setMockGates, mockMedia, setMockMedia, mockWhitelist, setMockWhitelist, mockBlacklist, setMockBlacklist } from './mock-data';
+import { mockPassengers, mockTransactions, mockVisaDatabase, mockOfficerDesks, mockPorts, mockTerminals, mockZones, mockWorkflows, mockRiskProfiles, setMockOfficerDesks, mockGates, setMockGates, mockMedia, setMockMedia, mockWhitelist, setMockWhitelist, mockBlacklist, setMockBlacklist, setMockPassengers } from './mock-data';
 import { assessPassengerRisk } from '@/ai/flows/assess-risk-flow';
 import { countries } from './countries';
 import { Fingerprint, ScanLine, UserCheck, ShieldAlert, User } from 'lucide-react';
 import { extractPassportData } from '@/ai/flows/extract-passport-data-flow';
-import type { Transaction, Gate, CivilRecord, Media, BlacklistEntry, WhitelistEntry } from '@/types/live-processing';
+import type { Transaction, Gate, CivilRecord, Media, BlacklistEntry, WhitelistEntry, Passenger } from '@/types/live-processing';
 import type { OfficerDesk } from '@/types/configuration';
 
 const users: User[] = [
@@ -557,7 +557,48 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
         return Result.success(civilRecords) as Result<T>;
     }
 
-    // PASSENGER
+    // PASSENGERS
+    if (method === 'POST' && url.pathname === '/data/passengers/delete') {
+        const { id } = JSON.parse(body as string);
+        const initialLength = mockPassengers.length;
+        setMockPassengers(mockPassengers.filter(p => p.id !== id));
+        if (mockPassengers.length < initialLength) {
+            return Result.success({ id }) as Result<T>;
+        }
+        return Result.failure([new ApiError('NOT_FOUND', 'Passenger not found.')]) as Result<T>;
+    }
+
+    if (method === 'POST' && url.pathname === '/data/passengers/save') {
+        const passengerData = JSON.parse(body as string) as Passenger;
+        const isNew = !passengerData.id;
+
+        if (isNew) {
+            const newPassenger = { ...passengerData, id: `P-NEW-${Date.now()}` };
+            setMockPassengers([...mockPassengers, newPassenger]);
+            return Result.success(newPassenger) as Result<T>;
+        } else {
+            let found = false;
+            const updatedPassengers = mockPassengers.map(p => {
+                if (p.id === passengerData.id) {
+                    found = true;
+                    return { ...p, ...passengerData };
+                }
+                return p;
+            });
+            if (found) {
+                setMockPassengers(updatedPassengers);
+                return Result.success(passengerData) as Result<T>;
+            }
+            return Result.failure([new ApiError('NOT_FOUND', 'Passenger not found to update.')]) as Result<T>;
+        }
+    }
+
+    if (method === 'GET' && url.pathname.startsWith('/data/passengers/')) {
+        const id = pathParts[pathParts.length - 1];
+        const passenger = mockPassengers.find(p => p.id === id);
+        return passenger ? Result.success(passenger) as Result<T> : Result.failure([new ApiError('NOT_FOUND', `Passenger with id ${id} not found.`)]) as Result<T>;
+    }
+
     if (method === 'GET' && url.pathname === '/data/passenger-by-passport') {
         const passportNumber = url.searchParams.get('passportNumber');
         const passenger = mockPassengers.find(p => p.passportNumber === passportNumber);
@@ -567,6 +608,17 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
         return Result.failure([new ApiError('NOT_FOUND', `Passenger with passport ${passportNumber} not found.`)]) as Result<T>;
     }
 
+    if (method === 'GET' && url.pathname === '/data/passengers') {
+        // This simulates scoped data fetching for non-admin users, though in a real app,
+        // the backend would derive the scope from the user's auth token, not a query param.
+        const module = url.searchParams.get('module');
+        if (module && module !== 'admin') {
+            const passengerSubset = mockPassengers.slice(0, 2); // Return a smaller, "scoped" list
+            return Result.success(passengerSubset) as Result<T>;
+        }
+        // Admin gets all passengers
+        return Result.success(mockPassengers) as Result<T>;
+    }
 
     // TRANSACTIONS
     if (method === 'POST' && url.pathname === '/data/transactions') {
@@ -893,14 +945,6 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
 
     if (method === 'GET' && url.pathname === '/dashboard/airport') {
         return Result.success(airportDashboardData) as Result<T>;
-    }
-
-    if (method === 'GET' && url.pathname.startsWith('/data/passengers')) {
-        return Result.success(passengerData) as Result<T>;
-    }
-
-    if (method === 'GET' && url.pathname === '/data/visa-database') {
-        return Result.success(mockVisaDatabase) as Result<T>;
     }
 
     if (method === 'GET' && url.pathname === '/dashboard/transaction-overview') {

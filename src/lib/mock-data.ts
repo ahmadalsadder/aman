@@ -4,7 +4,7 @@ import type { Passenger, Transaction, OfficerDesk, Gate, Media, WhitelistEntry, 
 import { Plane, Car, Ship } from "lucide-react";
 import type { Port, Terminal, Zone, Workflow, RiskProfile } from '@/types/configuration';
 
-export const mockPassengers: Passenger[] = [
+export let mockPassengers: Passenger[] = [
     {
       id: "P001",
       firstName: "John",
@@ -262,4 +262,8 @@ export const setMockWhitelist = (newWhitelist: WhitelistEntry[]) => {
 
 export const setMockBlacklist = (newBlacklist: BlacklistEntry[]) => {
     mockBlacklist = newBlacklist;
+};
+
+export const setMockPassengers = (newPassengers: Passenger[]) => {
+    mockPassengers = newPassengers;
 };

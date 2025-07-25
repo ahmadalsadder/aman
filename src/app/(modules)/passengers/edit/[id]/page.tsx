@@ -4,20 +4,25 @@
 import { PassengerForm, type PassengerFormValues } from '@/components/passengers/passenger-form';
 import { GradientPageHeader } from '@/components/shared/gradient-page-header';
 import { useToast } from '@/hooks/use-toast';
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter, useParams, usePathname } from 'next/navigation';
 import type { Passenger } from '@/types/live-processing';
 import { useState, useEffect } from 'react';
-import { Loader2, FilePenLine } from 'lucide-react';
+import { Loader2, FilePenLine, User, LayoutDashboard } from 'lucide-react';
 import { api } from '@/lib/api';
+import { useTranslations } from 'next-intl';
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 
 export default function EditPassengerPage() {
     const router = useRouter();
-    const params = useParams<{ id: string, module: string }>();
+    const params = useParams<{ id: string }>();
+    const pathname = usePathname();
+    const module = pathname.split('/')[1] || 'passengers';
     const { toast } = useToast();
+    const t = useTranslations('PassengerForm');
+    const tNav = useTranslations('Navigation');
     const [passenger, setPassenger] = useState<Passenger | null>(null);
     const [loading, setLoading] = useState(true);
     const id = params.id;
-    const module = params.module || 'passengers';
 
     useEffect(() => {
         if (!id) return;
@@ -29,17 +34,17 @@ export default function EditPassengerPage() {
                 setPassenger(result.data);
             } else {
                 toast({
-                    title: "Error",
-                    description: "Could not load passenger data.",
+                    title: t('toast.loadErrorTitle'),
+                    description: t('toast.loadErrorDesc'),
                     variant: "destructive",
                 });
             }
             setLoading(false);
         };
         fetchPassenger();
-    }, [id, toast]);
+    }, [id, toast, t]);
 
-    const handleSave = (formData: PassengerFormValues) => {
+    const handleSave = async (formData: PassengerFormValues) => {
         if (!passenger) return;
 
         const updatedPassenger: Passenger = {
@@ -48,22 +53,21 @@ export default function EditPassengerPage() {
             profilePicture: formData.personalPhotoUrl || passenger.profilePicture,
         };
         
-        api.post('/data/passengers/update', updatedPassenger).then(result => {
-            if (result.isSuccess) {
-                toast({
-                    title: 'Passenger Updated',
-                    description: `${updatedPassenger.firstName} ${updatedPassenger.lastName}'s record has been successfully updated.`,
-                    variant: 'success',
-                });
-                router.push(`/${module}`);
-            } else {
-                toast({
-                    title: 'Update Failed',
-                    description: result.errors?.[0]?.message || 'There was an error saving the passenger data.',
-                    variant: 'destructive',
-                });
-            }
-        });
+        const result = await api.post('/data/passengers/save', updatedPassenger);
+        if (result.isSuccess) {
+            toast({
+                title: t('toast.updateSuccessTitle'),
+                description: t('toast.updateSuccessDesc', { name: `${updatedPassenger.firstName} ${updatedPassenger.lastName}` }),
+                variant: 'success',
+            });
+            router.push(`/${module === 'passengers' ? 'airport' : module}/passengers`);
+        } else {
+            toast({
+                title: t('toast.errorTitle'),
+                description: result.errors?.[0]?.message || t('toast.errorDesc'),
+                variant: 'destructive',
+            });
+        }
     };
 
     if (loading) {
@@ -71,7 +75,7 @@ export default function EditPassengerPage() {
             <div className="flex h-full w-full items-center justify-center">
                  <div className="flex flex-col items-center gap-4">
                     <Loader2 className="h-8 w-8 animate-spin" />
-                    <p>Loading passenger data...</p>
+                    <p>{t('loading')}</p>
                 </div>
             </div>
         );
@@ -81,7 +85,7 @@ export default function EditPassengerPage() {
         return (
              <div className="flex h-full w-full items-center justify-center">
                  <div className="flex flex-col items-center gap-4 text-destructive">
-                    <p>Passenger not found.</p>
+                    <p>{t('notFound')}</p>
                 </div>
             </div>
         )
@@ -94,9 +98,24 @@ export default function EditPassengerPage() {
 
     return (
         <div className="space-y-6">
+             <Breadcrumb>
+                <BreadcrumbList>
+                    <BreadcrumbItem>
+                        <BreadcrumbLink href={`/${module}/dashboard`} icon={LayoutDashboard}>{tNav('dashboard')}</BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                        <BreadcrumbLink href={`/${module}/passengers`} icon={User}>{tNav('passengers')}</BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                        <BreadcrumbPage icon={FilePenLine}>{t('editTitle')}</BreadcrumbPage>
+                    </BreadcrumbItem>
+                </BreadcrumbList>
+            </Breadcrumb>
             <GradientPageHeader
-                title="Edit Passenger"
-                description={`Editing the record for ${passenger.firstName} ${passenger.lastName}.`}
+                title={t('editTitle')}
+                description={t('editDescription', { name: `${passenger.firstName} ${passenger.lastName}` })}
                 icon={FilePenLine}
             />
             <PassengerForm onSave={handleSave} passengerToEdit={passengerForForm} />

@@ -38,6 +38,7 @@ interface PassengerDetailsSheetProps {
 }
 
 export function PassengerDetailsSheet({ passenger, isOpen, onOpenChange }: PassengerDetailsSheetProps) {
+    const t = useTranslations('PassengerDetails');
     if (!passenger) return null;
 
     return (
@@ -57,30 +58,30 @@ export function PassengerDetailsSheet({ passenger, isOpen, onOpenChange }: Passe
                 </SheetHeader>
                 <div className="py-4 space-y-2">
                     <Separator />
-                    <h4 className="font-semibold text-base pt-2">Personal Information</h4>
-                    <DetailItem label="Status"><Badge variant="outline" className={cn(statusColors[passenger.status])}>{passenger.status}</Badge></DetailItem>
-                    <DetailItem label="Risk Level"><Badge variant="outline" className={cn(riskLevelColors[passenger.riskLevel])}>{passenger.riskLevel}</Badge></DetailItem>
-                    <DetailItem label="Gender" value={passenger.gender} />
-                    <DetailItem label="Date of Birth" value={passenger.dateOfBirth} />
+                    <h4 className="font-semibold text-base pt-2">{t('personalInfo')}</h4>
+                    <DetailItem label={t('status')}><Badge variant="outline" className={cn(statusColors[passenger.status])}>{passenger.status}</Badge></DetailItem>
+                    <DetailItem label={t('riskLevel')}><Badge variant="outline" className={cn(riskLevelColors[passenger.riskLevel])}>{passenger.riskLevel}</Badge></DetailItem>
+                    <DetailItem label={t('gender')} value={passenger.gender} />
+                    <DetailItem label={t('dob')} value={passenger.dateOfBirth} />
 
                     <Separator />
-                    <h4 className="font-semibold text-base pt-2">Document Information</h4>
-                    <DetailItem label="Passport No." value={passenger.passportNumber} />
-                    <DetailItem label="Nationality" value={passenger.nationality} />
-                    <DetailItem label="Issuing Country" value={passenger.passportCountry} />
-                    <DetailItem label="Issue Date" value={passenger.passportIssueDate} />
-                    <DetailItem label="Expiry Date" value={passenger.passportExpiryDate} />
-                    <DetailItem label="National ID" value={passenger.nationalId} />
+                    <h4 className="font-semibold text-base pt-2">{t('documentInfo')}</h4>
+                    <DetailItem label={t('passportNo')} value={passenger.passportNumber} />
+                    <DetailItem label={t('nationality')} value={passenger.nationality} />
+                    <DetailItem label={t('issuingCountry')} value={passenger.passportCountry} />
+                    <DetailItem label={t('issueDate')} value={passenger.passportIssueDate} />
+                    <DetailItem label={t('expiryDate')} value={passenger.passportExpiryDate} />
+                    <DetailItem label={t('nationalId')} value={passenger.nationalId} />
 
                     <Separator />
-                    <h4 className="font-semibold text-base pt-2">Visa & Residency</h4>
-                    <DetailItem label="Visa No." value={passenger.visaNumber || 'N/A'} />
-                    <DetailItem label="Visa Type" value={passenger.visaType || 'N/A'} />
-                    <DetailItem label="Visa Expiry" value={passenger.visaExpiryDate || 'N/A'} />
-                    <DetailItem label="Residency No." value={passenger.residencyFileNumber || 'N/A'} />
+                    <h4 className="font-semibold text-base pt-2">{t('visaInfo')}</h4>
+                    <DetailItem label={t('visaNo')} value={passenger.visaNumber || 'N/A'} />
+                    <DetailItem label={t('visaType')} value={passenger.visaType || 'N/A'} />
+                    <DetailItem label={t('visaExpiry')} value={passenger.visaExpiryDate || 'N/A'} />
+                    <DetailItem label={t('residencyNo')} value={passenger.residencyFileNumber || 'N/A'} />
                 </div>
                 <SheetFooter className="mt-4">
-                    <Button onClick={() => onOpenChange(false)}>Close</Button>
+                    <Button onClick={() => onOpenChange(false)}>{t('close')}</Button>
                 </SheetFooter>
             </SheetContent>
         </Sheet>

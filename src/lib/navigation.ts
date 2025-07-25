@@ -81,18 +81,24 @@ const getModuleSubNav = (module: Module, t: any): NavItem[] => {
     if (module === 'analyst') {
         subNav.push({
             href: '/analyst/whitelist',
-            label: 'Whitelist',
+            label: t('whitelist'),
             icon: ListChecks,
         });
         subNav.push({
             href: '/analyst/blacklist',
-            label: 'Blacklist',
+            label: t('blacklist'),
             icon: ShieldOff,
         });
     }
 
     if (['airport', 'landport', 'seaport', 'egate'].includes(module)) {
         subNav.push(
+             {
+                href: `${moduleBaseUrl}/passengers`,
+                label: t('passengers'),
+                icon: Users,
+                permission: `${module}:records:view` as Permission,
+            },
             {
                 href: `${moduleBaseUrl}/whitelist`,
                 label: t('whitelist'),
@@ -145,6 +151,11 @@ export const getSidebarNavItems = (role: Role, modules: Module[], t: any): NavIt
     
     // Add admin-specific items if the role is admin
     if (role === 'admin') {
+        nav.push({
+            href: `/passengers`,
+            label: t('passengers'),
+            icon: Users,
+        });
          if (adminNavItems.users) {
             nav.push({ ...adminNavItems.users, href: `${adminNavItems.users.href}`, label: t('userManagement') });
          }

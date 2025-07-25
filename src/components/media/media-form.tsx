@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React, { useRef, useState } from 'react';
@@ -31,7 +32,9 @@ const mediaFileSchema = z.object({
   language: z.string().min(1, "Language is required."),
   fileName: z.string().min(1, "File is required."),
   fileType: z.string().min(1, "File type is required."),
-  fileUrl: z.string().min(1, "File URL is required."),
+  fileUrl: z.string(), // No longer required, can be generated on server if needed
+  content: z.string().optional(), // For base64
+  fileBytes: z.instanceof(ArrayBuffer).optional(), // For raw bytes
 });
 
 const formSchema = z.object({
@@ -91,7 +94,7 @@ export function MediaForm({ onSave, isLoading, mediaToEdit }: MediaFormProps) {
     name: "mediaFiles",
   });
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file && mediaType) {
         const maxSize = MAX_SIZES[mediaType];
@@ -115,13 +118,21 @@ export function MediaForm({ onSave, isLoading, mediaToEdit }: MediaFormProps) {
             return;
         }
 
-      append({
-        id: nanoid(),
-        language: currentLanguage,
-        fileName: file.name,
-        fileType: file.type,
-        fileUrl: `/uploads/mock/${file.name}`,
-      });
+        const reader = new FileReader();
+        reader.onload = () => {
+             append({
+                id: nanoid(),
+                language: currentLanguage,
+                fileName: file.name,
+                fileType: file.type,
+                fileUrl: '', // This can be generated server-side
+                fileBytes: reader.result as ArrayBuffer,
+            });
+        };
+        reader.onerror = () => {
+            toast({ variant: 'destructive', title: 'File Read Error', description: 'Could not process the selected file.' });
+        }
+        reader.readAsArrayBuffer(file);
     }
      if (event.target) {
         event.target.value = '';

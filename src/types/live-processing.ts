@@ -182,7 +182,9 @@ export interface MediaFile {
     language: string;
     fileName: string;
     fileType: string;
-    fileUrl: string;
+    fileUrl: string; // This can be a data URI or a remote URL
+    content?: string; // base64
+    fileBytes?: ArrayBuffer;
 }
 export interface Media {
   id: string;

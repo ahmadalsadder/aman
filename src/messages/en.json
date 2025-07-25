@@ -1124,5 +1124,63 @@
             "documentLabel": "Official Document (e.g., Diplomatic Note)"
         }
     }
+  },
+   "BlacklistPage": {
+    "form": {
+        "addTitle": "Add to Blacklist",
+        "addDescription": "Flag an individual for security risks.",
+        "editTitle": "Edit Blacklist Entry",
+        "editDescription": "Modify the details for {name}.",
+        "accessDenied": {
+            "title": "Access Denied",
+            "createDescription": "You do not have permission to add new entries to the blacklist for this module.",
+            "editDescription": "You do not have permission to edit blacklist entries for this module."
+        },
+        "search": {
+            "title": "Link to Existing Passenger (Recommended)",
+            "description": "Search for a passenger by their passport number to link this blacklist entry to their record.",
+            "placeholder": "Enter passport number...",
+            "button": "Search"
+        },
+        "toast": {
+            "passengerFoundTitle": "Passenger Found",
+            "passengerNotFoundTitle": "Passenger Not Found",
+            "passengerNotFoundDesc": "No existing record found. Please fill details manually.",
+            "addSuccessTitle": "Entry Added",
+            "addSuccessDesc": "{name} has been added to the blacklist.",
+            "updateSuccessTitle": "Entry Updated",
+            "updateSuccessDesc": "{name}'s blacklist entry has been updated.",
+            "errorTitle": "Operation Failed",
+            "errorDesc": "An error occurred. Please try again.",
+            "loadError": "Failed to load blacklist entry data."
+        },
+        "common": {
+            "cancel": "Cancel",
+            "save": "Save Entry"
+        },
+        "details": {
+            "title": "Blacklist Details",
+            "description": "Enter the details for the individual to be blacklisted.",
+            "linkedTitle": "Passenger Record Linked",
+            "linkedDesc": "The following fields are pre-filled from {name}'s record and cannot be changed here.",
+            "name": "Full Name",
+            "nationality": "Nationality",
+            "selectNationality": "Select a nationality...",
+            "reason": "Reason for Blacklisting",
+            "notes": "Notes"
+        },
+        "category": {
+            "title": "Category",
+            "category": "Blacklist Category",
+            "noFly": "No-Fly",
+            "wanted": "Wanted",
+            "financial": "Financial",
+            "other": "Other"
+        },
+        "attachments": {
+            "title": "Supporting Evidence",
+            "documentLabel": "Official Document (e.g., Warrant, Alert)"
+        }
+    }
   }
 }

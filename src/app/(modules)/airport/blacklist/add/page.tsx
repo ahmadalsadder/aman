@@ -7,7 +7,7 @@ import { GradientPageHeader } from '@/components/shared/gradient-page-header';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import type { Passenger, BlacklistEntry } from '@/types/live-processing';
-import { PlusCircle, ShieldAlert, AlertTriangle, Search, Loader2, ListChecks, LayoutDashboard, ShieldOff } from 'lucide-react';
+import { PlusCircle, ShieldOff, AlertTriangle, Search, Loader2, ListChecks, LayoutDashboard } from 'lucide-react';
 import { useAuth } from '@/hooks/use-auth';
 import { useTranslations } from 'next-intl';
 import { api } from '@/lib/api';
@@ -24,9 +24,26 @@ export default function AddAirportBlacklistPage() {
     const tNav = useTranslations('Navigation');
     
     const [isLoading, setIsLoading] = useState(false);
+    const [isSearching, setIsSearching] = useState(false);
+    const [searchedPassenger, setSearchedPassenger] = useState<Passenger | null>(null);
+    const [passportSearch, setPassportSearch] = useState('');
     
     const module = 'airport';
     const canCreate = hasPermission([`${module}:blacklist:create`]);
+
+    const handleSearch = async () => {
+        if (!passportSearch) return;
+        setIsSearching(true);
+        const result = await api.get<Passenger>(`/data/passenger-by-passport?passportNumber=${passportSearch}`);
+        if (result.isSuccess && result.data) {
+            setSearchedPassenger(result.data);
+            toast({ title: t('toast.passengerFoundTitle') });
+        } else {
+            setSearchedPassenger(null);
+            toast({ title: t('toast.passengerNotFoundTitle'), description: t('toast.passengerNotFoundDesc'), variant: 'default' });
+        }
+        setIsSearching(false);
+    };
 
     const handleSave = async (formData: BlacklistFormValues) => {
         setIsLoading(true);
@@ -75,7 +92,21 @@ export default function AddAirportBlacklistPage() {
                 </BreadcrumbList>
             </Breadcrumb>
             <GradientPageHeader title={t('addTitle')} description={t('addDescription')} icon={PlusCircle} />
-            <BlacklistForm onSave={handleSave} isLoading={isLoading} />
+            <Card>
+                <CardHeader>
+                    <CardTitle>{t('search.title')}</CardTitle>
+                    <CardDescription>{t('search.description')}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <div className="flex gap-2">
+                        <Input placeholder={t('search.placeholder')} value={passportSearch} onChange={(e) => setPassportSearch(e.target.value)} />
+                        <Button onClick={handleSearch} disabled={isSearching || !passportSearch}>
+                            {isSearching ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
+                        </Button>
+                    </div>
+                </CardContent>
+            </Card>
+            <BlacklistForm onSave={handleSave} isLoading={isLoading} passenger={searchedPassenger} />
         </div>
     );
 }

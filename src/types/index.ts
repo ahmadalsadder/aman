@@ -41,6 +41,13 @@ export type Permission =
   | 'airport:desks:view' | 'airport:desks:create' | 'airport:desks:edit' | 'airport:desks:delete'
   | 'landport:desks:view' | 'landport:desks:create' | 'landport:desks:edit' | 'landport:desks:delete'
   | 'seaport:desks:view' | 'seaport:desks:create' | 'seaport:desks:edit' | 'seaport:desks:delete'
+  
+  // Workload permissions
+  | 'airport:workload:view'
+  | 'landport:workload:view'
+  | 'seaport:workload:view'
+  | 'egate:workload:view'
+
   // E-Gate media permissions
   | 'egate:media:view' | 'egate:media:create' | 'egate:media:edit' | 'egate:media:delete'
   // Other permissions

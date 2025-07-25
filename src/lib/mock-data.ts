@@ -4,7 +4,7 @@
 import type { Passenger, Transaction, OfficerDesk, Gate, Media, WhitelistEntry, BlacklistEntry } from "@/types/live-processing";
 import type { Shift, DayOfWeek } from "@/types/workload";
 import { Plane, Car, Ship } from "lucide-react";
-import type { Port, Terminal, Zone, Workflow, RiskProfile } from '@/types/configuration';
+import type { Port, Terminal, Zone, Workflow, RiskProfile, User } from '@/types';
 
 let mockPassengers: Passenger[] = [
     {
@@ -263,6 +263,526 @@ export const mockShifts: Shift[] = [
     { id: 'S004', name: 'Weekend Day', startTime: '09:00', endTime: '21:00', days: ['saturday', 'sunday'], status: 'Active', lastModified: '2023-05-19' },
 ];
 
+const users: User[] = [
+  { 
+    id: '1', 
+    name: 'Admin User', 
+    fullName: 'Admin User',
+    email: 'admin@example.com', 
+    role: 'admin', 
+    token: 'fake-admin-token', 
+    modules: ['landport', 'seaport', 'airport', 'egate', 'analyst', 'control-room', 'users', 'settings', 'duty-manager'],
+    permissions: [
+        'users:manage', 'reports:view',
+        // Airport
+        'airport:passengers:view', 'airport:passengers:create', 'airport:passengers:edit', 'airport:passengers:delete',
+        'airport:whitelist:view', 'airport:whitelist:create', 'airport:whitelist:edit', 'airport:whitelist:delete',
+        'airport:blacklist:view', 'airport:blacklist:create', 'airport:blacklist:edit', 'airport:blacklist:delete',
+        'airport:records:create',
+        'airport:civil-records:view',
+        'airport:transactions:view',
+        'airport:transactions:live',
+        'airport:dashboard:view', 'airport:dashboard:stats:view', 'airport:prediction:view', 'airport:dashboard:charts:view', 'airport:dashboard:officer-performance:view',
+        'airport:desks:view', 'airport:desks:create', 'airport:desks:edit', 'airport:desks:delete',
+        'airport:workload:view',
+        // Landport
+        'landport:passengers:view', 'landport:passengers:create', 'landport:passengers:edit', 'landport:passengers:delete',
+        'landport:whitelist:view', 'landport:whitelist:create', 'landport:whitelist:edit', 'landport:whitelist:delete',
+        'landport:blacklist:view', 'landport:blacklist:create', 'landport:blacklist:edit', 'landport:blacklist:delete',
+        'landport:records:create',
+        'landport:civil-records:view',
+        'landport:transactions:view',
+        'landport:transactions:live',
+        'landport:dashboard:view', 'landport:dashboard:stats:view', 'landport:prediction:view', 'landport:dashboard:charts:view', 'landport:dashboard:officer-performance:view',
+        'landport:desks:view', 'landport:desks:create', 'landport:desks:edit', 'landport:desks:delete',
+        'landport:workload:view',
+        // Seaport
+        'seaport:passengers:view', 'seaport:passengers:create', 'seaport:passengers:edit', 'seaport:passengers:delete',
+        'seaport:whitelist:view', 'seaport:whitelist:create', 'seaport:whitelist:edit', 'seaport:whitelist:delete',
+        'seaport:blacklist:view', 'seaport:blacklist:create', 'seaport:blacklist:edit', 'seaport:blacklist:delete',
+        'seaport:records:create',
+        'seaport:civil-records:view',
+        'seaport:transactions:view',
+        'seaport:transactions:live',
+        'seaport:dashboard:view', 'seaport:dashboard:stats:view', 'seaport:prediction:view', 'seaport:dashboard:charts:view', 'seaport:dashboard:officer-performance:view',
+        'seaport:desks:view', 'seaport:desks:create', 'seaport:desks:edit', 'seaport:desks:delete',
+        'seaport:workload:view',
+        // E-Gate
+        'egate:passengers:view', 'egate:passengers:create', 'egate:passengers:edit', 'egate:passengers:delete',
+        'egate:whitelist:view', 'egate:whitelist:create', 'egate:whitelist:edit', 'egate:whitelist:delete',
+        'egate:blacklist:view', 'egate:blacklist:create', 'egate:blacklist:edit', 'egate:blacklist:delete',
+        'egate:records:create', 'egate:records:edit', 'egate:records:delete',
+        'egate:civil-records:view',
+        'egate:dashboard:view', 'egate:dashboard:stats:view', 'egate:prediction:view', 'egate:dashboard:charts:view', 'egate:media:view', 'egate:media:create', 'egate:media:edit', 'egate:media:delete',
+        'egate:workload:view',
+        // Other Modules
+        'analyst:records:view', 'analyst:records:create', 'analyst:records:edit', 'analyst:records:delete',
+        'analyst:dashboard:view', 'analyst:dashboard:stats:view', 'analyst:dashboard:charts:view',
+        'control-room:dashboard:view', 'control-room:dashboard:stats:view', 'control-room:dashboard:charts:view', 'control-room:dashboard:officer-performance:view',
+        'duty-manager:view'
+    ]
+  },
+  { 
+    id: '2', 
+    name: 'Auditor User', 
+    fullName: 'Auditor User',
+    email: 'auditor@example.com', 
+    role: 'auditor', 
+    token: 'fake-auditor-token', 
+    modules: ['landport', 'seaport'],
+    permissions: ['reports:view', 'landport:transactions:view', 'seaport:transactions:view', 'landport:dashboard:view', 'seaport:dashboard:view', 'landport:civil-records:view', 'seaport:civil-records:view']
+  },
+  { 
+    id: '3', 
+    name: 'Viewer User', 
+    fullName: 'Viewer User',
+    email: 'viewer@example.com', 
+    role: 'viewer', 
+    token: 'fake-viewer-token', 
+    modules: ['airport'],
+    permissions: ['airport:civil-records:view', 'airport:dashboard:view', 'airport:dashboard:stats:view']
+  },
+  {
+    id: '4',
+    name: 'Shift Supervisor User',
+    fullName: 'Shift Supervisor User',
+    email: 'supervisor@example.com',
+    role: 'shiftsupervisor',
+    token: 'fake-supervisor-token',
+    modules: ['airport', 'landport', 'seaport', 'control-room', 'duty-manager'],
+    permissions: [
+        'reports:view', 
+        'airport:civil-records:view',
+        'landport:civil-records:view',
+        'seaport:civil-records:view',
+        'airport:transactions:view', 'landport:transactions:view', 'seaport:transactions:view', 
+        'airport:transactions:live', 'landport:transactions:live', 'seaport:transactions:live',
+        'airport:dashboard:view', 'airport:dashboard:stats:view', 'airport:prediction:view', 'airport:dashboard:charts:view', 'airport:dashboard:officer-performance:view',
+        'airport:workload:view',
+        'landport:dashboard:view', 'landport:dashboard:stats:view', 'landport:prediction:view', 'landport:dashboard:charts:view', 'landport:dashboard:officer-performance:view',
+        'landport:workload:view',
+        'seaport:dashboard:view', 'seaport:dashboard:stats:view', 'seaport:prediction:view', 'seaport:dashboard:charts:view', 'seaport:dashboard:officer-performance:view',
+        'seaport:workload:view',
+        'control-room:dashboard:view', 'control-room:dashboard:stats:view', 'control-room:dashboard:charts:view', 'control-room:dashboard:officer-performance:view',
+        'duty-manager:view',
+        // Granular permissions for editing across modules they supervise
+        'airport:passengers:edit', 'airport:whitelist:edit', 'airport:blacklist:edit',
+        'landport:passengers:edit', 'landport:whitelist:edit', 'landport:blacklist:edit',
+        'seaport:passengers:edit', 'seaport:whitelist:edit', 'seaport:blacklist:edit',
+    ]
+  },
+  {
+    id: '5',
+    name: 'Analyst User',
+    fullName: 'Analyst User',
+    email: 'analyst@example.com',
+    role: 'analyst',
+    token: 'fake-analyst-token',
+    modules: ['analyst'],
+    permissions: ['analyst:records:view', 'reports:view', 'analyst:dashboard:view', 'analyst:records:create', 'analyst:records:edit', 'analyst:records:delete']
+  },
+  {
+    id: '6',
+    name: 'Control Room User',
+    fullName: 'Control Room User',
+    email: 'controlroom@example.com',
+    role: 'control-room',
+    token: 'fake-control-room-token',
+    modules: ['control-room'],
+    permissions: ['control-room:records:view', 'reports:view', 'control-room:dashboard:view', 'control-room:dashboard:stats:view', 'control-room:dashboard:charts:view']
+  },
+  {
+    id: '7',
+    name: 'Landport Officer',
+    fullName: 'Landport Officer',
+    email: 'officer.land@example.com',
+    role: 'officer',
+    token: 'fake-officer-token',
+    modules: ['landport'],
+    permissions: [
+        'landport:civil-records:view', 'landport:records:create',
+        'landport:dashboard:view', 'landport:dashboard:stats:view', 'landport:dashboard:charts:view',
+        'landport:transactions:view', 'landport:transactions:live'
+    ]
+  }
+];
+
+const NATIONALITIES_REQUIRING_VISA = ['Jordan'];
+
+
+// Mock data for the main dashboard
+const mainDashboardData = {
+    throughput: [
+        { name: '08:00', transactions: 230 },
+        { name: '10:00', transactions: 290 },
+        { name: '12:00', transactions: 220 },
+        { name: '14:00', transactions: 250 },
+        { name: '16:00', transactions: 1120 },
+        { name: '18:00', transactions: 980 },
+        { name: '20:00', transactions: 750 },
+        { name: '22:00', transactions: 350 },
+    ],
+    riskRules: [
+        { name: 'Watchlist Match', value: 12 },
+        { name: 'Irregular Travel Pattern', value: 8 },
+        { name: 'Expired Document', value: 5 },
+        { name: 'Invalid Visa', value: 3 },
+        { name: 'Baggage Anomaly', value: 2 },
+    ],
+    nationalityDistribution: {
+        'USA': 1250,
+        'IND': 980,
+        'CHN': 750,
+        'GBR': 680,
+        'DEU': 550,
+        'FRA': 490,
+        'CAN': 450,
+        'AUS': 380,
+        'JPN': 320,
+        'BRA': 280,
+    },
+    avgProcessingTime: {
+        airport: '2.5m',
+        seaport: '12.5m',
+        landport: '3.1m',
+        egate: '1.2m',
+        analyst: '1.2m',
+        'shiftsupervisor': '1.2m',
+        'control-room': '1.2m',
+    }
+};
+
+const dashboardStats = {
+    airport: {
+        passengersProcessed: '12,453',
+        bagsScanned: '25,832',
+        securityAlerts: '3',
+        flightsMonitored: '128',
+    },
+    landport: {
+        vehiclesProcessed: '4,589',
+        travelersChecked: '7,123',
+        documentsScanned: '9,876',
+        activeLanes: '8',
+    },
+    seaport: {
+        vesselsInPort: '23',
+        cruisePassengers: '2,480',
+        passengersProcessed: '1,250',
+        activeBerths: '6',
+    },
+    egate: {
+        successfulEntries: '8,210',
+        failedAttempts: '14',
+        biometricVerifications: '8,224',
+        activeGates: '24',
+        activeAlerts: '2',
+    },
+    analyst: {
+        successfulEntries: '8,210',
+        avgOfficerProcessingTime: '1.8m',
+        biometricVerifications: '8,224',
+        activeGates: '24',
+    },
+    shiftsupervisor: {
+        successfulEntries: '8,210',
+        avgOfficerProcessingTime: '2.1m',
+        biometricVerifications: '8,224',
+        activeGates: '24',
+        activeAlerts: '3',
+    },
+    'control-room': {
+        successfulEntries: '8,210',
+        failedAttempts: '14',
+        biometricVerifications: '8,224',
+        activeGates: '24',
+        totalGates: 30,
+        activeAlerts: '5',
+    }
+}
+
+// Mock data for the airport-specific dashboard
+const airportDashboardData = {
+    ageDistribution: [
+        { name: '0-17', value: 1254 },
+        { name: '18-24', value: 2341 },
+        { name: '25-34', value: 3123 },
+        { name: '35-44', value: 2876 },
+        { name: '45-59', value: 1987 },
+        { name: '60+', value: 872 },
+    ]
+};
+
+const passengerData = {
+    airport: [
+        { name: 'Citizen', value: 4500 },
+        { name: 'Visitor', value: 6200 },
+        { name: 'Resident', value: 1753 },
+        { name: 'Transit', value: 800 },
+        { name: 'VIP', value: 150 },
+    ],
+    seaport: [
+        { name: 'Citizen', value: 1200 },
+        { name: 'Visitor', value: 3400 },
+        { name: 'Resident', value: 800 },
+        { name: 'Transit', value: 300 },
+        { name: 'VIP', value: 50 },
+    ],
+    landport: [
+        { name: 'Citizen', value: 5600 },
+        { name: 'Visitor', value: 1200 },
+        { name: 'Resident', value: 323 },
+        { name: 'Transit', value: 100 },
+        { name: 'VIP', value: 20 },
+    ],
+};
+
+const transactionOverviewData = [
+    { name: 'Day 1', entry: 4210, exit: 2390 },
+    { name: 'Day 2', entry: 3800, exit: 1100 },
+    { name: 'Day 3', entry: 4500, exit: 1500 },
+    { name: 'Day 4', entry: 4890, exit: 9800 },
+    { name: 'Day 5', entry: 5100, exit: 5900 },
+    { name: 'Day 6', entry: 5300, exit: 3100 },
+    { name: 'Day 7', entry: 5520, exit: 3300 },
+];
+
+const forecastData = {
+  airport: {
+    current: {
+      title: "Current Shift Forecast",
+      description: "Predicted passenger volume for the current shift (08:00 - 16:00).",
+      recommendedStaff: 45,
+      metrics: [
+        { title: 'Incoming Pax', value: '6,200', description: 'Predicted arrivals' },
+        { title: 'Outgoing Pax', value: '5,800', description: 'Predicted departures' },
+      ],
+    },
+    next: {
+      title: "Next Shift Forecast",
+      description: "Predicted passenger volume for the next shift (16:00 - 00:00).",
+      recommendedStaff: 38,
+      metrics: [
+        { title: 'Incoming Pax', value: '4,800', description: 'Predicted arrivals' },
+        { title: 'Outgoing Pax', value: '4,500', description: 'Predicted departures' },
+      ],
+    },
+  },
+  landport: {
+    current: {
+        title: "Current Shift Forecast",
+        description: "Expected vehicle and traveler traffic for the current shift (07:00 - 15:00).",
+        recommendedStaff: 12,
+        metrics: [
+            { title: 'Inbound Vehicles', value: '2,100', description: 'Predicted entries' },
+            { title: 'Outbound Vehicles', value: '1,950', description: 'Predicted exits' },
+        ],
+    },
+    next: {
+        title: "Next Shift Forecast",
+        description: "Expected vehicle and traveler traffic for the next shift (15:00 - 23:00).",
+        recommendedStaff: 15,
+        metrics: [
+            { title: 'Inbound Vehicles', value: '2,500', description: 'Predicted entries' },
+            { title: 'Outbound Vehicles', value: '2,600', description: 'Predicted exits' },
+        ],
+    }
+  },
+  seaport: {
+      current: {
+          title: "Current Shift Forecast",
+          description: "Expected passenger and vessel traffic for the current shift (06:00 - 18:00).",
+          recommendedStaff: 25,
+          metrics: [
+            { title: 'Passenger Arrivals', value: '850', description: 'Predicted arrivals' },
+            { title: 'Passenger Departures', value: '700', description: 'Predicted departures' },
+          ],
+      },
+      next: {
+          title: "Next Shift Forecast",
+          description: "Expected passenger and vessel traffic for the next shift (18:00 - 06:00).",
+          recommendedStaff: 18,
+          metrics: [
+            { title: 'Passenger Arrivals', value: '400', description: 'Predicted arrivals' },
+            { title: 'Passenger Departures', value: '350', description: 'Predicted departures' },
+          ],
+      }
+  },
+  'control-room': {
+    current: {
+        title: "Current Shift Forecast",
+        description: "Expected system-wide traffic and resource needs for the current shift (08:00 - 16:00).",
+        recommendedStaff: 8,
+        metrics: [
+            { title: 'Total Entries', value: '15,000', description: 'Predicted system-wide entries' },
+            { title: 'Potential Alerts', value: '5-8', description: 'Predicted security/risk alerts' },
+        ],
+    },
+    next: {
+        title: "Next Shift Forecast",
+        description: "Expected system-wide traffic and resource needs for the next shift (16:00 - 00:00).",
+        recommendedStaff: 6,
+        metrics: [
+            { title: 'Total Entries', value: '11,500', description: 'Predicted system-wide entries' },
+            { title: 'Potential Alerts', value: '3-5', description: 'Predicted security/risk alerts' },
+        ],
+    }
+  },
+  shiftsupervisor: {
+    current: {
+        title: "Current Shift Forecast",
+        description: "Predicted traffic and staffing for the current shift (08:00 - 16:00).",
+        recommendedStaff: 12,
+        metrics: [
+            { title: 'Total Transactions', value: '8,500', description: 'Predicted entries & exits' },
+            { title: 'Peak Hour', value: '14:00-15:00', description: 'Highest traffic expected' },
+        ],
+    },
+    next: {
+        title: "Next Shift Forecast",
+        description: "Predicted traffic and staffing for the next shift (16:00 - 00:00).",
+        recommendedStaff: 10,
+        metrics: [
+            { title: 'Total Transactions', value: '6,200', description: 'Predicted entries & exits' },
+            { title: 'Peak Hour', value: '18:00-19:00', description: 'Highest traffic expected' },
+        ],
+    }
+  }
+};
+
+const gateRejectionReasonsData = [
+    { name: 'Biometric Mismatch', value: 45 },
+    { name: 'Expired Passport', value: 30 },
+    { name: 'Watchlist Flag', value: 15 },
+    { name: 'Invalid Visa', value: 8 },
+    { name: 'Other', value: 2 },
+];
+
+const transactionListData = {
+  whitelisted: [
+    { name: 'Whitelisted', value: 75, fill: 'hsl(var(--chart-1))' },
+    { name: 'Not Whitelisted', value: 25, fill: 'hsl(var(--chart-2))' },
+  ],
+  blacklisted: [
+    { name: 'Not Blacklisted', value: 98, fill: 'hsl(var(--chart-1))' },
+    { name: 'Blacklisted', value: 2, fill: 'hsl(var(--destructive))' },
+  ],
+  risky: [
+    { name: 'Non-Risky', value: 95, fill: 'hsl(var(--chart-1))' },
+    { name: 'Risky', value: 5, fill: 'hsl(var(--chart-4))' },
+  ]
+};
+
+const transactionBreakdownData = {
+    gate: [
+        { name: 'Success', value: 2200, fill: 'hsl(var(--chart-1))' },
+        { name: 'Rejected', value: 150, fill: 'hsl(var(--chart-2))' },
+        { name: 'Cancelled', value: 50, fill: 'hsl(var(--chart-4))' },
+    ],
+    counter: [
+        { name: 'Success', value: 1800, fill: 'hsl(var(--chart-1))' },
+        { name: 'Rejected', value: 250, fill: 'hsl(var(--chart-2))' },
+        { name: 'Cancelled', value: 100, fill: 'hsl(var(--chart-4))' },
+    ],
+    total: [
+        { name: 'Success', value: 4000, fill: 'hsl(var(--chart-1))' },
+        { name: 'Rejected', value: 400, fill: 'hsl(var(--chart-2))' },
+        { name: 'Cancelled', value: 150, fill: 'hsl(var(--chart-4))' },
+    ]
+};
+
+const gatePerformanceData = [
+    { id: 'G-01', name: 'Gate 01', type: 'E-Gate', status: 'Active', totalTransactions: 1254, avgProcessingTime: '1.2m' },
+    { id: 'G-02', name: 'Gate 02', type: 'E-Gate', status: 'Active', totalTransactions: 1302, avgProcessingTime: '1.1m' },
+    { id: 'G-03', name: 'Gate 03', type: 'E-Gate', status: 'Maintenance', totalTransactions: 56, avgProcessingTime: '1.5m' },
+    { id: 'D-01', name: 'Desk 01', type: 'Officer Desk', status: 'Active', totalTransactions: 432, avgProcessingTime: '2.8m' },
+    { id: 'D-02', name: 'Desk 02', type: 'Officer Desk', status: 'Offline', totalTransactions: 0, avgProcessingTime: 'N/A' },
+    { id: 'D-03', name: 'Desk 03', type: 'Officer Desk', status: 'Active', totalTransactions: 512, avgProcessingTime: '2.5m' },
+];
+
+const officerPerformanceData = {
+    officers: [
+        { id: 'O-01', name: 'John Smith', totalTransactions: 432, avgProcessingTime: 2.8, decisions: { approved: 420, rejected: 12 }, approvalRate: 97.2 },
+        { id: 'O-02', name: 'Jane Doe', totalTransactions: 512, avgProcessingTime: 2.5, decisions: { approved: 500, rejected: 12 }, approvalRate: 97.6 },
+        { id: 'O-03', name: 'Peter Jones', totalTransactions: 380, avgProcessingTime: 3.1, decisions: { approved: 370, rejected: 10 }, approvalRate: 97.4 },
+        { id: 'O-04', name: 'Emily White', totalTransactions: 620, avgProcessingTime: 2.2, decisions: { approved: 610, rejected: 10 }, approvalRate: 98.4 },
+        { id: 'O-05', name: 'David Green', totalTransactions: 450, avgProcessingTime: 2.6, decisions: { approved: 445, rejected: 5 }, approvalRate: 98.9 },
+        { id: 'O-06', name: 'Susan Black', totalTransactions: 210, avgProcessingTime: 3.5, decisions: { approved: 200, rejected: 10 }, approvalRate: 95.2 },
+    ],
+    decisionBreakdown: [
+        { name: 'Approved', value: 2545, fill: 'hsl(var(--chart-2))' },
+        { name: 'Rejected', value: 59, fill: 'hsl(var(--destructive))' },
+        { name: 'Escalated', value: 20, fill: 'hsl(var(--chart-4))' },
+    ],
+};
+
+const processingTimeDistributionData = [
+    { name: '< 1m', value: 1200 },
+    { name: '1-3m', value: 3400 },
+    { name: '3-5m', value: 2100 },
+    { name: '> 5m', value: 800 },
+];
+
+const seaportTravelerCategoriesData = [
+    { name: 'Citizens', value: 1200 },
+    { name: 'Visitors', value: 3400 },
+    { name: 'Residents', value: 800 },
+    { name: 'Crew', value: 450 },
+];
+
+const predictionData = {
+    stats: {
+      passengers: { total: 12500, change: 5.2 },
+      vehicles: { total: 4300, change: -2.1 },
+      vessels: { total: 18, change: 10.0 },
+      processingTime: { avg: '2m 15s', change: 3.5 },
+      staff: { recommended: 62, change: 8.0 },
+    },
+    passengerFlow: [
+        { hour: '08:00', air: 450, land: 210, sea: 80, egate: 300 },
+        { hour: '10:00', air: 620, land: 300, sea: 120, egate: 450 },
+        { hour: '12:00', air: 580, land: 280, sea: 110, egate: 400 },
+        { hour: '14:00', air: 710, land: 350, sea: 150, egate: 550 },
+        { hour: '16:00', air: 950, land: 420, sea: 180, egate: 700 },
+    ],
+    processingVelocity: [
+        { type: 'Citizen', time: 35 },
+        { type: 'Resident', time: 60 },
+        { type: 'Visitor (Visa)', time: 150 },
+        { type: 'Visitor (No Visa)', time: 90 },
+        { type: 'Crew', time: 75 },
+    ],
+    queueDynamics: [
+        { time: '08:00', current: 25, historical: 22 },
+        { time: '10:00', current: 40, historical: 35 },
+        { time: '12:00', current: 35, historical: 38 },
+        { time: '14:00', current: 50, historical: 45 },
+        { time: '16:00', current: 65, historical: 60 },
+    ],
+    flightSchedule: {
+        arrivals: [
+            { id: 'EK201', from: 'JFK', time: '08:30', gate: 'A12', status: 'On Time' },
+            { id: 'BA105', from: 'LHR', time: '08:45', gate: 'B05', status: 'On Time' },
+            { id: 'AF672', from: 'CDG', time: '09:10', gate: 'A14', status: 'Delayed' },
+        ],
+        departures: [
+            { id: 'EK202', to: 'JFK', time: '09:00', gate: 'A15', status: 'Boarding' },
+            { id: 'QF002', to: 'SYD', time: '09:20', gate: 'C22', status: 'On Time' },
+        ]
+    },
+    vesselSchedule: {
+        arrivals: [
+            { id: 'MSC Bellissima', from: 'DOH', time: '07:00', berth: 'T1-B2', status: 'On Time' },
+            { id: 'Costa Toscana', from: 'MCT', time: '08:30', berth: 'T1-B3', status: 'Expected' },
+        ],
+        departures: [
+            { id: 'MSC Opera', to: 'BAH', time: '14:00', berth: 'T1-B1', status: 'On Time' },
+        ]
+    }
+};
+
+let allTransactions: Transaction[] = [...getMockTransactions()];
+
 // Getters
 export const getMockPassengers = () => mockPassengers;
 export const getMockTransactions = () => mockTransactions;
@@ -291,3 +811,6 @@ export const setMockWhitelist = (newWhitelist: WhitelistEntry[]) => {
 export const setMockBlacklist = (newBlacklist: BlacklistEntry[]) => {
     mockBlacklist = newBlacklist;
 };
+
+// This export is needed for the mockApi to work.
+export { users };

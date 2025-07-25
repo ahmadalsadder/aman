@@ -132,7 +132,7 @@ export function BlacklistPage({ module, blacklist, loading }: BlacklistPageProps
             <DropdownMenuItem onClick={() => setEntryToView(row.original)}><Eye className="mr-2 h-4 w-4 text-primary" /><span>View details</span></DropdownMenuItem>
             {row.original.passengerId && (
                 <DropdownMenuItem asChild>
-                    <Link href={`/passengers/${row.original.passengerId}/edit`}>
+                    <Link href={`/${module}/passengers/edit/${row.original.passengerId}`}>
                         <User className="mr-2 h-4 w-4 text-primary" />
                         <span>View Passenger</span>
                     </Link>

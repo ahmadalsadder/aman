@@ -216,73 +216,73 @@ function SingleUploader({ config, value, onFileChange, outputType, disabled }: {
     ].filter(Boolean).join(' | ');
 
     return (
-      <div>
-        <div className="flex justify-between items-end">
-            <div>
-                <Label htmlFor={config.name} required={config.required} className="text-sm font-medium">
-                    {config.label}
-                </Label>
-                {hints && <p className="text-xs text-muted-foreground">{hints}</p>}
+        <div>
+            <div className="flex justify-between items-end">
+                <div>
+                    <Label htmlFor={config.name} required={config.required} className="text-sm font-medium">
+                        {config.label}
+                    </Label>
+                    {hints && <p className="text-xs text-muted-foreground">{hints}</p>}
+                </div>
+                
+                {!value && (
+                    <Button type="button" size="sm" variant="outline" onClick={() => inputRef.current?.click()} disabled={disabled || isLoading} className="shrink-0">
+                        <Upload className="mr-2 h-4 w-4" />
+                        Upload File
+                    </Button>
+                )}
             </div>
-            
-             {!value && (
-                <Button type="button" size="sm" variant="outline" onClick={() => inputRef.current?.click()} disabled={disabled || isLoading} className="shrink-0">
-                    <Upload className="mr-2 h-4 w-4" />
-                    Upload File
-                </Button>
-            )}
+
+            <div className="mt-2">
+                <input
+                    type="file"
+                    ref={inputRef}
+                    id={config.name}
+                    onChange={(e) => handleFileSelect(e.target.files?.[0] || null)}
+                    className="hidden"
+                    disabled={disabled || isLoading}
+                    accept={config.allowedMimeTypes?.join(',')}
+                />
+
+                {isLoading && (
+                    <Card className="flex items-center gap-4 p-4 h-20">
+                        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                        <div className="flex-grow space-y-1">
+                            <p className="text-sm font-semibold">Uploading file...</p>
+                            <Progress value={uploadProgress} className="h-2" />
+                        </div>
+                    </Card>
+                )}
+
+                {!isLoading && value && (
+                    <Card className="flex items-center gap-4 p-2">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-md bg-secondary flex-shrink-0">
+                            {fileType === 'image' && fileSrc ? (
+                                <Image src={fileSrc} alt={config.label} width={48} height={48} className="h-full w-full rounded-md object-cover" />
+                            ) : (
+                                <FileTypeIcon className={cn("h-8 w-8", fileTypeIconProps.className)} />
+                            )}
+                        </div>
+                        <div className="flex-grow space-y-1 overflow-hidden">
+                            <p className="truncate text-sm font-semibold">{value.fileInfo.name}</p>
+                            <p className="text-xs text-muted-foreground">{formatFileSize(value.fileInfo.size)}</p>
+                        </div>
+                        <div className="flex-shrink-0">
+                            <TooltipProvider>
+                                {fileSrc && (
+                                    <Dialog>
+                                        <Tooltip><TooltipTrigger asChild><DialogTrigger asChild><Button size="icon" variant="ghost"><Eye/></Button></DialogTrigger></Tooltip><TooltipContent><p>View</p></TooltipContent></Tooltip>
+                                        <AttachmentViewerDialog src={fileSrc!} name={value.fileInfo.name} mimeType={value.fileInfo.type} />
+                                    </Dialog>
+                                )}
+                                {fileSrc && <Tooltip><TooltipTrigger asChild><a href={fileSrc} download={value.fileInfo.name}><Button size="icon" variant="ghost" asChild><span className="flex items-center justify-center"><Download/></span></Button></a></TooltipTrigger><TooltipContent><p>Download</p></TooltipContent></Tooltip>}
+                                <Tooltip><TooltipTrigger asChild><Button size="icon" variant="ghost" onClick={handleDelete}><Trash2 className="text-destructive"/></Button></TooltipTrigger><TooltipContent><p>Delete</p></TooltipContent></Tooltip>
+                            </TooltipProvider>
+                        </div>
+                    </Card>
+                )}
+            </div>
         </div>
-
-        <div className="mt-2">
-            <input
-                type="file"
-                ref={inputRef}
-                id={config.name}
-                onChange={(e) => handleFileSelect(e.target.files?.[0] || null)}
-                className="hidden"
-                disabled={disabled || isLoading}
-                accept={config.allowedMimeTypes?.join(',')}
-            />
-
-            {isLoading && (
-                 <Card className="flex items-center gap-4 p-4 h-20">
-                    <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                    <div className="flex-grow space-y-1">
-                        <p className="text-sm font-semibold">Uploading file...</p>
-                        <Progress value={uploadProgress} className="h-2" />
-                    </div>
-                </Card>
-            )}
-
-            {!isLoading && value && (
-                <Card className="flex items-center gap-4 p-2">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-md bg-secondary flex-shrink-0">
-                         {fileType === 'image' && fileSrc ? (
-                             <Image src={fileSrc} alt={config.label} width={48} height={48} className="h-full w-full rounded-md object-cover" />
-                        ) : (
-                            <FileTypeIcon className={cn("h-8 w-8", fileTypeIconProps.className)} />
-                        )}
-                    </div>
-                    <div className="flex-grow space-y-1 overflow-hidden">
-                        <p className="truncate text-sm font-semibold">{value.fileInfo.name}</p>
-                        <p className="text-xs text-muted-foreground">{formatFileSize(value.fileInfo.size)}</p>
-                    </div>
-                    <div className="flex-shrink-0">
-                         <TooltipProvider>
-                             {fileSrc && (
-                                <Dialog>
-                                    <Tooltip><TooltipTrigger asChild><DialogTrigger asChild><Button size="icon" variant="ghost"><Eye/></Button></DialogTrigger></Tooltip><TooltipContent><p>View</p></TooltipContent></Tooltip>
-                                    <AttachmentViewerDialog src={fileSrc!} name={value.fileInfo.name} mimeType={value.fileInfo.type} />
-                                </Dialog>
-                             )}
-                            {fileSrc && <Tooltip><TooltipTrigger asChild><a href={fileSrc} download={value.fileInfo.name}><Button size="icon" variant="ghost" asChild><span className="flex items-center justify-center"><Download/></span></Button></a></TooltipTrigger><TooltipContent><p>Download</p></TooltipContent></Tooltip>}
-                            <Tooltip><TooltipTrigger asChild><Button size="icon" variant="ghost" onClick={handleDelete}><Trash2 className="text-destructive"/></Button></TooltipTrigger><TooltipContent><p>Delete</p></TooltipContent></Tooltip>
-                        </TooltipProvider>
-                    </div>
-                </Card>
-            )}
-        </div>
-      </div>
     );
 }
 

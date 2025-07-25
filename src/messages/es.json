@@ -586,7 +586,8 @@
     "recordsDescription": "Una lista de todo el contenido multimedia en el sistema.",
     "accessDenied": {
       "title": "Acceso Denegado",
-      "description": "No tiene permiso para ver el contenido multimedia."
+      "description": "No tiene permiso para ver el contenido multimedia.",
+      "createDescription": "No tiene permiso para crear nuevo contenido multimedia."
     },
     "filters": {
       "title": "Buscar y Filtrar Medios",

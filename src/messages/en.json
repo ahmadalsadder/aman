@@ -586,7 +586,8 @@
     "recordsDescription": "A list of all media content in the system.",
     "accessDenied": {
       "title": "Access Denied",
-      "description": "You do not have permission to view media content."
+      "description": "You do not have permission to view media content.",
+      "createDescription": "You do not have permission to create new media content."
     },
     "filters": {
       "title": "Search & Filter Media",

@@ -90,7 +90,7 @@ export default function MediaManagementPage() {
         toast({
             title: t('deleteDialog.successTitle'),
             description: t('deleteDialog.successDesc', { name: mediaToDelete.name }),
-            variant: 'info',
+            variant: 'default',
         });
     } else {
         toast({

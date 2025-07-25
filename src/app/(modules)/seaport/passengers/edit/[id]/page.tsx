@@ -23,7 +23,7 @@ export default function EditPassengerPage() {
     const t = useTranslations('PassengerForm');
     const tNav = useTranslations('Navigation');
     
-    const module: Module = 'airport';
+    const module: Module = 'seaport';
     const [passenger, setPassenger] = useState<Passenger | null>(null);
     const [loading, setLoading] = useState(true);
     const id = params.id;

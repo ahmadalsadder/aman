@@ -1,7 +1,7 @@
 
 
 'use client';
-import { Shield, LayoutDashboard, BarChart3, Users, Settings, Activity, Ship, LandPlot, DoorOpen, PieChart, UserCog, RadioTower, Home, Plane, ArrowRightLeft, Monitor, ClipboardList, AlertTriangle, ShieldAlert, BrainCircuit, IdCard, Music, ListChecks, ShieldOff } from 'lucide-react';
+import { Shield, LayoutDashboard, BarChart3, Users, Settings, Activity, Ship, LandPlot, DoorOpen, PieChart, UserCog, RadioTower, Home, Plane, ArrowRightLeft, Monitor, ClipboardList, AlertTriangle, ShieldAlert, BrainCircuit, IdCard, Music, ListChecks, ShieldOff, UserPlus, FilePenLine } from 'lucide-react';
 import type { Role, Module, Permission } from '@/types';
 
 export interface NavItem {
@@ -84,19 +84,19 @@ const getModuleSubNav = (module: Module, t: any): NavItem[] => {
                 href: `${moduleBaseUrl}/passengers`,
                 label: t('passengers'),
                 icon: Users,
-                permission: `${module}:records:view` as Permission,
+                permission: `${module}:passengers:view` as Permission,
             },
             {
                 href: `${moduleBaseUrl}/whitelist`,
                 label: t('whitelist'),
                 icon: ListChecks,
-                permission: `${module}:records:view` as Permission,
+                permission: `${module}:whitelist:view` as Permission,
             },
             {
                 href: `${moduleBaseUrl}/blacklist`,
                 label: t('blacklist'),
                 icon: ShieldOff,
-                permission: `${module}:records:view` as Permission,
+                permission: `${module}:blacklist:view` as Permission,
             },
             {
                 href: `${moduleBaseUrl}/prediction`,
@@ -138,11 +138,6 @@ export const getSidebarNavItems = (role: Role, modules: Module[], t: any): NavIt
     
     // Add admin-specific items if the role is admin
     if (role === 'admin') {
-        nav.push({
-            href: `/passengers`,
-            label: t('passengers'),
-            icon: Users,
-        });
          if (adminNavItems.users) {
             nav.push({ ...adminNavItems.users, href: `${adminNavItems.users.href}`, label: t('userManagement') });
          }

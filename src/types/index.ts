@@ -1,7 +1,7 @@
 
 
 export type Role = 'admin' | 'auditor' | 'viewer' | 'shiftsupervisor' | 'control-room' | 'analyst' | 'officer';
-export type Module = 'landport' | 'seaport' | 'airport' | 'egate' | 'analyst' | 'shiftsupervisor' | 'control-room' | 'duty-manager';
+export type Module = 'landport' | 'seaport' | 'airport' | 'egate' | 'analyst' | 'shiftsupervisor' | 'control-room' | 'duty-manager' | 'users' | 'settings' | 'passengers';
 export type Permission = 
   // Passenger permissions
   | 'airport:passengers:view' | 'airport:passengers:create' | 'airport:passengers:edit' | 'airport:passengers:delete'
@@ -22,10 +22,10 @@ export type Permission =
   | 'egate:blacklist:view' | 'egate:blacklist:create' | 'egate:blacklist:edit' | 'egate:blacklist:delete'
 
   // Module-specific record permissions
-  | 'airport:records:create'
-  | 'landport:records:create'
-  | 'seaport:records:create'
-  | 'egate:records:create'
+  | 'airport:records:create' | 'airport:records:edit' | 'airport:records:delete'
+  | 'landport:records:create' | 'landport:records:edit' | 'landport:records:delete'
+  | 'seaport:records:create' | 'seaport:records:edit' | 'seaport:records:delete'
+  | 'egate:records:create' | 'egate:records:edit' | 'egate:records:delete'
   | 'analyst:records:view' | 'analyst:records:create' | 'analyst:records:edit' | 'analyst:records:delete'
   | 'control-room:records:view' | 'control-room:records:create' | 'control-room:records:edit' | 'control-room:records:delete'
   | 'airport:civil-records:view' 

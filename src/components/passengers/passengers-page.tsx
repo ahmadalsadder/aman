@@ -31,7 +31,7 @@ import { countries } from '@/lib/countries';
 import type { Module, Permission } from '@/types';
 import CalendarIcon from '../icons/calendar-icon';
 import { api } from '@/lib/api';
-import { Skeleton } from '@/components/ui/skeleton';
+import { Skeleton } from '../ui/skeleton';
 import { useAuth } from '@/hooks/use-auth';
 
 const riskLevelColors = {
@@ -81,9 +81,11 @@ export function PassengersPage({ module }: PassengersPageProps) {
   
   const viewPermission = useMemo(() => (module === 'admin' ? ['airport:passengers:view', 'landport:passengers:view', 'seaport:passengers:view', 'egate:passengers:view'] : [`${module}:passengers:view`]) as Permission[], [module]);
   const canViewPage = viewPermission.some(p => hasPermission([p]));
-  const canCreate = hasPermission([`${module === 'admin' ? 'airport' : module}:passengers:create` as Permission]);
-  const canEdit = hasPermission([`${module === 'admin' ? 'airport' : module}:passengers:edit` as Permission]);
-  const canDelete = hasPermission([`${module === 'admin' ? 'airport' : module}:passengers:delete` as Permission]);
+  
+  const getModuleForAction = () => (module === 'admin' ? 'airport' : module);
+  const canCreate = hasPermission([`${getModuleForAction()}:passengers:create` as Permission]);
+  const canEdit = hasPermission([`${getModuleForAction()}:passengers:edit` as Permission]);
+  const canDelete = hasPermission([`${getModuleForAction()}:passengers:delete` as Permission]);
 
 
   useEffect(() => {
@@ -236,6 +238,7 @@ export function PassengersPage({ module }: PassengersPageProps) {
       id: 'actions',
       cell: ({ row }) => {
         const passenger = row.original;
+        const actionModule = getModuleForAction();
         return (
           <div className="flex items-center gap-2">
             <Button variant="ghost" size="icon" className="text-primary hover:text-primary/80" onClick={() => setPassengerToView(passenger)}>
@@ -243,7 +246,7 @@ export function PassengersPage({ module }: PassengersPageProps) {
             </Button>
             {canEdit && (
                 <Button asChild variant="ghost" size="icon" className="text-yellow-500 hover:text-yellow-500/80">
-                <Link href={`/passengers/${passenger.id}/edit`}>
+                <Link href={`/${actionModule}/passengers/edit/${passenger.id}`}>
                     <FilePenLine className="h-4 w-4" />
                 </Link>
                 </Button>
@@ -278,7 +281,7 @@ export function PassengersPage({ module }: PassengersPageProps) {
       >
         {canCreate && (
             <Button asChild className="bg-white font-semibold text-primary hover:bg-white/90">
-                <Link href="/passengers/new">
+                <Link href={`/${getModuleForAction()}/passengers/new`}>
                     <PlusCircle className="mr-2 h-4 w-4" /> Add Passenger
                 </Link>
             </Button>
@@ -407,10 +410,10 @@ export function PassengersPage({ module }: PassengersPageProps) {
       
       <Card>
         <CardHeader>
-          <CardTitle>Passenger Records</CardTitle>
+           <CardTitle>Passenger Records</CardTitle>
         </CardHeader>
         <CardContent>
-          <DataTable
+           <DataTable
             columns={columns}
             data={filteredData}
             filterColumnId="fullName"

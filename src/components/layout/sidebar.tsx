@@ -38,7 +38,7 @@ export default function AppSidebar() {
     const allItems = getSidebarNavItems(user.role, user.modules, t);
     
     // Correctly filter modules based on whether the user has permission for the module
-    // itself OR any of its children. This is the fix.
+    // itself OR any of its children.
     return allItems.filter(module => {
       // If user has permission for the top-level module link, show it.
       if (module.permission && hasPermission([module.permission])) {
@@ -47,7 +47,14 @@ export default function AppSidebar() {
       // If the module has children, check if the user has permission for ANY of them.
       if (module.children) {
         // First, filter the children themselves.
-        module.children = module.children.filter(child => !child.permission || hasPermission([child.permission]));
+        const permittedChildren = module.children.filter(child => {
+            if (child.children) { // Handle nested children
+                 child.children = child.children.filter(subChild => !subChild.permission || hasPermission([subChild.permission]));
+                 return child.children.length > 0;
+            }
+            return !child.permission || hasPermission([child.permission]);
+        });
+        module.children = permittedChildren;
         // Then, if any children remain, the parent module should be visible.
         return module.children.length > 0;
       }
@@ -78,12 +85,15 @@ export default function AppSidebar() {
 
   React.useEffect(() => {
     const activeStates: Record<string, boolean> = {};
-    const currentModulePath = `/${pathname.split('/')[1]}`;
-    navItems.forEach(item => {
-        if(item.href.startsWith(currentModulePath)) {
+    const pathSegments = pathname.split('/');
+    if (pathSegments.length > 2) {
+      const currentModulePath = `/${pathSegments[1]}`;
+       navItems.forEach(item => {
+        if(item.href === currentModulePath) {
             activeStates[item.href] = true;
         }
     });
+    }
     setOpenCollapsibles(activeStates);
   }, [pathname, navItems]);
 
@@ -123,15 +133,43 @@ export default function AppSidebar() {
                     <SidebarMenuSub>
                     {item.children?.map(child => (
                         <SidebarMenuSubItem key={child.href}>
-                            <SidebarMenuSubButton
-                                asChild
-                                isActive={pathname.startsWith(child.href)}
-                            >
-                                <Link href={child.href} className='flex items-center gap-2'>
-                                    {child.icon && <child.icon className="h-4 w-4 text-primary" />}
-                                    <span>{child.label}</span>
-                                </Link>
-                            </SidebarMenuSubButton>
+                             {child.children ? (
+                                 <Collapsible>
+                                     <CollapsibleTrigger asChild>
+                                        <SidebarMenuSubButton className="justify-between">
+                                             <div className="flex items-center gap-2">
+                                                {child.icon && <child.icon className="h-4 w-4 text-primary" />}
+                                                <span>{child.label}</span>
+                                            </div>
+                                             <ChevronDown className="h-4 w-4" />
+                                        </SidebarMenuSubButton>
+                                     </CollapsibleTrigger>
+                                     <CollapsibleContent>
+                                         <SidebarMenuSub>
+                                             {child.children.map(subChild => (
+                                                 <SidebarMenuSubItem key={subChild.href}>
+                                                     <SidebarMenuSubButton asChild isActive={pathname.startsWith(subChild.href)}>
+                                                         <Link href={subChild.href} className='flex items-center gap-2 pl-4'>
+                                                            {subChild.icon && <subChild.icon className="h-4 w-4 text-primary" />}
+                                                            <span>{subChild.label}</span>
+                                                         </Link>
+                                                     </SidebarMenuSubButton>
+                                                 </SidebarMenuSubItem>
+                                             ))}
+                                         </SidebarMenuSub>
+                                     </CollapsibleContent>
+                                 </Collapsible>
+                             ) : (
+                                <SidebarMenuSubButton
+                                    asChild
+                                    isActive={pathname.startsWith(child.href)}
+                                >
+                                    <Link href={child.href} className='flex items-center gap-2'>
+                                        {child.icon && <child.icon className="h-4 w-4 text-primary" />}
+                                        <span>{child.label}</span>
+                                    </Link>
+                                </SidebarMenuSubButton>
+                             )}
                         </SidebarMenuSubItem>
                     ))}
                     </SidebarMenuSub>

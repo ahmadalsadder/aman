@@ -76,7 +76,7 @@ export function CivilRecordsPage({ module, records, isLoading }: CivilRecordsPag
     const filteredData = useMemo(() => {
         return records.filter(record => {
             const nameLower = appliedFilters.name.toLowerCase();
-            const localizedNameLower = appliedFilters.localizedName.toLowerCase();
+            const localizedNameLower = record.localizedName?.toLowerCase();
             const docNumLower = appliedFilters.documentNumber.toLowerCase();
 
             if (nameLower && !`${record.firstName} ${record.lastName}`.toLowerCase().includes(nameLower)) return false;

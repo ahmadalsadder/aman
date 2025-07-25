@@ -17,12 +17,21 @@ export default function Home() {
     }
     
     if (user) {
-      if (user.modules && user.modules.length > 0 && user.modules[0] !== 'dashboard') {
-        router.replace(`/${user.modules[0]}/dashboard`);
+      if (user.modules && user.modules.length > 0) {
+        // Find the first module that isn't a logical/grouping one like 'duty-manager'
+        const firstNavigableModule = user.modules.find(m => m !== 'duty-manager');
+        if (firstNavigableModule) {
+          router.replace(`/${firstNavigableModule}/dashboard`);
+        } else {
+           // Fallback for users with only non-navigable modules
+           router.replace('/login');
+        }
       } else {
-        router.replace('/login'); // Or a 'no modules assigned' page
+        // No modules assigned
+        router.replace('/login'); 
       }
     } else {
+      // Not logged in
       router.replace('/login');
     }
   }, [user, loading, router]);

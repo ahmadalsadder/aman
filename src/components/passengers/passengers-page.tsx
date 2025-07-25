@@ -29,6 +29,8 @@ import { TransactionStatsCard } from '@/components/transactions/transaction-stat
 import { countries } from '@/lib/countries';
 import type { Module } from '@/types';
 import CalendarIcon from '../icons/calendar-icon';
+import { api } from '@/lib/api';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const riskLevelColors = {
   Low: 'bg-green-500/20 text-green-700 border-green-500/30',
@@ -39,7 +41,7 @@ const riskLevelColors = {
 const statusColors = {
   Active: 'bg-blue-500/20 text-blue-700 border-blue-500/30',
   Inactive: 'bg-gray-500/20 text-gray-700 border-gray-500/30',
-  Watchlisted: 'bg-purple-500/20 text-purple-700 border-purple-500/30',
+  Flagged: 'bg-purple-500/20 text-purple-700 border-purple-500/30',
   Blocked: 'bg-zinc-500/20 text-zinc-700 border-zinc-500/30',
 };
 
@@ -66,6 +68,7 @@ export function PassengersPage({ module }: PassengersPageProps) {
   const [passengers, setPassengers] = useState<Passenger[]>([]);
   const { toast } = useToast();
   const router = useRouter();
+  const [loading, setLoading] = useState(true);
 
   const [passengerToView, setPassengerToView] = useState<Passenger | null>(null);
   const [passengerToDelete, setPassengerToDelete] = useState<Passenger | null>(null);
@@ -73,15 +76,22 @@ export function PassengersPage({ module }: PassengersPageProps) {
   const [filters, setFilters] = useState(initialFilters);
   const [appliedFilters, setAppliedFilters] = useState(initialFilters);
 
-  // This will be replaced by API calls
   useEffect(() => {
-    setPassengers([]); 
-  }, []);
+    setLoading(true);
+    // In a real app, you'd fetch based on the module
+    const endpoint = module === 'admin' ? '/data/passengers' : `/data/passengers?module=${module}`;
+    api.get<Passenger[]>(endpoint).then(result => {
+        if(result.isSuccess && result.data) {
+            setPassengers(result.data);
+        }
+        setLoading(false);
+    });
+  }, [module]);
 
   const passengerStats = useMemo(() => {
     const total = passengers.length;
     const active = passengers.filter(p => p.status === 'Active').length;
-    const flagged = passengers.filter(p => p.status === 'Watchlisted').length;
+    const flagged = passengers.filter(p => p.status === 'Flagged').length;
     const highRisk = passengers.filter(p => p.riskLevel === 'High').length;
     return { total, active, flagged, highRisk };
   }, [passengers]);
@@ -112,9 +122,9 @@ export function PassengersPage({ module }: PassengersPageProps) {
       .map(p => ({ ...p, fullName: `${p.firstName} ${p.lastName}` }))
       .filter(p => {
         const nameLower = appliedFilters.name.toLowerCase();
-        const localizedNameLower = appliedFilters.localizedName?.toLowerCase() || '';
+        const localizedNameLower = p.localizedName?.toLowerCase() || '';
         const passportLower = appliedFilters.passportNumber.toLowerCase();
-        const visaLower = appliedFilters.visaNumber?.toLowerCase() || '';
+        const visaLower = p.visaNumber?.toLowerCase() || '';
 
         if (nameLower && !p.fullName.toLowerCase().includes(nameLower)) return false;
         if (localizedNameLower && !p.localizedName?.toLowerCase().includes(localizedNameLower)) return false;
@@ -133,15 +143,25 @@ export function PassengersPage({ module }: PassengersPageProps) {
       });
   }, [passengers, appliedFilters]);
   
-  const handleDeletePassenger = () => {
+  const handleDeletePassenger = async () => {
     if (!passengerToDelete) return;
 
-    // This will be an API call
-    toast({
-        title: 'Passenger Deleted',
-        description: `${passengerToDelete.firstName} ${passengerToDelete.lastName}'s record has been deleted.`,
-        variant: 'info',
-    });
+    const result = await api.post('/data/passengers/delete', { id: passengerToDelete.id });
+
+    if(result.isSuccess) {
+        setPassengers(prev => prev.filter(p => p.id !== passengerToDelete.id));
+        toast({
+            title: 'Passenger Deleted',
+            description: `${passengerToDelete.firstName} ${passengerToDelete.lastName}'s record has been deleted.`,
+            variant: 'info',
+        });
+    } else {
+        toast({
+            title: 'Delete Failed',
+            description: result.errors?.[0]?.message || 'There was an error deleting the passenger data.',
+            variant: 'destructive',
+        });
+    }
     setPassengerToDelete(null);
   }
 
@@ -209,7 +229,7 @@ export function PassengersPage({ module }: PassengersPageProps) {
               <Eye className="h-4 w-4" />
             </Button>
             <Button asChild variant="ghost" size="icon" className="text-yellow-500 hover:text-yellow-500/80">
-              <Link href={`/${module}/passengers/${passenger.id}/edit`}>
+              <Link href={`/passengers/${passenger.id}/edit`}>
                 <FilePenLine className="h-4 w-4" />
               </Link>
             </Button>
@@ -222,6 +242,16 @@ export function PassengersPage({ module }: PassengersPageProps) {
     },
   ];
 
+  if(loading) {
+    return (
+        <div className="space-y-6">
+            <Skeleton className="h-24" />
+            <Skeleton className="h-32" />
+            <Skeleton className="h-96" />
+        </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       <GradientPageHeader
@@ -230,7 +260,7 @@ export function PassengersPage({ module }: PassengersPageProps) {
         icon={Users}
       >
         <Button asChild className="bg-white font-semibold text-primary hover:bg-white/90">
-            <Link href={`/${module}/passengers/new`}>
+            <Link href="/passengers/new">
                 <PlusCircle className="mr-2 h-4 w-4" /> Add Passenger
             </Link>
         </Button>
@@ -252,9 +282,9 @@ export function PassengersPage({ module }: PassengersPageProps) {
           iconColor="text-green-500"
         />
         <TransactionStatsCard
-          title="Watchlisted"
+          title="Flagged for Review"
           value={passengerStats.flagged.toLocaleString()}
-          description="Passengers on a watchlist"
+          description="Passengers flagged for review"
           icon={Flag}
           iconColor="text-yellow-500"
         />
@@ -384,4 +414,3 @@ export function PassengersPage({ module }: PassengersPageProps) {
     </div>
   );
 }
-

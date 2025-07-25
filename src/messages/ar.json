@@ -578,6 +578,74 @@
       }
     }
   },
+  "MediaManagement": {
+    "pageTitle": "إدارة الوسائط",
+    "pageDescription": "إدارة جميع محتويات الوسائط مثل الملفات الصوتية والفيديو.",
+    "addMedia": "إضافة وسائط",
+    "recordsTitle": "سجلات الوسائط",
+    "recordsDescription": "قائمة بجميع محتويات الوسائط في النظام.",
+    "accessDenied": {
+      "title": "تم رفض الوصول",
+      "description": "ليس لديك إذن لعرض محتوى الوسائط."
+    },
+    "filters": {
+      "title": "بحث وتصفية الوسائط",
+      "namePlaceholder": "اسم الوسائط...",
+      "typePlaceholder": "النوع",
+      "allTypes": "جميع الأنواع",
+      "statusPlaceholder": "الحالة",
+      "allStatuses": "جميع الحالات",
+      "reset": "إعادة تعيين",
+      "search": "بحث"
+    },
+    "table": {
+      "name": "الاسم",
+      "type": "النوع",
+      "status": "الحالة",
+      "lastModified": "آخر تعديل",
+      "actions": {
+        "view": "عرض التفاصيل",
+        "edit": "تحرير",
+        "delete": "حذف"
+      }
+    },
+    "deleteDialog": {
+      "title": "هل أنت متأكد؟",
+      "description": "لا يمكن التراجع عن هذا الإجراء. سيؤدي هذا إلى حذف محتوى الوسائط '{name}' نهائيًا.",
+      "cancel": "إلغاء",
+      "confirm": "نعم، احذف الوسائط",
+      "successTitle": "تم حذف الوسائط",
+      "successDesc": "تم حذف الوسائط '{name}'.",
+      "errorTitle": "فشل الحذف"
+    },
+    "detailsSheet": {
+      "title": "تفاصيل الوسائط",
+      "close": "إغلاق",
+      "name": "الاسم",
+      "localizedName": "الاسم المترجم",
+      "type": "النوع",
+      "status": "الحالة",
+      "url": "رابط الملف",
+      "description": "الوصف",
+      "lastModified": "آخر تعديل",
+      "createdBy": "تم إنشاؤه بواسطة"
+    },
+    "form": {
+      "addTitle": "إضافة وسائط جديدة",
+      "addDescription": "تحديد إدخال محتوى وسائط جديد للنظام.",
+      "editTitle": "تحرير الوسائط",
+      "editDescription": "تحديث التفاصيل لمحتوى الوسائط: {name}.",
+      "toast": {
+        "loadError": "فشل تحميل بيانات الوسائط.",
+        "addSuccessTitle": "تمت إضافة الوسائط",
+        "addSuccessDesc": "تم إنشاء الوسائط الجديدة '{name}'.",
+        "updateSuccessTitle": "تم تحديث الوسائط",
+        "updateSuccessDesc": "تم تحديث الوسائط '{name}'.",
+        "errorTitle": "فشلت العملية",
+        "errorDesc": "حدث خطأ. يرجى المحاولة مرة أخرى."
+      }
+    }
+  },
   "GatesPage": {
     "pageTitle": "إدارة البوابات",
     "pageDescription": "الحالة والأداء في الوقت الفعلي لجميع بوابات مراقبة الحدود.",

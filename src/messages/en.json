@@ -578,6 +578,74 @@
       }
     }
   },
+  "MediaManagement": {
+    "pageTitle": "Media Management",
+    "pageDescription": "Manage all media content like audio and video files.",
+    "addMedia": "Add Media",
+    "recordsTitle": "Media Records",
+    "recordsDescription": "A list of all media content in the system.",
+    "accessDenied": {
+      "title": "Access Denied",
+      "description": "You do not have permission to view media content."
+    },
+    "filters": {
+      "title": "Search & Filter Media",
+      "namePlaceholder": "Media Name...",
+      "typePlaceholder": "Type",
+      "allTypes": "All Types",
+      "statusPlaceholder": "Status",
+      "allStatuses": "All Statuses",
+      "reset": "Reset",
+      "search": "Search"
+    },
+    "table": {
+      "name": "Name",
+      "type": "Type",
+      "status": "Status",
+      "lastModified": "Last Modified",
+      "actions": {
+        "view": "View details",
+        "edit": "Edit",
+        "delete": "Delete"
+      }
+    },
+    "deleteDialog": {
+      "title": "Are you sure?",
+      "description": "This action cannot be undone. This will permanently delete the media content '{name}'.",
+      "cancel": "Cancel",
+      "confirm": "Yes, Delete Media",
+      "successTitle": "Media Deleted",
+      "successDesc": "Media '{name}' has been deleted.",
+      "errorTitle": "Delete Failed"
+    },
+    "detailsSheet": {
+      "title": "Media Details",
+      "close": "Close",
+      "name": "Name",
+      "localizedName": "Localized Name",
+      "type": "Type",
+      "status": "Status",
+      "url": "File URL",
+      "description": "Description",
+      "lastModified": "Last Modified",
+      "createdBy": "Created By"
+    },
+    "form": {
+      "addTitle": "Add New Media",
+      "addDescription": "Define a new media content entry for the system.",
+      "editTitle": "Edit Media",
+      "editDescription": "Update the details for media content: {name}.",
+      "toast": {
+        "loadError": "Failed to load media data.",
+        "addSuccessTitle": "Media Added",
+        "addSuccessDesc": "New media '{name}' created.",
+        "updateSuccessTitle": "Media Updated",
+        "updateSuccessDesc": "Media '{name}' updated.",
+        "errorTitle": "Operation Failed",
+        "errorDesc": "An error occurred. Please try again."
+      }
+    }
+  },
   "GatesPage": {
     "pageTitle": "Gate Management",
     "pageDescription": "Real-time status and performance of all border control gates.",

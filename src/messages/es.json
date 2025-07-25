@@ -578,6 +578,74 @@
       }
     }
   },
+  "MediaManagement": {
+    "pageTitle": "Gestión de Medios",
+    "pageDescription": "Gestionar todo el contenido multimedia como archivos de audio y vídeo.",
+    "addMedia": "Añadir Medios",
+    "recordsTitle": "Registros de Medios",
+    "recordsDescription": "Una lista de todo el contenido multimedia en el sistema.",
+    "accessDenied": {
+      "title": "Acceso Denegado",
+      "description": "No tiene permiso para ver el contenido multimedia."
+    },
+    "filters": {
+      "title": "Buscar y Filtrar Medios",
+      "namePlaceholder": "Nombre del Medio...",
+      "typePlaceholder": "Tipo",
+      "allTypes": "Todos los Tipos",
+      "statusPlaceholder": "Estado",
+      "allStatuses": "Todos los Estados",
+      "reset": "Reiniciar",
+      "search": "Buscar"
+    },
+    "table": {
+      "name": "Nombre",
+      "type": "Tipo",
+      "status": "Estado",
+      "lastModified": "Última Modificación",
+      "actions": {
+        "view": "Ver detalles",
+        "edit": "Editar",
+        "delete": "Eliminar"
+      }
+    },
+    "deleteDialog": {
+      "title": "¿Está seguro?",
+      "description": "Esta acción no se puede deshacer. Esto eliminará permanentemente el contenido multimedia '{name}'.",
+      "cancel": "Cancelar",
+      "confirm": "Sí, Eliminar Medios",
+      "successTitle": "Medios Eliminados",
+      "successDesc": "Los medios '{name}' han sido eliminados.",
+      "errorTitle": "Fallo al Eliminar"
+    },
+    "detailsSheet": {
+      "title": "Detalles del Medio",
+      "close": "Cerrar",
+      "name": "Nombre",
+      "localizedName": "Nombre Localizado",
+      "type": "Tipo",
+      "status": "Estado",
+      "url": "URL del Archivo",
+      "description": "Descripción",
+      "lastModified": "Última Modificación",
+      "createdBy": "Creado por"
+    },
+    "form": {
+      "addTitle": "Añadir Nuevo Medio",
+      "addDescription": "Definir una nueva entrada de contenido multimedia para el sistema.",
+      "editTitle": "Editar Medio",
+      "editDescription": "Actualizar los detalles del contenido multimedia: {name}.",
+      "toast": {
+        "loadError": "Error al cargar los datos del medio.",
+        "addSuccessTitle": "Medio Añadido",
+        "addSuccessDesc": "Nuevo medio '{name}' creado.",
+        "updateSuccessTitle": "Medio Actualizado",
+        "updateSuccessDesc": "Medio '{name}' actualizado.",
+        "errorTitle": "Operación Fallida",
+        "errorDesc": "Ocurrió un error. Por favor, inténtelo de nuevo."
+      }
+    }
+  },
   "GatesPage": {
     "pageTitle": "Gestión de Puertas",
     "pageDescription": "Estado y rendimiento en tiempo real de todas las puertas de control fronterizo.",

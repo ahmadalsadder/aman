@@ -21,17 +21,19 @@ const users: User[] = [
     modules: ['landport', 'seaport', 'airport', 'egate', 'analyst', 'control-room', 'users', 'settings', 'duty-manager'],
     permissions: [
         'users:manage', 'reports:view',
-        'airport:civil-records:view', 'airport:records:create', 'airport:records:edit', 'airport:records:delete',
-        'landport:civil-records:view', 'landport:records:create', 'landport:records:edit', 'landport:records:delete',
-        'seaport:civil-records:view', 'seaport:records:create', 'seaport:records:edit', 'seaport:records:delete',
-        'egate:civil-records:view', 'egate:records:create', 'egate:records:edit', 'egate:records:delete',
+        'airport:records:view', 'airport:records:create', 'airport:records:edit', 'airport:records:delete',
+        'landport:records:view', 'landport:records:create', 'landport:records:edit', 'landport:records:delete',
+        'seaport:records:view', 'seaport:records:create', 'seaport:records:edit', 'seaport:records:delete',
+        'egate:records:view', 'egate:records:create', 'egate:records:edit', 'egate:records:delete',
+        'airport:civil-records:view', 'landport:civil-records:view', 'seaport:civil-records:view', 'egate:civil-records:view',
+        'analyst:records:view', 'analyst:records:create', 'analyst:records:edit', 'analyst:records:delete',
         'airport:transactions:view', 'landport:transactions:view', 'seaport:transactions:view',
         'airport:transactions:live', 'landport:transactions:live', 'seaport:transactions:live',
         'airport:dashboard:view', 'airport:dashboard:stats:view', 'airport:prediction:view', 'airport:dashboard:charts:view', 'airport:dashboard:officer-performance:view',
         'landport:dashboard:view', 'landport:dashboard:stats:view', 'landport:prediction:view', 'landport:dashboard:charts:view', 'landport:dashboard:officer-performance:view',
         'seaport:dashboard:view', 'seaport:dashboard:stats:view', 'seaport:prediction:view', 'seaport:dashboard:charts:view', 'seaport:dashboard:officer-performance:view',
         'egate:dashboard:view', 'egate:dashboard:stats:view', 'egate:prediction:view', 'egate:dashboard:charts:view', 'egate:media:view', 'egate:media:create', 'egate:media:edit', 'egate:media:delete',
-        'analyst:dashboard:view', 'analyst:dashboard:stats:view', 'analyst:dashboard:charts:view', 'analyst:records:create', 'analyst:records:edit', 'analyst:records:delete',
+        'analyst:dashboard:view', 'analyst:dashboard:stats:view', 'analyst:dashboard:charts:view',
         'control-room:dashboard:view', 'control-room:dashboard:stats:view', 'control-room:dashboard:charts:view', 'control-room:dashboard:officer-performance:view',
         'airport:desks:view', 'airport:desks:create', 'airport:desks:edit', 'airport:desks:delete',
         'landport:desks:view', 'landport:desks:create', 'landport:desks:edit', 'landport:desks:delete',
@@ -247,13 +249,6 @@ const passengerData = {
     ],
 };
 
-const seaportTravelerCategoriesData = [
-    { name: 'Citizens', value: 1200 },
-    { name: 'Visitors', value: 3400 },
-    { name: 'Residents', value: 800 },
-    { name: 'Crew', value: 450 },
-];
-
 const transactionOverviewData = [
     { name: 'Day 1', entry: 4210, exit: 2390 },
     { name: 'Day 2', entry: 3800, exit: 1100 },
@@ -440,57 +435,12 @@ const processingTimeDistributionData = [
     { name: '&gt; 5m', value: 800 },
 ];
 
-const predictionData = {
-    passengerFlow: [
-        { hour: '08:00', air: 120, land: 30, sea: 5, egate: 80 },
-        { hour: '09:00', air: 150, land: 45, sea: 8, egate: 110 },
-        { hour: '10:00', air: 180, land: 50, sea: 10, egate: 130 },
-        { hour: '11:00', air: 200, land: 40, sea: 12, egate: 150 },
-        { hour: '12:00', air: 190, land: 35, sea: 15, egate: 140 },
-    ],
-    processingVelocity: [
-        { type: 'Citizen', time: 35 },
-        { type: 'Resident', time: 45 },
-        { type: 'Visitor', time: 65 },
-        { type: 'VIP', time: 25 },
-        { type: 'Crew', time: 30 },
-    ],
-    queueDynamics: [
-        { time: '08:00', current: 15, historical: 12 },
-        { time: '08:30', current: 25, historical: 20 },
-        { time: '09:00', current: 40, historical: 35 },
-        { time: '09:30', current: 35, historical: 38 },
-        { time: '10:00', current: 55, historical: 50 },
-    ],
-    flightSchedule: {
-        arrivals: [
-            { id: 'EK202', from: 'JFK', time: '08:15', status: 'On Time', gate: 'A12' },
-            { id: 'BA105', from: 'LHR', time: '08:45', status: 'On Time', gate: 'A14' },
-            { id: 'AF655', from: 'CDG', time: '09:30', status: 'Delayed', gate: 'B05' },
-        ],
-        departures: [
-            { id: 'EY101', to: 'AUH', time: '09:00', status: 'Boarding', gate: 'C22' },
-            { id: 'QR1007', to: 'DOH', time: '09:20', status: 'On Time', gate: 'C24' },
-        ]
-    },
-    vesselSchedule: {
-        arrivals: [
-            { id: 'MSC-WRLD', from: 'SGP', time: '07:30', status: 'On Time', berth: 'B2' },
-            { id: 'SYM-SEAS', from: 'BCN', time: '10:00', status: 'Expected', berth: 'C1' },
-        ],
-        departures: [
-            { id: 'QNM-II', to: 'SOU', time: '18:00', status: 'On Time', berth: 'A3' },
-        ]
-    },
-    stats: {
-        passengers: { total: 2450, change: 12.5 },
-        vehicles: { total: 450, change: -5.2 },
-        vessels: { total: 3, change: 0 },
-        processingTime: { avg: '2.8m', change: 3.1 },
-        staff: { recommended: 52, change: 4 },
-    }
-}
-
+const seaportTravelerCategoriesData = [
+    { name: 'Citizens', value: 1200 },
+    { name: 'Visitors', value: 3400 },
+    { name: 'Residents', value: 800 },
+    { name: 'Crew', value: 450 },
+];
 
 let allTransactions: Transaction[] = [...mockTransactions];
 

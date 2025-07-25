@@ -1,8 +1,12 @@
 
+
 import type { Passenger, Transaction, OfficerDesk, Gate, Media, WhitelistEntry, BlacklistEntry } from "@/types/live-processing";
 import type { Shift, DayOfWeek } from "@/types/workload";
 import { Plane, Car, Ship } from "lucide-react";
 import type { Port, Terminal, Zone, Workflow, RiskProfile, User } from '@/types';
+
+// This is the correct order for initialization.
+// Define data first, then functions that use it.
 
 let mockPassengers: Passenger[] = [
     {
@@ -46,7 +50,7 @@ let mockPassengers: Passenger[] = [
     }
 ];
 
-let mockTransactions: Transaction[] = [
+const mockTransactionsInit: Transaction[] = [
     {
       id: 'TXN741852963',
       passengerId: 'P001',
@@ -129,6 +133,8 @@ let mockTransactions: Transaction[] = [
       passenger: mockPassengers.find(p => p.id === 'P003'),
     }
 ];
+
+let allTransactions: Transaction[] = [...mockTransactionsInit];
 
 let mockOfficerDesks: OfficerDesk[] = [
     { id: 'DESK-A1', name: 'Officer Desk A1', terminalId: 'TERM-DXB-1', zoneId: 'ZONE-A', ipAddress: '192.168.1.10', macAddress: '00:1A:2B:3C:4D:5E', status: 'Active', lastUpdatedAt: '2023-05-20T10:00:00Z', movementType: 'Entry', workflowId: 'WF-Standard', riskRuleId: 'RR-Low' },
@@ -776,9 +782,9 @@ const predictionData = {
     }
 };
 
-// Getters
+// Getters and setters should come after data definitions
 export const getMockPassengers = () => mockPassengers;
-export const getMockTransactions = () => mockTransactions;
+export const getMockTransactions = () => allTransactions;
 export const getMockOfficerDesks = () => mockOfficerDesks;
 export const getMockGates = () => mockGates;
 export const getMockMedia = () => mockMedia;
@@ -790,7 +796,7 @@ export const setMockPassengers = (newPassengers: Passenger[]) => {
     mockPassengers = newPassengers;
 };
 export const setMockTransactions = (newTransactions: Transaction[]) => {
-    mockTransactions = newTransactions;
+    allTransactions = newTransactions;
 };
 export const setMockOfficerDesks = (newDesks: OfficerDesk[]) => {
     mockOfficerDesks = newDesks;

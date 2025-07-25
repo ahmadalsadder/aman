@@ -22,9 +22,9 @@ export type Permission =
   | 'egate:blacklist:view' | 'egate:blacklist:create' | 'egate:blacklist:edit' | 'egate:blacklist:delete'
 
   // Module-specific record permissions
-  | 'airport:records:create'
-  | 'landport:records:create'
-  | 'seaport:records:create'
+  | 'airport:records:create' | 'airport:records:edit' | 'airport:records:delete'
+  | 'landport:records:create' | 'landport:records:edit' | 'landport:records:delete'
+  | 'seaport:records:create' | 'seaport:records:edit' | 'seaport:records:delete'
   | 'egate:records:create' | 'egate:records:edit' | 'egate:records:delete'
   | 'analyst:records:view' | 'analyst:records:create' | 'analyst:records:edit' | 'analyst:records:delete'
   | 'control-room:records:view' | 'control-room:records:create' | 'control-room:records:edit' | 'control-room:records:delete'
@@ -37,6 +37,13 @@ export type Permission =
   | 'airport:desks:view' | 'airport:desks:create' | 'airport:desks:edit' | 'airport:desks:delete'
   | 'landport:desks:view' | 'landport:desks:create' | 'landport:desks:edit' | 'landport:desks:delete'
   | 'seaport:desks:view' | 'seaport:desks:create' | 'seaport:desks:edit' | 'seaport:desks:delete'
+  
+  // Workload permissions
+  | 'airport:workload:view'
+  | 'landport:workload:view'
+  | 'seaport:workload:view'
+  | 'egate:workload:view'
+
   // E-Gate media permissions
   | 'egate:media:view' | 'egate:media:create' | 'egate:media:edit' | 'egate:media:delete'
   // Other permissions
@@ -93,55 +100,4 @@ export interface User {
   token: string;
   modules: Module[];
   permissions: Permission[];
-}
-
-export interface Port {
-    id: string;
-    name: string;
-    type: 'Airport' | 'Seaport' | 'Landport';
-}
-
-export interface Terminal {
-    id: string;
-    name: string;
-    portId: string;
-}
-
-export interface Zone {
-    id: string;
-    name: string;
-    terminalId: string;
-}
-
-export interface OfficerDesk {
-    id: string;
-    name: string;
-    terminalId: string;
-    zoneId: string;
-    ipAddress: string;
-    macAddress: string;
-    status: 'Active' | 'Inactive' | 'Closed';
-    lastUpdatedAt: string;
-    movementType: 'Entry' | 'Exit' | 'Bidirectional';
-    workflowId: string;
-    riskRuleId: string;
-    // These will be enriched for display purposes
-    portId?: string;
-    portName?: string;
-    terminalName?: string;
-    zoneName?: string;
-    connectedMachines: string[];
-    createdAt: string;
-    createdBy: string;
-    lastUpdatedBy: string;
-}
-
-export interface Workflow {
-    id: string;
-    name: string;
-}
-
-export interface RiskProfile {
-    id: string;
-    name: string;
 }

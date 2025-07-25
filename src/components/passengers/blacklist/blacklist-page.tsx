@@ -14,7 +14,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
-import { MoreHorizontal, Eye, Trash2, ShieldOff, Filter, ChevronDown, X, Search, User, PlusCircle, FilePenLine, AlertTriangle } from 'lucide-react';
+import { MoreHorizontal, Eye, Trash2, ShieldOff, Filter, ChevronDown, X, Search, User, PlusCircle, FilePenLine, AlertTriangle, LayoutDashboard } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -30,6 +30,7 @@ import type { Module, Permission } from '@/types';
 import { useAuth } from '@/hooks/use-auth';
 import { api } from '@/lib/api';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 
 const categoryColors: { [key: string]: string } = {
   'No-Fly': 'bg-red-500/20 text-red-700 border-red-500/30',
@@ -176,6 +177,17 @@ export function BlacklistPage({ module, blacklist, loading }: BlacklistPageProps
 
   return (
     <div className="space-y-6">
+       <Breadcrumb>
+        <BreadcrumbList>
+            <BreadcrumbItem>
+                <BreadcrumbLink href={`/${module}/dashboard`} icon={LayoutDashboard}>Dashboard</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+                <BreadcrumbPage icon={ShieldOff}>Passenger Blacklist</BreadcrumbPage>
+            </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
       <GradientPageHeader title="Passenger Blacklist" description="Manage individuals flagged for security risks." icon={ShieldOff}>
         {canCreate && (
             <Button asChild className="bg-white font-semibold text-primary hover:bg-white/90">

@@ -2,7 +2,8 @@
 
 import { useState, useMemo, useEffect } from 'react';
 import type { ColumnDef } from '@tanstack/react-table';
-import type { Media, Permission } from '@/types/live-processing';
+import type { Media } from '@/types/live-processing';
+import type { Permission } from '@/types';
 import { DataTable } from '@/components/shared/data-table';
 import { GradientPageHeader } from '@/components/shared/gradient-page-header';
 import { Button } from '@/components/ui/button';
@@ -12,7 +13,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { MoreHorizontal, PlusCircle, Eye, FilePenLine, Trash2, Music, Filter, ChevronDown, X, Search, AlertTriangle } from 'lucide-react';
+import { MoreHorizontal, PlusCircle, Eye, FilePenLine, Trash2, Music, Filter, ChevronDown, X, Search, AlertTriangle, LayoutDashboard } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
@@ -28,6 +29,7 @@ import { api } from '@/lib/api';
 import { useAuth } from '@/hooks/use-auth';
 import { useTranslations } from 'next-intl';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 
 const statusColors: { [key: string]: string } = {
   Active: 'bg-green-500/20 text-green-700 border-green-500/30',
@@ -54,6 +56,7 @@ export default function MediaManagementPage() {
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
   const t = useTranslations('MediaManagement');
+  const tNav = useTranslations('Navigation');
   const { hasPermission } = useAuth();
   
   const [mediaToView, setMediaToView] = useState<Media | null>(null);
@@ -171,6 +174,17 @@ export default function MediaManagementPage() {
 
   return (
     <div className="space-y-6">
+       <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/egate/dashboard" icon={LayoutDashboard}>{tNav('dashboard')}</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage icon={Music}>{t('pageTitle')}</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
       <GradientPageHeader title={t('pageTitle')} description={t('pageDescription')} icon={Music}>
         {canCreate && <Button asChild className="bg-white font-semibold text-primary hover:bg-white/90">
           <Link href="/egate/media-management/add"><PlusCircle className="mr-2 h-4 w-4" /> {t('addMedia')}</Link>

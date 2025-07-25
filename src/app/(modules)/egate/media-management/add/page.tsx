@@ -3,7 +3,7 @@
 
 import { GradientPageHeader } from '@/components/shared/gradient-page-header';
 import { MediaForm, type MediaFormValues } from '@/components/media/media-form';
-import { PlusCircle, AlertTriangle } from 'lucide-react';
+import { PlusCircle, AlertTriangle, Music, ClipboardList, LayoutDashboard } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import type { Media } from '@/types/live-processing';
@@ -11,6 +11,7 @@ import { useAuth } from '@/hooks/use-auth';
 import { useTranslations } from 'next-intl';
 import { api } from '@/lib/api';
 import { useState } from 'react';
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 
 export default function AddMediaPage() {
     const router = useRouter();
@@ -18,6 +19,7 @@ export default function AddMediaPage() {
     const { user, hasPermission } = useAuth();
     const t = useTranslations('MediaManagement');
     const tForm = useTranslations('MediaManagement.form');
+    const tNav = useTranslations('Navigation');
     const [isLoading, setIsLoading] = useState(false);
 
     const canCreate = hasPermission(['egate:media:create']);
@@ -64,6 +66,21 @@ export default function AddMediaPage() {
 
     return (
         <div className="space-y-6">
+             <Breadcrumb>
+                <BreadcrumbList>
+                    <BreadcrumbItem>
+                        <BreadcrumbLink href="/egate/dashboard" icon={LayoutDashboard}>{tNav('dashboard')}</BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                        <BreadcrumbLink href="/egate/media-management" icon={Music}>{tNav('mediaManagement')}</BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                        <BreadcrumbPage icon={PlusCircle}>{tForm('addTitle')}</BreadcrumbPage>
+                    </BreadcrumbItem>
+                </BreadcrumbList>
+            </Breadcrumb>
             <GradientPageHeader
                 title={tForm('addTitle')}
                 description={tForm('addDescription')}

@@ -6,17 +6,19 @@ import { useToast } from '@/hooks/use-toast';
 import { useRouter, useParams } from 'next/navigation';
 import type { Media } from '@/types/live-processing';
 import { useState, useEffect } from 'react';
-import { Loader2, FilePenLine, AlertTriangle } from 'lucide-react';
+import { Loader2, FilePenLine, AlertTriangle, Music, LayoutDashboard } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { api } from '@/lib/api';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAuth } from '@/hooks/use-auth';
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 
 export default function EditMediaPage() {
     const router = useRouter();
     const params = useParams<{ id: string }>();
     const { toast } = useToast();
     const t = useTranslations('MediaManagement.form');
+    const tNav = useTranslations('Navigation');
     const { hasPermission } = useAuth();
     const [media, setMedia] = useState<Media | null>(null);
     const [loading, setLoading] = useState(true);
@@ -97,6 +99,21 @@ export default function EditMediaPage() {
 
     return (
         <div className="space-y-6">
+             <Breadcrumb>
+                <BreadcrumbList>
+                    <BreadcrumbItem>
+                        <BreadcrumbLink href="/egate/dashboard" icon={LayoutDashboard}>{tNav('dashboard')}</BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                        <BreadcrumbLink href="/egate/media-management" icon={Music}>{tNav('mediaManagement')}</BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                        <BreadcrumbPage icon={FilePenLine}>{t('editTitle')}</BreadcrumbPage>
+                    </BreadcrumbItem>
+                </BreadcrumbList>
+            </Breadcrumb>
             <GradientPageHeader
                 title={t('editTitle')}
                 description={t('editDescription', { name: media.name })}

@@ -4,7 +4,7 @@
 import { useState, useEffect } from 'react';
 import { GradientPageHeader } from '@/components/shared/gradient-page-header';
 import { OfficerDeskForm, type OfficerDeskFormValues } from '@/components/configuration/officer-desks/officer-desk-form';
-import { PlusCircle, AlertTriangle } from 'lucide-react';
+import { PlusCircle, AlertTriangle, Monitor, LayoutDashboard } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
@@ -12,12 +12,14 @@ import { useAuth } from '@/hooks/use-auth';
 import type { Port, Terminal, Zone, Workflow, RiskProfile, OfficerDesk } from '@/types/configuration';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useTranslations } from 'next-intl';
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 
 export default function AddLandportOfficerDeskPage() {
     const router = useRouter();
     const { toast } = useToast();
     const { hasPermission } = useAuth();
     const t = useTranslations('OfficerDesks.form');
+    const tNav = useTranslations('Navigation');
 
     const [isLoading, setIsLoading] = useState(false);
     const [loadingError, setLoadingError] = useState<string | null>(null);
@@ -101,6 +103,21 @@ export default function AddLandportOfficerDeskPage() {
     
     return (
         <div className="space-y-6">
+            <Breadcrumb>
+                <BreadcrumbList>
+                    <BreadcrumbItem>
+                        <BreadcrumbLink href="/landport/dashboard" icon={LayoutDashboard}>{tNav('dashboard')}</BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                        <BreadcrumbLink href="/landport/officer-desks" icon={Monitor}>{tNav('officerDesks')}</BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                        <BreadcrumbPage icon={PlusCircle}>{t('addTitle')}</BreadcrumbPage>
+                    </BreadcrumbItem>
+                </BreadcrumbList>
+            </Breadcrumb>
             <GradientPageHeader
                 title={t('addTitle')}
                 description={t('addDescription')}

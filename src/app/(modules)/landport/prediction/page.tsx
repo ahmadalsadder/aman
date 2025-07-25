@@ -1,7 +1,24 @@
 
 'use client';
 import { PredictionPage } from '@/components/prediction/prediction-page';
+import { useState, useEffect } from 'react';
+import { api } from '@/lib/api';
 
 export default function LandportPredictionPage() {
-    return <PredictionPage module="landport" />;
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            const result = await api.get(`/dashboard/prediction?module=landport`);
+            if (result.isSuccess) {
+                setData(result.data);
+            }
+            setLoading(false);
+        };
+        fetchData();
+    }, []);
+    
+    return <PredictionPage module="landport" data={data} loading={loading} />;
 }

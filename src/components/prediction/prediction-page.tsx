@@ -27,6 +27,8 @@ import CalendarIcon from '@/components/icons/calendar-icon';
 
 interface PredictionPageProps {
     module: Module;
+    data: any;
+    loading: boolean;
 }
 
 const initialFilters = {
@@ -34,42 +36,25 @@ const initialFilters = {
     dateTo: addDays(new Date(), 1),
 };
 
-export function PredictionPage({ module }: PredictionPageProps) {
+export function PredictionPage({ module, data, loading }: PredictionPageProps) {
     const t = useTranslations('Prediction');
     const { hasPermission } = useAuth();
-    const [data, setData] = useState<any>(null);
-    const [loading, setLoading] = useState(true);
 
     const [filters, setFilters] = useState(initialFilters);
     const [appliedFilters, setAppliedFilters] = useState(initialFilters);
 
     const canViewPage = useMemo(() => hasPermission([`${module}:prediction:view` as Permission]), [hasPermission, module]);
 
-    useEffect(() => {
-        if (!canViewPage) {
-            setLoading(false);
-            return;
-        }
-        const fetchData = async () => {
-            setLoading(true);
-            const result = await api.get(`/dashboard/prediction?module=${module}`);
-            if (result.isSuccess) {
-                setData(result.data);
-            }
-            setLoading(false);
-        };
-        fetchData();
-    }, [canViewPage, module, appliedFilters]);
-
-
     const handleUpdateFilter = (key: keyof typeof filters, value: any) => {
         setFilters(prev => ({ ...prev, [key]: value }));
     };
 
-    const handleSearch = () => setAppliedFilters(filters);
+    // In a real app, this would trigger a re-fetch in the parent component
+    const handleSearch = () => {
+        alert('Filtering is not implemented in this mock version.');
+    };
     const clearFilters = () => {
         setFilters(initialFilters);
-        setAppliedFilters(initialFilters);
     };
 
     if (loading) {

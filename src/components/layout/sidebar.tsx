@@ -37,16 +37,26 @@ export default function AppSidebar() {
     
     const allItems = getSidebarNavItems(user.role, user.modules, t);
     
-    // Filter items based on permission
+    // Correctly filter modules based on whether the user has permission for the module
+    // itself OR any of its children. This is the fix.
     return allItems.filter(module => {
-      // If a module has children, check if any child has permission.
+      // If user has permission for the top-level module link, show it.
+      if (module.permission && hasPermission([module.permission])) {
+        return true;
+      }
+      // If the module has children, check if the user has permission for ANY of them.
       if (module.children) {
+        // First, filter the children themselves.
         module.children = module.children.filter(child => !child.permission || hasPermission([child.permission]));
-        // If after filtering, there are children left, the parent module should be visible.
+        // Then, if any children remain, the parent module should be visible.
         return module.children.length > 0;
       }
-      // If no children, check permission on the module itself.
-      return !module.permission || hasPermission([module.permission]);
+      // If no permission is set on the module and it has no children, show it by default.
+      if (!module.permission && !module.children) {
+        return true;
+      }
+      // Otherwise, hide it.
+      return false;
     });
 
   }, [user, t, hasPermission]);

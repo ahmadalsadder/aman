@@ -1,6 +1,5 @@
 
 
-
 import type { Port, Terminal, Zone, Workflow, RiskProfile } from './configuration';
 
 export interface Passenger {
@@ -209,6 +208,18 @@ export interface WhitelistEntry {
   validUntil: string;
   addedBy: string;
   reason: string;
+}
+
+export interface BlacklistEntry {
+  id: string;
+  passengerId?: string;
+  name: string;
+  nationality: string;
+  reason: string;
+  category: 'No-Fly' | 'Wanted' | 'Financial' | 'Other';
+  dateAdded: string;
+  addedBy: string;
+  notes?: string;
 }
 
 export { Port, Terminal, Zone, Workflow, RiskProfile };

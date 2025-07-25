@@ -1,7 +1,7 @@
 
 
 'use client';
-import { Shield, LayoutDashboard, BarChart3, Users, Settings, Activity, Ship, LandPlot, DoorOpen, PieChart, UserCog, RadioTower, Home, Plane, ArrowRightLeft, Monitor, ClipboardList, AlertTriangle, ShieldAlert, BrainCircuit, IdCard, Music, ListChecks } from 'lucide-react';
+import { Shield, LayoutDashboard, BarChart3, Users, Settings, Activity, Ship, LandPlot, DoorOpen, PieChart, UserCog, RadioTower, Home, Plane, ArrowRightLeft, Monitor, ClipboardList, AlertTriangle, ShieldAlert, BrainCircuit, IdCard, Music, ListChecks, ShieldOff } from 'lucide-react';
 import type { Role, Module, Permission } from '@/types';
 
 export interface NavItem {
@@ -83,6 +83,11 @@ const getModuleSubNav = (module: Module, t: any): NavItem[] => {
             href: '/analyst/whitelist',
             label: 'Whitelist',
             icon: ListChecks,
+        });
+        subNav.push({
+            href: '/analyst/blacklist',
+            label: 'Blacklist',
+            icon: ShieldOff,
         });
     }
 

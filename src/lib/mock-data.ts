@@ -1,7 +1,6 @@
 
 
-
-import type { Passenger, Transaction, OfficerDesk, Gate, Media, WhitelistEntry } from "@/types/live-processing";
+import type { Passenger, Transaction, OfficerDesk, Gate, Media, WhitelistEntry, BlacklistEntry } from "@/types/live-processing";
 import { Plane, Car, Ship } from "lucide-react";
 import type { Port, Terminal, Zone, Workflow, RiskProfile } from '@/types/configuration';
 
@@ -240,6 +239,10 @@ export const mockWhitelist: WhitelistEntry[] = [
   { id: 'WL-003', passengerId: 'P003', name: 'Wei Chen', nationality: 'China', status: 'Revoked', dateAdded: '2023-03-01', validUntil: '2024-03-01', addedBy: 'Admin User', reason: 'Temporary clearance for conference' },
 ];
 
+export const mockBlacklist: BlacklistEntry[] = [
+    { id: 'BL-001', passengerId: 'P003', name: 'Wei Chen', nationality: 'China', reason: 'International No-Fly List Match', category: 'No-Fly', dateAdded: '2023-01-10', addedBy: 'Interpol Feed' },
+    { id: 'BL-002', name: 'Unknown Male', nationality: 'Syrian Arab Republic', reason: 'Attempted use of fraudulent document', category: 'Wanted', dateAdded: '2023-04-22', addedBy: 'Admin User', notes: 'Subject fled during secondary screening.' },
+];
 
 export const setMockOfficerDesks = (newDesks: OfficerDesk[]) => {
     mockOfficerDesks = newDesks;

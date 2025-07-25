@@ -786,6 +786,14 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
     }
     
     // Whitelist
+    if (method === 'GET' && url.pathname === '/data/whitelist') {
+        return Result.success(mockWhitelist) as Result<T>;
+    }
+    if (method === 'POST' && url.pathname === '/data/whitelist/delete') {
+        const { id } = JSON.parse(body as string);
+        setMockWhitelist(mockWhitelist.filter(e => e.id !== id));
+        return Result.success({ id }) as Result<T>;
+    }
     if (method === 'POST' && url.pathname === '/data/whitelist/save') {
         const entryData = JSON.parse(body as string) as WhitelistEntry;
         const isNew = !entryData.id;

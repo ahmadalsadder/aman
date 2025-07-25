@@ -19,7 +19,6 @@ const allModules: Record<string, Omit<NavItem, 'label' | 'href'>> = {
   egate: { icon: DoorOpen },
   analyst: { icon: PieChart },
   'control-room': { icon: RadioTower },
-  shiftsupervisor: { icon: UserCog }, // Note: This module doesn't have a dedicated page, but can be a logical grouping
 };
 
 const adminNavItems: Record<string, Omit<NavItem, 'label'>> = {
@@ -52,12 +51,7 @@ const getModuleSubNav = (module: Module, t: any): NavItem[] => {
                 icon: RadioTower,
                 permission: `${module}:transactions:live` as Permission,
             },
-            {
-                href: `${moduleBaseUrl}/transactions/duty-manager`,
-                label: t('dutyManager'),
-                icon: ShieldAlert,
-                permission: 'duty-manager:view',
-            }
+            
         ];
 
         subNav.push({
@@ -136,7 +130,7 @@ const getModuleSubNav = (module: Module, t: any): NavItem[] => {
 export const getSidebarNavItems = (role: Role, modules: Module[], t: any): NavItem[] => {
     const nav: NavItem[] = [];
 
-    const navigableModules = modules.filter(m => m !== 'duty-manager');
+    const navigableModules = modules.filter(m => !['duty-manager', 'shiftsupervisor'].includes(m));
 
     navigableModules.forEach(moduleKey => {
         const moduleInfo = allModules[moduleKey];
@@ -150,6 +144,15 @@ export const getSidebarNavItems = (role: Role, modules: Module[], t: any): NavIt
             });
         }
     });
+
+    if (modules.includes('duty-manager')) {
+        nav.push({
+            href: '/airport/transactions/duty-manager',
+            label: t('dutyManager'),
+            icon: ShieldAlert,
+            permission: 'duty-manager:view',
+        });
+    }
     
     // Add admin-specific items if the role is admin
     if (role === 'admin') {

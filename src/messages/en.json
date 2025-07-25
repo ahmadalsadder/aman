@@ -1,4 +1,5 @@
 
+
 {
   "LoginPage": {
     "title": "Welcome to Guardian Gate",
@@ -55,7 +56,9 @@
     "predictiveAnalytics": "Predictive Analytics",
     "civilRecords": "Civil Records",
     "whitelist": "Whitelist",
-    "blacklist": "Blacklist"
+    "blacklist": "Blacklist",
+    "workloads": "Workloads",
+    "shiftManagement": "Shift Management"
   },
   "ModulePage": {
     "verifyingAccess": "Verifying access...",

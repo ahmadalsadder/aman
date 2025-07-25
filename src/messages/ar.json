@@ -53,7 +53,9 @@
     "dutyManager": "مدير المناوبة",
     "logout": "تسجيل الخروج",
     "predictiveAnalytics": "التحليلات التنبؤية",
-    "civilRecords": "السجلات المدنية"
+    "civilRecords": "السجلات المدنية",
+    "workloads": "أعباء العمل",
+    "shiftManagement": "إدارة الورديات"
   },
   "ModulePage": {
     "verifyingAccess": "التحقق من الوصول...",

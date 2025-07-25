@@ -54,7 +54,9 @@
     "dutyManager": "Gerente de Turno",
     "logout": "Cerrar sesión",
     "predictiveAnalytics": "Análisis Predictivo",
-    "civilRecords": "Registros Civiles"
+    "civilRecords": "Registros Civiles",
+    "workloads": "Cargas de trabajo",
+    "shiftManagement": "Gestión de turnos"
   },
   "ModulePage": {
     "verifyingAccess": "Verificando acceso...",

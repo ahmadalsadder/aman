@@ -1,7 +1,8 @@
 
 
+
 'use client';
-import { Shield, LayoutDashboard, BarChart3, Users, Settings, Activity, Ship, LandPlot, DoorOpen, PieChart, UserCog, RadioTower, Home, Plane, ArrowRightLeft, Monitor, ClipboardList, AlertTriangle, ShieldAlert, BrainCircuit, IdCard, Music, ListChecks, ShieldOff, UserPlus, FilePenLine } from 'lucide-react';
+import { Shield, LayoutDashboard, BarChart3, Users, Settings, Activity, Ship, LandPlot, DoorOpen, PieChart, UserCog, RadioTower, Home, Plane, ArrowRightLeft, Monitor, ClipboardList, AlertTriangle, ShieldAlert, BrainCircuit, IdCard, Music, ListChecks, ShieldOff, UserPlus, FilePenLine, CalendarDays } from 'lucide-react';
 import type { Role, Module, Permission } from '@/types';
 
 export interface NavItem {
@@ -51,6 +52,12 @@ const getModuleSubNav = (module: Module, t: any): NavItem[] => {
                 icon: RadioTower,
                 permission: `${module}:transactions:live` as Permission,
             },
+            {
+                href: `${moduleBaseUrl}/transactions/duty-manager`,
+                label: t('dutyManager'),
+                icon: ShieldAlert,
+                permission: 'duty-manager:view' as Permission,
+            },
             
         ];
 
@@ -62,13 +69,6 @@ const getModuleSubNav = (module: Module, t: any): NavItem[] => {
             children: transactionChildren
         });
         
-        subNav.push({
-            href: `${moduleBaseUrl}/transactions/duty-manager`,
-            label: t('dutyManager'),
-            icon: ShieldAlert,
-            permission: 'duty-manager:view',
-        });
-
         subNav.push({
             href: `${moduleBaseUrl}/officer-desks`,
             label: t('officerDesks'),
@@ -128,6 +128,24 @@ const getModuleSubNav = (module: Module, t: any): NavItem[] => {
                 permission: `${module}:prediction:view` as Permission,
             }
         );
+    }
+
+    if (['airport', 'landport', 'seaport', 'egate'].includes(module)) {
+        const workloadChildren: NavItem[] = [
+             {
+                href: `${moduleBaseUrl}/workload/shift-management`,
+                label: t('shiftManagement'),
+                icon: CalendarDays,
+                permission: `${module}:workload:view` as Permission,
+            },
+        ];
+        subNav.push({
+            href: `${moduleBaseUrl}/workload`,
+            label: t('workloads'),
+            icon: Settings,
+            permission: `${module}:workload:view` as Permission,
+            children: workloadChildren
+        });
     }
 
     return subNav;

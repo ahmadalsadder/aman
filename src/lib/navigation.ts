@@ -106,20 +106,6 @@ const getModuleSubNav = (module: Module, t: any): NavItem[] => {
             }
         );
     }
-    
-    if (module === 'analyst') {
-        subNav.push({
-            href: '/analyst/whitelist',
-            label: t('whitelist'),
-            icon: ListChecks,
-        });
-        subNav.push({
-            href: '/analyst/blacklist',
-            label: t('blacklist'),
-            icon: ShieldOff,
-        });
-    }
-
 
      if (['airport', 'landport', 'seaport', 'control-room'].includes(module)) {
         subNav.push({

@@ -1,9 +1,10 @@
+
 'use client';
 
 import { BlacklistForm, type BlacklistFormValues } from '@/components/passengers/blacklist/blacklist-form';
 import { GradientPageHeader } from '@/components/shared/gradient-page-header';
 import { useToast } from '@/hooks/use-toast';
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter, useParams, usePathname } from 'next/navigation';
 import type { BlacklistEntry } from '@/types/live-processing';
 import { useState, useEffect } from 'react';
 import { Loader2, FilePenLine } from 'lucide-react';
@@ -12,6 +13,8 @@ const BLACKLIST_STORAGE_KEY = 'guardian-gate-blacklist';
 
 export default function EditBlacklistPage() {
     const router = useRouter();
+    const pathname = usePathname();
+    const module = pathname.split('/')[1] || 'analyst';
     const params = useParams<{ id: string }>();
     const { toast } = useToast();
     const [entry, setEntry] = useState<BlacklistEntry | null>(null);
@@ -53,7 +56,7 @@ export default function EditBlacklistPage() {
                 description: `"${updatedEntry.name}"'s record has been successfully updated.`,
                 variant: 'success',
             });
-            router.push('/analyst/blacklist');
+            router.push(`/${module}/blacklist`);
         } catch (error) {
             toast({
                 title: 'Update Failed',

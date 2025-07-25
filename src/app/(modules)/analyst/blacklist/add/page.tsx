@@ -1,9 +1,10 @@
+
 'use client';
 
 import { BlacklistForm, type BlacklistFormValues } from '@/components/passengers/blacklist/blacklist-form';
 import { GradientPageHeader } from '@/components/shared/gradient-page-header';
 import { useToast } from '@/hooks/use-toast';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { PlusCircle } from 'lucide-react';
 import type { BlacklistEntry } from '@/types/live-processing';
 
@@ -11,6 +12,8 @@ const BLACKLIST_STORAGE_KEY = 'guardian-gate-blacklist';
 
 export default function AddBlacklistPage() {
     const router = useRouter();
+    const pathname = usePathname();
+    const module = pathname.split('/')[1] || 'analyst';
     const { toast } = useToast();
 
     const handleSave = (formData: BlacklistFormValues) => {
@@ -33,7 +36,7 @@ export default function AddBlacklistPage() {
                 variant: 'success',
             });
             
-            router.push('/analyst/blacklist');
+            router.push(`/${module}/blacklist`);
         } catch (error) {
             toast({
                 title: 'Save Failed',

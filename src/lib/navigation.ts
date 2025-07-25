@@ -92,12 +92,26 @@ const getModuleSubNav = (module: Module, t: any): NavItem[] => {
     }
 
     if (['airport', 'landport', 'seaport', 'egate'].includes(module)) {
-        subNav.push({
-            href: `${moduleBaseUrl}/prediction`,
-            label: t('predictiveAnalytics'),
-            icon: BrainCircuit,
-            permission: `${module}:prediction:view` as Permission,
-        });
+        subNav.push(
+            {
+                href: `${moduleBaseUrl}/whitelist`,
+                label: t('whitelist'),
+                icon: ListChecks,
+                permission: `${module}:records:view` as Permission,
+            },
+            {
+                href: `${moduleBaseUrl}/blacklist`,
+                label: t('blacklist'),
+                icon: ShieldOff,
+                permission: `${module}:records:view` as Permission,
+            },
+            {
+                href: `${moduleBaseUrl}/prediction`,
+                label: t('predictiveAnalytics'),
+                icon: BrainCircuit,
+                permission: `${module}:prediction:view` as Permission,
+            }
+        );
     }
 
      if (['airport', 'landport', 'seaport', 'control-room'].includes(module)) {

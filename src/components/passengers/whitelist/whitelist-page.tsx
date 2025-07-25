@@ -1,9 +1,10 @@
+
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
 import type { ColumnDef } from '@tanstack/react-table';
-import type { BlacklistEntry } from '@/types/live-processing';
-import { mockBlacklist } from '@/lib/mock-data';
+import type { WhitelistEntry } from '@/types/live-processing';
+import { mockWhitelist } from '@/lib/mock-data';
 import { DataTable } from '@/components/shared/data-table';
 import { GradientPageHeader } from '@/components/shared/gradient-page-header';
 import { Button } from '@/components/ui/button';
@@ -14,7 +15,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
-import { MoreHorizontal, Eye, Trash2, ShieldOff, Filter, ChevronDown, X, Search, User, PlusCircle, FilePenLine } from 'lucide-react';
+import { MoreHorizontal, Eye, Trash2, ListChecks, Filter, ChevronDown, X, Search, User, PlusCircle, FilePenLine } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -22,68 +23,72 @@ import { useToast } from '@/hooks/use-toast';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { DeleteBlacklistDialog } from '@/components/passengers/blacklist/delete-blacklist-dialog';
-import { BlacklistDetailsSheet } from '@/components/passengers/blacklist/blacklist-details-sheet';
+import { DeleteWhitelistDialog } from '@/components/passengers/whitelist/delete-whitelist-dialog';
+import { WhitelistDetailsSheet } from '@/components/passengers/whitelist/whitelist-details-sheet';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import type { Module } from '@/types';
 
-const BLACKLIST_STORAGE_KEY = 'guardian-gate-blacklist';
+const WHITELIST_STORAGE_KEY = 'guardian-gate-whitelist';
 
-const categoryColors: { [key: string]: string } = {
-  'No-Fly': 'bg-red-500/20 text-red-700 border-red-500/30',
-  'Wanted': 'bg-orange-500/20 text-orange-700 border-orange-500/30',
-  'Financial': 'bg-yellow-500/20 text-yellow-700 border-yellow-500/30',
-  'Other': 'bg-gray-500/20 text-gray-700 border-gray-500/30',
+const statusColors: { [key: string]: string } = {
+  Active: 'bg-green-500/20 text-green-700 border-green-500/30',
+  Expired: 'bg-gray-500/20 text-gray-700 border-gray-500/30',
+  Revoked: 'bg-red-500/20 text-red-700 border-red-500/30',
 };
 
 const initialFilters = {
   name: '',
   nationality: '',
-  category: '',
+  status: '',
 };
 
-export default function BlacklistPage() {
-  const [blacklist, setBlacklist] = useState<BlacklistEntry[]>([]);
+interface WhitelistPageProps {
+    module: Module | 'analyst';
+}
+
+export function WhitelistPage({ module }: WhitelistPageProps) {
+  const [whitelist, setWhitelist] = useState<WhitelistEntry[]>([]);
   const { toast } = useToast();
   const router = useRouter();
   
-  const [entryToView, setEntryToView] = useState<BlacklistEntry | null>(null);
-  const [entryToDelete, setEntryToDelete] = useState<BlacklistEntry | null>(null);
+  const [entryToView, setEntryToView] = useState<WhitelistEntry | null>(null);
+  const [entryToDelete, setEntryToDelete] = useState<WhitelistEntry | null>(null);
   const [filters, setFilters] = useState(initialFilters);
   const [appliedFilters, setAppliedFilters] = useState(initialFilters);
 
   useEffect(() => {
     try {
-      const storedBlacklist = localStorage.getItem(BLACKLIST_STORAGE_KEY);
-      if (storedBlacklist) {
-        setBlacklist(JSON.parse(storedBlacklist));
+      const storedWhitelist = localStorage.getItem(WHITELIST_STORAGE_KEY);
+      if (storedWhitelist) {
+        setWhitelist(JSON.parse(storedWhitelist));
       } else {
-        localStorage.setItem(BLACKLIST_STORAGE_KEY, JSON.stringify(mockBlacklist));
-        setBlacklist(mockBlacklist);
+        localStorage.setItem(WHITELIST_STORAGE_KEY, JSON.stringify(mockWhitelist));
+        setWhitelist(mockWhitelist);
       }
     } catch (error) {
-      console.error('Failed to access blacklist from localStorage', error);
-      setBlacklist(mockBlacklist);
+      console.error('Failed to access whitelist from localStorage', error);
+      setWhitelist(mockWhitelist);
     }
   }, []);
 
   const handleDeleteEntry = () => {
     if (!entryToDelete) return;
     try {
-      const updatedBlacklist = blacklist.filter(r => r.id !== entryToDelete.id);
-      localStorage.setItem(BLACKLIST_STORAGE_KEY, JSON.stringify(updatedBlacklist));
-      setBlacklist(updatedBlacklist);
+      const updatedWhitelist = whitelist.filter(r => r.id !== entryToDelete.id);
+      localStorage.setItem(WHITELIST_STORAGE_KEY, JSON.stringify(updatedWhitelist));
+      setWhitelist(updatedWhitelist);
       toast({
         title: 'Entry Deleted',
-        description: `Blacklist entry for "${entryToDelete.name}" has been permanently deleted.`,
+        description: `Whitelist entry for "${entryToDelete.name}" has been permanently deleted.`,
         variant: 'info',
       });
       setEntryToDelete(null);
     } catch (error) {
-      console.error('Failed to delete blacklist entry from localStorage', error);
+      console.error('Failed to delete whitelist entry from localStorage', error);
       toast({
         title: 'Delete Failed',
-        description: 'There was an error deleting the blacklist entry.',
+        description: 'There was an error deleting the whitelist entry.',
         variant: 'destructive',
       });
     }
@@ -100,29 +105,29 @@ export default function BlacklistPage() {
   };
   
   const filteredData = useMemo(() => {
-    return blacklist.filter(item => {
+    return whitelist.filter(item => {
       const nameLower = appliedFilters.name.toLowerCase();
       if (nameLower && !item.name.toLowerCase().includes(nameLower)) return false;
       if (appliedFilters.nationality && item.nationality !== appliedFilters.nationality) return false;
-      if (appliedFilters.category && item.category !== appliedFilters.category) return false;
+      if (appliedFilters.status && item.status !== appliedFilters.status) return false;
       return true;
     });
-  }, [blacklist, appliedFilters]);
+  }, [whitelist, appliedFilters]);
 
   const uniqueNationalities = useMemo(() => {
-    return Array.from(new Set(blacklist.map(item => item.nationality)));
-  }, [blacklist]);
+    return Array.from(new Set(whitelist.map(item => item.nationality)));
+  }, [whitelist]);
 
-  const uniqueCategories = useMemo(() => {
-    return Array.from(new Set(blacklist.map(item => item.category)));
-  }, [blacklist]);
+  const uniqueStatuses = useMemo(() => {
+    return Array.from(new Set(whitelist.map(item => item.status)));
+  }, [whitelist]);
 
-  const columns: ColumnDef<BlacklistEntry>[] = [
+  const columns: ColumnDef<WhitelistEntry>[] = [
     { accessorKey: 'id', header: 'ID' },
     { accessorKey: 'name', header: 'Name' },
     { accessorKey: 'nationality', header: 'Nationality' },
     { accessorKey: 'dateAdded', header: 'Date Added' },
-    { accessorKey: 'category', header: 'Category', cell: ({ row }) => <Badge variant="outline" className={cn(categoryColors[row.original.category])}>{row.original.category}</Badge> },
+    { accessorKey: 'status', header: 'Status', cell: ({ row }) => <Badge variant="outline" className={cn(statusColors[row.original.status])}>{row.original.status}</Badge> },
     { id: 'actions', cell: ({ row }) => (
         <DropdownMenu>
           <DropdownMenuTrigger asChild><Button variant="ghost" className="h-8 w-8 p-0"><span className="sr-only">Open menu</span><MoreHorizontal className="h-4 w-4" /></Button></DropdownMenuTrigger>
@@ -136,7 +141,7 @@ export default function BlacklistPage() {
                     </Link>
                 </DropdownMenuItem>
             )}
-             <DropdownMenuItem onClick={() => router.push(`/analyst/blacklist/edit/${row.original.id}`)}>
+             <DropdownMenuItem onClick={() => router.push(`/${module}/whitelist/edit/${row.original.id}`)}>
                 <FilePenLine className="mr-2 h-4 w-4 text-yellow-500" />
                 <span>Edit Entry</span>
             </DropdownMenuItem>
@@ -150,10 +155,10 @@ export default function BlacklistPage() {
 
   return (
     <div className="space-y-6">
-      <GradientPageHeader title="Passenger Blacklist" description="Manage individuals flagged for security risks." icon={ShieldOff}>
+      <GradientPageHeader title="Passenger Whitelist" description="Manage individuals with special clearance." icon={ListChecks}>
         <Button asChild className="bg-white font-semibold text-primary hover:bg-white/90">
-            <Link href="/analyst/blacklist/add">
-                <PlusCircle className="mr-2 h-4 w-4" /> Add to Blacklist
+            <Link href={`/${module}/whitelist/add`}>
+                <PlusCircle className="mr-2 h-4 w-4" /> Add to Whitelist
             </Link>
         </Button>
       </GradientPageHeader>
@@ -162,7 +167,7 @@ export default function BlacklistPage() {
         <Collapsible>
           <CollapsibleTrigger asChild>
             <div className="flex w-full cursor-pointer items-center justify-between p-4">
-              <div className="flex items-center gap-3"><Filter className="h-5 w-5" /><h2 className="text-lg font-semibold">Search & Filter Blacklist</h2></div>
+              <div className="flex items-center gap-3"><Filter className="h-5 w-5" /><h2 className="text-lg font-semibold">Search & Filter Whitelist</h2></div>
               <ChevronDown className="h-5 w-5 transition-transform duration-300 [&[data-state=open]]:rotate-180" />
             </div>
           </CollapsibleTrigger>
@@ -177,11 +182,11 @@ export default function BlacklistPage() {
                     {uniqueNationalities.map(n => <SelectItem key={n} value={n}>{n}</SelectItem>)}
                   </SelectContent>
                 </Select>
-                <Select value={filters.category} onValueChange={(value) => handleUpdateFilter('category', value === 'all' ? '' : value)}>
-                  <SelectTrigger><SelectValue placeholder="Category" /></SelectTrigger>
+                <Select value={filters.status} onValueChange={(value) => handleUpdateFilter('status', value === 'all' ? '' : value)}>
+                  <SelectTrigger><SelectValue placeholder="Status" /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Categories</SelectItem>
-                    {uniqueCategories.map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}
+                    <SelectItem value="all">All Statuses</SelectItem>
+                    {uniqueStatuses.map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}
                   </SelectContent>
                 </Select>
               </div>
@@ -195,18 +200,18 @@ export default function BlacklistPage() {
       </Card>
       
       <Card>
-        <CardHeader><CardTitle>Blacklist Records</CardTitle><CardDescription>A list of all blacklisted individuals in the system.</CardDescription></CardHeader>
+        <CardHeader><CardTitle>Whitelist Records</CardTitle><CardDescription>A list of all whitelisted individuals in the system.</CardDescription></CardHeader>
         <CardContent>
             <DataTable columns={columns} data={filteredData} filterColumnId="name" hideDefaultFilter />
         </CardContent>
       </Card>
       
-      <BlacklistDetailsSheet
+      <WhitelistDetailsSheet
         entry={entryToView}
         isOpen={!!entryToView}
         onOpenChange={(isOpen) => !isOpen && setEntryToView(null)}
       />
-      <DeleteBlacklistDialog entry={entryToDelete} isOpen={!!entryToDelete} onOpenChange={(isOpen) => !isOpen && setEntryToDelete(null)} onConfirm={handleDeleteEntry} />
+      <DeleteWhitelistDialog entry={entryToDelete} isOpen={!!entryToDelete} onOpenChange={(isOpen) => !isOpen && setEntryToDelete(null)} onConfirm={handleDeleteEntry} />
     </div>
   );
 }

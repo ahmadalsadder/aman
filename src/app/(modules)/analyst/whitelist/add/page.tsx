@@ -1,9 +1,10 @@
+
 'use client';
 
 import { WhitelistForm, type WhitelistFormValues } from '@/components/passengers/whitelist/whitelist-form';
 import { GradientPageHeader } from '@/components/shared/gradient-page-header';
 import { useToast } from '@/hooks/use-toast';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { PlusCircle } from 'lucide-react';
 import type { WhitelistEntry } from '@/types/live-processing';
 
@@ -11,6 +12,8 @@ const WHITELIST_STORAGE_KEY = 'guardian-gate-whitelist';
 
 export default function AddWhitelistPage() {
     const router = useRouter();
+    const pathname = usePathname();
+    const module = pathname.split('/')[1] || 'analyst';
     const { toast } = useToast();
 
     const handleSave = (formData: WhitelistFormValues) => {
@@ -33,7 +36,7 @@ export default function AddWhitelistPage() {
                 variant: 'success',
             });
             
-            router.push('/analyst/whitelist');
+            router.push(`/${module}/whitelist`);
         } catch (error) {
             toast({
                 title: 'Save Failed',

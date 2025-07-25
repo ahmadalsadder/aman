@@ -154,11 +154,13 @@ export function CivilRecordsPage({ module }: CivilRecordsPageProps) {
     ];
     
     if (loading) {
-        return <div className="space-y-6">
-            <Skeleton className="h-24" />
-            <Skeleton className="h-48" />
-            <Skeleton className="h-96" />
-        </div>;
+        return (
+            <div className="space-y-6">
+                <Skeleton className="h-24" />
+                <Skeleton className="h-48" />
+                <Skeleton className="h-96" />
+            </div>
+        );
     }
 
     if (!canViewPage) {
@@ -253,7 +255,7 @@ export function CivilRecordsPage({ module }: CivilRecordsPageProps) {
             </Card>
       
             <Card>
-                <CardHeader><CardTitle>{t('recordsTitle')}</CardHeader></CardHeader>
+                <CardHeader><CardTitle>{t('recordsTitle')}</CardTitle></CardHeader>
                 <CardContent>
                 <DataTable
                     columns={columns}

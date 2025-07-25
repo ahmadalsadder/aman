@@ -127,35 +127,23 @@ export function DutyManagerPageComponent({ module, transactions, loading }: Duty
       id: 'actions',
       cell: ({ row }) => {
         const transaction = row.original;
-        const transactionModule = transaction.tripInformation?.type || 'airport';
         return (
           <div className="flex items-center gap-2">
             <Button asChild variant="ghost" size="icon" className="text-primary hover:text-primary/80">
-              <Link href={`/${transactionModule}/transactions/${transaction.id}`}>
+              <Link href={`/${module}/transactions/${transaction.id}`}>
                 <Eye className="h-4 w-4" />
               </Link>
             </Button>
-            <Button asChild variant="ghost" size="icon" className="text-primary hover:text-primary/80" disabled>
-                <Link href={`/${transactionModule}/passengers/${transaction.passengerId}/edit`}>
+            <Button asChild variant="ghost" size="icon" className="text-primary hover:text-primary/80">
+                <Link href={`/${module}/passengers/edit/${transaction.passengerId}`}>
                     <User className="h-4 w-4" />
                 </Link>
-            </Button>
-            <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-muted-foreground/80" onClick={() => window.print()}>
-              <Printer className="h-4 w-4" />
             </Button>
           </div>
         );
       },
     },
   ];
-
-  if (loading) {
-    return <div className="space-y-6">
-        <Skeleton className="h-24" />
-        <Skeleton className="h-32" />
-        <Skeleton className="h-96" />
-    </div>;
-  }
   
   const handleUpdateFilter = (key: keyof typeof filters, value: any) => {
     setFilters(prev => ({ ...prev, [key]: value }));

@@ -1,25 +1,52 @@
+
 'use client';
-import { useMemo } from 'react';
-import { ShiftManagementPage } from '@/components/workloads/shift-management/shift-management-page';
-import { useAuth } from '@/hooks/use-auth';
-import type { Permission } from '@/types';
-import { AlertTriangle } from 'lucide-react';
+import Link from 'next/link';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { ArrowRight, CalendarDays, UserCog } from 'lucide-react';
+import { GradientPageHeader } from '@/components/shared/gradient-page-header';
 
-export default function AirportShiftManagementPage() {
-    const { hasPermission } = useAuth();
-    const canView = useMemo(() => hasPermission(['airport:workload:view' as Permission]), [hasPermission]);
-
-    if (!canView) {
-        return (
-            <div className="flex h-full w-full flex-col items-center justify-center gap-4 text-center">
-                <AlertTriangle className="h-16 w-16 text-destructive" />
-                <h1 className="text-2xl font-bold">Access Denied</h1>
-                <p className="max-w-md text-muted-foreground">
-                    You do not have permission to view workload management for this module.
-                </p>
-            </div>
-        );
+const featureCards = [
+    {
+        title: "Shift Management",
+        description: "Define and manage officer work shifts, schedules, and rotations.",
+        href: "/airport/workloads/shift-management",
+        icon: CalendarDays,
+    },
+    {
+        title: "Assign Officer",
+        description: "Assign specific officers to shifts and manage their workload.",
+        href: "/airport/workloads/assign-officer",
+        icon: UserCog,
     }
-    
-    return <ShiftManagementPage module="airport" />;
+];
+
+export default function AirportWorkloadsPage() {
+  return (
+    <div className="space-y-6">
+       <GradientPageHeader
+        title="Workload Management"
+        description="Plan and manage officer shifts and assignments."
+        icon={CalendarDays}
+      />
+      <div className="grid gap-6 md:grid-cols-2">
+        {featureCards.map(card => (
+          <Link href={card.href} key={card.title}>
+            <Card className="flex flex-col h-full hover:border-primary transition-colors">
+              <CardHeader className="flex flex-row items-center gap-4">
+                <card.icon className="h-8 w-8 text-primary" />
+                <div>
+                  <CardTitle>{card.title}</CardTitle>
+                  <CardDescription>{card.description}</CardDescription>
+                </div>
+              </CardHeader>
+              <CardContent className="flex-grow"></CardContent>
+              <div className="flex justify-end p-4">
+                  <ArrowRight className="h-5 w-5 text-muted-foreground" />
+              </div>
+            </Card>
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
 }

@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -70,6 +71,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const logout = () => {
     setUser(null);
     eraseCookie(AUTH_COOKIE_NAME);
+    localStorage.clear();
   };
   
   const hasPermission = (requiredPermissions: Permission[]): boolean => {

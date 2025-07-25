@@ -58,7 +58,8 @@
     "whitelist": "Whitelist",
     "blacklist": "Blacklist",
     "workloads": "Workloads",
-    "shiftManagement": "Shift Management"
+    "shiftManagement": "Shift Management",
+    "assignOfficer": "Assign Officer"
   },
   "ModulePage": {
     "verifyingAccess": "Verifying access...",

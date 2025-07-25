@@ -55,7 +55,8 @@
     "predictiveAnalytics": "التحليلات التنبؤية",
     "civilRecords": "السجلات المدنية",
     "workloads": "أعباء العمل",
-    "shiftManagement": "إدارة الورديات"
+    "shiftManagement": "إدارة الورديات",
+    "assignOfficer": "تعيين ضابط"
   },
   "ModulePage": {
     "verifyingAccess": "التحقق من الوصول...",
@@ -494,7 +495,7 @@
   },
   "OfficerDesks": {
     "pageTitle": "إدارة مكاتب الضباط",
-    "pageDescription": "الحالة والتكوين في الوقت الفعلي لجميع مكاتب الضباط.",
+    "pageDescription": "الحالة والتكوين في الوقت الحقيقي لجميع مكاتب الضباط.",
     "addDesk": "إضافة مكتب",
     "filterTitle": "بحث وتصفية المكاتب",
     "filterPlaceholder": "اسم المكتب أو المحطة...",

@@ -130,13 +130,30 @@ const getModuleSubNav = (module: Module, t: any): NavItem[] => {
     }
 
     if (['airport', 'landport', 'seaport', 'egate'].includes(module)) {
+        const workloadChildren: NavItem[] = [
+            {
+                href: `${moduleBaseUrl}/workloads/shift-management`,
+                label: t('shiftManagement'),
+                icon: CalendarDays,
+                permission: `${module}:workload:view` as Permission,
+            },
+            {
+                href: `${moduleBaseUrl}/workloads/assign-officer`,
+                label: t('assignOfficer'),
+                icon: UserCog,
+                permission: `${module}:workload:view` as Permission, // Assuming same permission for now
+            }
+        ];
+
         subNav.push({
             href: `${moduleBaseUrl}/workloads`,
-            label: t('shiftManagement'),
-            icon: CalendarDays,
+            label: t('workloads'),
+            icon: Activity,
             permission: `${module}:workload:view` as Permission,
+            children: workloadChildren
         });
     }
+
 
     return subNav;
 }

@@ -15,6 +15,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
+import { format } from 'date-fns';
 
 export default function AddAirportBlacklistPage() {
     const router = useRouter();
@@ -47,10 +48,14 @@ export default function AddAirportBlacklistPage() {
 
     const handleSave = async (formData: BlacklistFormValues) => {
         setIsLoading(true);
-        const newEntryData = {
+        const newEntryData: Partial<BlacklistEntry> = {
             ...formData,
             addedBy: user?.name || 'System',
             dateAdded: new Date().toISOString().split('T')[0],
+            validFrom: formData.validFrom ? format(formData.validFrom, 'yyyy-MM-dd') : undefined,
+            validUntil: formData.validUntil ? format(formData.validUntil, 'yyyy-MM-dd') : undefined,
+            passportIssueDate: formData.passportIssueDate ? format(formData.passportIssueDate, 'yyyy-MM-dd') : undefined,
+            passportExpiryDate: formData.passportExpiryDate ? format(formData.passportExpiryDate, 'yyyy-MM-dd') : undefined,
         };
         
         const result = await api.post<BlacklistEntry>('/data/blacklist/save', newEntryData);

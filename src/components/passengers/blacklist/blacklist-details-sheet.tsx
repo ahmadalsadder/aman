@@ -17,6 +17,12 @@ const categoryColors: { [key: string]: string } = {
   'Other': 'bg-gray-500/20 text-gray-700 border-gray-500/30',
 };
 
+const statusColors: { [key: string]: string } = {
+  Active: 'bg-green-500/20 text-green-700 border-green-500/30',
+  Expired: 'bg-gray-500/20 text-gray-700 border-gray-500/30',
+  Revoked: 'bg-red-500/20 text-red-700 border-red-500/30',
+};
+
 const DetailItem = ({ label, value, children }: { label: string; value?: string | number | null; children?: React.ReactNode }) => (
     <div className="flex justify-between py-2 text-sm">
       <p className="text-muted-foreground">{label}</p>
@@ -43,14 +49,22 @@ export function BlacklistDetailsSheet({ entry, isOpen, onOpenChange }: Blacklist
                 </SheetHeader>
                 <div className="py-4 space-y-2">
                     <Separator />
+                    <h4 className="font-semibold text-base pt-2">Blacklist Details</h4>
+                    <DetailItem label="Status"><Badge variant="outline" className={cn(statusColors[entry.status])}>{entry.status}</Badge></DetailItem>
                     <DetailItem label="Category"><Badge variant="outline" className={cn(categoryColors[entry.category])}>{entry.category}</Badge></DetailItem>
-                    <DetailItem label="Nationality" value={entry.nationality} />
                     <DetailItem label="Reason" value={entry.reason} />
+                    <DetailItem label="Added By" value={entry.addedBy} />
+                    <DetailItem label="Date Added" value={entry.dateAdded} />
+                     <DetailItem label="Valid From" value={entry.validFrom} />
+                    <DetailItem label="Valid Until" value={entry.validUntil || 'Indefinite'} />
 
                     <Separator />
-                    <h4 className="font-semibold text-base pt-2">System Information</h4>
-                    <DetailItem label="Date Added" value={entry.dateAdded} />
-                    <DetailItem label="Added By" value={entry.addedBy} />
+                    <h4 className="font-semibold text-base pt-2">Passenger Information</h4>
+                    <DetailItem label="Nationality" value={entry.nationality} />
+                    <DetailItem label="Passport Number" value={entry.passportNumber} />
+                    <DetailItem label="Passport Issue Country" value={entry.passportCountry} />
+                    <DetailItem label="Passport Issue Date" value={entry.passportIssueDate} />
+                    <DetailItem label="Passport Expiry Date" value={entry.passportExpiryDate} />
                     
                     <Separator />
                      <div className="py-2 space-y-1">

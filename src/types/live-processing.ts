@@ -1,5 +1,6 @@
 
 
+
 import type { Port, Terminal, Zone, Workflow, RiskProfile } from './configuration';
 
 export interface Passenger {
@@ -220,13 +221,26 @@ export interface BlacklistEntry {
   passengerId?: string;
   name: string;
   nationality: string;
+  status: 'Active' | 'Expired' | 'Revoked';
   reason: string;
   category: 'No-Fly' | 'Wanted' | 'Financial' | 'Other';
   dateAdded: string;
   addedBy: string;
   notes?: string;
   attachmentUrl?: string;
+  
+  // Passenger details
+  localizedName?: string;
+  passportNumber: string;
+  passportIssueDate?: string;
+  passportExpiryDate?: string;
+  passportCountry?: string;
+
+  // Validity
+  validFrom?: string;
+  validUntil?: string;
 }
+
 
 export { Port, Terminal, Zone, Workflow, RiskProfile };
     

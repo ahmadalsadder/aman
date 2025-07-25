@@ -49,7 +49,7 @@ const mockPassengersData: Passenger[] = [
     }
 ];
 
-const mockTransactionsInit: Transaction[] = [
+const getMockTransactions = (): Transaction[] => [
     {
       id: 'TXN741852963',
       passengerId: 'P001',
@@ -133,8 +133,9 @@ const mockTransactionsInit: Transaction[] = [
     }
 ];
 
+
 let mockPassengers = [...mockPassengersData];
-let mockTransactions = [...mockTransactionsInit];
+let mockTransactions = getMockTransactions();
 
 let mockOfficerDesks: OfficerDesk[] = [
     { id: 'DESK-A1', name: 'Officer Desk A1', terminalId: 'TERM-DXB-1', zoneId: 'ZONE-A', ipAddress: '192.168.1.10', macAddress: '00:1A:2B:3C:4D:5E', status: 'Active', lastUpdatedAt: '2023-05-20T10:00:00Z', movementType: 'Entry', workflowId: 'WF-Standard', riskRuleId: 'RR-Low' },
@@ -269,7 +270,7 @@ let mockShifts: Shift[] = [
 
 // Getters
 export const getMockPassengers = () => mockPassengers;
-export const getMockTransactions = () => mockTransactions;
+export { getMockTransactions };
 export const getMockOfficerDesks = () => mockOfficerDesks;
 export const getMockGates = () => mockGates;
 export const getMockMedia = () => mockMedia;
@@ -306,18 +307,5 @@ export const setMockShifts = (newShifts: Shift[]) => {
 
 // Re-export other mock data if needed
 export const mockData = {
-    mainDashboardData,
-    dashboardStats,
-    airportDashboardData,
-    passengerData,
-    transactionOverviewData,
-    forecastData,
-    gateRejectionReasonsData,
-    transactionListData,
-    transactionBreakdownData,
-    gatePerformanceData,
-    officerPerformanceData,
-    processingTimeDistributionData,
-    seaportTravelerCategoriesData,
-    predictionData,
+    // All specific data objects have been moved to mock-api.ts
 };

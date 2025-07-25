@@ -1,14 +1,20 @@
 
 'use client';
 
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetFooter } from '@/components/ui/sheet';
-import { Button } from '@/components/ui/button';
 import type { Media } from '@/types/live-processing';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet';
+import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { useTranslations } from 'next-intl';
-import { Badge } from '../ui/badge';
 import { cn } from '@/lib/utils';
-import Link from 'next/link';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Button } from '@/components/ui/button';
+import { Download } from 'lucide-react';
+
+interface MediaDetailsSheetProps {
+  media: Media | null;
+  isOpen: boolean;
+  onOpenChange: (isOpen: boolean) => void;
+}
 
 const statusColors: { [key: string]: string } = {
   Active: 'bg-green-500/20 text-green-700 border-green-500/30',
@@ -21,51 +27,74 @@ const typeColors: { [key: string]: string } = {
   Video: 'bg-orange-500/20 text-orange-700 border-orange-500/30',
 };
 
-const DetailItem = ({ label, value, children }: { label: string; value?: string | number | null; children?: React.ReactNode }) => (
-    <div className="flex flex-col gap-1 py-2 text-sm">
-      <p className="font-semibold text-muted-foreground">{label}</p>
-      {value != null && <p className="font-medium">{String(value)}</p>}
-      {children}
+function DetailItem({ label, value, className }: { label: string; value?: string | number | null; className?: string }) {
+  if (!value) return null;
+  return (
+    <div className={className}>
+      <p className="text-xs text-muted-foreground">{label}</p>
+      <p className="text-sm font-medium">{value}</p>
     </div>
-);
-
-interface MediaDetailsSheetProps {
-    media: Media | null;
-    isOpen: boolean;
-    onOpenChange: (open: boolean) => void;
+  );
 }
 
 export function MediaDetailsSheet({ media, isOpen, onOpenChange }: MediaDetailsSheetProps) {
-    const t = useTranslations('MediaManagement.detailsSheet');
-    if (!media) return null;
-
-    return (
-        <Sheet open={isOpen} onOpenChange={onOpenChange}>
-            <SheetContent className="sm:max-w-md overflow-y-auto">
-                <SheetHeader>
-                    <SheetTitle>{t('title')}</SheetTitle>
-                    <SheetDescription>{media.name}</SheetDescription>
-                </SheetHeader>
-                <div className="py-4 space-y-2">
-                    <Separator />
-                    <DetailItem label={t('name')} value={media.name} />
-                    <DetailItem label={t('localizedName')} value={media.localizedName} />
-                    <DetailItem label={t('description')} value={media.description} />
-                    <Separator />
-                    <DetailItem label={t('status')}><Badge variant="outline" className={cn(statusColors[media.status])}>{media.status}</Badge></DetailItem>
-                    <DetailItem label={t('type')}><Badge variant="outline" className={cn(typeColors[media.type])}>{media.type}</Badge></DetailItem>
-                    <Separator />
-                    <DetailItem label={t('url')}>
-                        <Link href={media.url} target="_blank" className="text-primary hover:underline break-all">{media.url}</Link>
-                    </DetailItem>
-                    <Separator />
-                    <DetailItem label={t('createdBy')} value={media.createdBy} />
-                    <DetailItem label={t('lastModified')} value={new Date(media.lastModified).toLocaleString()} />
-                </div>
-                <SheetFooter className="mt-4">
-                    <Button onClick={() => onOpenChange(false)}>{t('close')}</Button>
-                </SheetFooter>
-            </SheetContent>
-        </Sheet>
-    );
+  if (!media) return null;
+  
+  return (
+    <Sheet open={isOpen} onOpenChange={onOpenChange}>
+      <SheetContent className="w-full overflow-y-auto sm:max-w-lg">
+        <SheetHeader className="mb-6">
+          <SheetTitle className="text-2xl">{media.name}</SheetTitle>
+          <SheetDescription>{media.localizedName}</SheetDescription>
+          <div className="flex flex-wrap gap-2 pt-2">
+            <Badge variant="outline" className={cn(statusColors[media.status])}>{media.status}</Badge>
+            <Badge variant="outline" className={cn(typeColors[media.type])}>{media.type}</Badge>
+          </div>
+        </SheetHeader>
+        
+        <div className="space-y-6">
+          <div>
+            <h3 className="mb-3 text-lg font-semibold">Attached Files</h3>
+            <div className="rounded-md border">
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>Language</TableHead>
+                            <TableHead>File Name</TableHead>
+                            <TableHead className="text-right">Actions</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {(media.mediaFiles || []).map((file) => (
+                            <TableRow key={file.id}>
+                                <TableCell>{file.language}</TableCell>
+                                <TableCell className="font-mono text-xs">{file.fileName}</TableCell>
+                                <TableCell className="text-right">
+                                    <Button asChild variant="ghost" size="icon">
+                                        <a href={file.fileUrl} download={file.fileName}>
+                                            <Download className="h-4 w-4" />
+                                        </a>
+                                    </Button>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </div>
+          </div>
+          
+          <Separator />
+            
+          <div>
+            <h3 className="mb-3 text-lg font-semibold">System Information</h3>
+            <div className="grid grid-cols-2 gap-4">
+              <DetailItem label="Media ID" value={media.id} />
+              <DetailItem label="Created By" value={media.createdBy} />
+              <DetailItem label="Last Modified" value={media.lastModified} />
+            </div>
+          </div>
+        </div>
+      </SheetContent>
+    </Sheet>
+  );
 }

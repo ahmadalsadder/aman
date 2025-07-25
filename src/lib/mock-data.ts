@@ -190,9 +190,47 @@ export let mockGates: Gate[] = [
 ];
 
 export let mockMedia: Media[] = [
-    { id: 'MEDIA-001', name: 'Entry Greeting', localizedName: 'تحية الدخول', type: 'Audio', status: 'Active', url: '/audio/entry_greeting.mp3', description: 'Standard welcome audio for all entry points.', lastModified: '2023-05-15', createdBy: 'Admin User' },
-    { id: 'MEDIA-002', name: 'Prohibited Items', localizedName: 'الأصناف الممنوعة', type: 'Video', status: 'Active', url: '/video/prohibited_items.mp4', description: 'Security video displaying prohibited items.', lastModified: '2023-05-10', createdBy: 'Admin User' },
-    { id: 'MEDIA-003', name: 'E-Gate Instructions', localizedName: 'تعليمات البوابة الإلكترونية', type: 'Image', status: 'Inactive', url: '/images/egate_instructions.png', description: 'Visual guide for using the e-gates.', lastModified: '2023-04-20', createdBy: 'Admin User' },
+    { 
+        id: 'MEDIA-001', 
+        name: 'Entry Greeting', 
+        localizedName: 'تحية الدخول', 
+        type: 'Audio', 
+        status: 'Active', 
+        description: 'Standard welcome audio for all entry points.', 
+        lastModified: '2023-05-15', 
+        createdBy: 'Admin User',
+        mediaFiles: [
+            { id: 'F001', language: 'English', fileName: 'entry_greeting_en.mp3', fileType: 'audio/mpeg', fileUrl: '/audio/entry_greeting_en.mp3' },
+            { id: 'F002', language: 'Arabic', fileName: 'entry_greeting_ar.mp3', fileType: 'audio/mpeg', fileUrl: '/audio/entry_greeting_ar.mp3' },
+        ]
+    },
+    { 
+        id: 'MEDIA-002', 
+        name: 'Prohibited Items', 
+        localizedName: 'الأصناف الممنوعة', 
+        type: 'Video', 
+        status: 'Active', 
+        description: 'Security video displaying prohibited items.', 
+        lastModified: '2023-05-10', 
+        createdBy: 'Admin User',
+        mediaFiles: [
+            { id: 'F003', language: 'English', fileName: 'prohibited_items.mp4', fileType: 'video/mp4', fileUrl: '/video/prohibited_items.mp4' },
+        ]
+    },
+    { 
+        id: 'MEDIA-003', 
+        name: 'E-Gate Instructions', 
+        localizedName: 'تعليمات البوابة الإلكترونية', 
+        type: 'Image', 
+        status: 'Inactive', 
+        description: 'Visual guide for using the e-gates.', 
+        lastModified: '2023-04-20', 
+        createdBy: 'Admin User',
+        mediaFiles: [
+            { id: 'F004', language: 'English', fileName: 'egate_instructions_en.png', fileType: 'image/png', fileUrl: '/images/egate_instructions.png' },
+            { id: 'F005', language: 'Arabic', fileName: 'egate_instructions_ar.png', fileType: 'image/png', fileUrl: '/images/egate_instructions_ar.png' },
+        ]
+    },
 ];
 
 

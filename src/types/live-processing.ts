@@ -177,17 +177,23 @@ export interface Gate {
       capacity: number;
     };
   }
-
+export interface MediaFile {
+    id: string;
+    language: string;
+    fileName: string;
+    fileType: string;
+    fileUrl: string;
+}
 export interface Media {
   id: string;
   name: string;
   localizedName?: string;
   type: 'Audio' | 'Image' | 'Video';
   status: 'Active' | 'Inactive';
-  url: string;
   description: string;
   lastModified: string;
   createdBy: string;
+  mediaFiles: MediaFile[];
 }
 
 export { Port, Terminal, Zone, Workflow, RiskProfile };

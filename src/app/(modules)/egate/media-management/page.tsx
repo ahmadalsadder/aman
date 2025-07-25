@@ -61,7 +61,10 @@ export default function MediaManagementPage() {
   const [filters, setFilters] = useState(initialFilters);
   const [appliedFilters, setAppliedFilters] = useState(initialFilters);
 
-  const canView = useMemo(() => hasPermission(['egate:media:view']), [hasPermission]);
+  const canView = hasPermission(['egate:media:view']);
+  const canCreate = hasPermission(['egate:media:create']);
+  const canEdit = hasPermission(['egate:media:edit']);
+  const canDelete = hasPermission(['egate:media:delete']);
 
   useEffect(() => {
     if (canView) {
@@ -136,8 +139,8 @@ export default function MediaManagementPage() {
           <DropdownMenuTrigger asChild><Button variant="ghost" className="h-8 w-8 p-0"><span className="sr-only">Open menu</span><MoreHorizontal className="h-4 w-4" /></Button></DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem onClick={() => setMediaToView(row.original)}><Eye className="mr-2 h-4 w-4 text-primary" /><span>{t('table.actions.view')}</span></DropdownMenuItem>
-            <DropdownMenuItem asChild><Link href={`/egate/media-management/edit/${row.original.id}`}><FilePenLine className="mr-2 h-4 w-4 text-yellow-500" /><span>{t('table.actions.edit')}</span></Link></DropdownMenuItem>
-            <DropdownMenuItem className="text-destructive focus:text-destructive" onClick={() => setMediaToDelete(row.original)}><Trash2 className="mr-2 h-4 w-4" /><span>{t('table.actions.delete')}</span></DropdownMenuItem>
+            {canEdit && <DropdownMenuItem asChild><Link href={`/egate/media-management/edit/${row.original.id}`}><FilePenLine className="mr-2 h-4 w-4 text-yellow-500" /><span>{t('table.actions.edit')}</span></Link></DropdownMenuItem>}
+            {canDelete && <DropdownMenuItem className="text-destructive focus:text-destructive" onClick={() => setMediaToDelete(row.original)}><Trash2 className="mr-2 h-4 w-4" /><span>{t('table.actions.delete')}</span></DropdownMenuItem>}
           </DropdownMenuContent>
         </DropdownMenu>
       ),
@@ -169,9 +172,9 @@ export default function MediaManagementPage() {
   return (
     <div className="space-y-6">
       <GradientPageHeader title={t('pageTitle')} description={t('pageDescription')} icon={Music}>
-        <Button asChild className="bg-white font-semibold text-primary hover:bg-white/90">
+        {canCreate && <Button asChild className="bg-white font-semibold text-primary hover:bg-white/90">
           <Link href="/egate/media-management/add"><PlusCircle className="mr-2 h-4 w-4" /> {t('addMedia')}</Link>
-        </Button>
+        </Button>}
       </GradientPageHeader>
       
        <Card>

@@ -6,23 +6,30 @@ import { useToast } from '@/hooks/use-toast';
 import { useRouter, useParams } from 'next/navigation';
 import type { Media } from '@/types/live-processing';
 import { useState, useEffect } from 'react';
-import { Loader2, FilePenLine } from 'lucide-react';
+import { Loader2, FilePenLine, AlertTriangle } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { api } from '@/lib/api';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useAuth } from '@/hooks/use-auth';
 
 export default function EditMediaPage() {
     const router = useRouter();
     const params = useParams<{ id: string }>();
     const { toast } = useToast();
     const t = useTranslations('MediaManagement.form');
+    const { hasPermission } = useAuth();
     const [media, setMedia] = useState<Media | null>(null);
     const [loading, setLoading] = useState(true);
     const id = params.id;
 
+    const canEdit = hasPermission(['egate:media:edit']);
+
     useEffect(() => {
+        if (!id || !canEdit) {
+            setLoading(false);
+            return;
+        }
         const fetchMedia = async () => {
-            if (!id) return;
             setLoading(true);
             const result = await api.get<{ media: Media }>(`/data/media/${id}`);
             if (result.isSuccess && result.data) {
@@ -37,7 +44,7 @@ export default function EditMediaPage() {
             setLoading(false);
         };
         fetchMedia();
-    }, [id, t, toast]);
+    }, [id, t, toast, canEdit]);
 
     const handleSave = async (formData: MediaFormValues) => {
         if (!media) return;
@@ -64,6 +71,18 @@ export default function EditMediaPage() {
 
     if (loading) {
         return <Skeleton className="h-96 w-full" />;
+    }
+    
+    if (!canEdit) {
+        return (
+            <div className="flex h-full w-full flex-col items-center justify-center gap-4 text-center">
+                <AlertTriangle className="h-16 w-16 text-destructive" />
+                <h1 className="text-2xl font-bold">Access Denied</h1>
+                <p className="max-w-md text-muted-foreground">
+                    You do not have permission to edit media content.
+                </p>
+            </div>
+        );
     }
     
     if (!media) {

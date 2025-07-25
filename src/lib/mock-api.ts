@@ -2,12 +2,12 @@
 
 import type { User } from '@/types';
 import { Result, ApiError } from '@/types/api/result';
-import { mockPassengers, mockTransactions, mockVisaDatabase, mockOfficerDesks, mockPorts, mockTerminals, mockZones, mockWorkflows, mockRiskProfiles, setMockOfficerDesks, mockGates, setMockGates } from './mock-data';
+import { mockPassengers, mockTransactions, mockVisaDatabase, mockOfficerDesks, mockPorts, mockTerminals, mockZones, mockWorkflows, mockRiskProfiles, setMockOfficerDesks, mockGates, setMockGates, mockMedia, setMockMedia } from './mock-data';
 import { assessPassengerRisk } from '@/ai/flows/assess-risk-flow';
 import { countries } from './countries';
 import { Fingerprint, ScanLine, UserCheck, ShieldAlert, User } from 'lucide-react';
 import { extractPassportData } from '@/ai/flows/extract-passport-data-flow';
-import type { Transaction, Gate, CivilRecord } from '@/types/live-processing';
+import type { Transaction, Gate, CivilRecord, Media } from '@/types/live-processing';
 import type { OfficerDesk } from '@/types/configuration';
 
 const users: User[] = [
@@ -30,7 +30,7 @@ const users: User[] = [
         'airport:dashboard:view', 'airport:dashboard:stats:view', 'airport:prediction:view', 'airport:dashboard:charts:view', 'airport:dashboard:officer-performance:view',
         'landport:dashboard:view', 'landport:dashboard:stats:view', 'landport:prediction:view', 'landport:dashboard:charts:view', 'landport:dashboard:officer-performance:view',
         'seaport:dashboard:view', 'seaport:dashboard:stats:view', 'seaport:prediction:view', 'seaport:dashboard:charts:view', 'seaport:dashboard:officer-performance:view',
-        'egate:dashboard:view', 'egate:dashboard:stats:view', 'egate:prediction:view', 'egate:dashboard:charts:view',
+        'egate:dashboard:view', 'egate:dashboard:stats:view', 'egate:prediction:view', 'egate:dashboard:charts:view', 'egate:media:view', 'egate:media:create', 'egate:media:edit', 'egate:media:delete',
         'analyst:dashboard:view', 'analyst:dashboard:stats:view', 'analyst:dashboard:charts:view',
         'control-room:dashboard:view', 'control-room:dashboard:stats:view', 'control-room:dashboard:charts:view', 'control-room:dashboard:officer-performance:view',
         'airport:desks:view', 'airport:desks:create', 'airport:desks:edit', 'airport:desks:delete',
@@ -717,6 +717,41 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
     if (method === 'POST' && url.pathname === '/data/gates/delete') {
         const { id } = JSON.parse(body as string);
         setMockGates(mockGates.filter(g => g.id !== id));
+        return Result.success({ id }) as Result<T>;
+    }
+
+    // MEDIA DATA
+    if (method === 'GET' && url.pathname.startsWith('/data/media/')) {
+        const id = pathParts[pathParts.length - 1];
+        const media = mockMedia.find(m => m.id === id);
+        if (media) {
+            return Result.success({ media }) as Result<T>;
+        }
+        return Result.failure([new ApiError('NOT_FOUND', `Media with id ${id} not found.`)]) as Result<T>;
+    }
+
+    if (method === 'GET' && url.pathname === '/data/media') {
+        return Result.success(mockMedia) as Result<T>;
+    }
+
+    if (method === 'POST' && url.pathname === '/data/media/save') {
+        const mediaData = JSON.parse(body as string) as Media;
+        const isNew = !mediaData.id;
+
+        let updatedMedia: Media;
+        if (isNew) {
+            updatedMedia = { ...mediaData, id: `MEDIA-NEW-${Date.now()}` };
+            setMockMedia([...mockMedia, updatedMedia]);
+        } else {
+            updatedMedia = { ...mediaData };
+            setMockMedia(mockMedia.map(m => m.id === mediaData.id ? updatedMedia : m));
+        }
+        return Result.success(updatedMedia) as Result<T>;
+    }
+
+    if (method === 'POST' && url.pathname === '/data/media/delete') {
+        const { id } = JSON.parse(body as string);
+        setMockMedia(mockMedia.filter(m => m.id !== id));
         return Result.success({ id }) as Result<T>;
     }
 

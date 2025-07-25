@@ -1,6 +1,5 @@
 
 
-
 export type Role = 'admin' | 'auditor' | 'viewer' | 'shiftsupervisor' | 'control-room' | 'analyst' | 'officer';
 export type Module = 'landport' | 'seaport' | 'airport' | 'egate' | 'analyst' | 'shiftsupervisor' | 'control-room' | 'duty-manager';
 export type Permission = 
@@ -29,17 +28,18 @@ export type Permission =
   | 'airport:transactions:view'
   | 'landport:transactions:view'
   | 'seaport:transactions:view'
+  | 'airport:prediction:view'
+  | 'landport:prediction:view'
+  | 'seaport:prediction:view'
+  | 'egate:prediction:view'
   // Component-level view permissions
   | 'airport:dashboard:stats:view'
-  | 'airport:dashboard:forecasts:view'
   | 'airport:dashboard:charts:view'
   | 'airport:dashboard:officer-performance:view'
   | 'landport:dashboard:stats:view'
-  | 'landport:dashboard:forecasts:view'
   | 'landport:dashboard:charts:view'
   | 'landport:dashboard:officer-performance:view'
   | 'seaport:dashboard:stats:view'
-  | 'seaport:dashboard:forecasts:view'
   | 'seaport:dashboard:charts:view'
   | 'seaport:dashboard:officer-performance:view'
   | 'egate:dashboard:stats:view'

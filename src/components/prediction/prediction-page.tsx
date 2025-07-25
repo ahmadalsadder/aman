@@ -43,7 +43,7 @@ export function PredictionPage({ module }: PredictionPageProps) {
     const [filters, setFilters] = useState(initialFilters);
     const [appliedFilters, setAppliedFilters] = useState(initialFilters);
 
-    const canViewPage = useMemo(() => hasPermission([`${module}:dashboard:forecasts:view` as Permission]), [hasPermission, module]);
+    const canViewPage = useMemo(() => hasPermission([`${module}:prediction:view` as Permission]), [hasPermission, module]);
 
     useEffect(() => {
         if (!canViewPage) {

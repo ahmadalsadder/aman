@@ -92,7 +92,7 @@ export const getModuleNavItems = (module: Module, role: Role, t: any): NavItem[]
             href: `${moduleBaseUrl}/prediction`,
             label: t('predictiveAnalytics'),
             icon: BrainCircuit,
-            permission: `${module}:dashboard:forecasts:view` as Permission,
+            permission: `${module}:prediction:view` as Permission,
         });
     }
 

@@ -17,7 +17,7 @@ export default function Home() {
     }
     
     if (user) {
-        if (user.modules && user.modules.length > 0) {
+      if (user.modules && user.modules.length > 0 && user.modules[0] !== 'dashboard') {
         router.replace(`/${user.modules[0]}/dashboard`);
       } else {
         router.replace('/login'); // Or a 'no modules assigned' page

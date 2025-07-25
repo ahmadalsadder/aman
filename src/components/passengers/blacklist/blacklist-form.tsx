@@ -95,6 +95,7 @@ export function BlacklistForm({ entryToEdit, passenger, onSave, isLoading }: Bla
             ...form.getValues(),
             passengerId: passenger.id,
             name: `${passenger.firstName} ${passenger.lastName}`,
+            localizedName: passenger.localizedName || '',
             nationality: passenger.nationality,
             passportNumber: passenger.passportNumber,
             passportIssueDate: passenger.passportIssueDate ? new Date(passenger.passportIssueDate) : undefined,
@@ -119,12 +120,7 @@ export function BlacklistForm({ entryToEdit, passenger, onSave, isLoading }: Bla
   }
 
   const handleSubmit = (data: BlacklistFormValues) => {
-    const payload = {
-        ...data,
-        nationality: countries.find(c => c.value === data.nationality)?.label || data.nationality,
-        passportCountry: countries.find(c => c.value === data.passportCountry)?.label || data.passportCountry,
-    };
-    onSave(payload as any);
+    onSave(data);
   };
 
   return (
@@ -202,4 +198,5 @@ export function BlacklistForm({ entryToEdit, passenger, onSave, isLoading }: Bla
     </Form>
   );
 }
+
 

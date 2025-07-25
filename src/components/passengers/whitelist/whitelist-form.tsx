@@ -2,7 +2,7 @@
 
 'use client';
 
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -81,16 +81,13 @@ export function WhitelistForm({ entryToEdit, passenger, onSave, isLoading }: Whi
   React.useEffect(() => {
     if (passenger) {
         form.reset({
+            ...form.getValues(),
             passengerId: passenger.id,
             name: `${passenger.firstName} ${passenger.lastName}`,
             localizedName: passenger.localizedName,
             passportNumber: passenger.passportNumber,
             passportExpiryDate: passenger.passportExpiryDate ? new Date(passenger.passportExpiryDate) : undefined,
             nationality: passenger.nationality,
-            status: 'Active',
-            validFrom: new Date(),
-            validUntil: undefined,
-            reason: ''
         });
     }
   }, [passenger, form]);
@@ -180,6 +177,7 @@ export function WhitelistForm({ entryToEdit, passenger, onSave, isLoading }: Whi
     </Form>
   );
 }
+
 
 
 

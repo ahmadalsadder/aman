@@ -1,8 +1,9 @@
 
 
+
 import type { User } from '@/types';
 import { Result, ApiError } from '@/types/api/result';
-import { getMockPassengers, getMockTransactions, mockVisaDatabase, getMockOfficerDesks, mockPorts, mockTerminals, mockZones, mockWorkflows, mockRiskProfiles, setMockOfficerDesks, getMockGates, setMockGates, getMockMedia, setMockMedia, getMockWhitelist, getMockBlacklist, setMockPassengers, setMockWhitelist, setMockBlacklist, getMockShifts, setMockShifts } from './mock-data';
+import { mockVisaDatabase, mockPorts, mockTerminals, mockZones, mockWorkflows, mockRiskProfiles, setMockOfficerDesks, setMockGates, setMockMedia, setMockWhitelist, setMockBlacklist, setMockPassengers, setMockShifts, getMockPassengers, getMockTransactions, getMockOfficerDesks, getMockGates, getMockMedia, getMockWhitelist, getMockBlacklist, getMockShifts } from './mock-data';
 import { assessPassengerRisk } from '@/ai/flows/assess-risk-flow';
 import { countries } from './countries';
 import { Fingerprint, ScanLine, UserCheck, ShieldAlert, User } from 'lucide-react';
@@ -900,6 +901,31 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
     }
 
     // SHIFTS
+    if (method === 'GET' && url.pathname.startsWith('/data/shifts/')) {
+        const id = pathParts[pathParts.length - 1];
+        const shift = getMockShifts().find(s => s.id === id);
+        if (shift) {
+            return Result.success({ shift }) as Result<T>;
+        }
+        return Result.failure([new ApiError('NOT_FOUND', `Shift with id ${id} not found.`)]) as Result<T>;
+    }
+
+    if (method === 'POST' && url.pathname === '/data/shifts/save') {
+        const shiftData = JSON.parse(body as string) as Shift;
+        const { name, createdBy } = getAuthInfo();
+        const isNew = !shiftData.id;
+
+        let updatedShift: Shift;
+        if (isNew) {
+            updatedShift = { ...shiftData, id: `SHIFT-NEW-${Date.now()}`, lastModified: new Date().toISOString(), createdBy: name };
+            setMockShifts([...getMockShifts(), updatedShift]);
+        } else {
+            updatedShift = { ...shiftData, lastModified: new Date().toISOString() };
+            setMockShifts(getMockShifts().map(d => d.id === shiftData.id ? updatedShift : d));
+        }
+        return Result.success(updatedShift) as Result<T>;
+    }
+
     if (method === 'GET' && url.pathname === '/data/shifts') {
         return Result.success(getMockShifts()) as Result<T>;
     }

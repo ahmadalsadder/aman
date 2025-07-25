@@ -1031,5 +1031,41 @@
             "documentLabel": "Official Document (e.g., Warrant, Alert)"
         }
     }
+  },
+  "ShiftManagement": {
+    "form": {
+      "addTitle": "Add New Shift",
+      "addDescription": "Define a new work shift for officers.",
+      "editTitle": "Edit Shift",
+      "editDescription": "Editing the shift: {name}",
+      "details": {
+        "title": "Shift Details",
+        "description": "Set the core properties of the shift.",
+        "name": "Shift Name",
+        "namePlaceholder": "e.g., Morning Main Terminal",
+        "startTime": "Start Time",
+        "endTime": "End Time",
+        "status": "Status",
+        "active": "Active",
+        "inactive": "Inactive"
+      },
+      "operatingDays": {
+        "title": "Operating Days",
+        "description": "Select the days of the week this shift is active."
+      },
+      "common": {
+        "cancel": "Cancel",
+        "save": "Save Changes",
+        "add": "Add Shift"
+      },
+      "toast": {
+        "addSuccessTitle": "Shift Added",
+        "addSuccessDesc": "New shift '{name}' has been added.",
+        "updateSuccessTitle": "Shift Updated",
+        "updateSuccessDesc": "Shift '{name}' has been successfully updated.",
+        "errorTitle": "Save Failed",
+        "errorDesc": "There was an error saving the shift data."
+      }
+    }
   }
 }

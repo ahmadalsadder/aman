@@ -1,4 +1,5 @@
 
+
 export interface DayOfWeek {
     id: 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
     label: string;
@@ -19,4 +20,6 @@ export interface Shift {
     status: 'Active' | 'Inactive';
     assignedOfficers?: Officer[];
     lastModified: string;
+    createdBy?: string;
+    module?: string;
 }

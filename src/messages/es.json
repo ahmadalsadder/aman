@@ -49,6 +49,7 @@
     "allTransactions": "Todas las transacciones",
     "officerDesks": "Escritorios de Oficial",
     "gateManagement": "Gestión de Puertas",
+    "mediaManagement": "Gestión de Medios",
     "dutyManager": "Gerente de Turno",
     "logout": "Cerrar sesión",
     "predictiveAnalytics": "Análisis Predictivo",
@@ -716,7 +717,7 @@
         }
     }
   },
-  "DutyManager": {
+   "DutyManager": {
     "title": "Duty Manager",
     "description": "Review and action transactions pending supervisor review.",
     "pendingTransactions": "Pending Transactions",

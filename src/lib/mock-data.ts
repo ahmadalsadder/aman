@@ -1,6 +1,4 @@
 
-
-
 import type { Passenger, Transaction, OfficerDesk, Gate, Media, WhitelistEntry, BlacklistEntry } from "@/types/live-processing";
 import type { Shift, DayOfWeek } from "@/types/workload";
 import { Plane, Car, Ship } from "lucide-react";
@@ -409,8 +407,6 @@ const users: User[] = [
 
 const NATIONALITIES_REQUIRING_VISA = ['Jordan'];
 
-
-// Mock data for the main dashboard
 const mainDashboardData = {
     throughput: [
         { name: '08:00', transactions: 230 },
@@ -501,7 +497,6 @@ const dashboardStats = {
     }
 }
 
-// Mock data for the airport-specific dashboard
 const airportDashboardData = {
     ageDistribution: [
         { name: '0-17', value: 1254 },
@@ -781,8 +776,6 @@ const predictionData = {
     }
 };
 
-let allTransactions: Transaction[] = [...getMockTransactions()];
-
 // Getters
 export const getMockPassengers = () => mockPassengers;
 export const getMockTransactions = () => mockTransactions;
@@ -795,6 +788,9 @@ export const getMockBlacklist = () => mockBlacklist;
 // Setters
 export const setMockPassengers = (newPassengers: Passenger[]) => {
     mockPassengers = newPassengers;
+};
+export const setMockTransactions = (newTransactions: Transaction[]) => {
+    mockTransactions = newTransactions;
 };
 export const setMockOfficerDesks = (newDesks: OfficerDesk[]) => {
     mockOfficerDesks = newDesks;
@@ -813,4 +809,4 @@ export const setMockBlacklist = (newBlacklist: BlacklistEntry[]) => {
 };
 
 // This export is needed for the mockApi to work.
-export { users };
+export { users, mainDashboardData, dashboardStats, airportDashboardData, passengerData, transactionOverviewData, forecastData, gateRejectionReasonsData, transactionListData, transactionBreakdownData, gatePerformanceData, officerPerformanceData, processingTimeDistributionData, seaportTravelerCategoriesData, predictionData };

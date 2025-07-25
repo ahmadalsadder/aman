@@ -4,7 +4,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import type { ColumnDef } from '@tanstack/react-table';
 import type { Shift, DayOfWeek, Module, Permission } from '@/types';
-import { mockShifts, daysOfWeek } from '@/lib/mock-data';
+import { daysOfWeek } from '@/lib/mock-data';
 import { DataTable } from '@/components/shared/data-table';
 import { GradientPageHeader } from '@/components/shared/gradient-page-header';
 import { Button } from '@/components/ui/button';
@@ -21,7 +21,6 @@ import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import Link from 'next/link';
-import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { TransactionStatsCard } from '@/components/transactions/transaction-stats-card';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
@@ -30,8 +29,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { ShiftDetailsSheet } from '@/components/workloads/shift-details-sheet';
 import { DeleteShiftDialog } from '@/components/workloads/delete-shift-dialog';
 import { useAuth } from '@/hooks/use-auth';
-
-const SHIFTS_STORAGE_KEY = 'guardian-gate-shifts';
 
 const statusColors: { [key: string]: string } = {
   Active: 'bg-green-500/20 text-green-700 border-green-500/30',
@@ -46,29 +43,25 @@ const initialFilters = {
 
 interface ShiftManagementPageProps {
     module: Module;
+    shifts: Shift[];
+    loading: boolean;
+    onDeleteShift: (shiftId: string) => Promise<boolean>;
+    onToggleStatus: (shiftId: string) => Promise<boolean>;
 }
 
-export function ShiftManagementPage({ module }: ShiftManagementPageProps) {
-  const [shifts, setShifts] = useState<Shift[]>([]);
-  const { toast } = useToast();
+export function ShiftManagementPage({ module, shifts, loading, onDeleteShift, onToggleStatus }: ShiftManagementPageProps) {
   const router = useRouter();
   const { hasPermission } = useAuth();
+
+  const canCreate = useMemo(() => hasPermission([`${module}:workload:view`]), [hasPermission, module]);
+  const canEdit = useMemo(() => hasPermission([`${module}:workload:view`]), [hasPermission, module]);
+  const canDelete = useMemo(() => hasPermission([`${module}:workload:view`]), [hasPermission, module]);
 
   const [filters, setFilters] = useState(initialFilters);
   const [appliedFilters, setAppliedFilters] = useState(initialFilters);
 
   const [shiftToView, setShiftToView] = useState<Shift | null>(null);
   const [shiftToDelete, setShiftToDelete] = useState<Shift | null>(null);
-
-  useEffect(() => {
-    try {
-      const storedShifts = localStorage.getItem(SHIFTS_STORAGE_KEY);
-      setShifts(storedShifts ? JSON.parse(storedShifts) : mockShifts);
-    } catch (error) {
-      console.error('Failed to access shifts from localStorage', error);
-      setShifts(mockShifts);
-    }
-  }, []);
 
   const shiftStats = useMemo(() => ({
     total: shifts.length,
@@ -86,52 +79,17 @@ export function ShiftManagementPage({ module }: ShiftManagementPageProps) {
     setAppliedFilters(initialFilters);
   };
   
-  const handleToggleStatus = (shiftId: string) => {
-    setShifts(prevShifts => {
-        const updatedShifts = prevShifts.map(shift => {
-            if (shift.id === shiftId) {
-                const newStatus = shift.status === 'Active' ? 'Inactive' : 'Active';
-                toast({
-                    title: `Shift ${newStatus === 'Active' ? 'Activated' : 'Deactivated'}`,
-                    description: `Shift "${shift.name}" has been set to ${newStatus.toLowerCase()}.`,
-                    variant: 'success',
-                });
-                return { ...shift, status: newStatus, lastModified: new Date().toISOString().split('T')[0] };
-            }
-            return shift;
-        });
-        localStorage.setItem(SHIFTS_STORAGE_KEY, JSON.stringify(updatedShifts));
-        return updatedShifts;
-    });
-  };
-
-  const handleDeleteShift = () => {
+  const handleConfirmDelete = async () => {
     if (!shiftToDelete) return;
-    try {
-      const updatedShifts = shifts.filter(r => r.id !== shiftToDelete.id);
-      localStorage.setItem(SHIFTS_STORAGE_KEY, JSON.stringify(updatedShifts));
-      setShifts(updatedShifts);
-
-      toast({
-        title: 'Shift Deleted',
-        description: `Shift "${shiftToDelete.name}" has been permanently deleted.`,
-        variant: 'info',
-      });
+    const success = await onDeleteShift(shiftToDelete.id);
+    if (success) {
       setShiftToDelete(null);
-    } catch (error) {
-      console.error('Failed to delete shift from localStorage', error);
-      toast({
-        title: 'Delete Failed',
-        description: 'There was an error deleting the shift data.',
-        variant: 'destructive',
-      });
     }
   };
   
   const filteredData = useMemo(() => {
     return shifts.filter(shift => {
       const nameLower = appliedFilters.name.toLowerCase();
-
       if (nameLower && !shift.name.toLowerCase().includes(nameLower)) return false;
       if (appliedFilters.status && shift.status !== appliedFilters.status) return false;
       if (appliedFilters.day && !shift.days.includes(appliedFilters.day as DayOfWeek['id'])) return false;
@@ -204,28 +162,34 @@ export function ShiftManagementPage({ module }: ShiftManagementPageProps) {
                   <Eye className="mr-2 h-4 w-4 text-primary" />
                   <span>View details</span>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href={`/${module}/workload/shift-management/edit/${shift.id}`}>
-                  <FilePenLine className="mr-2 h-4 w-4 text-yellow-500" />
-                  <span>Edit shift</span>
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              {shift.status === 'Active' ? (
-                <DropdownMenuItem onClick={() => handleToggleStatus(shift.id)}>
-                    <PauseCircle className="mr-2 h-4 w-4 text-orange-500" />
-                    <span>Deactivate</span>
-                </DropdownMenuItem>
-              ) : (
-                <DropdownMenuItem onClick={() => handleToggleStatus(shift.id)}>
-                    <PlayCircle className="mr-2 h-4 w-4 text-green-500" />
-                    <span>Activate</span>
+              {canEdit && (
+                <DropdownMenuItem asChild>
+                  <Link href={`/${module}/workloads/shift-management/edit/${shift.id}`}>
+                    <FilePenLine className="mr-2 h-4 w-4 text-yellow-500" />
+                    <span>Edit shift</span>
+                  </Link>
                 </DropdownMenuItem>
               )}
-              <DropdownMenuItem className="text-destructive focus:text-destructive" onClick={() => setShiftToDelete(shift)}>
-                  <Trash2 className="mr-2 h-4 w-4" />
-                  <span>Delete</span>
-              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              {canEdit && (
+                shift.status === 'Active' ? (
+                  <DropdownMenuItem onClick={() => onToggleStatus(shift.id)}>
+                      <PauseCircle className="mr-2 h-4 w-4 text-orange-500" />
+                      <span>Deactivate</span>
+                  </DropdownMenuItem>
+                ) : (
+                  <DropdownMenuItem onClick={() => onToggleStatus(shift.id)}>
+                      <PlayCircle className="mr-2 h-4 w-4 text-green-500" />
+                      <span>Activate</span>
+                  </DropdownMenuItem>
+                )
+              )}
+              {canDelete && (
+                <DropdownMenuItem className="text-destructive focus:text-destructive" onClick={() => setShiftToDelete(shift)}>
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    <span>Delete</span>
+                </DropdownMenuItem>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         );
@@ -240,11 +204,13 @@ export function ShiftManagementPage({ module }: ShiftManagementPageProps) {
         description="Define and manage officer work shifts."
         icon={CalendarDays}
       >
-        <Button asChild className="bg-white font-semibold text-primary hover:bg-white/90">
-          <Link href={`/${module}/workload/shift-management/add`}>
-            <PlusCircle className="mr-2 h-4 w-4" /> Add Shift
-          </Link>
-        </Button>
+        {canCreate && (
+          <Button asChild className="bg-white font-semibold text-primary hover:bg-white/90">
+            <Link href={`/${module}/workloads/shift-management/add`}>
+              <PlusCircle className="mr-2 h-4 w-4" /> Add Shift
+            </Link>
+          </Button>
+        )}
       </GradientPageHeader>
       
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -316,7 +282,7 @@ export function ShiftManagementPage({ module }: ShiftManagementPageProps) {
         shift={shiftToDelete}
         isOpen={!!shiftToDelete}
         onOpenChange={(isOpen) => !isOpen && setShiftToDelete(null)}
-        onConfirm={handleDeleteShift}
+        onConfirm={handleConfirmDelete}
       />
     </div>
   );

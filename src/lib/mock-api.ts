@@ -2,12 +2,12 @@
 
 import type { User } from '@/types';
 import { Result, ApiError } from '@/types/api/result';
-import { getMockPassengers, getMockTransactions, mockVisaDatabase, getMockOfficerDesks, mockPorts, mockTerminals, mockZones, mockWorkflows, mockRiskProfiles, setMockOfficerDesks, getMockGates, setMockGates, getMockMedia, setMockMedia, getMockWhitelist, getMockBlacklist, setMockPassengers, setMockWhitelist, setMockBlacklist } from './mock-data';
+import { getMockPassengers, getMockTransactions, mockVisaDatabase, getMockOfficerDesks, mockPorts, mockTerminals, mockZones, mockWorkflows, mockRiskProfiles, setMockOfficerDesks, getMockGates, setMockGates, getMockMedia, setMockMedia, getMockWhitelist, getMockBlacklist, setMockPassengers, setMockWhitelist, setMockBlacklist, getMockShifts, setMockShifts } from './mock-data';
 import { assessPassengerRisk } from '@/ai/flows/assess-risk-flow';
 import { countries } from './countries';
 import { Fingerprint, ScanLine, UserCheck, ShieldAlert, User } from 'lucide-react';
 import { extractPassportData } from '@/ai/flows/extract-passport-data-flow';
-import type { Transaction, Gate, CivilRecord, Media, BlacklistEntry, WhitelistEntry, Passenger } from '@/types/live-processing';
+import type { Transaction, Gate, CivilRecord, Media, BlacklistEntry, WhitelistEntry, Passenger, Shift } from '@/types/live-processing';
 import type { OfficerDesk } from '@/types/configuration';
 
 const users: User[] = [
@@ -31,6 +31,7 @@ const users: User[] = [
         'airport:transactions:live',
         'airport:dashboard:view', 'airport:dashboard:stats:view', 'airport:prediction:view', 'airport:dashboard:charts:view', 'airport:dashboard:officer-performance:view',
         'airport:desks:view', 'airport:desks:create', 'airport:desks:edit', 'airport:desks:delete',
+        'airport:workload:view',
         // Landport
         'landport:passengers:view', 'landport:passengers:create', 'landport:passengers:edit', 'landport:passengers:delete',
         'landport:whitelist:view', 'landport:whitelist:create', 'landport:whitelist:edit', 'landport:whitelist:delete',
@@ -41,6 +42,7 @@ const users: User[] = [
         'landport:transactions:live',
         'landport:dashboard:view', 'landport:dashboard:stats:view', 'landport:prediction:view', 'landport:dashboard:charts:view', 'landport:dashboard:officer-performance:view',
         'landport:desks:view', 'landport:desks:create', 'landport:desks:edit', 'landport:desks:delete',
+        'landport:workload:view',
         // Seaport
         'seaport:passengers:view', 'seaport:passengers:create', 'seaport:passengers:edit', 'seaport:passengers:delete',
         'seaport:whitelist:view', 'seaport:whitelist:create', 'seaport:whitelist:edit', 'seaport:whitelist:delete',
@@ -51,6 +53,7 @@ const users: User[] = [
         'seaport:transactions:live',
         'seaport:dashboard:view', 'seaport:dashboard:stats:view', 'seaport:prediction:view', 'seaport:dashboard:charts:view', 'seaport:dashboard:officer-performance:view',
         'seaport:desks:view', 'seaport:desks:create', 'seaport:desks:edit', 'seaport:desks:delete',
+        'seaport:workload:view',
         // E-Gate
         'egate:passengers:view', 'egate:passengers:create', 'egate:passengers:edit', 'egate:passengers:delete',
         'egate:whitelist:view', 'egate:whitelist:create', 'egate:whitelist:edit', 'egate:whitelist:delete',
@@ -58,6 +61,7 @@ const users: User[] = [
         'egate:records:create', 'egate:records:edit', 'egate:records:delete',
         'egate:civil-records:view',
         'egate:dashboard:view', 'egate:dashboard:stats:view', 'egate:prediction:view', 'egate:dashboard:charts:view', 'egate:media:view', 'egate:media:create', 'egate:media:edit', 'egate:media:delete',
+        'egate:workload:view',
         // Other Modules
         'analyst:records:view', 'analyst:records:create', 'analyst:records:edit', 'analyst:records:delete',
         'analyst:dashboard:view', 'analyst:dashboard:stats:view', 'analyst:dashboard:charts:view',
@@ -105,6 +109,7 @@ const users: User[] = [
         'seaport:dashboard:view', 'seaport:dashboard:stats:view', 'seaport:prediction:view', 'seaport:dashboard:charts:view', 'seaport:dashboard:officer-performance:view',
         'control-room:dashboard:view', 'control-room:dashboard:stats:view', 'control-room:dashboard:charts:view', 'control-room:dashboard:officer-performance:view',
         'duty-manager:view',
+        'airport:workload:view', 'landport:workload:view', 'seaport:workload:view',
         // Granular permissions for editing across modules they supervise
         'airport:passengers:edit', 'airport:whitelist:edit', 'airport:blacklist:edit',
         'landport:passengers:edit', 'landport:whitelist:edit', 'landport:blacklist:edit',
@@ -521,7 +526,7 @@ const predictionData = {
     }
 };
 
-let allTransactions: Transaction[] = [...getMockTransactions()];
+let allTransactions = [...getMockTransactions()];
 
 export async function mockApi<T>(endpoint: string, options: RequestInit = {}): Promise<Result<T>> {
     const { method = 'GET', body } = options;
@@ -893,6 +898,37 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
         const entry = getMockBlacklist().find(e => e.id === id);
         return entry ? Result.success({ entry }) as Result<T> : Result.failure([new ApiError('NOT_FOUND', 'Entry not found')]) as Result<T>;
     }
+
+    // SHIFTS
+    if (method === 'GET' && url.pathname === '/data/shifts') {
+        return Result.success(getMockShifts()) as Result<T>;
+    }
+    if (method === 'POST' && url.pathname === '/data/shifts/delete') {
+        const { id } = JSON.parse(body as string);
+        const currentShifts = getMockShifts();
+        const initialLength = currentShifts.length;
+        setMockShifts(currentShifts.filter(s => s.id !== id));
+        if (getMockShifts().length < initialLength) {
+            return Result.success({ id }) as Result<T>;
+        }
+        return Result.failure([new ApiError('NOT_FOUND', 'Shift not found.')]) as Result<T>;
+    }
+    if (method === 'POST' && url.pathname === '/data/shifts/toggle-status') {
+        const { id } = JSON.parse(body as string);
+        let updatedShift;
+        const newShifts = getMockShifts().map(shift => {
+            if (shift.id === id) {
+                updatedShift = { ...shift, status: shift.status === 'Active' ? 'Inactive' : 'Active' };
+                return updatedShift;
+            }
+            return shift;
+        });
+        setMockShifts(newShifts);
+        return updatedShift 
+            ? Result.success(updatedShift) as Result<T> 
+            : Result.failure([new ApiError('NOT_FOUND', 'Shift not found.')]) as Result<T>;
+    }
+
 
     // CONFIGURATION DATA
     if(method === 'GET' && url.pathname === '/data/desks') {

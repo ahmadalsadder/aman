@@ -17,9 +17,8 @@ export default function Home() {
     }
 
     if (user) {
-      if (user.modules && user.modules.length > 1) {
-        router.replace('/portal');
-      } else if (user.modules && user.modules.length === 1) {
+      if (user.modules && user.modules.length > 0) {
+        // Redirect to the first available module
         router.replace(`/${user.modules[0]}/dashboard`);
       } else {
          // This case can be for users with no modules, e.g. system admins

@@ -5,7 +5,7 @@ import * as React from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/use-auth';
-import { getModuleNavItems, type NavItem } from '@/lib/navigation';
+import { getSidebarNavItems, type NavItem } from '@/lib/navigation';
 import Logo from '@/components/logo';
 import {
   Sidebar,
@@ -22,7 +22,7 @@ import {
 } from '@/components/ui/sidebar';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useTranslations } from 'next-intl';
-import { ArrowLeft, ChevronDown, LogOut } from 'lucide-react';
+import { ChevronDown, LogOut } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { cn } from '@/lib/utils';
 
@@ -32,36 +32,31 @@ export default function AppSidebar() {
   const pathname = usePathname();
   const t = useTranslations('Navigation');
 
-  const currentModule = pathname.split('/')[1] as any;
   const navItems = React.useMemo(() => {
     if (!user) return [];
-    const allItems = getModuleNavItems(currentModule, user.role, t);
+    
+    const allItems = getSidebarNavItems(user.role, user.modules, t);
     
     // Filter items based on permission
-    return allItems.filter(item => {
-      // If the item itself doesn't have a specific permission, show it.
-      if (!item.permission) {
-          // If it has children, filter them based on their permissions.
-          if (item.children) {
-              item.children = item.children.filter(child => !child.permission || hasPermission([child.permission]));
-              // Only show the parent if it still has children after filtering.
-              return item.children.length > 0;
-          }
-          return true;
+    return allItems.filter(module => {
+      if (!module.permission) {
+        if (module.children) {
+          module.children = module.children.filter(child => !child.permission || hasPermission([child.permission]));
+          return module.children.length > 0;
+        }
+        return true;
       }
       
-      // If the item has a permission, check if the user has it.
-      const hasItemPermission = hasPermission([item.permission]);
+      const hasModulePermission = hasPermission([module.permission]);
       
-      // If it has children, also filter them.
-      if (item.children) {
-          item.children = item.children.filter(child => !child.permission || hasPermission([child.permission]));
+      if (module.children) {
+        module.children = module.children.filter(child => !child.permission || hasPermission([child.permission]));
       }
-
-      return hasItemPermission;
+      
+      return hasModulePermission;
     });
-  }, [currentModule, user, t, hasPermission]);
 
+  }, [user, t, hasPermission]);
   
   const [openCollapsibles, setOpenCollapsibles] = React.useState<Record<string, boolean>>({});
 
@@ -80,10 +75,10 @@ export default function AppSidebar() {
 
   React.useEffect(() => {
     const activeStates: Record<string, boolean> = {};
+    const currentModulePath = `/${pathname.split('/')[1]}`;
     navItems.forEach(item => {
-        if (item.children) {
-            const isActive = item.children.some(child => pathname.startsWith(child.href));
-            activeStates[item.href] = isActive;
+        if(item.href.startsWith(currentModulePath)) {
+            activeStates[item.href] = true;
         }
     });
     setOpenCollapsibles(activeStates);
@@ -93,9 +88,7 @@ export default function AppSidebar() {
     setOpenCollapsibles(prev => ({ ...prev, [href]: !prev[href] }));
   };
 
-
-  const shouldShowPortalsLink = user && user.modules && user.modules.length > 1;
-  const moduleDashboardHref = currentModule ? `/${currentModule}/dashboard` : '/';
+  const moduleDashboardHref = user?.modules?.[0] ? `/${user.modules[0]}/dashboard` : '/';
 
   return (
     <Sidebar variant="inset" collapsible="icon">
@@ -107,73 +100,44 @@ export default function AppSidebar() {
       </SidebarHeader>
       <SidebarContent>
         <SidebarMenu>
-          {navItems.map((item: NavItem) => 
-            item.children ? (
-                <Collapsible key={item.href} open={openCollapsibles[item.href] || false} onOpenChange={() => toggleCollapsible(item.href)}>
-                    <SidebarMenuItem>
-                         <CollapsibleTrigger asChild>
-                            <SidebarMenuButton
-                                tooltip={{ children: item.label }}
-                                className="w-full justify-between"
+          {navItems.map((item: NavItem) => (
+            <Collapsible key={item.href} open={openCollapsibles[item.href] || false} onOpenChange={() => toggleCollapsible(item.href)}>
+                <SidebarMenuItem>
+                      <CollapsibleTrigger asChild>
+                        <SidebarMenuButton
+                            tooltip={{ children: item.label }}
+                            className="w-full justify-between"
+                        >
+                            <div className='flex items-center gap-2'>
+                                <item.icon />
+                                <span>{item.label}</span>
+                            </div>
+                            <ChevronDown className={cn("h-4 w-4 transition-transform", openCollapsibles[item.href] && "rotate-180")} />
+                        </SidebarMenuButton>
+                    </CollapsibleTrigger>
+                </SidebarMenuItem>
+                <CollapsibleContent>
+                    <SidebarMenuSub>
+                    {item.children?.map(child => (
+                        <SidebarMenuSubItem key={child.href}>
+                            <SidebarMenuSubButton
+                                asChild
+                                isActive={pathname.startsWith(child.href)}
                             >
-                                <div className='flex items-center gap-2'>
-                                    <item.icon />
-                                    <span>{item.label}</span>
-                                </div>
-                                <ChevronDown className={cn("h-4 w-4 transition-transform", openCollapsibles[item.href] && "rotate-180")} />
-                            </SidebarMenuButton>
-                        </CollapsibleTrigger>
-                    </SidebarMenuItem>
-                    <CollapsibleContent>
-                        <SidebarMenuSub>
-                        {item.children.map(child => (
-                            <SidebarMenuSubItem key={child.href}>
-                                <SidebarMenuSubButton
-                                    asChild
-                                    isActive={pathname.startsWith(child.href)}
-                                >
-                                    <Link href={child.href} className='flex items-center gap-2'>
-                                        <child.icon className="h-4 w-4 text-primary" />
-                                        <span>{child.label}</span>
-                                    </Link>
-                                </SidebarMenuSubButton>
-                            </SidebarMenuSubItem>
-                        ))}
-                        </SidebarMenuSub>
-                    </CollapsibleContent>
-                </Collapsible>
-            ) : (
-            <SidebarMenuItem key={item.href}>
-              <SidebarMenuButton
-                asChild
-                isActive={pathname === item.href || (item.href !== moduleDashboardHref && pathname.startsWith(item.href))}
-                tooltip={{ children: item.label }}
-              >
-                <Link href={item.href}>
-                  <item.icon />
-                  <span>{item.label}</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
+                                <Link href={child.href} className='flex items-center gap-2'>
+                                    {child.icon && <child.icon className="h-4 w-4 text-primary" />}
+                                    <span>{child.label}</span>
+                                </Link>
+                            </SidebarMenuSubButton>
+                        </SidebarMenuSubItem>
+                    ))}
+                    </SidebarMenuSub>
+                </CollapsibleContent>
+            </Collapsible>
           ))}
         </SidebarMenu>
       </SidebarContent>
       <SidebarSeparator />
-      {shouldShowPortalsLink && (
-        <>
-            <SidebarMenu>
-                <SidebarMenuItem>
-                    <SidebarMenuButton asChild tooltip={{ children: t('backToPortals') }}>
-                        <Link href="/portal">
-                            <ArrowLeft />
-                            <span>{t('backToPortals')}</span>
-                        </Link>
-                    </SidebarMenuButton>
-                </SidebarMenuItem>
-            </SidebarMenu>
-            <SidebarSeparator />
-        </>
-      )}
         <SidebarMenu>
             <SidebarMenuItem>
                 <SidebarMenuButton onClick={handleLogout} tooltip={{ children: t('logout') }}>

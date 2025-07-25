@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React, { useState, useMemo, useEffect } from 'react';
@@ -158,13 +159,13 @@ export function PassengerForm({ passengerToEdit }: PassengerFormProps) {
     const currentStepFields = steps[currentStep].fields as (keyof PassengerFormValues)[];
     const isValid = await form.trigger(currentStepFields);
     if (isValid && currentStep < steps.length - 1) {
-        setCurrentStep(prev => prev + 1);
+        setCurrentStep(currentStep + 1);
     }
   };
 
   const prevStep = () => {
     if (currentStep > 0) {
-        setCurrentStep(prev => prev - 1);
+        setCurrentStep(currentStep - 1);
     }
   };
   
@@ -178,7 +179,7 @@ export function PassengerForm({ passengerToEdit }: PassengerFormProps) {
     <>
       <Stepper steps={steps} currentStep={currentStep} />
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSave)} className="space-y-6 mt-8">
+        <form onSubmit={(e) => e.preventDefault()} className="space-y-6 mt-8">
             <AnimatePresence mode="wait">
                  <motion.div
                     key={currentStep}
@@ -254,30 +255,29 @@ export function PassengerForm({ passengerToEdit }: PassengerFormProps) {
                     )}
                 </motion.div>
             </AnimatePresence>
-
-            <div className="flex justify-between gap-2 pt-4">
-                <div>
-                    <Button type="button" variant="outline" onClick={prevStep} disabled={currentStep === 0}>
-                        <ArrowLeft className="mr-2 h-4 w-4" />
-                        {t('common.back')}
-                    </Button>
-                </div>
-                <div>
-                    {currentStep < steps.length - 1 ? (
-                        <Button type="button" onClick={nextStep}>
-                            {t('common.next')}
-                            <ArrowRight className="ml-2 h-4 w-4" />
-                        </Button>
-                    ) : (
-                        <Button type="submit" disabled={isLoading}>
-                            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                            {passengerToEdit ? t('common.save') : t('common.add')}
-                        </Button>
-                    )}
-                </div>
-            </div>
         </form>
       </Form>
+       <div className="flex justify-between gap-2 pt-4">
+            <div>
+                <Button type="button" variant="outline" onClick={prevStep} disabled={currentStep === 0}>
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    {t('common.back')}
+                </Button>
+            </div>
+            <div>
+                {currentStep < steps.length - 1 ? (
+                    <Button type="button" onClick={nextStep}>
+                        {t('common.next')}
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                ) : (
+                    <Button type="button" onClick={form.handleSubmit(onSave)} disabled={isLoading}>
+                        {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                        {passengerToEdit ? t('common.save') : t('common.add')}
+                    </Button>
+                )}
+            </div>
+        </div>
     </>
   );
 }

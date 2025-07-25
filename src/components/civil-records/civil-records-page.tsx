@@ -23,7 +23,6 @@ import { CivilRecordDetailsSheet } from '@/components/civil-records/civil-record
 import { Combobox } from '@/components/ui/combobox';
 import { useAuth } from '@/hooks/use-auth';
 import { useTranslations } from 'next-intl';
-import { api } from '@/lib/api';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import CalendarIcon from '../icons/calendar-icon';
@@ -46,39 +45,23 @@ const initialFilters = {
 
 interface CivilRecordsPageProps {
     module: Module;
+    records: CivilRecord[];
+    isLoading: boolean;
 }
 
-export function CivilRecordsPage({ module }: CivilRecordsPageProps) {
+export function CivilRecordsPage({ module, records, isLoading }: CivilRecordsPageProps) {
     const t = useTranslations('CivilRecords');
     const { hasPermission } = useAuth();
-    const [civilRecords, setCivilRecords] = useState<CivilRecord[]>([]);
     const [recordToView, setRecordToView] = useState<CivilRecord | null>(null);
     const [filters, setFilters] = useState(initialFilters);
     const [appliedFilters, setAppliedFilters] = useState(initialFilters);
-    const [loading, setLoading] = useState(true);
 
     const canViewPage = useMemo(() => hasPermission([`${module}:civil-records:view` as Permission]), [hasPermission, module]);
 
-    useEffect(() => {
-        if (!canViewPage) {
-            setLoading(false);
-            return;
-        }
-        const fetchData = async () => {
-            setLoading(true);
-            const result = await api.get<CivilRecord[]>('/data/civil-records');
-            if (result.isSuccess) {
-                setCivilRecords(result.data || []);
-            }
-            setLoading(false);
-        };
-        fetchData();
-    }, [canViewPage]);
-
     const nationalityOptions = useMemo(() => {
-        const unique = new Set(civilRecords.map(p => p.nationality).filter(Boolean));
+        const unique = new Set(records.map(p => p.nationality).filter(Boolean));
         return Array.from(unique).sort().map(n => ({ value: n, label: n }));
-    }, [civilRecords]);
+    }, [records]);
     
     const handleUpdateFilter = (key: keyof typeof filters, value: any) => {
         setFilters(prev => ({ ...prev, [key]: value }));
@@ -91,7 +74,7 @@ export function CivilRecordsPage({ module }: CivilRecordsPageProps) {
     };
 
     const filteredData = useMemo(() => {
-        return civilRecords.filter(record => {
+        return records.filter(record => {
             const nameLower = appliedFilters.name.toLowerCase();
             const localizedNameLower = appliedFilters.localizedName.toLowerCase();
             const docNumLower = appliedFilters.documentNumber.toLowerCase();
@@ -107,7 +90,7 @@ export function CivilRecordsPage({ module }: CivilRecordsPageProps) {
             
             return true;
         });
-    }, [civilRecords, appliedFilters]);
+    }, [records, appliedFilters]);
 
     const columns: ColumnDef<CivilRecord>[] = [
         {
@@ -153,7 +136,7 @@ export function CivilRecordsPage({ module }: CivilRecordsPageProps) {
         },
     ];
     
-    if (loading) {
+    if (isLoading) {
         return (
             <div className="space-y-6">
                 <Skeleton className="h-24" />

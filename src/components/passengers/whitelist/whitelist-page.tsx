@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import type { ColumnDef } from '@tanstack/react-table';
 import type { WhitelistEntry } from '@/types/live-processing';
 import { DataTable } from '@/components/shared/data-table';
@@ -14,11 +14,10 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
-import { MoreHorizontal, Eye, Trash2, ListChecks, Filter, ChevronDown, X, Search, User, PlusCircle, FilePenLine, AlertTriangle } from 'lucide-react';
+import { MoreHorizontal, Eye, Trash2, ListChecks, Filter, ChevronDown, X, Search, User, PlusCircle, FilePenLine, AlertTriangle, LayoutDashboard } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { useToast } from '@/hooks/use-toast';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -28,8 +27,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import type { Module, Permission } from '@/types';
 import { useAuth } from '@/hooks/use-auth';
-import { api } from '@/lib/api';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage } from '@/components/ui/breadcrumb';
 
 const statusColors: { [key: string]: string } = {
   Active: 'bg-green-500/20 text-green-700 border-green-500/30',
@@ -47,10 +46,10 @@ interface WhitelistPageProps {
     module: Module;
     whitelist: WhitelistEntry[];
     loading: boolean;
+    onDeleteEntry: (entryId: string) => Promise<boolean>;
 }
 
-export function WhitelistPage({ module, whitelist, loading }: WhitelistPageProps) {
-  const { toast } = useToast();
+export function WhitelistPage({ module, whitelist, loading, onDeleteEntry }: WhitelistPageProps) {
   const router = useRouter();
   const { hasPermission } = useAuth();
   
@@ -59,35 +58,16 @@ export function WhitelistPage({ module, whitelist, loading }: WhitelistPageProps
   const canEdit = hasPermission([`${module}:whitelist:edit` as Permission]);
   const canDelete = hasPermission([`${module}:whitelist:delete` as Permission]);
 
-  const [currentWhitelist, setCurrentWhitelist] = useState<WhitelistEntry[]>(whitelist);
   const [entryToView, setEntryToView] = useState<WhitelistEntry | null>(null);
   const [entryToDelete, setEntryToDelete] = useState<WhitelistEntry | null>(null);
   const [filters, setFilters] = useState(initialFilters);
   const [appliedFilters, setAppliedFilters] = useState(initialFilters);
 
-  useEffect(() => {
-    setCurrentWhitelist(whitelist);
-  }, [whitelist]);
-
-  const handleDeleteEntry = async () => {
+  const handleConfirmDelete = async () => {
     if (!entryToDelete) return;
-
-    const result = await api.post<WhitelistEntry>('/data/whitelist/delete', { id: entryToDelete.id });
-    
-    if (result.isSuccess) {
-      setCurrentWhitelist(prev => prev.filter(r => r.id !== entryToDelete.id));
-      toast({
-        title: 'Entry Deleted',
-        description: `Whitelist entry for "${entryToDelete.name}" has been permanently deleted.`,
-        variant: 'info',
-      });
+    const success = await onDeleteEntry(entryToDelete.id);
+    if (success) {
       setEntryToDelete(null);
-    } else {
-      toast({
-        title: 'Delete Failed',
-        description: 'There was an error deleting the whitelist entry.',
-        variant: 'destructive',
-      });
     }
   };
   
@@ -102,22 +82,22 @@ export function WhitelistPage({ module, whitelist, loading }: WhitelistPageProps
   };
   
   const filteredData = useMemo(() => {
-    return currentWhitelist.filter(item => {
+    return whitelist.filter(item => {
       const nameLower = appliedFilters.name.toLowerCase();
       if (nameLower && !item.name.toLowerCase().includes(nameLower)) return false;
       if (appliedFilters.nationality && item.nationality !== appliedFilters.nationality) return false;
       if (appliedFilters.status && item.status !== appliedFilters.status) return false;
       return true;
     });
-  }, [currentWhitelist, appliedFilters]);
+  }, [whitelist, appliedFilters]);
 
   const uniqueNationalities = useMemo(() => {
-    return Array.from(new Set(currentWhitelist.map(item => item.nationality)));
-  }, [currentWhitelist]);
+    return Array.from(new Set(whitelist.map(item => item.nationality)));
+  }, [whitelist]);
 
   const uniqueStatuses = useMemo(() => {
-    return Array.from(new Set(currentWhitelist.map(item => item.status)));
-  }, [currentWhitelist]);
+    return Array.from(new Set(whitelist.map(item => item.status)));
+  }, [whitelist]);
 
   const columns: ColumnDef<WhitelistEntry>[] = [
     { accessorKey: 'id', header: 'ID' },
@@ -132,7 +112,7 @@ export function WhitelistPage({ module, whitelist, loading }: WhitelistPageProps
             <DropdownMenuItem onClick={() => setEntryToView(row.original)}><Eye className="mr-2 h-4 w-4 text-primary" /><span>View details</span></DropdownMenuItem>
             {row.original.passengerId && (
                 <DropdownMenuItem asChild>
-                    <Link href={`/${module}/passengers/${row.original.passengerId}/edit`}>
+                    <Link href={`/${module}/passengers/edit/${row.original.passengerId}`}>
                         <User className="mr-2 h-4 w-4 text-primary" />
                         <span>View Passenger</span>
                     </Link>
@@ -176,6 +156,17 @@ export function WhitelistPage({ module, whitelist, loading }: WhitelistPageProps
 
   return (
     <div className="space-y-6">
+       <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href={`/${module}/dashboard`} icon={LayoutDashboard}>Dashboard</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage icon={ListChecks}>Passenger Whitelist</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
       <GradientPageHeader title="Passenger Whitelist" description="Manage individuals with special clearance." icon={ListChecks}>
         {canCreate && (
             <Button asChild className="bg-white font-semibold text-primary hover:bg-white/90">
@@ -235,7 +226,7 @@ export function WhitelistPage({ module, whitelist, loading }: WhitelistPageProps
         isOpen={!!entryToView}
         onOpenChange={(isOpen) => !isOpen && setEntryToView(null)}
       />
-      <DeleteWhitelistDialog entry={entryToDelete} isOpen={!!entryToDelete} onOpenChange={(isOpen) => !isOpen && setEntryToDelete(null)} onConfirm={handleDeleteEntry} />
+      <DeleteWhitelistDialog entry={entryToDelete} isOpen={!!entryToDelete} onOpenChange={(isOpen) => !isOpen && setEntryToDelete(null)} onConfirm={handleConfirmDelete} />
     </div>
   );
 }

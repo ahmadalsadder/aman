@@ -1,5 +1,6 @@
 
 
+
 import type { Port, Terminal, Zone, Workflow, RiskProfile } from './configuration';
 
 export interface Passenger {
@@ -196,6 +197,18 @@ export interface Media {
   lastModified: string;
   createdBy: string;
   mediaFiles: MediaFile[];
+}
+
+export interface WhitelistEntry {
+  id: string;
+  passengerId: string;
+  name: string;
+  nationality: string;
+  status: 'Active' | 'Expired' | 'Revoked';
+  dateAdded: string;
+  validUntil: string;
+  addedBy: string;
+  reason: string;
 }
 
 export { Port, Terminal, Zone, Workflow, RiskProfile };

@@ -1,6 +1,7 @@
 
 
-import type { Passenger, Transaction, OfficerDesk, Gate, Media } from "@/types/live-processing";
+
+import type { Passenger, Transaction, OfficerDesk, Gate, Media, WhitelistEntry } from "@/types/live-processing";
 import { Plane, Car, Ship } from "lucide-react";
 import type { Port, Terminal, Zone, Workflow, RiskProfile } from '@/types/configuration';
 
@@ -231,6 +232,12 @@ export let mockMedia: Media[] = [
             { id: 'F005', language: 'Arabic', fileName: 'egate_instructions_ar.png', fileType: 'image/png', fileUrl: '/images/egate_instructions_ar.png' },
         ]
     },
+];
+
+export const mockWhitelist: WhitelistEntry[] = [
+  { id: 'WL-001', passengerId: 'P001', name: 'John Doe', nationality: 'United States', status: 'Active', dateAdded: '2023-01-15', validUntil: '2025-01-14', addedBy: 'Admin User', reason: 'Diplomatic Staff' },
+  { id: 'WL-002', passengerId: 'P002', name: 'Jane Smith', nationality: 'United Kingdom', status: 'Active', dateAdded: '2022-11-20', validUntil: '2024-11-19', addedBy: 'Admin User', reason: 'Frequent Business Traveler' },
+  { id: 'WL-003', passengerId: 'P003', name: 'Wei Chen', nationality: 'China', status: 'Revoked', dateAdded: '2023-03-01', validUntil: '2024-03-01', addedBy: 'Admin User', reason: 'Temporary clearance for conference' },
 ];
 
 

@@ -27,7 +27,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { CalendarIcon } from 'lucide-react';
 import { Calendar } from '../ui/calendar';
-import { format } from 'date-fns';
+import { format, parse, isValid } from 'date-fns';
 import { cn } from '@/lib/utils';
 
 const formSchema = z.object({
@@ -73,6 +73,13 @@ const steps = [
     { id: 'status', label: 'Status & Review', fields: ['status', 'riskLevel'] },
 ];
 
+const parseDateString = (dateString?: string): Date | undefined => {
+    if (!dateString) return undefined;
+    const date = parse(dateString, 'yyyy-MM-dd', new Date());
+    return isValid(date) ? date : undefined;
+};
+
+
 export function PassengerForm({ passengerToEdit }: PassengerFormProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -88,9 +95,9 @@ export function PassengerForm({ passengerToEdit }: PassengerFormProps) {
     defaultValues: passengerToEdit
       ? { 
           ...passengerToEdit, 
-          dateOfBirth: new Date(passengerToEdit.dateOfBirth),
-          passportIssueDate: passengerToEdit.passportIssueDate ? new Date(passengerToEdit.passportIssueDate) : undefined,
-          passportExpiryDate: passengerToEdit.passportExpiryDate ? new Date(passengerToEdit.passportExpiryDate) : undefined,
+          dateOfBirth: parseDateString(passengerToEdit.dateOfBirth),
+          passportIssueDate: parseDateString(passengerToEdit.passportIssueDate),
+          passportExpiryDate: parseDateString(passengerToEdit.passportExpiryDate),
           visaExpiryDate: passengerToEdit.visaExpiryDate || '',
           personalPhotoUrl: passengerToEdit.profilePicture, 
           passportPhotoUrl: passengerToEdit.passportPhotoUrl 
@@ -276,6 +283,7 @@ export function PassengerForm({ passengerToEdit }: PassengerFormProps) {
     </>
   );
 }
+
 
 
 

@@ -36,12 +36,29 @@ export default function AppSidebar() {
   const navItems = React.useMemo(() => {
     if (!user) return [];
     const allItems = getModuleNavItems(currentModule, user.role, t);
+    
     // Filter items based on permission
     return allItems.filter(item => {
-        if (item.permission) {
-            return hasPermission([item.permission]);
-        }
-        return true;
+      // If the item itself doesn't have a specific permission, show it.
+      if (!item.permission) {
+          // If it has children, filter them based on their permissions.
+          if (item.children) {
+              item.children = item.children.filter(child => !child.permission || hasPermission([child.permission]));
+              // Only show the parent if it still has children after filtering.
+              return item.children.length > 0;
+          }
+          return true;
+      }
+      
+      // If the item has a permission, check if the user has it.
+      const hasItemPermission = hasPermission([item.permission]);
+      
+      // If it has children, also filter them.
+      if (item.children) {
+          item.children = item.children.filter(child => !child.permission || hasPermission([child.permission]));
+      }
+
+      return hasItemPermission;
     });
   }, [currentModule, user, t, hasPermission]);
 

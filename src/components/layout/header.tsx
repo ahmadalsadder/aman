@@ -34,7 +34,7 @@ export default function Header() {
   
   const currentModule = pathname.split('/')[1] as Module;
 
-  const showQuickActions = ['airport', 'landport', 'seaport', 'shiftsupervisor', 'gate-supervisor'].includes(currentModule);
+  const showQuickActions = ['airport', 'landport', 'seaport', 'shiftsupervisor'].includes(currentModule);
   const canProcessLive = React.useMemo(() => hasPermission([`${currentModule}:transactions:live` as Permission]), [hasPermission, currentModule]);
 
 

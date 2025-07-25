@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import type { ColumnDef } from '@tanstack/react-table';
 import type { Transaction } from '@/types/live-processing';
 import { DataTable } from '@/components/shared/data-table';
@@ -13,7 +13,6 @@ import { Progress } from '@/components/ui/progress';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { useAuth } from '@/hooks/use-auth';
-import { api } from '@/lib/api';
 import { useTranslations } from 'next-intl';
 import { TransactionStatsCard } from '@/components/transactions/transaction-stats-card';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage } from '@/components/ui/breadcrumb';
@@ -39,38 +38,22 @@ const initialFilters = {
 
 interface DutyManagerPageProps {
     module: Module;
+    transactions: Transaction[];
+    loading: boolean;
 }
 
-export function DutyManagerPageComponent({ module }: DutyManagerPageProps) {
-  const [allPendingTransactions, setAllPendingTransactions] = useState<Transaction[]>([]);
+export function DutyManagerPageComponent({ module, transactions, loading }: DutyManagerPageProps) {
   const { hasPermission } = useAuth();
   const t = useTranslations('DutyManager');
   const tNav = useTranslations('Navigation');
   const tTransactions = useTranslations('Transactions');
-  const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState(initialFilters);
   const [appliedFilters, setAppliedFilters] = useState(initialFilters);
 
   const canView = hasPermission(['duty-manager:view']);
 
-  useEffect(() => {
-    if (!canView) {
-        setLoading(false);
-        return;
-    }
-    const fetchData = async () => {
-        setLoading(true);
-        const result = await api.get<Transaction[]>(`/data/transactions/pending`);
-        if (result.isSuccess) {
-            setAllPendingTransactions(result.data || []);
-        }
-        setLoading(false);
-    };
-    fetchData();
-  }, [canView]);
-
   const filteredTransactions = useMemo(() => {
-    return allPendingTransactions.filter(t => {
+    return transactions.filter(t => {
         if (appliedFilters.passportNumber && t.passportNumber && !t.passportNumber.toLowerCase().includes(appliedFilters.passportNumber.toLowerCase())) {
             return false;
         }
@@ -85,7 +68,7 @@ export function DutyManagerPageComponent({ module }: DutyManagerPageProps) {
 
         return true;
     });
-  }, [allPendingTransactions, appliedFilters]);
+  }, [transactions, appliedFilters]);
 
   const stats = useMemo(() => {
     const highRisk = filteredTransactions.filter(t => t.riskScore >= 75).length;
@@ -291,5 +274,3 @@ export function DutyManagerPageComponent({ module }: DutyManagerPageProps) {
     </div>
   );
 }
-
-    

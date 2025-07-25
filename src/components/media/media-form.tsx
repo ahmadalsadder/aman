@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useRef, useState } from 'react';
-import { useForm, useFieldArray } from 'react-hook-form';
+import { useForm, useFieldArray, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useRouter } from 'next/navigation';
@@ -16,6 +16,7 @@ import { nanoid } from 'nanoid';
 import { PlusCircle, Trash2, Loader2 } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Label } from '@/components/ui/label';
+import { useToast } from '@/hooks/use-toast';
 
 const languages = [
   { value: 'English', label: 'English' },
@@ -49,12 +50,25 @@ interface MediaFormProps {
   mediaToEdit?: Media | null;
 }
 
+const MAX_SIZES = {
+    Image: 2 * 1024 * 1024, // 2MB
+    Audio: 5 * 1024 * 1024, // 5MB
+    Video: 10 * 1024 * 1024, // 10MB
+};
+
+const ALLOWED_MIME_TYPES = {
+    Image: 'image/*',
+    Audio: 'audio/*',
+    Video: 'video/*',
+};
+
 function MandatoryFieldLabel({ children }: { children: React.ReactNode }) {
     return <FormLabel>{children} <span className="text-destructive">*</span></FormLabel>;
 }
 
 export function MediaForm({ onSave, isLoading, mediaToEdit }: MediaFormProps) {
   const router = useRouter();
+  const { toast } = useToast();
   const isEditMode = !!mediaToEdit;
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [currentLanguage, setCurrentLanguage] = React.useState('English');
@@ -69,6 +83,8 @@ export function MediaForm({ onSave, isLoading, mediaToEdit }: MediaFormProps) {
       mediaFiles: [],
     },
   });
+  
+  const mediaType = useWatch({ control: form.control, name: 'type' });
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
@@ -77,7 +93,28 @@ export function MediaForm({ onSave, isLoading, mediaToEdit }: MediaFormProps) {
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file) {
+    if (file && mediaType) {
+        const maxSize = MAX_SIZES[mediaType];
+        const allowedMimePattern = ALLOWED_MIME_TYPES[mediaType];
+
+        if (!file.type.startsWith(allowedMimePattern.split('/')[0])) {
+            toast({
+                variant: 'destructive',
+                title: 'Invalid File Type',
+                description: `Please select a valid ${mediaType.toLowerCase()} file.`,
+            });
+            return;
+        }
+
+        if (file.size > maxSize) {
+            toast({
+                variant: 'destructive',
+                title: 'File Too Large',
+                description: `The file size cannot exceed ${maxSize / 1024 / 1024}MB.`,
+            });
+            return;
+        }
+
       append({
         id: nanoid(),
         language: currentLanguage,
@@ -121,8 +158,14 @@ export function MediaForm({ onSave, isLoading, mediaToEdit }: MediaFormProps) {
                             <SelectContent>{languages.map(l => <SelectItem key={l.value} value={l.value}>{l.label}</SelectItem>)}</SelectContent>
                         </Select>
                     </div>
-                    <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" />
-                    <Button type="button" onClick={() => fileInputRef.current?.click()}><PlusCircle className="mr-2 h-4 w-4" /> Attach</Button>
+                    <input 
+                        type="file" 
+                        ref={fileInputRef} 
+                        onChange={handleFileChange} 
+                        className="hidden" 
+                        accept={mediaType ? ALLOWED_MIME_TYPES[mediaType] : ''}
+                    />
+                    <Button type="button" onClick={() => fileInputRef.current?.click()} disabled={!mediaType}><PlusCircle className="mr-2 h-4 w-4" /> Attach</Button>
                  </div>
                  <div className="rounded-md border">
                     <Table>

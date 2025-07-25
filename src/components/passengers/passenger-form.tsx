@@ -150,14 +150,16 @@ export function PassengerForm({ passengerToEdit }: PassengerFormProps) {
   const nextStep = async () => {
     const currentStepFields = steps[currentStep].fields as (keyof PassengerFormValues)[];
     const isValid = await form.trigger(currentStepFields);
-    if (isValid && currentStep < steps.length - 1) {
-        setCurrentStep(prev => prev + 1);
+    if (isValid) {
+        if (currentStep < steps.length - 1) {
+            setCurrentStep(prev => prev + 1);
+        }
     }
   };
 
   const prevStep = () => {
     if (currentStep > 0) {
-        setCurrentStep(prev => prev + 1);
+        setCurrentStep(prev => prev - 1);
     }
   };
   
@@ -274,5 +276,6 @@ export function PassengerForm({ passengerToEdit }: PassengerFormProps) {
     </>
   );
 }
+
 
 

@@ -208,6 +208,7 @@ export interface WhitelistEntry {
   validUntil: string;
   addedBy: string;
   reason: string;
+  attachmentUrl?: string;
 }
 
 export interface BlacklistEntry {
@@ -220,6 +221,7 @@ export interface BlacklistEntry {
   dateAdded: string;
   addedBy: string;
   notes?: string;
+  attachmentUrl?: string;
 }
 
 export { Port, Terminal, Zone, Workflow, RiskProfile };

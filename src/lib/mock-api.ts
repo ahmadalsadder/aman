@@ -2,7 +2,7 @@
 
 import type { User } from '@/types';
 import { Result, ApiError } from '@/types/api/result';
-import { mockPassengers, mockTransactions, mockVisaDatabase, mockOfficerDesks, mockPorts, mockTerminals, mockZones, mockWorkflows, mockRiskProfiles, setMockOfficerDesks, mockGates, setMockGates, mockMedia, setMockMedia, mockWhitelist, setMockWhitelist, mockBlacklist, setMockBlacklist, setMockPassengers } from './mock-data';
+import { getMockPassengers, getMockTransactions, mockVisaDatabase, getMockOfficerDesks, mockPorts, mockTerminals, mockZones, mockWorkflows, mockRiskProfiles, setMockOfficerDesks, getMockGates, setMockGates, getMockMedia, setMockMedia, getMockWhitelist, setMockWhitelist, getMockBlacklist, setMockBlacklist, setMockPassengers } from './mock-data';
 import { assessPassengerRisk } from '@/ai/flows/assess-risk-flow';
 import { countries } from './countries';
 import { Fingerprint, ScanLine, UserCheck, ShieldAlert, User } from 'lucide-react';
@@ -470,7 +470,7 @@ const seaportTravelerCategoriesData = [
     { name: 'Crew', value: 450 },
 ];
 
-let allTransactions: Transaction[] = [...mockTransactions];
+let allTransactions: Transaction[] = [...getMockTransactions()];
 
 export async function mockApi<T>(endpoint: string, options: RequestInit = {}): Promise<Result<T>> {
     const { method = 'GET', body } = options;
@@ -523,7 +523,7 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
             }
         }
         
-        const civilRecords = mockPassengers.map(p => {
+        const civilRecords = getMockPassengers().map(p => {
             const docType = getDocumentType(p as any);
             return {
                 ...p,
@@ -538,9 +538,10 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
     // PASSENGERS
     if (method === 'POST' && url.pathname === '/data/passengers/delete') {
         const { id } = JSON.parse(body as string);
-        const initialLength = mockPassengers.length;
-        setMockPassengers(mockPassengers.filter(p => p.id !== id));
-        if (mockPassengers.length < initialLength) {
+        const currentPassengers = getMockPassengers();
+        const initialLength = currentPassengers.length;
+        setMockPassengers(currentPassengers.filter(p => p.id !== id));
+        if (getMockPassengers().length < initialLength) {
             return Result.success({ id }) as Result<T>;
         }
         return Result.failure([new ApiError('NOT_FOUND', 'Passenger not found.')]) as Result<T>;
@@ -549,14 +550,15 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
     if (method === 'POST' && url.pathname === '/data/passengers/save') {
         const passengerData = JSON.parse(body as string) as Passenger;
         const isNew = !passengerData.id;
+        const currentPassengers = getMockPassengers();
 
         if (isNew) {
             const newPassenger = { ...passengerData, id: `P-NEW-${Date.now()}` };
-            setMockPassengers([...mockPassengers, newPassenger]);
+            setMockPassengers([...currentPassengers, newPassenger]);
             return Result.success(newPassenger) as Result<T>;
         } else {
             let found = false;
-            const updatedPassengers = mockPassengers.map(p => {
+            const updatedPassengers = currentPassengers.map(p => {
                 if (p.id === passengerData.id) {
                     found = true;
                     return { ...p, ...passengerData };
@@ -573,13 +575,13 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
 
     if (method === 'GET' && url.pathname.startsWith('/data/passengers/')) {
         const id = pathParts[pathParts.length - 1];
-        const passenger = mockPassengers.find(p => p.id === id);
+        const passenger = getMockPassengers().find(p => p.id === id);
         return passenger ? Result.success(passenger) as Result<T> : Result.failure([new ApiError('NOT_FOUND', `Passenger with id ${id} not found.`)]) as Result<T>;
     }
 
     if (method === 'GET' && url.pathname === '/data/passenger-by-passport') {
         const passportNumber = url.searchParams.get('passportNumber');
-        const passenger = mockPassengers.find(p => p.passportNumber === passportNumber);
+        const passenger = getMockPassengers().find(p => p.passportNumber === passportNumber);
         if (passenger) {
             return Result.success(passenger) as Result<T>;
         }
@@ -591,11 +593,11 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
         // the backend would derive the scope from the user's auth token, not a query param.
         const module = url.searchParams.get('module');
         if (module && module !== 'admin') {
-            const passengerSubset = mockPassengers.slice(0, 2); // Return a smaller, "scoped" list
+            const passengerSubset = getMockPassengers().slice(0, 2); // Return a smaller, "scoped" list
             return Result.success(passengerSubset) as Result<T>;
         }
         // Admin gets all passengers
-        return Result.success(mockPassengers) as Result<T>;
+        return Result.success(getMockPassengers()) as Result<T>;
     }
 
     // TRANSACTIONS
@@ -640,7 +642,7 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
         }
 
         // 1. Check for existing passenger
-        const existingPassenger = mockPassengers.find(p => p.passportNumber === extractedData.passportNumber) || null;
+        const existingPassenger = getMockPassengers().find(p => p.passportNumber === extractedData.passportNumber) || null;
     
         // 2. Visa Check
         const countryLabel = countries.find(c => c.value === extractedData.nationality)?.label || extractedData.nationality;
@@ -704,7 +706,7 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
     // GATES DATA
     if (method === 'GET' && url.pathname.startsWith('/data/gates/')) {
         const id = pathParts[pathParts.length - 1];
-        const gate = mockGates.find(g => g.id === id);
+        const gate = getMockGates().find(g => g.id === id);
         if (gate) {
             return Result.success({ gate }) as Result<T>;
         }
@@ -712,7 +714,7 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
     }
     
     if (method === 'GET' && url.pathname === '/data/gates') {
-        return Result.success(mockGates) as Result<T>;
+        return Result.success(getMockGates()) as Result<T>;
     }
 
     if (method === 'POST' && url.pathname === '/data/gates/save') {
@@ -722,11 +724,11 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
         let updatedGate: Gate;
         if (isNew) {
             updatedGate = { ...gateData, id: `GATE-NEW-${Date.now()}`, lastModified: new Date().toISOString() };
-            const newGates = [...mockGates, updatedGate];
+            const newGates = [...getMockGates(), updatedGate];
             setMockGates(newGates);
         } else {
             updatedGate = { ...gateData, lastModified: new Date().toISOString() };
-            const newGates = mockGates.map(d => d.id === gateData.id ? updatedGate : d);
+            const newGates = getMockGates().map(d => d.id === gateData.id ? updatedGate : d);
             setMockGates(newGates);
         }
         return Result.success(updatedGate) as Result<T>;
@@ -734,7 +736,7 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
 
     if (method === 'POST' && url.pathname === '/data/gates/update-status') {
         const { gateId, status } = JSON.parse(body as string);
-        const newGates = mockGates.map(gate =>
+        const newGates = getMockGates().map(gate =>
             gate.id === gateId 
             ? { ...gate, status, lastModified: new Date().toISOString().split('T')[0] } 
             : gate
@@ -746,14 +748,14 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
 
     if (method === 'POST' && url.pathname === '/data/gates/delete') {
         const { id } = JSON.parse(body as string);
-        setMockGates(mockGates.filter(g => g.id !== id));
+        setMockGates(getMockGates().filter(g => g.id !== id));
         return Result.success({ id }) as Result<T>;
     }
 
     // MEDIA DATA
     if (method === 'GET' && url.pathname.startsWith('/data/media/')) {
         const id = pathParts[pathParts.length - 1];
-        const media = mockMedia.find(m => m.id === id);
+        const media = getMockMedia().find(m => m.id === id);
         if (media) {
             return Result.success({ media }) as Result<T>;
         }
@@ -761,7 +763,7 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
     }
 
     if (method === 'GET' && url.pathname === '/data/media') {
-        return Result.success(mockMedia) as Result<T>;
+        return Result.success(getMockMedia()) as Result<T>;
     }
 
     if (method === 'POST' && url.pathname === '/data/media/save') {
@@ -771,27 +773,27 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
         let updatedMedia: Media;
         if (isNew) {
             updatedMedia = { ...mediaData, id: `MEDIA-NEW-${Date.now()}` };
-            setMockMedia([...mockMedia, updatedMedia]);
+            setMockMedia([...getMockMedia(), updatedMedia]);
         } else {
             updatedMedia = { ...mediaData };
-            setMockMedia(mockMedia.map(m => m.id === mediaData.id ? updatedMedia : m));
+            setMockMedia(getMockMedia().map(m => m.id === mediaData.id ? updatedMedia : m));
         }
         return Result.success(updatedMedia) as Result<T>;
     }
 
     if (method === 'POST' && url.pathname === '/data/media/delete') {
         const { id } = JSON.parse(body as string);
-        setMockMedia(mockMedia.filter(m => m.id !== id));
+        setMockMedia(getMockMedia().filter(m => m.id !== id));
         return Result.success({ id }) as Result<T>;
     }
     
-    // Whitelist
+    // WHITELIST
     if (method === 'GET' && url.pathname === '/data/whitelist') {
-        return Result.success(mockWhitelist) as Result<T>;
+        return Result.success(getMockWhitelist()) as Result<T>;
     }
     if (method === 'POST' && url.pathname === '/data/whitelist/delete') {
         const { id } = JSON.parse(body as string);
-        setMockWhitelist(mockWhitelist.filter(e => e.id !== id));
+        setMockWhitelist(getMockWhitelist().filter(e => e.id !== id));
         return Result.success({ id }) as Result<T>;
     }
     if (method === 'POST' && url.pathname === '/data/whitelist/save') {
@@ -800,40 +802,46 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
         let updatedEntry: WhitelistEntry;
         if (isNew) {
             updatedEntry = { ...entryData, id: `WL-NEW-${Date.now()}` };
-            setMockWhitelist([...mockWhitelist, updatedEntry]);
+            setMockWhitelist([...getMockWhitelist(), updatedEntry]);
         } else {
             updatedEntry = { ...entryData };
-            setMockWhitelist(mockWhitelist.map(e => e.id === entryData.id ? updatedEntry : e));
+            setMockWhitelist(getMockWhitelist().map(e => e.id === entryData.id ? updatedEntry : e));
         }
         return Result.success(updatedEntry) as Result<T>;
     }
     if (method === 'GET' && url.pathname.startsWith('/data/whitelist/')) {
         const id = pathParts[pathParts.length - 1];
-        const entry = mockWhitelist.find(e => e.id === id);
+        const entry = getMockWhitelist().find(e => e.id === id);
         return entry ? Result.success({ entry }) as Result<T> : Result.failure([new ApiError('NOT_FOUND', 'Entry not found')]) as Result<T>;
     }
 
-
-    // Blacklist
+    // BLACKLIST
+     if (method === 'GET' && url.pathname === '/data/blacklist') {
+        return Result.success(getMockBlacklist()) as Result<T>;
+    }
     if (method === 'POST' && url.pathname === '/data/blacklist/save') {
         const entryData = JSON.parse(body as string) as BlacklistEntry;
         const isNew = !entryData.id;
         let updatedEntry: BlacklistEntry;
         if (isNew) {
             updatedEntry = { ...entryData, id: `BL-NEW-${Date.now()}` };
-            setMockBlacklist([...mockBlacklist, updatedEntry]);
+            setMockBlacklist([...getMockBlacklist(), updatedEntry]);
         } else {
             updatedEntry = { ...entryData };
-            setMockBlacklist(mockBlacklist.map(e => e.id === entryData.id ? updatedEntry : e));
+            setMockBlacklist(getMockBlacklist().map(e => e.id === entryData.id ? updatedEntry : e));
         }
         return Result.success(updatedEntry) as Result<T>;
     }
-     if (method === 'GET' && url.pathname.startsWith('/data/blacklist/')) {
+    if (method === 'POST' && url.pathname === '/data/blacklist/delete') {
+        const { id } = JSON.parse(body as string);
+        setMockBlacklist(getMockBlacklist().filter(e => e.id !== id));
+        return Result.success({ id }) as Result<T>;
+    }
+    if (method === 'GET' && url.pathname.startsWith('/data/blacklist/')) {
         const id = pathParts[pathParts.length - 1];
-        const entry = mockBlacklist.find(e => e.id === id);
+        const entry = getMockBlacklist().find(e => e.id === id);
         return entry ? Result.success({ entry }) as Result<T> : Result.failure([new ApiError('NOT_FOUND', 'Entry not found')]) as Result<T>;
     }
-
 
     // CONFIGURATION DATA
     if(method === 'GET' && url.pathname === '/data/desks') {
@@ -841,7 +849,7 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
         const allPorts = mockPorts.filter(p => p.type.toLowerCase() === moduleType);
         const allTerminals = mockTerminals.filter(t => allPorts.some(p => p.id === t.portId));
         
-        const desksForModule = mockOfficerDesks.filter(desk => allTerminals.some(t => t.id === desk.terminalId));
+        const desksForModule = getMockOfficerDesks().filter(desk => allTerminals.some(t => t.id === desk.terminalId));
 
         const enrichedDesks = desksForModule.map(desk => {
             const terminal = mockTerminals.find(t => t.id === desk.terminalId);
@@ -860,7 +868,7 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
 
     if (method === 'POST' && url.pathname === '/data/desks/update-status') {
         const { deskId, status } = JSON.parse(body as string);
-        const newDesks = mockOfficerDesks.map(desk => 
+        const newDesks = getMockOfficerDesks().map(desk => 
             desk.id === deskId 
             ? { ...desk, status, lastUpdatedAt: new Date().toISOString() } 
             : desk
@@ -876,10 +884,10 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
         
         if (isNew) {
             deskData = { ...deskData, id: `DESK-NEW-${Date.now()}` };
-            const newDesks = [...mockOfficerDesks, deskData];
+            const newDesks = [...getMockOfficerDesks(), deskData];
             setMockOfficerDesks(newDesks);
         } else {
-            const newDesks = mockOfficerDesks.map(d => d.id === deskData.id ? deskData : d);
+            const newDesks = getMockOfficerDesks().map(d => d.id === deskData.id ? deskData : d);
             setMockOfficerDesks(newDesks);
         }
         return Result.success(deskData) as Result<T>;
@@ -887,7 +895,7 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
     
     if (method === 'POST' && url.pathname === '/data/desks/delete') {
         const { id } = JSON.parse(body as string);
-        setMockOfficerDesks(mockOfficerDesks.filter(d => d.id !== id));
+        setMockOfficerDesks(getMockOfficerDesks().filter(d => d.id !== id));
         return Result.success({ id }) as Result<T>;
     }
 

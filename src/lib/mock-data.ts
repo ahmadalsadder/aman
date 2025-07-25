@@ -4,7 +4,7 @@ import type { Passenger, Transaction, OfficerDesk, Gate, Media, WhitelistEntry, 
 import { Plane, Car, Ship } from "lucide-react";
 import type { Port, Terminal, Zone, Workflow, RiskProfile } from '@/types/configuration';
 
-export let mockPassengers: Passenger[] = [
+let mockPassengers: Passenger[] = [
     {
       id: "P001",
       firstName: "John",
@@ -46,7 +46,7 @@ export let mockPassengers: Passenger[] = [
     }
 ];
 
-export const mockTransactions: Transaction[] = [
+let mockTransactions: Transaction[] = [
     {
       id: 'TXN741852963',
       passengerId: 'P001',
@@ -130,7 +130,7 @@ export const mockTransactions: Transaction[] = [
     }
 ];
 
-export let mockOfficerDesks: OfficerDesk[] = [
+let mockOfficerDesks: OfficerDesk[] = [
     { id: 'DESK-A1', name: 'Officer Desk A1', terminalId: 'TERM-DXB-1', zoneId: 'ZONE-A', ipAddress: '192.168.1.10', macAddress: '00:1A:2B:3C:4D:5E', status: 'Active', lastUpdatedAt: '2023-05-20T10:00:00Z', movementType: 'Entry', workflowId: 'WF-Standard', riskRuleId: 'RR-Low' },
     { id: 'DESK-A2', name: 'Officer Desk A2', terminalId: 'TERM-DXB-1', zoneId: 'ZONE-A', ipAddress: '192.168.1.11', macAddress: '00:1A:2B:3C:4D:5F', status: 'Inactive', lastUpdatedAt: '2023-05-19T11:30:00Z', movementType: 'Bidirectional', workflowId: 'WF-Standard', riskRuleId: 'RR-Low' },
     { id: 'DESK-B1', name: 'Officer Desk B1', terminalId: 'TERM-DXB-2', zoneId: 'ZONE-B', ipAddress: '192.168.2.20', macAddress: '11:22:33:44:55:66', status: 'Active', lastUpdatedAt: '2023-05-20T09:00:00Z', movementType: 'Exit', workflowId: 'WF-FastTrack', riskRuleId: 'RR-Med' },
@@ -182,14 +182,14 @@ export const mockVisaDatabase: { passportNumber: string, nationality: string, vi
     }
 ];
 
-export let mockGates: Gate[] = [
+let mockGates: Gate[] = [
     { id: 'EGATE-01', code: 'A-01', name: 'Main Entry Gate', terminalName: 'Terminal 1', type: 'Entry', status: 'Active', ipAddress: '192.168.1.50', macAddress: 'A1:B2:C3:D4:E5:F6', lastMaintenance: '2023-04-15', lastModified: '2023-05-20', currentLoad: 75, passengerCount: 15, avgProcessingTime: '45s', equipment: [{ name: 'Passport Reader', status: 'online' }, { name: 'Biometric Scanner', status: 'online' }], entryConfig: { workflowId: 'WF-Standard', riskProfileId: 'RR-Low', capacity: 20 } },
     { id: 'EGATE-02', code: 'A-02', name: 'Main Entry Gate', terminalName: 'Terminal 1', type: 'Entry', status: 'Active', ipAddress: '192.168.1.51', macAddress: 'A1:B2:C3:D4:E5:F7', lastMaintenance: '2023-04-16', lastModified: '2023-05-21', currentLoad: 50, passengerCount: 10, avgProcessingTime: '42s', equipment: [{ name: 'Passport Reader', status: 'online' }, { name: 'Biometric Scanner', status: 'online' }], entryConfig: { workflowId: 'WF-Standard', riskProfileId: 'RR-Low', capacity: 20 } },
     { id: 'EGATE-03', code: 'B-01', name: 'Business Class Gate', terminalName: 'Terminal 3', type: 'Bidirectional', status: 'Maintenance', ipAddress: '192.168.3.10', macAddress: 'A1:B2:C3:D4:E5:F8', lastMaintenance: '2023-05-18', lastModified: '2023-05-18', currentLoad: 0, passengerCount: 0, avgProcessingTime: 'N/A', equipment: [{ name: 'Passport Reader', status: 'offline' }, { name: 'Biometric Scanner', status: 'online' }], entryConfig: { workflowId: 'WF-FastTrack', riskProfileId: 'RR-Low', capacity: 15 }, exitConfig: { workflowId: 'WF-FastTrack', riskProfileId: 'RR-Low', capacity: 15 } },
     { id: 'EGATE-04', code: 'C-05', name: 'Exit Gate', terminalName: 'Terminal 1', type: 'Exit', status: 'Offline', ipAddress: '192.168.1.55', macAddress: 'A1:B2:C3:D4:E5:F9', lastMaintenance: '2023-03-20', lastModified: '2023-05-10', currentLoad: 0, passengerCount: 0, avgProcessingTime: 'N/A', equipment: [{ name: 'Passport Reader', status: 'offline' }, { name: 'Biometric Scanner', status: 'offline' }], exitConfig: { workflowId: 'WF-Standard', riskProfileId: 'RR-Low', capacity: 25 } },
 ];
 
-export let mockMedia: Media[] = [
+let mockMedia: Media[] = [
     { 
         id: 'MEDIA-001', 
         name: 'Entry Greeting', 
@@ -233,37 +233,42 @@ export let mockMedia: Media[] = [
     },
 ];
 
-export let mockWhitelist: WhitelistEntry[] = [
+let mockWhitelist: WhitelistEntry[] = [
   { id: 'WL-001', passengerId: 'P001', name: 'John Doe', nationality: 'United States', status: 'Active', dateAdded: '2023-01-15', validUntil: '2025-01-14', addedBy: 'Admin User', reason: 'Diplomatic Staff' },
   { id: 'WL-002', passengerId: 'P002', name: 'Jane Smith', nationality: 'United Kingdom', status: 'Active', dateAdded: '2022-11-20', validUntil: '2024-11-19', addedBy: 'Admin User', reason: 'Frequent Business Traveler' },
   { id: 'WL-003', passengerId: 'P003', name: 'Wei Chen', nationality: 'China', status: 'Revoked', dateAdded: '2023-03-01', validUntil: '2024-03-01', addedBy: 'Admin User', reason: 'Temporary clearance for conference' },
 ];
 
-export let mockBlacklist: BlacklistEntry[] = [
+let mockBlacklist: BlacklistEntry[] = [
     { id: 'BL-001', passengerId: 'P003', name: 'Wei Chen', nationality: 'China', reason: 'International No-Fly List Match', category: 'No-Fly', dateAdded: '2023-01-10', addedBy: 'Interpol Feed' },
     { id: 'BL-002', name: 'Unknown Male', nationality: 'Syrian Arab Republic', reason: 'Attempted use of fraudulent document', category: 'Wanted', dateAdded: '2023-04-22', addedBy: 'Admin User', notes: 'Subject fled during secondary screening.' },
 ];
 
+// Getters
+export const getMockPassengers = () => mockPassengers;
+export const getMockTransactions = () => mockTransactions;
+export const getMockOfficerDesks = () => mockOfficerDesks;
+export const getMockGates = () => mockGates;
+export const getMockMedia = () => mockMedia;
+export const getMockWhitelist = () => mockWhitelist;
+export const getMockBlacklist = () => mockBlacklist;
+
+// Setters
+export const setMockPassengers = (newPassengers: Passenger[]) => {
+    mockPassengers = newPassengers;
+};
 export const setMockOfficerDesks = (newDesks: OfficerDesk[]) => {
     mockOfficerDesks = newDesks;
 };
-
 export const setMockGates = (newGates: Gate[]) => {
     mockGates = newGates;
 };
-
 export const setMockMedia = (newMedia: Media[]) => {
     mockMedia = newMedia;
 };
-
 export const setMockWhitelist = (newWhitelist: WhitelistEntry[]) => {
     mockWhitelist = newWhitelist;
 };
-
 export const setMockBlacklist = (newBlacklist: BlacklistEntry[]) => {
     mockBlacklist = newBlacklist;
-};
-
-export const setMockPassengers = (newPassengers: Passenger[]) => {
-    mockPassengers = newPassengers;
 };

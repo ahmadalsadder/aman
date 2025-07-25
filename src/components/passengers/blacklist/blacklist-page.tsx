@@ -5,7 +5,6 @@
 import { useState, useMemo, useEffect } from 'react';
 import type { ColumnDef } from '@tanstack/react-table';
 import type { BlacklistEntry } from '@/types/live-processing';
-import { mockBlacklist } from '@/lib/mock-data';
 import { DataTable } from '@/components/shared/data-table';
 import { GradientPageHeader } from '@/components/shared/gradient-page-header';
 import { Button } from '@/components/ui/button';
@@ -30,8 +29,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import type { Module, Permission } from '@/types';
 import { useAuth } from '@/hooks/use-auth';
-
-const BLACKLIST_STORAGE_KEY = 'guardian-gate-blacklist';
+import { api } from '@/lib/api';
 
 const categoryColors: { [key: string]: string } = {
   'No-Fly': 'bg-red-500/20 text-red-700 border-red-500/30',
@@ -55,6 +53,7 @@ export function BlacklistPage({ module }: BlacklistPageProps) {
   const { toast } = useToast();
   const router = useRouter();
   const { hasPermission } = useAuth();
+  const [loading, setLoading] = useState(true);
 
   const canView = hasPermission([`${module}:blacklist:view` as Permission]);
   const canCreate = hasPermission([`${module}:blacklist:create` as Permission]);
@@ -67,35 +66,35 @@ export function BlacklistPage({ module }: BlacklistPageProps) {
   const [appliedFilters, setAppliedFilters] = useState(initialFilters);
 
   useEffect(() => {
-    if (!canView) return;
-    try {
-      const storedBlacklist = localStorage.getItem(BLACKLIST_STORAGE_KEY);
-      if (storedBlacklist) {
-        setBlacklist(JSON.parse(storedBlacklist));
-      } else {
-        localStorage.setItem(BLACKLIST_STORAGE_KEY, JSON.stringify(mockBlacklist));
-        setBlacklist(mockBlacklist);
-      }
-    } catch (error) {
-      console.error('Failed to access blacklist from localStorage', error);
-      setBlacklist(mockBlacklist);
+    if (!canView) {
+        setLoading(false);
+        return;
     }
+
+    const fetchBlacklist = async () => {
+        setLoading(true);
+        const result = await api.get<BlacklistEntry[]>('/data/blacklist');
+        if (result.isSuccess && result.data) {
+            setBlacklist(result.data);
+        }
+        setLoading(false);
+    }
+    fetchBlacklist();
   }, [canView]);
 
-  const handleDeleteEntry = () => {
+  const handleDeleteEntry = async () => {
     if (!entryToDelete) return;
-    try {
-      const updatedBlacklist = blacklist.filter(r => r.id !== entryToDelete.id);
-      localStorage.setItem(BLACKLIST_STORAGE_KEY, JSON.stringify(updatedBlacklist));
-      setBlacklist(updatedBlacklist);
+    const result = await api.post('/data/blacklist/delete', { id: entryToDelete.id });
+    
+    if (result.isSuccess) {
+      setBlacklist(prev => prev.filter(r => r.id !== entryToDelete.id));
       toast({
         title: 'Entry Deleted',
         description: `Blacklist entry for "${entryToDelete.name}" has been permanently deleted.`,
         variant: 'info',
       });
       setEntryToDelete(null);
-    } catch (error) {
-      console.error('Failed to delete blacklist entry from localStorage', error);
+    } else {
       toast({
         title: 'Delete Failed',
         description: 'There was an error deleting the blacklist entry.',

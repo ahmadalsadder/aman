@@ -39,21 +39,14 @@ export default function AppSidebar() {
     
     // Filter items based on permission
     return allItems.filter(module => {
-      if (!module.permission) {
-        if (module.children) {
-          module.children = module.children.filter(child => !child.permission || hasPermission([child.permission]));
-          return module.children.length > 0;
-        }
-        return true;
-      }
-      
-      const hasModulePermission = hasPermission([module.permission]);
-      
+      // If a module has children, check if any child has permission.
       if (module.children) {
         module.children = module.children.filter(child => !child.permission || hasPermission([child.permission]));
+        // If after filtering, there are children left, the parent module should be visible.
+        return module.children.length > 0;
       }
-      
-      return hasModulePermission;
+      // If no children, check permission on the module itself.
+      return !module.permission || hasPermission([module.permission]);
     });
 
   }, [user, t, hasPermission]);

@@ -58,7 +58,7 @@ const getModuleSubNav = (module: Module, t: any): NavItem[] => {
             href: `${moduleBaseUrl}/civil-records`,
             label: t('civilRecords'),
             icon: IdCard,
-            permission: `${module}:records:view` as Permission,
+            permission: `${module}:civil-records:view` as Permission,
         });
     }
 

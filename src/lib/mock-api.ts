@@ -18,13 +18,13 @@ const users: User[] = [
     email: 'admin@example.com', 
     role: 'admin', 
     token: 'fake-admin-token', 
-    modules: ['landport', 'seaport', 'airport', 'egate', 'analyst', 'shiftsupervisor', 'control-room', 'users', 'settings', 'duty-manager'],
+    modules: ['landport', 'seaport', 'airport', 'egate', 'analyst', 'control-room', 'users', 'settings', 'duty-manager'],
     permissions: [
         'users:manage', 'reports:view',
-        'airport:records:view', 'airport:records:create', 'airport:records:edit', 'airport:records:delete',
-        'landport:records:view', 'landport:records:create', 'landport:records:edit', 'landport:records:delete',
-        'seaport:records:view', 'seaport:records:create', 'seaport:records:edit', 'seaport:records:delete',
-        'egate:records:view', 'egate:records:create', 'egate:records:edit', 'egate:records:delete',
+        'airport:civil-records:view', 'airport:records:create', 'airport:records:edit', 'airport:records:delete',
+        'landport:civil-records:view', 'landport:records:create', 'landport:records:edit', 'landport:records:delete',
+        'seaport:civil-records:view', 'seaport:records:create', 'seaport:records:edit', 'seaport:records:delete',
+        'egate:civil-records:view', 'egate:records:create', 'egate:records:edit', 'egate:records:delete',
         'airport:transactions:view', 'landport:transactions:view', 'seaport:transactions:view',
         'airport:transactions:live', 'landport:transactions:live', 'seaport:transactions:live',
         'airport:dashboard:view', 'airport:dashboard:stats:view', 'airport:prediction:view', 'airport:dashboard:charts:view', 'airport:dashboard:officer-performance:view',
@@ -47,7 +47,7 @@ const users: User[] = [
     role: 'auditor', 
     token: 'fake-auditor-token', 
     modules: ['landport', 'seaport'],
-    permissions: ['reports:view', 'landport:transactions:view', 'seaport:transactions:view', 'landport:dashboard:view', 'seaport:dashboard:view', 'landport:records:view', 'seaport:records:view']
+    permissions: ['reports:view', 'landport:transactions:view', 'seaport:transactions:view', 'landport:dashboard:view', 'seaport:dashboard:view', 'landport:civil-records:view', 'seaport:civil-records:view']
   },
   { 
     id: '3', 
@@ -57,7 +57,7 @@ const users: User[] = [
     role: 'viewer', 
     token: 'fake-viewer-token', 
     modules: ['airport'],
-    permissions: ['airport:records:view', 'airport:dashboard:view', 'airport:dashboard:stats:view']
+    permissions: ['airport:civil-records:view', 'airport:dashboard:view', 'airport:dashboard:stats:view']
   },
   {
     id: '4',
@@ -69,9 +69,9 @@ const users: User[] = [
     modules: ['airport', 'landport', 'seaport', 'control-room', 'duty-manager'],
     permissions: [
         'reports:view', 
-        'airport:records:view', 'airport:records:edit',
-        'landport:records:view', 'landport:records:edit',
-        'seaport:records:view', 'seaport:records:edit',
+        'airport:civil-records:view', 'airport:records:edit',
+        'landport:civil-records:view', 'landport:records:edit',
+        'seaport:civil-records:view', 'seaport:records:edit',
         'airport:transactions:view', 'landport:transactions:view', 'seaport:transactions:view', 
         'airport:transactions:live', 'landport:transactions:live', 'seaport:transactions:live',
         'airport:dashboard:view', 'airport:dashboard:stats:view', 'airport:prediction:view', 'airport:dashboard:charts:view', 'airport:dashboard:officer-performance:view',
@@ -110,7 +110,7 @@ const users: User[] = [
     token: 'fake-officer-token',
     modules: ['landport'],
     permissions: [
-        'landport:records:view', 'landport:records:create',
+        'landport:civil-records:view', 'landport:records:create',
         'landport:dashboard:view', 'landport:dashboard:stats:view', 'landport:dashboard:charts:view',
         'landport:transactions:view', 'landport:transactions:live'
     ]
@@ -434,10 +434,10 @@ const officerPerformanceData = {
 };
 
 const processingTimeDistributionData = [
-    { name: '< 1m', value: 1200 },
+    { name: '&lt; 1m', value: 1200 },
     { name: '1-3m', value: 3400 },
     { name: '3-5m', value: 2100 },
-    { name: '> 5m', value: 800 },
+    { name: '&gt; 5m', value: 800 },
 ];
 
 const predictionData = {
@@ -532,16 +532,16 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
     if (method === 'GET' && url.pathname === '/data/civil-records') {
         const getDocumentType = (passenger: User): CivilRecord['documentType'] => {
             if (passenger.nationality === 'United Arab Emirates') return 'Citizen';
-            if (passenger.visaType === 'Residency' || passenger.residencyFileNumber) return 'Resident';
+            if ((passenger as any).visaType === 'Residency' || (passenger as any).residencyFileNumber) return 'Resident';
             return 'Visitor';
         };
 
         const getDocumentNumber = (passenger: User, type: CivilRecord['documentType']): string => {
             switch(type) {
-                case 'Citizen': return passenger.nationalId || passenger.passportNumber;
-                case 'Resident': return passenger.residencyFileNumber || passenger.passportNumber;
-                case 'Visitor': return passenger.visaNumber || passenger.passportNumber;
-                default: return passenger.passportNumber;
+                case 'Citizen': return (passenger as any).nationalId || (passenger as any).passportNumber;
+                case 'Resident': return (passenger as any).residencyFileNumber || (passenger as any).passportNumber;
+                case 'Visitor': return (passenger as any).visaNumber || (passenger as any).passportNumber;
+                default: return (passenger as any).passportNumber;
             }
         }
         

@@ -57,7 +57,7 @@ export function CivilRecordsPage({ module }: CivilRecordsPageProps) {
     const [appliedFilters, setAppliedFilters] = useState(initialFilters);
     const [loading, setLoading] = useState(true);
 
-    const canViewPage = useMemo(() => hasPermission([`${module}:records:view` as Permission]), [hasPermission, module]);
+    const canViewPage = useMemo(() => hasPermission([`${module}:civil-records:view` as Permission]), [hasPermission, module]);
 
     useEffect(() => {
         if (!canViewPage) {
@@ -253,7 +253,7 @@ export function CivilRecordsPage({ module }: CivilRecordsPageProps) {
             </Card>
       
             <Card>
-                <CardHeader><CardTitle>{t('recordsTitle')}</CardTitle></CardHeader>
+                <CardHeader><CardTitle>{t('recordsTitle')}</CardHeader></CardHeader>
                 <CardContent>
                 <DataTable
                     columns={columns}

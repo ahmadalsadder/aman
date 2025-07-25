@@ -1,5 +1,4 @@
 
-
 {
   "LoginPage": {
     "title": "Welcome to Guardian Gate",
@@ -1049,7 +1048,9 @@
     "common": {
       "cancel": "Cancel",
       "save": "Save Changes",
-      "add": "Add Passenger"
+      "add": "Add Passenger",
+      "next": "Next Step",
+      "back": "Back"
     },
     "toast": {
       "loadErrorTitle": "Error",

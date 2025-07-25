@@ -1,8 +1,8 @@
 
 'use client';
 
-import React, { useState, useMemo } from 'react';
-import { useForm } from 'react-hook-form';
+import React, { useState, useMemo, useEffect } from 'react';
+import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useRouter, usePathname } from 'next/navigation';
@@ -18,31 +18,37 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Combobox } from '@/components/ui/combobox';
 import { AttachmentUploader } from '@/components/shared/attachment-uploader';
 import { useTranslations } from 'next-intl';
-import { Loader2 } from 'lucide-react';
+import { Loader2, ArrowLeft, ArrowRight } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { api } from '@/lib/api';
+import { Stepper } from '@/components/shared/stepper';
+import { AnimatePresence, motion } from 'framer-motion';
 
 const formSchema = z.object({
   id: z.string().optional(),
   firstName: z.string().min(1, 'First name is required'),
   lastName: z.string().min(1, 'Last name is required'),
   localizedName: z.string().optional(),
-  passportNumber: z.string().min(1, 'Passport number is required'),
-  nationality: z.string().min(1, 'Nationality is required'),
   dateOfBirth: z.string().min(1, 'Date of birth is required'),
   gender: z.enum(['Male', 'Female', 'Other']),
-  status: z.enum(['Active', 'Inactive', 'Flagged', 'Blocked']),
-  riskLevel: z.enum(['Low', 'Medium', 'High']),
+  
+  passportNumber: z.string().min(1, 'Passport number is required'),
+  nationality: z.string().min(1, 'Nationality is required'),
+  passportCountry: z.string().optional(),
   passportIssueDate: z.string().optional(),
   passportExpiryDate: z.string().optional(),
-  passportCountry: z.string().optional(),
+  nationalId: z.string().optional(),
+
+  passportPhotoUrl: z.string().optional(),
+  personalPhotoUrl: z.string().optional(),
+  
   visaNumber: z.string().optional(),
   visaType: z.enum(['Tourism', 'Work', 'Residency']).optional(),
   visaExpiryDate: z.string().optional(),
   residencyFileNumber: z.string().optional(),
-  nationalId: z.string().optional(),
-  passportPhotoUrl: z.string().optional(),
-  personalPhotoUrl: z.string().optional(),
+
+  status: z.enum(['Active', 'Inactive', 'Flagged', 'Blocked']),
+  riskLevel: z.enum(['Low', 'Medium', 'High']),
 });
 
 export type PassengerFormValues = z.infer<typeof formSchema>;
@@ -51,6 +57,14 @@ interface PassengerFormProps {
   passengerToEdit?: Passenger;
 }
 
+const steps = [
+    { id: 'personal', label: 'Personal', fields: ['firstName', 'lastName', 'dateOfBirth', 'gender'] },
+    { id: 'passport', label: 'Passport', fields: ['passportNumber', 'nationality'] },
+    { id: 'photos', label: 'Photos', fields: [] },
+    { id: 'visa', label: 'Visa/Residency', fields: [] },
+    { id: 'status', label: 'Status & Review', fields: ['status', 'riskLevel'] },
+];
+
 export function PassengerForm({ passengerToEdit }: PassengerFormProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -58,31 +72,20 @@ export function PassengerForm({ passengerToEdit }: PassengerFormProps) {
   const { toast } = useToast();
   const t = useTranslations('PassengerForm');
   const [isLoading, setIsLoading] = useState(false);
+  const [currentStep, setCurrentStep] = useState(0);
 
   const form = useForm<PassengerFormValues>({
     resolver: zodResolver(formSchema),
+    mode: 'onChange',
     defaultValues: passengerToEdit
       ? { ...passengerToEdit, personalPhotoUrl: passengerToEdit.profilePicture, passportPhotoUrl: passengerToEdit.passportPhotoUrl }
       : {
-          firstName: '',
-          lastName: '',
-          localizedName: '',
-          passportNumber: '',
-          nationality: '',
-          dateOfBirth: '',
-          gender: 'Male',
-          status: 'Active',
-          riskLevel: 'Low',
-          passportIssueDate: '',
-          passportExpiryDate: '',
-          passportCountry: '',
-          visaNumber: '',
-          visaType: undefined,
-          visaExpiryDate: '',
-          residencyFileNumber: '',
-          nationalId: '',
-          passportPhotoUrl: '',
-          personalPhotoUrl: '',
+          firstName: '', lastName: '', localizedName: '', passportNumber: '',
+          nationality: '', dateOfBirth: '', gender: 'Male', status: 'Active',
+          riskLevel: 'Low', passportIssueDate: '', passportExpiryDate: '',
+          passportCountry: '', visaNumber: '', visaType: undefined,
+          visaExpiryDate: '', residencyFileNumber: '', nationalId: '',
+          passportPhotoUrl: '', personalPhotoUrl: '',
         },
   });
 
@@ -121,90 +124,134 @@ export function PassengerForm({ passengerToEdit }: PassengerFormProps) {
             description: result.errors?.[0]?.message || t('toast.errorDesc'),
             variant: 'destructive',
         });
-        setIsLoading(false);
+    }
+    setIsLoading(false);
+  };
+  
+  const nextStep = async () => {
+    const currentStepFields = steps[currentStep].fields as (keyof PassengerFormValues)[];
+    const isValid = await form.trigger(currentStepFields);
+    if (isValid && currentStep < steps.length - 1) {
+        setCurrentStep(prev => prev + 1);
     }
   };
 
+  const prevStep = () => {
+    if (currentStep > 0) {
+        setCurrentStep(prev => prev - 1);
+    }
+  };
+  
+  const motionVariants = {
+    hidden: { opacity: 0, x: 50 },
+    visible: { opacity: 1, x: 0 },
+    exit: { opacity: 0, x: -50 },
+  };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSave)} className="space-y-6">
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-          <div className="space-y-6 lg:col-span-1">
-             <Card>
-                <CardHeader>
-                    <CardTitle>{t('details.title')}</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                    <FormField control={form.control} name="firstName" render={({ field }) => ( <FormItem><FormLabel required>{t('details.firstName')}</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
-                    <FormField control={form.control} name="lastName" render={({ field }) => ( <FormItem><FormLabel required>{t('details.lastName')}</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
-                    <FormField control={form.control} name="localizedName" render={({ field }) => ( <FormItem><FormLabel>{t('details.localizedName')}</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
-                    <FormField control={form.control} name="dateOfBirth" render={({ field }) => ( <FormItem><FormLabel required>{t('details.dob')}</FormLabel><FormControl><Input type="date" {...field} /></FormControl><FormMessage /></FormItem> )} />
-                    <FormField control={form.control} name="gender" render={({ field }) => ( <FormItem><FormLabel required>{t('details.gender')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue/></SelectTrigger></FormControl><SelectContent><SelectItem value="Male">{t('details.male')}</SelectItem><SelectItem value="Female">{t('details.female')}</SelectItem><SelectItem value="Other">{t('details.other')}</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
-                </CardContent>
-             </Card>
-             <Card>
-                <CardHeader><CardTitle>{t('status.title')}</CardTitle></CardHeader>
-                <CardContent className="space-y-4">
-                    <FormField control={form.control} name="status" render={({ field }) => ( <FormItem><FormLabel required>{t('status.status')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue/></SelectTrigger></FormControl><SelectContent><SelectItem value="Active">{t('status.active')}</SelectItem><SelectItem value="Inactive">{t('status.inactive')}</SelectItem><SelectItem value="Flagged">{t('status.flagged')}</SelectItem><SelectItem value="Blocked">{t('status.blocked')}</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
-                    <FormField control={form.control} name="riskLevel" render={({ field }) => ( <FormItem><FormLabel required>{t('status.riskLevel')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue/></SelectTrigger></FormControl><SelectContent><SelectItem value="Low">{t('status.low')}</SelectItem><SelectItem value="Medium">{t('status.medium')}</SelectItem><SelectItem value="High">{t('status.high')}</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
-                </CardContent>
-             </Card>
-          </div>
-           <div className="space-y-6 lg:col-span-1">
-             <Card>
-                <CardHeader>
-                    <CardTitle>{t('passport.title')}</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                    <FormField control={form.control} name="passportNumber" render={({ field }) => ( <FormItem><FormLabel required>{t('passport.passportNo')}</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
-                    <FormField control={form.control} name="nationality" render={({ field }) => ( <FormItem><FormLabel required>{t('passport.nationality')}</FormLabel><Combobox options={countries} {...field} placeholder={t('passport.selectNationality')} /><FormMessage /></FormItem> )} />
-                    <FormField control={form.control} name="passportCountry" render={({ field }) => ( <FormItem><FormLabel>{t('passport.issuingCountry')}</FormLabel><Combobox options={countries} {...field} placeholder={t('passport.selectIssuingCountry')} /><FormMessage /></FormItem> )} />
-                    <FormField control={form.control} name="passportIssueDate" render={({ field }) => ( <FormItem><FormLabel>{t('passport.issueDate')}</FormLabel><FormControl><Input type="date" {...field} /></FormControl><FormMessage /></FormItem> )} />
-                    <FormField control={form.control} name="passportExpiryDate" render={({ field }) => ( <FormItem><FormLabel>{t('passport.expiryDate')}</FormLabel><FormControl><Input type="date" {...field} /></FormControl><FormMessage /></FormItem> )} />
-                    <FormField control={form.control} name="nationalId" render={({ field }) => ( <FormItem><FormLabel>{t('passport.nationalId')}</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
-                </CardContent>
-             </Card>
-          </div>
-           <div className="space-y-6 lg:col-span-1">
-             <Card>
-                <CardHeader>
-                    <CardTitle>{t('photos.title')}</CardTitle>
-                    <CardDescription>{t('photos.description')}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <AttachmentUploader 
-                        configs={photoAttachmentConfigs}
-                        onFilesChange={handleAttachmentsChange}
-                        initialFiles={{
-                            passportPhotoUrl: passengerToEdit?.passportPhotoUrl || null,
-                            personalPhotoUrl: passengerToEdit?.profilePicture || null,
-                        }}
-                        outputType='base64'
-                    />
-                </CardContent>
-             </Card>
-            <Card>
-                <CardHeader>
-                    <CardTitle>{t('visa.title')}</CardTitle>
-                </CardHeader>
-                 <CardContent className="space-y-4">
-                    <FormField control={form.control} name="visaNumber" render={({ field }) => ( <FormItem><FormLabel>{t('visa.visaNo')}</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
-                    <FormField control={form.control} name="visaType" render={({ field }) => ( <FormItem><FormLabel>{t('visa.visaType')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue placeholder={t('visa.selectVisaType')}/></SelectTrigger></FormControl><SelectContent><SelectItem value="Tourism">{t('visa.tourism')}</SelectItem><SelectItem value="Work">{t('visa.work')}</SelectItem><SelectItem value="Residency">{t('visa.residency')}</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
-                    <FormField control={form.control} name="visaExpiryDate" render={({ field }) => ( <FormItem><FormLabel>{t('visa.visaExpiry')}</FormLabel><FormControl><Input type="date" {...field} /></FormControl><FormMessage /></FormItem> )} />
-                    <FormField control={form.control} name="residencyFileNumber" render={({ field }) => ( <FormItem><FormLabel>{t('visa.residencyNo')}</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
-                 </CardContent>
-             </Card>
-           </div>
-        </div>
-        <div className="flex justify-end gap-2">
-            <Button type="button" variant="outline" onClick={() => router.back()} disabled={isLoading}>{t('common.cancel')}</Button>
-            <Button type="submit" disabled={isLoading}>
-                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                {passengerToEdit ? t('common.save') : t('common.add')}
-            </Button>
-        </div>
-      </form>
-    </Form>
+    <>
+      <Stepper steps={steps} currentStep={currentStep} />
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSave)} className="space-y-6 mt-8">
+            <AnimatePresence mode="wait">
+                 <motion.div
+                    key={currentStep}
+                    variants={motionVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                    transition={{ duration: 0.3 }}
+                >
+                    {currentStep === 0 && (
+                        <Card>
+                            <CardHeader><CardTitle>{t('details.title')}</CardTitle></CardHeader>
+                            <CardContent className="space-y-4">
+                                <FormField control={form.control} name="firstName" render={({ field }) => ( <FormItem><FormLabel required>{t('details.firstName')}</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
+                                <FormField control={form.control} name="lastName" render={({ field }) => ( <FormItem><FormLabel required>{t('details.lastName')}</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
+                                <FormField control={form.control} name="localizedName" render={({ field }) => ( <FormItem><FormLabel>{t('details.localizedName')}</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
+                                <FormField control={form.control} name="dateOfBirth" render={({ field }) => ( <FormItem><FormLabel required>{t('details.dob')}</FormLabel><FormControl><Input type="date" {...field} /></FormControl><FormMessage /></FormItem> )} />
+                                <FormField control={form.control} name="gender" render={({ field }) => ( <FormItem><FormLabel required>{t('details.gender')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue/></SelectTrigger></FormControl><SelectContent><SelectItem value="Male">{t('details.male')}</SelectItem><SelectItem value="Female">{t('details.female')}</SelectItem><SelectItem value="Other">{t('details.other')}</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
+                            </CardContent>
+                        </Card>
+                    )}
+                    {currentStep === 1 && (
+                         <Card>
+                            <CardHeader><CardTitle>{t('passport.title')}</CardTitle></CardHeader>
+                            <CardContent className="space-y-4">
+                                <FormField control={form.control} name="passportNumber" render={({ field }) => ( <FormItem><FormLabel required>{t('passport.passportNo')}</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
+                                <FormField control={form.control} name="nationality" render={({ field }) => ( <FormItem><FormLabel required>{t('passport.nationality')}</FormLabel><Combobox options={countries} {...field} placeholder={t('passport.selectNationality')} /><FormMessage /></FormItem> )} />
+                                <FormField control={form.control} name="passportCountry" render={({ field }) => ( <FormItem><FormLabel>{t('passport.issuingCountry')}</FormLabel><Combobox options={countries} {...field} placeholder={t('passport.selectIssuingCountry')} /><FormMessage /></FormItem> )} />
+                                <FormField control={form.control} name="passportIssueDate" render={({ field }) => ( <FormItem><FormLabel>{t('passport.issueDate')}</FormLabel><FormControl><Input type="date" {...field} /></FormControl><FormMessage /></FormItem> )} />
+                                <FormField control={form.control} name="passportExpiryDate" render={({ field }) => ( <FormItem><FormLabel>{t('passport.expiryDate')}</FormLabel><FormControl><Input type="date" {...field} /></FormControl><FormMessage /></FormItem> )} />
+                                <FormField control={form.control} name="nationalId" render={({ field }) => ( <FormItem><FormLabel>{t('passport.nationalId')}</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
+                            </CardContent>
+                         </Card>
+                    )}
+                    {currentStep === 2 && (
+                         <Card>
+                            <CardHeader>
+                                <CardTitle>{t('photos.title')}</CardTitle>
+                                <CardDescription>{t('photos.description')}</CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <AttachmentUploader 
+                                    configs={photoAttachmentConfigs}
+                                    onFilesChange={handleAttachmentsChange}
+                                    initialFiles={{
+                                        passportPhotoUrl: passengerToEdit?.passportPhotoUrl || null,
+                                        personalPhotoUrl: passengerToEdit?.profilePicture || null,
+                                    }}
+                                    outputType='base64'
+                                />
+                            </CardContent>
+                         </Card>
+                    )}
+                    {currentStep === 3 && (
+                        <Card>
+                            <CardHeader><CardTitle>{t('visa.title')}</CardTitle></CardHeader>
+                             <CardContent className="space-y-4">
+                                <FormField control={form.control} name="visaNumber" render={({ field }) => ( <FormItem><FormLabel>{t('visa.visaNo')}</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
+                                <FormField control={form.control} name="visaType" render={({ field }) => ( <FormItem><FormLabel>{t('visa.visaType')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue placeholder={t('visa.selectVisaType')}/></SelectTrigger></FormControl><SelectContent><SelectItem value="Tourism">{t('visa.tourism')}</SelectItem><SelectItem value="Work">{t('visa.work')}</SelectItem><SelectItem value="Residency">{t('visa.residency')}</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
+                                <FormField control={form.control} name="visaExpiryDate" render={({ field }) => ( <FormItem><FormLabel>{t('visa.visaExpiry')}</FormLabel><FormControl><Input type="date" {...field} /></FormControl><FormMessage /></FormItem> )} />
+                                <FormField control={form.control} name="residencyFileNumber" render={({ field }) => ( <FormItem><FormLabel>{t('visa.residencyNo')}</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
+                             </CardContent>
+                         </Card>
+                    )}
+                    {currentStep === 4 && (
+                        <Card>
+                            <CardHeader><CardTitle>{t('status.title')}</CardTitle></CardHeader>
+                            <CardContent className="space-y-4">
+                                <FormField control={form.control} name="status" render={({ field }) => ( <FormItem><FormLabel required>{t('status.status')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue/></SelectTrigger></FormControl><SelectContent><SelectItem value="Active">{t('status.active')}</SelectItem><SelectItem value="Inactive">{t('status.inactive')}</SelectItem><SelectItem value="Flagged">{t('status.flagged')}</SelectItem><SelectItem value="Blocked">{t('status.blocked')}</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
+                                <FormField control={form.control} name="riskLevel" render={({ field }) => ( <FormItem><FormLabel required>{t('status.riskLevel')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue/></SelectTrigger></FormControl><SelectContent><SelectItem value="Low">{t('status.low')}</SelectItem><SelectItem value="Medium">{t('status.medium')}</SelectItem><SelectItem value="High">{t('status.high')}</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
+                            </CardContent>
+                         </Card>
+                    )}
+                </motion.div>
+            </AnimatePresence>
+
+            <div className="flex justify-between gap-2 pt-4">
+                <div>
+                    <Button type="button" variant="outline" onClick={prevStep} disabled={currentStep === 0}>
+                        <ArrowLeft className="mr-2 h-4 w-4" />
+                        {t('common.back')}
+                    </Button>
+                </div>
+                <div>
+                    {currentStep < steps.length - 1 ? (
+                        <Button type="button" onClick={nextStep}>
+                            {t('common.next')}
+                            <ArrowRight className="ml-2 h-4 w-4" />
+                        </Button>
+                    ) : (
+                        <Button type="submit" disabled={isLoading}>
+                            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                            {passengerToEdit ? t('common.save') : t('common.add')}
+                        </Button>
+                    )}
+                </div>
+            </div>
+        </form>
+      </Form>
+    </>
   );
 }

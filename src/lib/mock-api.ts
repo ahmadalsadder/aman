@@ -32,7 +32,7 @@ const users: User[] = [
         'seaport:dashboard:view', 'seaport:dashboard:stats:view', 'seaport:prediction:view', 'seaport:dashboard:charts:view', 'seaport:dashboard:officer-performance:view',
         'egate:dashboard:view', 'egate:dashboard:stats:view', 'egate:prediction:view', 'egate:dashboard:charts:view',
         'analyst:dashboard:view', 'analyst:dashboard:stats:view', 'analyst:dashboard:charts:view',
-        'control-room:dashboard:view', 'control-room:dashboard:stats:view', 'control-room:dashboard:forecasts:view', 'control-room:dashboard:charts:view', 'control-room:dashboard:officer-performance:view',
+        'control-room:dashboard:view', 'control-room:dashboard:stats:view', 'control-room:dashboard:charts:view', 'control-room:dashboard:officer-performance:view',
         'airport:desks:view', 'airport:desks:create', 'airport:desks:edit', 'airport:desks:delete',
         'landport:desks:view', 'landport:desks:create', 'landport:desks:edit', 'landport:desks:delete',
         'seaport:desks:view', 'seaport:desks:create', 'seaport:desks:edit', 'seaport:desks:delete',
@@ -77,7 +77,7 @@ const users: User[] = [
         'airport:dashboard:view', 'airport:dashboard:stats:view', 'airport:prediction:view', 'airport:dashboard:charts:view', 'airport:dashboard:officer-performance:view',
         'landport:dashboard:view', 'landport:dashboard:stats:view', 'landport:prediction:view', 'landport:dashboard:charts:view', 'landport:dashboard:officer-performance:view',
         'seaport:dashboard:view', 'seaport:dashboard:stats:view', 'seaport:prediction:view', 'seaport:dashboard:charts:view', 'seaport:dashboard:officer-performance:view',
-        'control-room:dashboard:view', 'control-room:dashboard:stats:view', 'control-room:dashboard:forecasts:view', 'control-room:dashboard:charts:view', 'control-room:dashboard:officer-performance:view',
+        'control-room:dashboard:view', 'control-room:dashboard:stats:view', 'control-room:dashboard:charts:view', 'control-room:dashboard:officer-performance:view',
         'duty-manager:view'
     ]
   },
@@ -99,7 +99,7 @@ const users: User[] = [
     role: 'control-room',
     token: 'fake-control-room-token',
     modules: ['control-room'],
-    permissions: ['control-room:records:view', 'reports:view', 'control-room:dashboard:view']
+    permissions: ['control-room:records:view', 'reports:view', 'control-room:dashboard:view', 'control-room:dashboard:stats:view', 'control-room:dashboard:charts:view']
   },
   {
     id: '7',
@@ -497,7 +497,7 @@ let allTransactions: Transaction[] = [...mockTransactions];
 const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 
 export async function mockApi<T>(endpoint: string, options: RequestInit = {}): Promise<Result<T>> {
-   // await delay(500); // Simulate network latency
+    await delay(500); // Simulate network latency
 
     const { method = 'GET', body } = options;
     const url = new URL(endpoint, 'http://mock.com'); // Base URL doesn't matter, just for parsing

@@ -7,8 +7,7 @@ import type { Port, Terminal, Zone, Workflow, RiskProfile, User } from '@/types'
 
 // This is the correct order for initialization.
 // Define data first, then functions that use it.
-
-let mockPassengers: Passenger[] = [
+const mockPassengersData: Passenger[] = [
     {
       id: "P001",
       firstName: "John",
@@ -50,7 +49,7 @@ let mockPassengers: Passenger[] = [
     }
 ];
 
-let mockTransactionsInit: Transaction[] = [
+const mockTransactionsInit: Transaction[] = [
     {
       id: 'TXN741852963',
       passengerId: 'P001',
@@ -92,7 +91,7 @@ let mockTransactionsInit: Transaction[] = [
         fileNumber: 'V-987654',
         fileExpiryDate: '2024-12-31'
       },
-      passenger: mockPassengers.find(p => p.id === 'P001'),
+      passenger: mockPassengersData.find(p => p.id === 'P001'),
     },
     {
       id: 'TXN951753486',
@@ -111,7 +110,7 @@ let mockTransactionsInit: Transaction[] = [
       triggeredRules: [{ alert: 'Baggage Anomaly', acknowledged: true }],
       notes: 'Passenger states the bag was a gift. Contents cleared after secondary screening.',
       tripInformation: { type: 'landport', vehiclePlateNumber: 'UK-JS-123', vehicleType: 'Car', laneNumber: '3', vehicleMake: 'Range Rover' },
-      passenger: mockPassengers.find(p => p.id === 'P002'),
+      passenger: mockPassengersData.find(p => p.id === 'P002'),
     },
     {
       id: 'TXN357159852',
@@ -130,9 +129,13 @@ let mockTransactionsInit: Transaction[] = [
       triggeredRules: [{ alert: 'Watchlist Match', acknowledged: false }],
       notes: 'Passenger matches a name on the internal watchlist. Escalated to supervisor for identity verification.',
       tripInformation: { type: 'seaport', vesselName: 'Oceanic Explorer', voyageNumber: 'OE-555', berth: 'C4', lastPortOfCall: 'SGP' },
-      passenger: mockPassengers.find(p => p.id === 'P003'),
+      passenger: mockPassengersData.find(p => p.id === 'P003'),
     }
 ];
+
+let mockPassengers = [...mockPassengersData];
+let mockTransactions = [...mockTransactionsInit];
+
 let mockOfficerDesks: OfficerDesk[] = [
     { id: 'DESK-A1', name: 'Officer Desk A1', terminalId: 'TERM-DXB-1', zoneId: 'ZONE-A', ipAddress: '192.168.1.10', macAddress: '00:1A:2B:3C:4D:5E', status: 'Active', lastUpdatedAt: '2023-05-20T10:00:00Z', movementType: 'Entry', workflowId: 'WF-Standard', riskRuleId: 'RR-Low' },
     { id: 'DESK-A2', name: 'Officer Desk A2', terminalId: 'TERM-DXB-1', zoneId: 'ZONE-A', ipAddress: '192.168.1.11', macAddress: '00:1A:2B:3C:4D:5F', status: 'Inactive', lastUpdatedAt: '2023-05-19T11:30:00Z', movementType: 'Bidirectional', workflowId: 'WF-Standard', riskRuleId: 'RR-Low' },
@@ -263,11 +266,10 @@ let mockShifts: Shift[] = [
     { id: 'S004', name: 'Weekend Day', startTime: '09:00', endTime: '21:00', days: ['saturday', 'sunday'], status: 'Active', lastModified: '2023-05-19' },
 ];
 
-let allTransactions: Transaction[] = [...mockTransactionsInit];
 
-// Getters and setters should come after data definitions
+// Getters
 export const getMockPassengers = () => mockPassengers;
-export const getMockTransactions = () => allTransactions;
+export const getMockTransactions = () => mockTransactions;
 export const getMockOfficerDesks = () => mockOfficerDesks;
 export const getMockGates = () => mockGates;
 export const getMockMedia = () => mockMedia;
@@ -275,12 +277,13 @@ export const getMockWhitelist = () => mockWhitelist;
 export const getMockBlacklist = () => mockBlacklist;
 export const getMockShifts = () => mockShifts;
 
+
 // Setters
 export const setMockPassengers = (newPassengers: Passenger[]) => {
     mockPassengers = newPassengers;
 };
 export const setMockTransactions = (newTransactions: Transaction[]) => {
-    allTransactions = newTransactions;
+    mockTransactions = newTransactions;
 };
 export const setMockOfficerDesks = (newDesks: OfficerDesk[]) => {
     mockOfficerDesks = newDesks;
@@ -303,7 +306,6 @@ export const setMockShifts = (newShifts: Shift[]) => {
 
 // Re-export other mock data if needed
 export const mockData = {
-    users,
     mainDashboardData,
     dashboardStats,
     airportDashboardData,

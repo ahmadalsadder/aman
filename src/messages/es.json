@@ -907,5 +907,220 @@
       "title": "Access Denied",
       "description": "You do not have permission to view civil records for this module."
     }
+  },
+  "PassengersPage": {
+    "title": "Passenger Management",
+    "description": "View, search, and manage all passenger records.",
+    "addPassenger": "Add Passenger",
+    "stats": {
+      "total": "Total Passengers",
+      "totalDesc": "Total passenger records",
+      "active": "Active Passengers",
+      "activeDesc": "Passengers with an active status",
+      "flagged": "Flagged for Review",
+      "flaggedDesc": "Passengers flagged for review",
+      "highRisk": "High-Risk Individuals",
+      "highRiskDesc": "Passengers with high-risk level"
+    },
+    "filter": {
+      "title": "Search & Filter Passengers",
+      "namePlaceholder": "Name...",
+      "localizedNamePlaceholder": "Localized Name...",
+      "passportPlaceholder": "Passport Number...",
+      "visaPlaceholder": "Visa Number...",
+      "nationalityPlaceholder": "Nationality",
+      "searchNationality": "Search nationality...",
+      "noNationality": "No nationality found.",
+      "genderPlaceholder": "Gender",
+      "allGenders": "All Genders",
+      "male": "Male",
+      "female": "Female",
+      "other": "Other",
+      "statusPlaceholder": "Status",
+      "allStatuses": "All Statuses",
+      "riskPlaceholder": "Risk Level",
+      "allRisks": "All Risk Levels",
+      "fromDate": "From Date",
+      "toDate": "To Date",
+      "reset": "Reset",
+      "search": "Search"
+    },
+    "recordsTitle": "Passenger Records",
+    "export": "Export",
+    "deleteDialog": {
+      "title": "Are you absolutely sure?",
+      "description": "This action cannot be undone. This will permanently delete the record for {name}.",
+      "cancel": "Cancel",
+      "confirm": "Yes, Delete Passenger",
+      "successTitle": "Passenger Deleted",
+      "successDesc": "{name}'s record has been deleted.",
+      "errorTitle": "Delete Failed",
+      "errorDesc": "There was an error deleting the passenger data."
+    },
+    "columns": {
+        "passenger": "Passenger",
+        "nationality": "Nationality",
+        "lastEntry": "Last Entry",
+        "status": "Status",
+        "risk": "Risk Level"
+    }
+  },
+   "PassengerDetails": {
+    "personalInfo": "Personal Information",
+    "status": "Status",
+    "riskLevel": "Risk Level",
+    "gender": "Gender",
+    "dob": "Date of Birth",
+    "documentInfo": "Document Information",
+    "passportNo": "Passport No.",
+    "nationality": "Nationality",
+    "issuingCountry": "Issuing Country",
+    "issueDate": "Issue Date",
+    "expiryDate": "Expiry Date",
+    "nationalId": "National ID",
+    "visaInfo": "Visa / Residency Information",
+    "visaNo": "Visa No.",
+    "visaType": "Visa Type",
+    "visaExpiry": "Visa Expiry",
+    "residencyNo": "Residency File No.",
+    "close": "Close"
+  },
+  "PassengerForm": {
+    "addTitle": "Add New Passenger",
+    "addDescription": "Fill out the form below to add a new passenger record to the system.",
+    "editTitle": "Edit Passenger",
+    "editDescription": "Editing the record for {name}.",
+    "loading": "Loading passenger data...",
+    "notFound": "Passenger not found.",
+    "details": {
+      "title": "Personal Details",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "localizedName": "Localized Name",
+      "dob": "Date of Birth",
+      "gender": "Gender",
+      "male": "Male",
+      "female": "Female",
+      "other": "Other"
+    },
+    "status": {
+      "title": "Status & Risk",
+      "status": "Status",
+      "active": "Active",
+      "inactive": "Inactive",
+      "flagged": "Flagged",
+      "blocked": "Blocked",
+      "riskLevel": "Risk Level",
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High"
+    },
+    "passport": {
+      "title": "Passport & Nationality",
+      "passportNo": "Passport Number",
+      "nationality": "Nationality",
+      "selectNationality": "Select a nationality...",
+      "issuingCountry": "Issuing Country",
+      "selectIssuingCountry": "Select an issuing country...",
+      "issueDate": "Issue Date",
+      "expiryDate": "Expiry Date",
+      "nationalId": "National ID"
+    },
+    "visa": {
+      "title": "Visa & Residency",
+      "visaNo": "Visa Number",
+      "visaType": "Visa Type",
+      "selectVisaType": "Select visa type...",
+      "tourism": "Tourism",
+      "work": "Work",
+      "residency": "Residency",
+      "visaExpiry": "Visa Expiry Date",
+      "residencyNo": "Residency File No."
+    },
+    "photos": {
+      "title": "Photos & Attachments",
+      "description": "Upload passenger photos.",
+      "passportLabel": "Passport Photo",
+      "personalLabel": "Personal Photo"
+    },
+    "common": {
+      "cancel": "Cancel",
+      "save": "Save Changes",
+      "add": "Add Passenger",
+      "next": "Next Step",
+      "back": "Back"
+    },
+    "toast": {
+      "loadErrorTitle": "Error",
+      "loadErrorDesc": "Could not load passenger data.",
+      "updateSuccessTitle": "Passenger Updated",
+      "updateSuccessDesc": "{name}'s record has been successfully updated.",
+      "addSuccessTitle": "Passenger Added",
+      "addSuccessDesc": "{name} has been successfully added.",
+      "errorTitle": "Operation Failed",
+      "errorDesc": "There was an error saving the passenger data."
+    }
+  },
+  "WhitelistPage": {
+    "form": {
+        "addTitle": "Add to Whitelist",
+        "addDescription": "Grant special clearance to an individual.",
+        "editTitle": "Edit Whitelist Entry",
+        "editDescription": "Modify the details for {name}.",
+        "accessDenied": {
+            "title": "Access Denied",
+            "createDescription": "You do not have permission to add new entries to the whitelist for this module.",
+            "editDescription": "You do not have permission to edit whitelist entries for this module."
+        },
+        "search": {
+            "title": "Link to Existing Passenger (Recommended)",
+            "description": "Search for a passenger by their passport number to link this whitelist entry to their record.",
+            "placeholder": "Enter passport number...",
+            "button": "Search"
+        },
+        "toast": {
+            "passengerFoundTitle": "Passenger Found",
+            "passengerNotFoundTitle": "Passenger Not Found",
+            "passengerNotFoundDesc": "No existing record found. Please fill details manually.",
+            "addSuccessTitle": "Entry Added",
+            "addSuccessDesc": "{name} has been added to the whitelist.",
+            "updateSuccessTitle": "Entry Updated",
+            "updateSuccessDesc": "{name}'s whitelist entry has been updated.",
+            "errorTitle": "Operation Failed",
+            "errorDesc": "An error occurred. Please try again.",
+            "loadError": "Failed to load whitelist entry data."
+        },
+        "common": {
+            "cancel": "Cancel",
+            "save": "Save Entry"
+        },
+        "details": {
+            "title": "Whitelist Details",
+            "description": "Enter the details for the individual to be whitelisted.",
+            "linkedTitle": "Passenger Record Linked",
+            "linkedDesc": "The following fields are pre-filled from {name}'s record and cannot be changed here.",
+            "name": "Full Name (English)",
+            "localizedName": "Full Name (Localized)",
+            "passportNumber": "Passport Number",
+            "passportExpiry": "Passport Expiry",
+            "nationality": "Nationality",
+            "selectNationality": "Select a nationality...",
+            "reason": "Reason for Whitelisting",
+            "pickDate": "Pick a date"
+        },
+        "validity": {
+            "title": "Validity & Status",
+            "status": "Status",
+            "active": "Active",
+            "expired": "Expired",
+            "revoked": "Revoked",
+            "validFrom": "Valid From",
+            "validUntil": "Valid Until"
+        },
+        "attachments": {
+            "title": "Supporting Evidence",
+            "documentLabel": "Official Document (e.g., Diplomatic Note)"
+        }
+    }
   }
 }

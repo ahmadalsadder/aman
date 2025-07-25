@@ -1062,5 +1062,67 @@
       "errorTitle": "Operation Failed",
       "errorDesc": "There was an error saving the passenger data."
     }
+  },
+  "WhitelistPage": {
+    "form": {
+        "addTitle": "Add to Whitelist",
+        "addDescription": "Grant special clearance to an individual.",
+        "editTitle": "Edit Whitelist Entry",
+        "editDescription": "Modify the details for {name}.",
+        "accessDenied": {
+            "title": "Access Denied",
+            "createDescription": "You do not have permission to add new entries to the whitelist for this module.",
+            "editDescription": "You do not have permission to edit whitelist entries for this module."
+        },
+        "search": {
+            "title": "Link to Existing Passenger (Recommended)",
+            "description": "Search for a passenger by their passport number to link this whitelist entry to their record.",
+            "placeholder": "Enter passport number...",
+            "button": "Search"
+        },
+        "toast": {
+            "passengerFoundTitle": "Passenger Found",
+            "passengerNotFoundTitle": "Passenger Not Found",
+            "passengerNotFoundDesc": "No existing record found. Please fill details manually.",
+            "addSuccessTitle": "Entry Added",
+            "addSuccessDesc": "{name} has been added to the whitelist.",
+            "updateSuccessTitle": "Entry Updated",
+            "updateSuccessDesc": "{name}'s whitelist entry has been updated.",
+            "errorTitle": "Operation Failed",
+            "errorDesc": "An error occurred. Please try again.",
+            "loadError": "Failed to load whitelist entry data."
+        },
+        "common": {
+            "cancel": "Cancel",
+            "save": "Save Entry"
+        },
+        "details": {
+            "title": "Whitelist Details",
+            "description": "Enter the details for the individual to be whitelisted.",
+            "linkedTitle": "Passenger Record Linked",
+            "linkedDesc": "The following fields are pre-filled from {name}'s record and cannot be changed here.",
+            "name": "Full Name (English)",
+            "localizedName": "Full Name (Localized)",
+            "passportNumber": "Passport Number",
+            "passportExpiry": "Passport Expiry",
+            "nationality": "Nationality",
+            "selectNationality": "Select a nationality...",
+            "reason": "Reason for Whitelisting",
+            "pickDate": "Pick a date"
+        },
+        "validity": {
+            "title": "Validity & Status",
+            "status": "Status",
+            "active": "Active",
+            "expired": "Expired",
+            "revoked": "Revoked",
+            "validFrom": "Valid From",
+            "validUntil": "Valid Until"
+        },
+        "attachments": {
+            "title": "Supporting Evidence",
+            "documentLabel": "Official Document (e.g., Diplomatic Note)"
+        }
+    }
   }
 }

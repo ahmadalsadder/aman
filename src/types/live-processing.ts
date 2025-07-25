@@ -204,11 +204,15 @@ export interface WhitelistEntry {
   name: string;
   nationality: string;
   status: 'Active' | 'Expired' | 'Revoked';
-  dateAdded: string;
+  dateAdded: string; // validFrom
   validUntil: string;
   addedBy: string;
   reason: string;
   attachmentUrl?: string;
+  // new fields for more details
+  localizedName?: string;
+  passportNumber?: string;
+  passportExpiryDate?: string;
 }
 
 export interface BlacklistEntry {

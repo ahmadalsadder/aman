@@ -281,6 +281,7 @@ export function ManualEntryForm() {
                                         configs={attachmentConfigs}
                                         onFilesChange={(files) => form.setValue('attachments', files)}
                                         disabled={!!searchedPassenger}
+                                        outputType="base64"
                                     />
                                 </FormControl>
                                 <FormMessage />

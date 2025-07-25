@@ -186,6 +186,7 @@ function SingleUploader({ config, value, onFileChange, outputType, disabled }: {
     const fileSrc = useMemo(() => {
         if (!value) return null;
         if (typeof value.content === 'string') return value.content;
+        // Cannot preview ArrayBuffer directly, would need conversion to blob url
         return null;
     }, [value]);
 
@@ -253,10 +254,10 @@ function SingleUploader({ config, value, onFileChange, outputType, disabled }: {
                 </Card>
             )}
 
-            {!isLoading && value && fileSrc && (
+            {!isLoading && value && (
                 <Card className="flex items-center gap-4 p-2">
                     <div className="flex h-12 w-12 items-center justify-center rounded-md bg-secondary flex-shrink-0">
-                         {fileType === 'image' ? (
+                         {fileType === 'image' && fileSrc ? (
                              <Image src={fileSrc} alt={config.label} width={48} height={48} className="h-full w-full rounded-md object-cover" />
                         ) : (
                             <FileTypeIcon className={cn("h-8 w-8", fileTypeIconProps.className)} />
@@ -267,14 +268,16 @@ function SingleUploader({ config, value, onFileChange, outputType, disabled }: {
                         <p className="text-xs text-muted-foreground">{formatFileSize(value.fileInfo.size)}</p>
                     </div>
                     <div className="flex-shrink-0">
-                        <Dialog>
-                             <TooltipProvider>
-                                <Tooltip><TooltipTrigger asChild><DialogTrigger asChild><Button size="icon" variant="ghost"><Eye/></Button></DialogTrigger></TooltipTrigger><TooltipContent><p>View</p></TooltipContent></Tooltip>
-                                <Tooltip><TooltipTrigger asChild><a href={fileSrc} download={value.fileInfo.name}><Button size="icon" variant="ghost" asChild><span className="flex items-center justify-center"><Download/></span></Button></a></TooltipTrigger><TooltipContent><p>Download</p></TooltipContent></Tooltip>
-                                <Tooltip><TooltipTrigger asChild><Button size="icon" variant="ghost" onClick={handleDelete}><Trash2 className="text-destructive"/></Button></TooltipTrigger><TooltipContent><p>Delete</p></TooltipContent></Tooltip>
-                            </TooltipProvider>
-                            <AttachmentViewerDialog src={fileSrc!} name={value.fileInfo.name} mimeType={value.fileInfo.type} />
-                        </Dialog>
+                         <TooltipProvider>
+                             {fileSrc && (
+                                <Dialog>
+                                    <Tooltip><TooltipTrigger asChild><DialogTrigger asChild><Button size="icon" variant="ghost"><Eye/></Button></DialogTrigger></Tooltip><TooltipContent><p>View</p></TooltipContent></Tooltip>
+                                    <AttachmentViewerDialog src={fileSrc!} name={value.fileInfo.name} mimeType={value.fileInfo.type} />
+                                </Dialog>
+                             )}
+                            {fileSrc && <Tooltip><TooltipTrigger asChild><a href={fileSrc} download={value.fileInfo.name}><Button size="icon" variant="ghost" asChild><span className="flex items-center justify-center"><Download/></span></Button></a></TooltipTrigger><TooltipContent><p>Download</p></TooltipContent></Tooltip>}
+                            <Tooltip><TooltipTrigger asChild><Button size="icon" variant="ghost" onClick={handleDelete}><Trash2 className="text-destructive"/></Button></TooltipTrigger><TooltipContent><p>Delete</p></TooltipContent></Tooltip>
+                        </TooltipProvider>
                     </div>
                 </Card>
             )}

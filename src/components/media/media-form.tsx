@@ -11,13 +11,14 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import type { Media, MediaFile } from '@/types/live-processing';
 import { nanoid } from 'nanoid';
 import { PlusCircle, Trash2, Loader2 } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 const languages = [
   { value: 'English', label: 'English' },
@@ -32,9 +33,9 @@ const mediaFileSchema = z.object({
   language: z.string().min(1, "Language is required."),
   fileName: z.string().min(1, "File is required."),
   fileType: z.string().min(1, "File type is required."),
-  fileUrl: z.string(), // No longer required, can be generated on server if needed
-  content: z.string().optional(), // For base64
-  fileBytes: z.instanceof(ArrayBuffer).optional(), // For raw bytes
+  fileUrl: z.string(),
+  content: z.string().optional(),
+  fileBytes: z.instanceof(ArrayBuffer).optional(),
 });
 
 const formSchema = z.object({
@@ -65,6 +66,8 @@ const ALLOWED_MIME_TYPES = {
     Video: 'video/*',
 };
 
+type OutputType = 'bytes' | 'base64';
+
 function MandatoryFieldLabel({ children }: { children: React.ReactNode }) {
     return <FormLabel>{children} <span className="text-destructive">*</span></FormLabel>;
 }
@@ -75,6 +78,7 @@ export function MediaForm({ onSave, isLoading, mediaToEdit }: MediaFormProps) {
   const isEditMode = !!mediaToEdit;
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [currentLanguage, setCurrentLanguage] = React.useState('English');
+  const [outputType, setOutputType] = useState<OutputType>('bytes');
 
   const form = useForm<MediaFormValues>({
     resolver: zodResolver(formSchema),
@@ -120,19 +124,30 @@ export function MediaForm({ onSave, isLoading, mediaToEdit }: MediaFormProps) {
 
         const reader = new FileReader();
         reader.onload = () => {
-             append({
+             const newFile: MediaFile = {
                 id: nanoid(),
                 language: currentLanguage,
                 fileName: file.name,
                 fileType: file.type,
                 fileUrl: '', // This can be generated server-side
-                fileBytes: reader.result as ArrayBuffer,
-            });
+             };
+
+             if (outputType === 'bytes') {
+                newFile.fileBytes = reader.result as ArrayBuffer;
+             } else {
+                newFile.content = reader.result as string;
+             }
+             append(newFile);
         };
         reader.onerror = () => {
             toast({ variant: 'destructive', title: 'File Read Error', description: 'Could not process the selected file.' });
         }
-        reader.readAsArrayBuffer(file);
+
+        if (outputType === 'bytes') {
+            reader.readAsArrayBuffer(file);
+        } else {
+            reader.readAsDataURL(file);
+        }
     }
      if (event.target) {
         event.target.value = '';
@@ -159,8 +174,21 @@ export function MediaForm({ onSave, isLoading, mediaToEdit }: MediaFormProps) {
         </Card>
 
         <Card>
-            <CardHeader><CardTitle>Media Files</CardTitle></CardHeader>
+            <CardHeader><CardTitle>Media Files</CardTitle><CardDescription>Attach one or more files for different languages.</CardDescription></CardHeader>
             <CardContent>
+                 <div className="mb-4 space-y-2">
+                    <Label>File Output Format</Label>
+                    <RadioGroup defaultValue="bytes" onValueChange={(value: string) => setOutputType(value as OutputType)} className="flex items-center gap-4">
+                         <div className="flex items-center space-x-2">
+                           <RadioGroupItem value="bytes" id="r-bytes" />
+                           <Label htmlFor="r-bytes">File Bytes (Default)</Label>
+                         </div>
+                         <div className="flex items-center space-x-2">
+                           <RadioGroupItem value="base64" id="r-base64" />
+                           <Label htmlFor="r-base64">Base64 String</Label>
+                         </div>
+                    </RadioGroup>
+                 </div>
                  <div className="flex items-end gap-2 mb-4">
                     <div className="flex-grow">
                         <Label>Language</Label>

@@ -1,11 +1,9 @@
 
-
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
 import type { ColumnDef } from '@tanstack/react-table';
 import type { WhitelistEntry } from '@/types/live-processing';
-import { mockWhitelist } from '@/lib/mock-data';
 import { DataTable } from '@/components/shared/data-table';
 import { GradientPageHeader } from '@/components/shared/gradient-page-header';
 import { Button } from '@/components/ui/button';
@@ -30,9 +28,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import type { Module, Permission } from '@/types';
 import { useAuth } from '@/hooks/use-auth';
-
-
-const WHITELIST_STORAGE_KEY = 'guardian-gate-whitelist';
+import { api } from '@/lib/api';
 
 const statusColors: { [key: string]: string } = {
   Active: 'bg-green-500/20 text-green-700 border-green-500/30',
@@ -68,34 +64,29 @@ export function WhitelistPage({ module }: WhitelistPageProps) {
 
   useEffect(() => {
     if(!canView) return;
-    try {
-      const storedWhitelist = localStorage.getItem(WHITELIST_STORAGE_KEY);
-      if (storedWhitelist) {
-        setWhitelist(JSON.parse(storedWhitelist));
-      } else {
-        localStorage.setItem(WHITELIST_STORAGE_KEY, JSON.stringify(mockWhitelist));
-        setWhitelist(mockWhitelist);
-      }
-    } catch (error) {
-      console.error('Failed to access whitelist from localStorage', error);
-      setWhitelist(mockWhitelist);
-    }
+    const fetchWhitelist = async () => {
+        const result = await api.get<WhitelistEntry[]>('/data/whitelist');
+        if (result.isSuccess && result.data) {
+            setWhitelist(result.data);
+        }
+    };
+    fetchWhitelist();
   }, [canView]);
 
-  const handleDeleteEntry = () => {
+  const handleDeleteEntry = async () => {
     if (!entryToDelete) return;
-    try {
-      const updatedWhitelist = whitelist.filter(r => r.id !== entryToDelete.id);
-      localStorage.setItem(WHITELIST_STORAGE_KEY, JSON.stringify(updatedWhitelist));
-      setWhitelist(updatedWhitelist);
+
+    const result = await api.post<WhitelistEntry>('/data/whitelist/delete', { id: entryToDelete.id });
+    
+    if (result.isSuccess) {
+      setWhitelist(prev => prev.filter(r => r.id !== entryToDelete.id));
       toast({
         title: 'Entry Deleted',
         description: `Whitelist entry for "${entryToDelete.name}" has been permanently deleted.`,
         variant: 'info',
       });
       setEntryToDelete(null);
-    } catch (error) {
-      console.error('Failed to delete whitelist entry from localStorage', error);
+    } else {
       toast({
         title: 'Delete Failed',
         description: 'There was an error deleting the whitelist entry.',
@@ -145,7 +136,7 @@ export function WhitelistPage({ module }: WhitelistPageProps) {
             <DropdownMenuItem onClick={() => setEntryToView(row.original)}><Eye className="mr-2 h-4 w-4 text-primary" /><span>View details</span></DropdownMenuItem>
             {row.original.passengerId && (
                 <DropdownMenuItem asChild>
-                    <Link href={`/passengers/${row.original.passengerId}/edit`}>
+                    <Link href={`/${module}/passengers/${row.original.passengerId}/edit`}>
                         <User className="mr-2 h-4 w-4 text-primary" />
                         <span>View Passenger</span>
                     </Link>
@@ -235,6 +226,7 @@ export function WhitelistPage({ module }: WhitelistPageProps) {
       </Card>
       
       <WhitelistDetailsSheet
+        module={module}
         entry={entryToView}
         isOpen={!!entryToView}
         onOpenChange={(isOpen) => !isOpen && setEntryToView(null)}

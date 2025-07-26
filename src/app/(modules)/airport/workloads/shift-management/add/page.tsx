@@ -45,8 +45,8 @@ export default function AddShiftPage() {
                 description: result.errors?.[0]?.message || t('toast.errorDesc'),
                 variant: 'destructive',
             });
+            setIsLoading(false);
         }
-        setIsLoading(false);
     };
     
     if (!canCreate) {

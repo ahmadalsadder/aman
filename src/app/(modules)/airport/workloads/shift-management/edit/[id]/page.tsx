@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { ShiftForm, type ShiftFormValues } from '@/components/workloads/shift-form';
@@ -66,8 +67,8 @@ export default function EditShiftPage() {
                 description: result.errors?.[0]?.message || t('toast.errorDesc'),
                 variant: 'destructive',
             });
+            setIsLoading(false);
         }
-        setIsLoading(false);
     };
 
     if (loading) {

@@ -1060,9 +1060,9 @@
       },
       "toast": {
         "addSuccessTitle": "Shift Added",
-        "addSuccessDesc": "New shift '{name}' has been added.",
+        "addSuccessDesc": "A new shift has been successfully added.",
         "updateSuccessTitle": "Shift Updated",
-        "updateSuccessDesc": "Shift '{name}' has been successfully updated.",
+        "updateSuccessDesc": "The shift has been successfully updated.",
         "errorTitle": "Save Failed",
         "errorDesc": "There was an error saving the shift data."
       }

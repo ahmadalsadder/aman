@@ -56,7 +56,7 @@ export default function EditShiftPage() {
         if (result.isSuccess && result.data) {
             toast({
                 title: t('toast.updateSuccessTitle'),
-                description: t('toast.updateSuccessDesc', { name: result.data.name }),
+                description: t('toast.updateSuccessDesc'),
                 variant: 'success',
             });
             router.push(`/${module}/workloads/shift-management`);

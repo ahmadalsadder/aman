@@ -35,7 +35,7 @@ export default function AddShiftPage() {
         if (result.isSuccess && result.data) {
             toast({
                 title: t('toast.addSuccessTitle'),
-                description: t('toast.addSuccessDesc', { name: result.data.name }),
+                description: t('toast.addSuccessDesc'),
                 variant: 'success',
             });
             router.push(`/${module}/workloads/shift-management`);

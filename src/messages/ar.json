@@ -1,5 +1,4 @@
 
-
 {
   "LoginPage": {
     "title": "مرحبًا بك في بوابة الحماية",
@@ -1059,9 +1058,9 @@
       },
       "toast": {
         "addSuccessTitle": "تمت إضافة الوردية",
-        "addSuccessDesc": "تمت إضافة وردية جديدة '{name}'.",
+        "addSuccessDesc": "تمت إضافة وردية جديدة بنجاح.",
         "updateSuccessTitle": "تم تحديث الوردية",
-        "updateSuccessDesc": "تم تحديث وردية '{name}' بنجاح.",
+        "updateSuccessDesc": "تم تحديث الوردية بنجاح.",
         "errorTitle": "فشل الحفظ",
         "errorDesc": "حدث خطأ أثناء حفظ بيانات الوردية."
       }

@@ -25,7 +25,8 @@ export default function EditAirportAssignOfficerPage() {
     const module = 'airport';
     const id = params.id;
 
-    const [isLoading, setIsLoading] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [pageData, setPageData] = useState<{
         assignment: OfficerAssignment;
         officers: User[];
@@ -38,10 +39,13 @@ export default function EditAirportAssignOfficerPage() {
     const canEdit = hasPermission([`${module}:workload:view`]);
 
     useEffect(() => {
-        if (!canEdit || !id) return;
+        if (!canEdit || !id) {
+            setLoading(false);
+            return;
+        }
 
         const fetchData = async () => {
-            setIsLoading(true);
+            setLoading(true);
             try {
                 const [assignmentRes, officersRes, shiftsRes, portsRes, terminalsRes, zonesRes] = await Promise.all([
                     api.get<{ assignment: OfficerAssignment }>(`/data/officer-assignments/${id}`),
@@ -71,7 +75,7 @@ export default function EditAirportAssignOfficerPage() {
                     variant: 'destructive',
                 });
             } finally {
-                setIsLoading(false);
+                setLoading(false);
             }
         };
 
@@ -79,7 +83,7 @@ export default function EditAirportAssignOfficerPage() {
     }, [id, canEdit, module, t, toast]);
 
     const handleSave = async (formData: AssignmentFormValues) => {
-        setIsLoading(true);
+        setIsSaving(true);
          const assignmentData = {
             id,
             ...formData,
@@ -102,9 +106,18 @@ export default function EditAirportAssignOfficerPage() {
                 description: result.errors?.[0]?.message || t('toast.errorDesc'),
                 variant: 'destructive',
             });
-            setIsLoading(false);
+            setIsSaving(false);
         }
     };
+    
+    if (loading) {
+        return (
+            <div className="space-y-6">
+                <Skeleton className="h-24" />
+                <Skeleton className="h-96" />
+            </div>
+        );
+    }
     
     if (!canEdit) {
         return (
@@ -140,12 +153,10 @@ export default function EditAirportAssignOfficerPage() {
                 description={t('editDescription')}
                 icon={FilePenLine}
             />
-            {isLoading && !pageData && <Skeleton className="h-96 w-full" />}
-            {!isLoading && !pageData && <p className="text-destructive">Failed to load data.</p>}
             {pageData && (
                 <AssignmentForm 
                     onSave={handleSave}
-                    isLoading={isLoading}
+                    isLoading={isSaving}
                     pageData={pageData}
                     assignment={pageData.assignment}
                 />

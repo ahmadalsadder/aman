@@ -23,23 +23,26 @@ export default function AddAirportAssignOfficerPage() {
     const tNav = useTranslations('Navigation');
     const module = 'airport';
 
-    const [isLoading, setIsLoading] = useState(false);
-    const [loadingError, setLoadingError] = useState<string | null>(null);
+    const [isSaving, setIsSaving] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [pageData, setPageData] = useState<{
         officers: User[];
         shifts: Shift[];
         ports: Port[],
-        terminals: Terminal[],
+        terminals: Terminal[];
         zones: Zone[],
     } | null>(null);
     
     const canCreate = hasPermission([`${module}:workload:view`]);
 
     useEffect(() => {
-        if (!canCreate) return;
+        if (!canCreate) {
+            setLoading(false);
+            return;
+        }
 
         const fetchData = async () => {
-            setIsLoading(true);
+            setLoading(true);
             try {
                 const [officersRes, shiftsRes, portsRes, terminalsRes, zonesRes] = await Promise.all([
                     api.get<User[]>('/data/users?role=officer'),
@@ -61,14 +64,13 @@ export default function AddAirportAssignOfficerPage() {
                     throw new Error('Failed to load required configuration data.');
                 }
             } catch (error) {
-                setLoadingError('Failed to load page data. Please try again later.');
                  toast({
                     title: t('toast.loadErrorTitle'),
-                    description: t('toast.loadErrorDesc'),
+                    description: (error as Error).message || t('toast.loadErrorDesc'),
                     variant: 'destructive',
                 });
             } finally {
-                setIsLoading(false);
+                setLoading(false);
             }
         };
 
@@ -76,7 +78,7 @@ export default function AddAirportAssignOfficerPage() {
     }, [canCreate, module, t, toast]);
 
     const handleSave = async (formData: AssignmentFormValues) => {
-        setIsLoading(true);
+        setIsSaving(true);
         const assignmentData = {
             ...formData,
             assignmentDate: format(formData.assignmentDate, 'yyyy-MM-dd'),
@@ -98,10 +100,19 @@ export default function AddAirportAssignOfficerPage() {
                 description: result.errors?.[0]?.message || t('toast.errorDesc'),
                 variant: 'destructive',
             });
-            setIsLoading(false);
+            setIsSaving(false);
         }
     };
     
+    if (loading) {
+        return (
+            <div className="space-y-6">
+                <Skeleton className="h-24" />
+                <Skeleton className="h-96" />
+            </div>
+        );
+    }
+
     if (!canCreate) {
         return (
             <div className="flex h-full w-full flex-col items-center justify-center gap-4 text-center">
@@ -136,12 +147,10 @@ export default function AddAirportAssignOfficerPage() {
                 description={t('addDescription')}
                 icon={PlusCircle}
             />
-            {isLoading && !pageData && <Skeleton className="h-96 w-full" />}
-            {loadingError && <p className="text-destructive">{loadingError}</p>}
             {pageData && (
                 <AssignmentForm 
                     onSave={handleSave}
-                    isLoading={isLoading}
+                    isLoading={isSaving}
                     pageData={pageData}
                 />
             )}

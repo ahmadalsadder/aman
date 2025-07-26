@@ -1,5 +1,9 @@
 
 
+export * from './live-processing';
+export * from './configuration';
+export * from './workload';
+
 export type Role = 'admin' | 'auditor' | 'viewer' | 'shiftsupervisor' | 'control-room' | 'analyst' | 'officer';
 export type Module = 'landport' | 'seaport' | 'airport' | 'egate' | 'analyst' | 'shiftsupervisor' | 'control-room' | 'duty-manager' | 'users' | 'settings' | 'passengers' | 'configuration';
 export type Permission = 
@@ -60,6 +64,11 @@ export type Permission =
   | 'configuration:dashboard:view'
   | 'configuration:country-language:view' | 'configuration:country-language:edit'
   | 'configuration:country-passport:view' | 'configuration:country-passport:edit'
+  | 'configuration:ports:view' | 'configuration:ports:create' | 'configuration:ports:edit' | 'configuration:ports:delete'
+  | 'configuration:terminals:view' | 'configuration:terminals:create' | 'configuration:terminals:edit' | 'configuration:terminals:delete'
+  | 'configuration:zones:view' | 'configuration:zones:create' | 'configuration:zones:edit' | 'configuration:zones:delete'
+  | 'configuration:machines:view' | 'configuration:machines:create' | 'configuration:machines:edit' | 'configuration:machines:delete'
+  | 'configuration:system-messages:view' | 'configuration:system-messages:create' | 'configuration:system-messages:edit' | 'configuration:system-messages:delete'
   | 'airport:transactions:view' | 'egate:transactions:view'
   | 'landport:transactions:view'
   | 'seaport:transactions:view'
@@ -104,51 +113,4 @@ export interface User {
   token: string;
   modules: Module[];
   permissions: Permission[];
-}
-
-// Configuration Types
-export type PortType = 'Airport' | 'Seaport' | 'Land Border';
-
-export interface Port {
-    id: string;
-    name: string;
-    shortName?: string;
-    localizedName?: string;
-    city: string;
-    country: string;
-    type: PortType;
-    status: 'Active' | 'Inactive';
-    lastModified: string;
-    createdBy: string;
-    address?: string;
-    localizedAddress?: string;
-}
-
-export interface Terminal {
-    id: string;
-    name: string;
-    portId: string;
-}
-
-export interface Zone {
-    id: string;
-    name: string;
-    terminalId: string;
-}
-
-export interface Machine {
-    id: string;
-    name: string;
-    type: 'Scanner' | 'Biometric' | 'Camera';
-    ipAddress: string;
-    macAddress: string;
-    status: 'Online' | 'Offline' | 'Maintenance';
-    portId: string;
-    terminalId: string;
-    zoneId: string;
-    portName?: string;
-    terminalName?: string;
-    zoneName?: string;
-    lastModified: string;
-    createdBy: string;
 }

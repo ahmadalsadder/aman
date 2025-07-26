@@ -3,7 +3,7 @@
 import type { Passenger, Transaction, OfficerDesk, Gate, Media, WhitelistEntry, BlacklistEntry, OfficerAssignment } from "@/types/live-processing";
 import type { Shift, DayOfWeek } from "@/types/workload";
 import { Plane, Car, Ship } from "lucide-react";
-import type { Port, Terminal, Zone, Workflow, RiskProfile, User, CountryLanguageMapping, CountryPassportMapping } from '@/types';
+import type { Port, Terminal, Zone, Workflow, RiskProfile, User, CountryLanguageMapping, CountryPassportMapping, Machine } from '@/types';
 
 // This is the correct order for initialization.
 // Define data first, then functions that use it.
@@ -145,26 +145,33 @@ let mockOfficerDesks: OfficerDesk[] = [
     { id: 'DESK-L1', name: 'Officer Desk L1', terminalId: 'TERM-HE-1', zoneId: 'ZONE-LA', ipAddress: '172.16.0.100', macAddress: 'BB:CC:DD:EE:FF:00', status: 'Closed', lastUpdatedAt: '2023-04-10T15:00:00Z', movementType: 'Bidirectional', workflowId: 'WF-Standard', riskRuleId: 'RR-High' },
 ];
 
-export const mockPorts: Port[] = [
-    { id: 'PORT-DXB', name: 'Dubai International Airport', type: 'Airport' },
-    { id: 'PORT-PC', name: 'Port Rashid', type: 'Seaport' },
-    { id: 'PORT-HE', name: 'Hatta Land Port', type: 'Landport' },
+let mockPorts: Port[] = [
+    { id: 'PORT-DXB', name: 'Dubai International Airport', city: 'Dubai', country: 'United Arab Emirates', type: 'Airport', status: 'Active', lastModified: '2023-05-20T10:00:00Z', createdBy: 'Admin User' },
+    { id: 'PORT-PC', name: 'Port Rashid', city: 'Dubai', country: 'United Arab Emirates', type: 'Seaport', status: 'Active', lastModified: '2023-05-20T10:00:00Z', createdBy: 'Admin User' },
+    { id: 'PORT-HE', name: 'Hatta Land Port', city: 'Hatta', country: 'United Arab Emirates', type: 'Landport', status: 'Inactive', lastModified: '2023-05-20T10:00:00Z', createdBy: 'Admin User' },
 ];
 
-export const mockTerminals: Terminal[] = [
-    { id: 'TERM-DXB-1', name: 'Terminal 1', portId: 'PORT-DXB' },
-    { id: 'TERM-DXB-2', name: 'Terminal 2', portId: 'PORT-DXB' },
-    { id: 'TERM-DXB-3', name: 'Terminal 3', portId: 'PORT-DXB' },
-    { id: 'TERM-PC-1', name: 'Cruise Terminal 1', portId: 'PORT-PC' },
-    { id: 'TERM-PC-2', name: 'Cruise Terminal 2', portId: 'PORT-PC' },
-    { id: 'TERM-HE-1', name: 'Main Terminal', portId: 'PORT-HE' },
+let mockTerminals: Terminal[] = [
+    { id: 'TERM-DXB-1', name: 'Terminal 1', portId: 'PORT-DXB', status: 'Active', lastModified: '2023-05-20T10:00:00Z', createdBy: 'Admin User' },
+    { id: 'TERM-DXB-2', name: 'Terminal 2', portId: 'PORT-DXB', status: 'Active', lastModified: '2023-05-20T10:00:00Z', createdBy: 'Admin User' },
+    { id: 'TERM-DXB-3', name: 'Terminal 3', portId: 'PORT-DXB', status: 'Active', lastModified: '2023-05-20T10:00:00Z', createdBy: 'Admin User' },
+    { id: 'TERM-PC-1', name: 'Cruise Terminal 1', portId: 'PORT-PC', status: 'Active', lastModified: '2023-05-20T10:00:00Z', createdBy: 'Admin User' },
+    { id: 'TERM-PC-2', name: 'Cruise Terminal 2', portId: 'PORT-PC', status: 'Inactive', lastModified: '2023-05-20T10:00:00Z', createdBy: 'Admin User' },
+    { id: 'TERM-HE-1', name: 'Main Terminal', portId: 'PORT-HE', status: 'Active', lastModified: '2023-05-20T10:00:00Z', createdBy: 'Admin User' },
 ];
 
-export const mockZones: Zone[] = [
-    { id: 'ZONE-A', name: 'Zone A', terminalId: 'TERM-DXB-1' },
-    { id: 'ZONE-B', name: 'Zone B', terminalId: 'TERM-DXB-2' },
-    { id: 'ZONE-SA', name: 'Arrivals', terminalId: 'TERM-PC-1' },
-    { id: 'ZONE-LA', name: 'Commercial Lanes', terminalId: 'TERM-HE-1' },
+let mockZones: Zone[] = [
+    { id: 'ZONE-A', name: 'Zone A', terminalId: 'TERM-DXB-1', status: 'Active', lastModified: '2023-05-20T10:00:00Z', createdBy: 'Admin User' },
+    { id: 'ZONE-B', name: 'Zone B', terminalId: 'TERM-DXB-2', status: 'Active', lastModified: '2023-05-20T10:00:00Z', createdBy: 'Admin User' },
+    { id: 'ZONE-SA', name: 'Arrivals', terminalId: 'TERM-PC-1', status: 'Active', lastModified: '2023-05-20T10:00:00Z', createdBy: 'Admin User' },
+    { id: 'ZONE-LA', name: 'Commercial Lanes', terminalId: 'TERM-HE-1', status: 'Active', lastModified: '2023-05-20T10:00:00Z', createdBy: 'Admin User' },
+];
+
+let mockMachines: Machine[] = [
+    { id: 'MACHINE-01', name: 'Passport Scanner A1-1', type: 'Scanner', ipAddress: '192.168.1.200', macAddress: '1A:2B:3C:4D:5E:6F', status: 'Online', portId: 'PORT-DXB', terminalId: 'TERM-DXB-1', zoneId: 'ZONE-A', lastModified: '2023-05-21', createdBy: 'Admin User' },
+    { id: 'MACHINE-02', name: 'Face Camera A1-1', type: 'Camera', ipAddress: '192.168.1.201', macAddress: '1A:2B:3C:4D:5E:70', status: 'Online', portId: 'PORT-DXB', terminalId: 'TERM-DXB-1', zoneId: 'ZONE-A', lastModified: '2023-05-21', createdBy: 'Admin User' },
+    { id: 'MACHINE-03', name: 'Biometric Reader B2-1', type: 'Biometric', ipAddress: '192.168.2.200', macAddress: '1A:2B:3C:4D:5E:71', status: 'Offline', portId: 'PORT-DXB', terminalId: 'TERM-DXB-2', zoneId: 'ZONE-B', lastModified: '2023-05-20', createdBy: 'Admin User' },
+    { id: 'MACHINE-04', name: 'Seaport Scanner S1-1', type: 'Scanner', ipAddress: '10.0.1.50', macAddress: 'DE:AD:BE:EF:00:01', status: 'Maintenance', portId: 'PORT-PC', terminalId: 'TERM-PC-1', zoneId: 'ZONE-SA', lastModified: '2023-05-19', createdBy: 'Admin User' },
 ];
 
 export const mockWorkflows: Workflow[] = [
@@ -292,12 +299,16 @@ export const mockCountryPassportMapping: CountryPassportMapping[] = [
 export const getMockPassengers = () => mockPassengers;
 export { getMockTransactions };
 export const getMockOfficerDesks = () => mockOfficerDesks;
+export const getMockPorts = () => mockPorts;
+export const getMockTerminals = () => mockTerminals;
+export const getMockZones = () => mockZones;
 export const getMockGates = () => mockGates;
 export const getMockMedia = () => mockMedia;
 export const getMockWhitelist = () => mockWhitelist;
 export const getMockBlacklist = () => mockBlacklist;
 export const getMockShifts = () => mockShifts;
 export const getMockOfficerAssignments = () => mockOfficerAssignments;
+export const getMockMachines = () => mockMachines;
 
 
 // Setters
@@ -327,6 +338,18 @@ export const setMockShifts = (newShifts: Shift[]) => {
 };
 export const setMockOfficerAssignments = (newAssignments: OfficerAssignment[]) => {
     mockOfficerAssignments = newAssignments;
+};
+export const setMockMachines = (newMachines: Machine[]) => {
+    mockMachines = newMachines;
+};
+export const setMockPorts = (newPorts: Port[]) => {
+    mockPorts = newPorts;
+};
+export const setMockTerminals = (newTerminals: Terminal[]) => {
+    mockTerminals = newTerminals;
+};
+export const setMockZones = (newZones: Zone[]) => {
+    mockZones = newZones;
 };
 
 

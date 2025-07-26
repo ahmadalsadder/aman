@@ -1,4 +1,5 @@
 
+
 export type PortType = 'Airport' | 'Seaport' | 'Landport';
 
 export interface Port {
@@ -20,31 +21,47 @@ export interface Terminal {
     id: string;
     name: string;
     portId: string;
+    status: 'Active' | 'Inactive';
+    lastModified: string;
+    createdBy: string;
 }
 
 export interface Zone {
     id: string;
     name: string;
     terminalId: string;
+    status: 'Active' | 'Inactive';
+    lastModified: string;
+    createdBy: string;
 }
 
-export interface OfficerDesk {
+export interface Machine {
     id: string;
     name: string;
-    terminalId: string;
-    zoneId: string;
+    type: 'Scanner' | 'Biometric' | 'Camera';
     ipAddress: string;
     macAddress: string;
-    status: 'Active' | 'Inactive' | 'Closed';
-    lastUpdatedAt: string;
-    movementType: 'Entry' | 'Exit' | 'Bidirectional';
-    workflowId: string;
-    riskRuleId: string;
-    // These will be enriched for display purposes
-    portId?: string;
+    status: 'Online' | 'Offline' | 'Maintenance';
+    portId: string;
+    terminalId: string;
+    zoneId: string;
     portName?: string;
     terminalName?: string;
     zoneName?: string;
+    lastModified: string;
+    createdBy: string;
+}
+
+export interface SystemMessage {
+    id: string;
+    name: string;
+    description: string;
+    localizedName?: string;
+    localizedDescription?: string;
+    category: 'Passenger Issue' | 'Machine Issue' | 'General Alert' | 'System Info';
+    status: 'Active' | 'Inactive';
+    lastModified: string;
+    createdBy: string;
 }
 
 export interface Workflow {

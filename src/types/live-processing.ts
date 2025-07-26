@@ -1,5 +1,6 @@
 
-import type { Port, Terminal, Zone, Workflow, RiskProfile } from './configuration';
+
+import type { Port, Terminal, Zone, Workflow, RiskProfile, Machine, SystemMessage } from './configuration';
 import type { OfficerAssignment } from './workload';
 
 export interface Passenger {
@@ -241,5 +242,5 @@ export interface BlacklistEntry {
 }
 
 
-export { Port, Terminal, Zone, Workflow, RiskProfile, OfficerAssignment };
+export { Port, Terminal, Zone, Workflow, RiskProfile, Machine, SystemMessage, OfficerAssignment };
     

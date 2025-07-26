@@ -15,7 +15,6 @@ import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import Link from 'next/link';
-import { useToast } from '@/hooks/use-toast';
 import { DeletePortDialog } from '@/components/configuration/ports/delete-port-dialog';
 import { PortDetailsSheet } from '@/components/configuration/ports/port-details-sheet';
 import { TransactionStatsCard } from '@/components/transactions/transaction-stats-card';
@@ -141,10 +140,7 @@ export function PortPageClient({ ports, onDeletePort, onToggleStatus, permission
                 <BreadcrumbItem>
                     <BreadcrumbLink href="/configuration/dashboard" icon={LayoutDashboard}>{t('dashboard', {ns: 'Navigation'})}</BreadcrumbLink>
                 </BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                    <BreadcrumbPage icon={Ship}>{t('pageTitle')}</BreadcrumbPage>
-                </BreadcrumbItem>
+                <BreadcrumbPage icon={Ship}>{t('pageTitle')}</BreadcrumbPage>
             </BreadcrumbList>
         </Breadcrumb>
       <GradientPageHeader title={t('pageTitle')} description={t('pageDescription')} icon={Ship}>

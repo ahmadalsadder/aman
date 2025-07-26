@@ -3,81 +3,122 @@
 
 import { GradientPageHeader } from '@/components/shared/gradient-page-header';
 import { MachineForm, type MachineFormValues } from '@/components/configuration/machines/machine-form';
-import { PlusCircle } from 'lucide-react';
+import { PlusCircle, AlertTriangle, HardDrive, LayoutDashboard } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
-import type { Machine, Port, Terminal, Zone } from '@/lib/types';
+import type { Machine, Port, Terminal, Zone, Permission } from '@/types';
 import { useAuth } from '@/hooks/use-auth';
-import { mockPorts, mockTerminals, mockZones } from '@/lib/mock-data';
-import { format } from 'date-fns';
-
-const MACHINES_STORAGE_KEY = 'guardian-gate-machines';
-const PORTS_STORAGE_KEY = 'guardian-gate-ports';
-const TERMINALS_STORAGE_KEY = 'guardian-gate-terminals';
-const ZONES_STORAGE_KEY = 'guardian-gate-zones';
+import { useState, useEffect } from 'react';
+import { api } from '@/lib/api';
+import { Skeleton } from '@/components/ui/skeleton';
+import { useTranslations } from 'next-intl';
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 
 export default function AddMachinePage() {
     const router = useRouter();
     const { toast } = useToast();
-    const { user } = useAuth();
+    const { user, hasPermission } = useAuth();
+    const t = useTranslations('Configuration.Machines.form');
+    const tNav = useTranslations('Navigation');
+    const module = 'configuration';
 
-    const handleSave = (formData: MachineFormValues) => {
-        try {
-            const storedMachines = localStorage.getItem(MACHINES_STORAGE_KEY);
-            const machines: Machine[] = storedMachines ? JSON.parse(storedMachines) : [];
-            
-            const storedPorts = localStorage.getItem(PORTS_STORAGE_KEY);
-            const ports: Port[] = storedPorts ? JSON.parse(storedPorts) : mockPorts;
-            
-            const storedTerminals = localStorage.getItem(TERMINALS_STORAGE_KEY);
-            const terminals: Terminal[] = storedTerminals ? JSON.parse(storedTerminals) : mockTerminals;
+    const [isLoading, setIsLoading] = useState(false);
+    const [pageData, setPageData] = useState<{
+        ports: Port[];
+        terminals: Terminal[];
+        zones: Zone[];
+    } | null>(null);
 
-            const storedZones = localStorage.getItem(ZONES_STORAGE_KEY);
-            const zones: Zone[] = storedZones ? JSON.parse(storedZones) : mockZones;
-            
-            const selectedPort = ports.find(p => p.id === formData.portId);
-            const selectedTerminal = terminals.find(t => t.id === formData.terminalId);
-            const selectedZone = zones.find(z => z.id === formData.zoneId);
+    const canCreate = hasPermission(['configuration:machines:create' as Permission]);
 
-            const newMachine: Machine = {
-                ...formData,
-                id: `MACHINE-${Date.now().toString().slice(-4)}`,
-                status: 'Online',
-                portName: selectedPort?.name,
-                terminalName: selectedTerminal?.name,
-                zoneName: selectedZone?.name,
-                lastModified: format(new Date(), 'yyyy-MM-dd'),
-                createdBy: user?.fullName || 'System',
-            };
+    useEffect(() => {
+        if (!canCreate) return;
 
-            const updatedMachines = [...machines, newMachine];
-            localStorage.setItem(MACHINES_STORAGE_KEY, JSON.stringify(updatedMachines));
-            
+        const fetchData = async () => {
+            setIsLoading(true);
+            const [portsRes, terminalsRes, zonesRes] = await Promise.all([
+                api.get<Port[]>('/data/ports/all'),
+                api.get<Terminal[]>('/data/terminals'),
+                api.get<Zone[]>('/data/zones'),
+            ]);
+
+            if (portsRes.isSuccess && terminalsRes.isSuccess && zonesRes.isSuccess) {
+                setPageData({
+                    ports: portsRes.data || [],
+                    terminals: terminalsRes.data || [],
+                    zones: zonesRes.data || [],
+                });
+            } else {
+                toast({ variant: 'destructive', title: t('toast.loadErrorTitle') });
+            }
+            setIsLoading(false);
+        };
+        fetchData();
+    }, [canCreate, t, toast]);
+
+    const handleSave = async (formData: MachineFormValues) => {
+        setIsLoading(true);
+        const result = await api.post<Machine>('/data/machines/save', { ...formData, createdBy: user?.name });
+        
+        if (result.isSuccess) {
             toast({
-                title: 'Machine Added',
-                description: `New machine "${newMachine.name}" has been added.`,
+                title: t('toast.addSuccessTitle'),
+                description: t('toast.addSuccessDesc', { name: result.data!.name }),
                 variant: 'success',
             });
-            
             router.push('/configuration/machines');
-        } catch (error) {
-            console.error('Failed to save machine to localStorage', error);
+        } else {
             toast({
-                title: 'Save Failed',
-                description: 'There was an error saving the machine data.',
+                title: t('toast.errorTitle'),
+                description: result.errors?.[0]?.message || t('toast.errorDesc'),
                 variant: 'destructive',
             });
+            setIsLoading(false);
         }
     };
 
+    if (!canCreate) {
+        return (
+            <div className="flex h-full w-full flex-col items-center justify-center gap-4 text-center">
+                <AlertTriangle className="h-16 w-16 text-destructive" />
+                <h1 className="text-2xl font-bold">{t('accessDenied.title')}</h1>
+                <p className="max-w-md text-muted-foreground">{t('accessDenied.createDescription')}</p>
+            </div>
+        );
+    }
+    
     return (
         <div className="space-y-6">
+             <Breadcrumb>
+                <BreadcrumbList>
+                    <BreadcrumbItem>
+                        <BreadcrumbLink href="/configuration/dashboard" icon={LayoutDashboard}>{tNav('dashboard')}</BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                        <BreadcrumbLink href="/configuration/machines" icon={HardDrive}>{t('pageTitle')}</BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                        <BreadcrumbPage icon={PlusCircle}>{t('addTitle')}</BreadcrumbPage>
+                    </BreadcrumbItem>
+                </BreadcrumbList>
+            </Breadcrumb>
             <GradientPageHeader
-                title="Add New Machine"
-                description="Define a new hardware device in the system."
+                title={t('addTitle')}
+                description={t('addDescription')}
                 icon={PlusCircle}
             />
-            <MachineForm onSave={handleSave} />
+            {isLoading && !pageData && <Skeleton className="h-96 w-full" />}
+            {pageData && (
+                <MachineForm 
+                    onSave={handleSave} 
+                    isLoading={isLoading}
+                    ports={pageData.ports}
+                    terminals={pageData.terminals}
+                    zones={pageData.zones}
+                />
+            )}
         </div>
     );
 }

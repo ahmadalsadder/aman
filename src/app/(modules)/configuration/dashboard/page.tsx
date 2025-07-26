@@ -7,18 +7,20 @@ import { LayoutDashboard, AlertTriangle } from 'lucide-react';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage } from '@/components/ui/breadcrumb';
 import { DashboardHeader } from '@/components/layout/dashboard-header';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { useTranslations } from 'next-intl';
 
 export default function ConfigurationDashboardPage() {
   const { hasPermission } = useAuth();
   const canView = hasPermission(['configuration:dashboard:view' as Permission]);
+  const t = useTranslations('Configuration.Dashboard');
 
   if (!canView) {
     return (
         <div className="flex h-full w-full flex-col items-center justify-center gap-4 text-center">
             <AlertTriangle className="h-16 w-16 text-destructive" />
-            <h1 className="text-2xl font-bold">Access Denied</h1>
+            <h1 className="text-2xl font-bold">{t('accessDenied.title')}</h1>
             <p className="max-w-md text-muted-foreground">
-                You do not have permission to view the configuration dashboard.
+                {t('accessDenied.description')}
             </p>
         </div>
     );
@@ -29,23 +31,23 @@ export default function ConfigurationDashboardPage() {
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbPage icon={LayoutDashboard}>Dashboard</BreadcrumbPage>
+            <BreadcrumbPage icon={LayoutDashboard}>{t('title')}</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
       <DashboardHeader
-        title="System Configuration"
-        description="Manage system-wide settings and parameters."
+        title={t('title')}
+        description={t('description')}
       />
       <Card>
         <CardHeader>
-          <CardTitle>Welcome to Configuration</CardTitle>
+          <CardTitle>{t('welcome.title')}</CardTitle>
           <CardDescription>
-            This section is under development. Use the sidebar to navigate to available configuration areas.
+            {t('welcome.description')}
           </CardDescription>
         </CardHeader>
         <CardContent>
-            <p>Future enhancements will consolidate high-level system settings here.</p>
+            <p>{t('welcome.content')}</p>
         </CardContent>
       </Card>
     </div>

@@ -1,13 +1,15 @@
 
 
+'use client';
+
 import type { User } from '@/types';
 import { Result, ApiError } from '@/types/api/result';
-import { mockVisaDatabase, mockPorts, mockTerminals, mockZones, mockWorkflows, mockRiskProfiles, setMockOfficerDesks, setMockGates, setMockMedia, setMockWhitelist, setMockBlacklist, setMockPassengers, setMockShifts, getMockPassengers, getMockTransactions, getMockOfficerDesks, getMockGates, getMockMedia, getMockWhitelist, getMockBlacklist, getMockShifts, setMockOfficerAssignments, getMockOfficerAssignments, mockCountryLanguageMapping, availableLanguages, mockCountryPassportMapping } from './mock-data';
+import { mockVisaDatabase, getMockPorts, setMockPorts, getMockTerminals, setMockTerminals, getMockZones, setMockZones, mockWorkflows, mockRiskProfiles, setMockOfficerDesks, setMockGates, setMockMedia, setMockWhitelist, setMockBlacklist, setMockPassengers, setMockShifts, getMockPassengers, getMockTransactions, getMockOfficerDesks, getMockGates, getMockMedia, getMockWhitelist, getMockBlacklist, getMockShifts, setMockOfficerAssignments, getMockOfficerAssignments, mockCountryLanguageMapping, availableLanguages, mockCountryPassportMapping, getMockMachines, setMockMachines } from './mock-data';
 import { assessPassengerRisk } from '@/ai/flows/assess-risk-flow';
 import { countries } from './countries';
 import { Fingerprint, ScanLine, UserCheck, ShieldAlert, User as UserIcon } from 'lucide-react';
 import { extractPassportData } from '@/ai/flows/extract-passport-data-flow';
-import type { Transaction, Gate, CivilRecord, Media, BlacklistEntry, WhitelistEntry, Passenger, Shift, OfficerAssignment, CountryLanguageMapping, CountryPassportMapping } from '@/types/live-processing';
+import type { Transaction, Gate, CivilRecord, Media, BlacklistEntry, WhitelistEntry, Passenger, Shift, OfficerAssignment, CountryLanguageMapping, CountryPassportMapping, Machine, Terminal, Zone, Port } from '@/types/live-processing';
 
 const getAuthInfo = (): Partial<User> => {
   try {
@@ -84,10 +86,15 @@ const users: User[] = [
         'analyst:dashboard:view', 'analyst:dashboard:stats:view', 'analyst:dashboard:charts:view',
         'control-room:dashboard:view', 'control-room:dashboard:stats:view', 'control-room:dashboard:charts:view', 'control-room:dashboard:officer-performance:view',
         'duty-manager:view',
+        // Configuration
         'configuration:dashboard:view',
         'configuration:country-language:view', 'configuration:country-language:edit',
         'configuration:country-passport:view', 'configuration:country-passport:edit',
-        'configuration:ports:view', 'configuration:ports:create', 'configuration:ports:edit', 'configuration:ports:delete'
+        'configuration:ports:view', 'configuration:ports:create', 'configuration:ports:edit', 'configuration:ports:delete',
+        'configuration:terminals:view', 'configuration:terminals:create', 'configuration:terminals:edit', 'configuration:terminals:delete',
+        'configuration:zones:view', 'configuration:zones:create', 'configuration:zones:edit', 'configuration:zones:delete',
+        'configuration:machines:view', 'configuration:machines:create', 'configuration:machines:edit', 'configuration:machines:delete',
+        'configuration:system-messages:view', 'configuration:system-messages:create', 'configuration:system-messages:edit', 'configuration:system-messages:delete',
     ]
   },
   { 
@@ -766,7 +773,7 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
         } else if (module === 'landport') {
             tripInformation = { type: 'landport', vehiclePlateNumber: 'AUH 12345', vehicleType: 'Car', laneNumber: '3', vehicleMake: 'Toyota' };
         } else if (module === 'seaport') {
-            tripInformation = { type: 'seaport', vesselName: 'Symphony of the Seas', voyageNumber: 'SYM-004', berth: 'C4', lastPortOfCall: 'SGP' };
+            tripInformation = { type: 'seaport', vesselName: 'Symphony of the Seas', voyageNumber: 'OE-555', berth: 'C4', lastPortOfCall: 'SGP' };
         }
 
 
@@ -990,9 +997,9 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
         const assignments = getMockOfficerAssignments().map(a => {
             const officer = users.find(u => u.id === a.officerId);
             const shift = getMockShifts().find(s => s.id === a.shiftId);
-            const zone = mockZones.find(z => z.id === a.zoneId);
-            const terminal = mockTerminals.find(t => t.id === zone?.terminalId);
-            const port = mockPorts.find(p => p.id === terminal?.portId);
+            const zone = getMockZones().find(z => z.id === a.zoneId);
+            const terminal = getMockTerminals().find(t => t.id === zone?.terminalId);
+            const port = getMockPorts().find(p => p.id === terminal?.portId);
             return {
                 ...a,
                 officerName: officer?.name || 'N/A',
@@ -1058,15 +1065,15 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
 
     if(method === 'GET' && url.pathname === '/data/desks') {
         const moduleType = url.searchParams.get('moduleType');
-        const allPorts = mockPorts.filter(p => p.type.toLowerCase() === moduleType);
-        const allTerminals = mockTerminals.filter(t => allPorts.some(p => p.id === t.portId));
+        const allPorts = getMockPorts().filter(p => p.type.toLowerCase() === moduleType);
+        const allTerminals = getMockTerminals().filter(t => allPorts.some(p => p.id === t.portId));
         
         const desksForModule = getMockOfficerDesks().filter(desk => allTerminals.some(t => t.id === desk.terminalId));
 
         const enrichedDesks = desksForModule.map(desk => {
-            const terminal = mockTerminals.find(t => t.id === desk.terminalId);
-            const port = mockPorts.find(p => p.id === terminal?.portId);
-            const zone = mockZones.find(z => z.id === desk.zoneId);
+            const terminal = getMockTerminals().find(t => t.id === desk.terminalId);
+            const port = getMockPorts().find(p => p.id === terminal?.portId);
+            const zone = getMockZones().find(z => z.id === desk.zoneId);
             return {
                 ...desk,
                 portId: port?.id,
@@ -1113,38 +1120,41 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
 
     if (method === 'GET' && url.pathname === '/data/ports') {
         const moduleType = url.searchParams.get('moduleType');
-        let portsForModule = mockPorts;
+        let portsForModule = getMockPorts();
         if (moduleType === 'egate') {
             // E-gates are typically at airports, so return airport-type ports.
-            portsForModule = mockPorts.filter(p => p.type === 'Airport');
+            portsForModule = getMockPorts().filter(p => p.type === 'Airport');
         } else if (moduleType) {
-            portsForModule = mockPorts.filter(p => p.type.toLowerCase() === moduleType);
+            portsForModule = getMockPorts().filter(p => p.type.toLowerCase() === moduleType);
         }
         return Result.success(portsForModule) as Result<T>;
     }
 
     if(method === 'GET' && url.pathname === '/data/ports/all') {
-        return Result.success(mockPorts) as Result<T>;
+        return Result.success(getMockPorts()) as Result<T>;
     }
 
     if(method === 'GET' && url.pathname.startsWith('/data/ports/')) {
         const id = pathParts[pathParts.length - 1];
-        const port = mockPorts.find(p => p.id === id);
+        const port = getMockPorts().find(p => p.id === id);
         return port ? Result.success(port) as Result<T> : Result.failure([new ApiError('NOT_FOUND', `Port with id ${id} not found.`)]) as Result<T>;
     }
 
     if(method === 'POST' && url.pathname === '/data/ports/save') {
         const portData = JSON.parse(body as string) as Port;
+        const currentPorts = getMockPorts();
         const isNew = !portData.id;
         let updatedPort: Port;
         if (isNew) {
             updatedPort = { ...portData, id: `PORT-NEW-${Date.now()}` };
-            mockPorts.push(updatedPort);
+            setMockPorts([...currentPorts, updatedPort]);
         } else {
             updatedPort = { ...portData };
-            const index = mockPorts.findIndex(p => p.id === portData.id);
+            const index = currentPorts.findIndex(p => p.id === portData.id);
             if (index > -1) {
-                mockPorts[index] = updatedPort;
+                const newPorts = [...currentPorts];
+                newPorts[index] = updatedPort;
+                setMockPorts(newPorts);
             }
         }
         return Result.success(updatedPort) as Result<T>;
@@ -1152,9 +1162,12 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
 
     if(method === 'POST' && url.pathname === '/data/ports/delete') {
         const { id } = JSON.parse(body as string);
-        const index = mockPorts.findIndex(p => p.id === id);
+        const currentPorts = getMockPorts();
+        const index = currentPorts.findIndex(p => p.id === id);
         if (index > -1) {
-            mockPorts.splice(index, 1);
+            const newPorts = [...currentPorts];
+            newPorts.splice(index, 1);
+            setMockPorts(newPorts);
             return Result.success({ id }) as Result<T>;
         }
         return Result.failure([new ApiError('NOT_FOUND', 'Port not found.')]) as Result<T>;
@@ -1162,21 +1175,104 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
 
     if(method === 'POST' && url.pathname === '/data/ports/toggle-status') {
         const { id } = JSON.parse(body as string);
-        const port = mockPorts.find(p => p.id === id);
+        const currentPorts = getMockPorts();
+        const port = currentPorts.find(p => p.id === id);
         if (port) {
             port.status = port.status === 'Active' ? 'Inactive' : 'Active';
+            setMockPorts(currentPorts);
             return Result.success(port) as Result<T>;
         }
         return Result.failure([new ApiError('NOT_FOUND', 'Port not found.')]) as Result<T>;
     }
 
-
+    if(method === 'GET' && url.pathname.startsWith('/data/terminals/')) {
+        const id = pathParts[pathParts.length - 1];
+        const terminal = getMockTerminals().find(t => t.id === id);
+        return terminal ? Result.success({ terminal }) as Result<T> : Result.failure([new ApiError('NOT_FOUND', `Terminal with id ${id} not found.`)]) as Result<T>;
+    }
     if (method === 'GET' && url.pathname === '/data/terminals') {
-        return Result.success(mockTerminals) as Result<T>;
+        return Result.success(getMockTerminals()) as Result<T>;
+    }
+    if (method === 'POST' && url.pathname === '/data/terminals/save') {
+        let terminalData = JSON.parse(body as string) as Terminal;
+        const isNew = !terminalData.id;
+        
+        if (isNew) {
+            terminalData = { ...terminalData, id: `TERM-NEW-${Date.now()}` };
+            setMockTerminals([...getMockTerminals(), terminalData]);
+        } else {
+            setMockTerminals(getMockTerminals().map(d => d.id === terminalData.id ? terminalData : d));
+        }
+        return Result.success(terminalData) as Result<T>;
+    }
+    if (method === 'POST' && url.pathname === '/data/terminals/delete') {
+        const { id } = JSON.parse(body as string);
+        setMockTerminals(getMockTerminals().filter(d => d.id !== id));
+        return Result.success({ id }) as Result<T>;
+    }
+
+    if(method === 'GET' && url.pathname.startsWith('/data/zones/')) {
+        const id = pathParts[pathParts.length - 1];
+        const zone = getMockZones().find(z => z.id === id);
+        return zone ? Result.success({ zone }) as Result<T> : Result.failure([new ApiError('NOT_FOUND', `Zone with id ${id} not found.`)]) as Result<T>;
     }
     if (method === 'GET' && url.pathname === '/data/zones') {
-        return Result.success(mockZones) as Result<T>;
+        return Result.success(getMockZones()) as Result<T>;
     }
+    if (method === 'POST' && url.pathname === '/data/zones/save') {
+        let zoneData = JSON.parse(body as string) as Zone;
+        const isNew = !zoneData.id;
+        
+        if (isNew) {
+            zoneData = { ...zoneData, id: `ZONE-NEW-${Date.now()}` };
+            setMockZones([...getMockZones(), zoneData]);
+        } else {
+            setMockZones(getMockZones().map(d => d.id === zoneData.id ? zoneData : d));
+        }
+        return Result.success(zoneData) as Result<T>;
+    }
+    if (method === 'POST' && url.pathname === '/data/zones/delete') {
+        const { id } = JSON.parse(body as string);
+        setMockZones(getMockZones().filter(d => d.id !== id));
+        return Result.success({ id }) as Result<T>;
+    }
+
+    if(method === 'GET' && url.pathname.startsWith('/data/machines/')) {
+        const id = pathParts[pathParts.length - 1];
+        const machine = getMockMachines().find(m => m.id === id);
+        return machine ? Result.success({ machine }) as Result<T> : Result.failure([new ApiError('NOT_FOUND', `Machine with id ${id} not found.`)]) as Result<T>;
+    }
+    if (method === 'GET' && url.pathname === '/data/machines') {
+        return Result.success(getMockMachines()) as Result<T>;
+    }
+    if (method === 'POST' && url.pathname === '/data/machines/save') {
+        let machineData = JSON.parse(body as string) as Machine;
+        const isNew = !machineData.id;
+        
+        if (isNew) {
+            machineData = { ...machineData, id: `MACHINE-NEW-${Date.now()}` };
+            setMockMachines([...getMockMachines(), machineData]);
+        } else {
+            setMockMachines(getMockMachines().map(d => d.id === machineData.id ? machineData : d));
+        }
+        return Result.success(machineData) as Result<T>;
+    }
+    if (method === 'POST' && url.pathname === '/data/machines/delete') {
+        const { id } = JSON.parse(body as string);
+        setMockMachines(getMockMachines().filter(d => d.id !== id));
+        return Result.success({ id }) as Result<T>;
+    }
+    if (method === 'POST' && url.pathname === '/data/machines/toggle-status') {
+        const { id, status } = JSON.parse(body as string);
+        const machine = getMockMachines().find(m => m.id === id);
+        if (machine) {
+            machine.status = status;
+            return Result.success(machine) as Result<T>;
+        }
+        return Result.failure([new ApiError('NOT_FOUND', `Machine with id ${id} not found.`)]) as Result<T>;
+    }
+
+
     if (method === 'GET' && url.pathname === '/data/workflows') {
         return Result.success(mockWorkflows) as Result<T>;
     }

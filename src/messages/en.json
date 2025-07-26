@@ -524,6 +524,43 @@
         "description": "This will permanently delete the zone {zoneName}.",
         "cancel": "Cancel",
         "confirm": "Yes, Delete"
+      },
+      "form": {
+        "addTitle": "Add New Zone",
+        "addDescription": "Configure a new zone within a terminal.",
+        "editTitle": "Edit Zone",
+        "editDescription": "Update the details for {name}.",
+        "accessDenied": {
+          "title": "Access Denied",
+          "createDescription": "You do not have permission to create new zones.",
+          "editDescription": "You do not have permission to edit zones."
+        },
+        "details": {
+          "title": "Zone Details",
+          "description": "Enter the identification and location details for the zone.",
+          "terminal": "Terminal",
+          "selectTerminal": "Select a terminal...",
+          "name": "Zone Name",
+          "namePlaceholder": "e.g., Concourse A",
+          "status": "Status",
+          "active": "Active",
+          "inactive": "Inactive"
+        },
+        "common": {
+          "cancel": "Cancel",
+          "save": "Save Changes",
+          "add": "Add Zone"
+        },
+        "toast": {
+          "loadErrorTitle": "Error",
+          "loadErrorDesc": "Could not load zone data.",
+          "updateSuccessTitle": "Zone Updated",
+          "updateSuccessDesc": "Zone {name} has been updated successfully.",
+          "addSuccessTitle": "Zone Added",
+          "addSuccessDesc": "New zone {name} has been created successfully.",
+          "errorTitle": "Save Failed",
+          "errorDesc": "There was an error saving the zone data."
+        }
       }
     }
   },

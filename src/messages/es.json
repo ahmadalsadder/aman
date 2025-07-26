@@ -446,8 +446,6 @@
         "confirm": "Sí, Eliminar"
       },
       "form": {
-        "portsPageTitle": "Puertos",
-        "pageTitle": "Terminales",
         "addTitle": "Añadir Nueva Terminal",
         "addDescription": "Configurar una nueva terminal dentro de un puerto.",
         "editTitle": "Editar Terminal",
@@ -526,6 +524,43 @@
         "description": "Esto eliminará permanentemente la zona {zoneName}.",
         "cancel": "Cancelar",
         "confirm": "Sí, Eliminar"
+      },
+      "form": {
+        "addTitle": "Añadir Nueva Zona",
+        "addDescription": "Configurar una nueva zona dentro de una terminal.",
+        "editTitle": "Editar Zona",
+        "editDescription": "Actualizar los detalles para {name}.",
+        "accessDenied": {
+          "title": "Acceso Denegado",
+          "createDescription": "No tiene permiso para crear nuevas zonas.",
+          "editDescription": "No tiene permiso para editar zonas."
+        },
+        "details": {
+          "title": "Detalles de la Zona",
+          "description": "Introduzca los detalles de identificación y ubicación de la zona.",
+          "terminal": "Terminal",
+          "selectTerminal": "Seleccione una terminal...",
+          "name": "Nombre de la Zona",
+          "namePlaceholder": "p. ej., Sala A",
+          "status": "Estado",
+          "active": "Activo",
+          "inactive": "Inactivo"
+        },
+        "common": {
+          "cancel": "Cancelar",
+          "save": "Guardar Cambios",
+          "add": "Añadir Zona"
+        },
+        "toast": {
+          "loadErrorTitle": "Error",
+          "loadErrorDesc": "No se pudieron cargar los datos de la zona.",
+          "updateSuccessTitle": "Zona Actualizada",
+          "updateSuccessDesc": "La zona {name} ha sido actualizada exitosamente.",
+          "addSuccessTitle": "Zona Añadida",
+          "addSuccessDesc": "La nueva zona {name} ha sido creada exitosamente.",
+          "errorTitle": "Error al Guardar",
+          "errorDesc": "Hubo un error al guardar los datos de la zona."
+        }
       }
     }
   },

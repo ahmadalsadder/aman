@@ -446,8 +446,6 @@
         "confirm": "نعم، حذف"
       },
       "form": {
-        "portsPageTitle": "الموانئ",
-        "pageTitle": "المحطات",
         "addTitle": "إضافة محطة جديدة",
         "addDescription": "تكوين محطة جديدة داخل منفذ.",
         "editTitle": "تحرير المحطة",
@@ -526,6 +524,43 @@
         "description": "سيؤدي هذا إلى حذف المنطقة {zoneName} بشكل دائم.",
         "cancel": "إلغاء",
         "confirm": "نعم، حذف"
+      },
+      "form": {
+        "addTitle": "إضافة منطقة جديدة",
+        "addDescription": "تكوين منطقة جديدة داخل محطة.",
+        "editTitle": "تحرير المنطقة",
+        "editDescription": "تحديث التفاصيل لـ {name}.",
+        "accessDenied": {
+          "title": "تم رفض الوصول",
+          "createDescription": "ليس لديك إذن لإنشاء مناطق جديدة.",
+          "editDescription": "ليس لديك إذن لتحرير المناطق."
+        },
+        "details": {
+          "title": "تفاصيل المنطقة",
+          "description": "أدخل تفاصيل التعريف والموقع للمنطقة.",
+          "terminal": "المحطة",
+          "selectTerminal": "اختر محطة...",
+          "name": "اسم المنطقة",
+          "namePlaceholder": "على سبيل المثال، صالة أ",
+          "status": "الحالة",
+          "active": "نشط",
+          "inactive": "غير نشط"
+        },
+        "common": {
+          "cancel": "إلغاء",
+          "save": "حفظ التغييرات",
+          "add": "إضافة منطقة"
+        },
+        "toast": {
+          "loadErrorTitle": "خطأ",
+          "loadErrorDesc": "تعذر تحميل بيانات المنطقة.",
+          "updateSuccessTitle": "تم تحديث المنطقة",
+          "updateSuccessDesc": "تم تحديث المنطقة {name} بنجاح.",
+          "addSuccessTitle": "تمت إضافة المنطقة",
+          "addSuccessDesc": "تم إنشاء منطقة جديدة {name} بنجاح.",
+          "errorTitle": "فشل الحفظ",
+          "errorDesc": "حدث خطأ أثناء حفظ بيانات المنطقة."
+        }
       }
     }
   },

@@ -86,7 +86,8 @@ const users: User[] = [
         'duty-manager:view',
         'configuration:dashboard:view',
         'configuration:country-language:view', 'configuration:country-language:edit',
-        'configuration:country-passport:view', 'configuration:country-passport:edit'
+        'configuration:country-passport:view', 'configuration:country-passport:edit',
+        'configuration:ports:view', 'configuration:ports:create', 'configuration:ports:edit', 'configuration:ports:delete'
     ]
   },
   { 
@@ -1055,7 +1056,6 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
         return Result.success(newMappings) as Result<T>;
     }
 
-
     if(method === 'GET' && url.pathname === '/data/desks') {
         const moduleType = url.searchParams.get('moduleType');
         const allPorts = mockPorts.filter(p => p.type.toLowerCase() === moduleType);
@@ -1122,6 +1122,55 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
         }
         return Result.success(portsForModule) as Result<T>;
     }
+
+    if(method === 'GET' && url.pathname === '/data/ports/all') {
+        return Result.success(mockPorts) as Result<T>;
+    }
+
+    if(method === 'GET' && url.pathname.startsWith('/data/ports/')) {
+        const id = pathParts[pathParts.length - 1];
+        const port = mockPorts.find(p => p.id === id);
+        return port ? Result.success(port) as Result<T> : Result.failure([new ApiError('NOT_FOUND', `Port with id ${id} not found.`)]) as Result<T>;
+    }
+
+    if(method === 'POST' && url.pathname === '/data/ports/save') {
+        const portData = JSON.parse(body as string) as Port;
+        const isNew = !portData.id;
+        let updatedPort: Port;
+        if (isNew) {
+            updatedPort = { ...portData, id: `PORT-NEW-${Date.now()}` };
+            mockPorts.push(updatedPort);
+        } else {
+            updatedPort = { ...portData };
+            const index = mockPorts.findIndex(p => p.id === portData.id);
+            if (index > -1) {
+                mockPorts[index] = updatedPort;
+            }
+        }
+        return Result.success(updatedPort) as Result<T>;
+    }
+
+    if(method === 'POST' && url.pathname === '/data/ports/delete') {
+        const { id } = JSON.parse(body as string);
+        const index = mockPorts.findIndex(p => p.id === id);
+        if (index > -1) {
+            mockPorts.splice(index, 1);
+            return Result.success({ id }) as Result<T>;
+        }
+        return Result.failure([new ApiError('NOT_FOUND', 'Port not found.')]) as Result<T>;
+    }
+
+    if(method === 'POST' && url.pathname === '/data/ports/toggle-status') {
+        const { id } = JSON.parse(body as string);
+        const port = mockPorts.find(p => p.id === id);
+        if (port) {
+            port.status = port.status === 'Active' ? 'Inactive' : 'Active';
+            return Result.success(port) as Result<T>;
+        }
+        return Result.failure([new ApiError('NOT_FOUND', 'Port not found.')]) as Result<T>;
+    }
+
+
     if (method === 'GET' && url.pathname === '/data/terminals') {
         return Result.success(mockTerminals) as Result<T>;
     }

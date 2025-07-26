@@ -600,6 +600,46 @@
         "lastModified": "آخر تعديل",
         "createdBy": "تم إنشاؤه بواسطة",
         "close": "إغلاق"
+      },
+      "form": {
+        "addTitle": "إضافة جهاز جديد",
+        "addDescription": "تكوين جهاز جديد للنظام.",
+        "editTitle": "تحرير الجهاز",
+        "editDescription": "تحديث التفاصيل لـ {name}.",
+        "accessDenied": {
+          "title": "تم رفض الوصول",
+          "createDescription": "ليس لديك إذن لإنشاء أجهزة جديدة.",
+          "editDescription": "ليس لديك إذن لتحرير الأجهزة."
+        },
+        "details": {
+          "title": "تفاصيل الجهاز",
+          "description": "أدخل تفاصيل التعريف والنوع والموقع.",
+          "name": "اسم الجهاز",
+          "namePlaceholder": "على سبيل المثال، ماسح جوازات السفر A1-1",
+          "type": "النوع",
+          "status": "الحالة",
+          "ipAddress": "عنوان IP",
+          "macAddress": "عنوان MAC",
+          "port": "المنفذ",
+          "selectPort": "اختر منفذًا...",
+          "terminal": "المحطة",
+          "selectTerminal": "اختر محطة...",
+          "zone": "المنطقة",
+          "selectZone": "اختر منطقة..."
+        },
+        "common": {
+          "cancel": "إلغاء",
+          "save": "حفظ التغييرات",
+          "add": "إضافة جهاز"
+        },
+        "toast": {
+          "addSuccessTitle": "تمت إضافة الجهاز",
+          "addSuccessDesc": "تم إنشاء الجهاز الجديد '{name}'.",
+          "updateSuccessTitle": "تم تحديث الجهاز",
+          "updateSuccessDesc": "تم تحديث الجهاز '{name}'.",
+          "errorTitle": "فشل الحفظ",
+          "errorDesc": "حدث خطأ أثناء حفظ الجهاز."
+        }
       }
     },
     "SystemMessages": {

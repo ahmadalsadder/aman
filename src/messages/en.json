@@ -600,6 +600,58 @@
         "lastModified": "Last Modified",
         "createdBy": "Created By",
         "close": "Close"
+      },
+      "accessDenied": {
+        "title": "Access Denied",
+        "description": "You do not have permission to view machine configurations.",
+        "createDescription": "You do not have permission to create new machines.",
+        "editDescription": "You do not have permission to edit machines."
+      },
+      "toast": {
+        "deleteSuccessTitle": "Machine Deleted",
+        "deleteSuccessDesc": "The machine has been successfully deleted.",
+        "deleteErrorTitle": "Delete Failed",
+        "deleteErrorDesc": "Could not delete the machine.",
+        "statusUpdateTitle": "Status Updated",
+        "statusUpdateDesc": "Machine {name}'s status has been updated to {status}.",
+        "statusUpdateErrorTitle": "Status Update Failed",
+        "loadErrorTitle": "Error",
+        "loadErrorDesc": "Could not load machine data."
+      },
+      "form": {
+        "addTitle": "Add New Machine",
+        "addDescription": "Configure a new hardware device for the system.",
+        "editTitle": "Edit Machine",
+        "editDescription": "Update the details for {name}.",
+        "details": {
+          "title": "Machine Details",
+          "description": "Enter the identification, type, and location details.",
+          "name": "Machine Name",
+          "namePlaceholder": "e.g., Passport Scanner A1-1",
+          "type": "Type",
+          "status": "Status",
+          "ipAddress": "IP Address",
+          "macAddress": "MAC Address",
+          "port": "Port",
+          "selectPort": "Select a port...",
+          "terminal": "Terminal",
+          "selectTerminal": "Select a terminal...",
+          "zone": "Zone",
+          "selectZone": "Select a zone..."
+        },
+        "common": {
+          "cancel": "Cancel",
+          "save": "Save Changes",
+          "add": "Add Machine"
+        },
+        "toast": {
+          "addSuccessTitle": "Machine Added",
+          "addSuccessDesc": "New machine '{name}' has been created.",
+          "updateSuccessTitle": "Machine Updated",
+          "updateSuccessDesc": "Machine '{name}' has been updated.",
+          "errorTitle": "Save Failed",
+          "errorDesc": "An error occurred saving the machine."
+        }
       }
     },
     "SystemMessages": {

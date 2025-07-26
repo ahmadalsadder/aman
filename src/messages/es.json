@@ -600,6 +600,58 @@
         "lastModified": "Última Modificación",
         "createdBy": "Creado por",
         "close": "Cerrar"
+      },
+      "accessDenied": {
+        "title": "Acceso Denegado",
+        "description": "No tiene permiso para ver las configuraciones de las máquinas.",
+        "createDescription": "No tiene permiso para crear nuevas máquinas.",
+        "editDescription": "No tiene permiso para editar máquinas."
+      },
+      "toast": {
+        "deleteSuccessTitle": "Máquina Eliminada",
+        "deleteSuccessDesc": "La máquina ha sido eliminada exitosamente.",
+        "deleteErrorTitle": "Error al Eliminar",
+        "deleteErrorDesc": "No se pudo eliminar la máquina.",
+        "statusUpdateTitle": "Estado Actualizado",
+        "statusUpdateDesc": "El estado de la máquina {name} ha sido actualizado a {status}.",
+        "statusUpdateErrorTitle": "Error al Actualizar Estado",
+        "loadErrorTitle": "Error",
+        "loadErrorDesc": "No se pudieron cargar los datos de la máquina."
+      },
+      "form": {
+        "addTitle": "Añadir Nueva Máquina",
+        "addDescription": "Configurar un nuevo dispositivo de hardware para el sistema.",
+        "editTitle": "Editar Máquina",
+        "editDescription": "Actualizar los detalles de {name}.",
+        "details": {
+          "title": "Detalles de la Máquina",
+          "description": "Introduzca los detalles de identificación, tipo y ubicación.",
+          "name": "Nombre de la Máquina",
+          "namePlaceholder": "p. ej., Escáner de Pasaportes A1-1",
+          "type": "Tipo",
+          "status": "Estado",
+          "ipAddress": "Dirección IP",
+          "macAddress": "Dirección MAC",
+          "port": "Puerto",
+          "selectPort": "Seleccione un puerto...",
+          "terminal": "Terminal",
+          "selectTerminal": "Seleccione una terminal...",
+          "zone": "Zona",
+          "selectZone": "Seleccione una zona..."
+        },
+        "common": {
+          "cancel": "Cancelar",
+          "save": "Guardar Cambios",
+          "add": "Añadir Máquina"
+        },
+        "toast": {
+          "addSuccessTitle": "Máquina Añadida",
+          "addSuccessDesc": "La nueva máquina '{name}' ha sido creada.",
+          "updateSuccessTitle": "Máquina Actualizada",
+          "updateSuccessDesc": "La máquina '{name}' ha sido actualizada.",
+          "errorTitle": "Error al Guardar",
+          "errorDesc": "Ocurrió un error al guardar la máquina."
+        }
       }
     },
     "SystemMessages": {

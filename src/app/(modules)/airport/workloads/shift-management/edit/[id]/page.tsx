@@ -19,6 +19,7 @@ export default function EditShiftPage() {
     const { toast } = useToast();
     const { hasPermission } = useAuth();
     const [shift, setShift] = useState<Shift | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
     const [loading, setLoading] = useState(true);
     const id = params.id;
     const module = 'airport';
@@ -48,13 +49,14 @@ export default function EditShiftPage() {
 
     const handleSave = async (formData: ShiftFormValues) => {
         if (!shift) return;
+        setIsLoading(true);
 
         const result = await api.post<Shift>('/data/shifts/save', { id: shift.id, ...formData, module });
 
-        if (result.isSuccess) {
+        if (result.isSuccess && result.data) {
             toast({
                 title: t('toast.updateSuccessTitle'),
-                description: t('toast.updateSuccessDesc', { name: result.data!.name }),
+                description: t('toast.updateSuccessDesc', { name: result.data.name }),
                 variant: 'success',
             });
             router.push(`/${module}/workloads/shift-management`);
@@ -65,6 +67,7 @@ export default function EditShiftPage() {
                 variant: 'destructive',
             });
         }
+        setIsLoading(false);
     };
 
     if (loading) {
@@ -122,7 +125,7 @@ export default function EditShiftPage() {
                 description={t('editDescription', { name: shift.name })}
                 icon={FilePenLine}
             />
-            <ShiftForm onSave={handleSave} shiftToEdit={shift} />
+            <ShiftForm onSave={handleSave} shiftToEdit={shift} isLoading={isLoading} />
         </div>
     );
 }

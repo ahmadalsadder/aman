@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -11,7 +12,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import type { Shift } from '@/types';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
 import { Loader2 } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { daysOfWeek } from '@/lib/mock-data';
@@ -31,13 +31,13 @@ export type ShiftFormValues = z.infer<typeof formSchema>;
 
 interface ShiftFormProps {
   shiftToEdit?: Shift;
-  onSave: (data: ShiftFormValues) => Promise<void>;
+  onSave: (data: ShiftFormValues) => void;
+  isLoading: boolean;
 }
 
-export function ShiftForm({ shiftToEdit, onSave }: ShiftFormProps) {
+export function ShiftForm({ shiftToEdit, onSave, isLoading }: ShiftFormProps) {
   const router = useRouter();
   const t = useTranslations('ShiftManagement.form');
-  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<ShiftFormValues>({
     resolver: zodResolver(formSchema),
@@ -50,15 +50,9 @@ export function ShiftForm({ shiftToEdit, onSave }: ShiftFormProps) {
     },
   });
 
-  const handleSubmit = async (data: ShiftFormValues) => {
-    setIsLoading(true);
-    await onSave(data);
-    setIsLoading(false);
-  };
-
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+      <form onSubmit={form.handleSubmit(onSave)} className="space-y-6">
         <Card>
             <CardHeader>
                 <CardTitle>{t('details.title')}</CardTitle>

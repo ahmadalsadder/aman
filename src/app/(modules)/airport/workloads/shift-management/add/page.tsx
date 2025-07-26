@@ -1,6 +1,8 @@
 
+
 'use client';
 
+import { useState } from 'react';
 import { GradientPageHeader } from '@/components/shared/gradient-page-header';
 import { ShiftForm, type ShiftFormValues } from '@/components/workloads/shift-form';
 import { PlusCircle, CalendarDays, LayoutDashboard, AlertTriangle } from 'lucide-react';
@@ -8,7 +10,6 @@ import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import type { Shift } from '@/types';
 import { useAuth } from '@/hooks/use-auth';
-import { format } from 'date-fns';
 import { api } from '@/lib/api';
 import { useTranslations } from 'next-intl';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
@@ -16,23 +17,25 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbP
 export default function AddShiftPage() {
     const router = useRouter();
     const { toast } = useToast();
-    const { user, hasPermission } = useAuth();
+    const { hasPermission } = useAuth();
     const t = useTranslations('ShiftManagement.form');
     const tNav = useTranslations('Navigation');
     const module = 'airport';
+    const [isLoading, setIsLoading] = useState(false);
 
     const canCreate = hasPermission([`${module}:workload:view`]);
 
     const handleSave = async (formData: ShiftFormValues) => {
+        setIsLoading(true);
         const result = await api.post<Shift>('/data/shifts/save', {
             ...formData,
             module
         });
         
-        if (result.isSuccess) {
+        if (result.isSuccess && result.data) {
             toast({
                 title: t('toast.addSuccessTitle'),
-                description: t('toast.addSuccessDesc', { name: result.data!.name }),
+                description: t('toast.addSuccessDesc', { name: result.data.name }),
                 variant: 'success',
             });
             router.push(`/${module}/workloads/shift-management`);
@@ -43,6 +46,7 @@ export default function AddShiftPage() {
                 variant: 'destructive',
             });
         }
+        setIsLoading(false);
     };
     
     if (!canCreate) {
@@ -79,7 +83,7 @@ export default function AddShiftPage() {
                 description={t('addDescription')}
                 icon={PlusCircle}
             />
-            <ShiftForm onSave={handleSave} />
+            <ShiftForm onSave={handleSave} isLoading={isLoading} />
         </div>
     );
 }

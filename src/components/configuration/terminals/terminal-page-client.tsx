@@ -95,7 +95,11 @@ export function TerminalPageClient({ terminals, ports, onDeleteTerminal, onToggl
     { accessorKey: 'name', header: t('table.terminalName') },
     { accessorKey: 'portName', header: t('table.port') },
     { accessorKey: 'status', header: t('table.status'), cell: ({ row }) => <Badge variant="outline" className={cn(statusColors[row.original.status])}>{row.original.status}</Badge> },
-    { accessorKey: 'lastModified', header: t('table.lastModified') },
+    { 
+      accessorKey: 'lastModified', 
+      header: t('table.lastModified'),
+      cell: ({ row }) => new Date(row.original.lastModified).toLocaleDateString(),
+    },
     { id: 'actions', cell: ({ row }) => {
         const terminal = row.original;
         return (

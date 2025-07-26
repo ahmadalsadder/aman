@@ -53,7 +53,7 @@ export default function TerminalsPage() {
       toast({
         title: t('toast.deleteSuccessTitle'),
         description: t('toast.deleteSuccessDesc'),
-        variant: 'info',
+        variant: 'success',
       });
       setTerminals(prev => prev.filter(p => p.id !== terminalId));
       return true;

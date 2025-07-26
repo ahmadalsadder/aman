@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useMemo } from 'react';
@@ -9,14 +10,13 @@ import { DataTable } from '@/components/shared/data-table';
 import { GradientPageHeader } from '@/components/shared/gradient-page-header';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { MoreHorizontal, PlusCircle, Map, Eye, FilePenLine, Trash2, PauseCircle, PlayCircle, Filter, ChevronDown, X, Search, Building } from 'lucide-react';
+import { MoreHorizontal, PlusCircle, Map, Eye, FilePenLine, Trash2, PauseCircle, PlayCircle, Filter, ChevronDown, X, Search, Building, Ship } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
-import { LayoutDashboard } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Input } from '@/components/ui/input';
 import { Combobox } from '@/components/ui/combobox';
@@ -128,7 +128,7 @@ export function ZonePageClient({ zones, terminals, ports, onDeleteZone, onToggle
     <div className="space-y-6">
       <Breadcrumb>
         <BreadcrumbList>
-          <BreadcrumbItem><BreadcrumbLink href="/configuration/dashboard" icon={LayoutDashboard}>{tNav('dashboard')}</BreadcrumbLink></BreadcrumbItem>
+          <BreadcrumbItem><BreadcrumbLink href="/configuration/ports" icon={Ship}>{tNav('ports')}</BreadcrumbLink></BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem><BreadcrumbLink href="/configuration/terminals" icon={Building}>{tNav('terminals')}</BreadcrumbLink></BreadcrumbItem>
           <BreadcrumbSeparator />

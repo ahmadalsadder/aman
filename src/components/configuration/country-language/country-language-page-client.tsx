@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -11,7 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useTranslations } from 'next-intl';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
-import { LayoutDashboard } from 'lucide-react';
+import { Ship } from 'lucide-react';
 
 interface CountryLanguagePageClientProps {
     mappings: CountryLanguageMapping[];
@@ -74,7 +75,7 @@ export function CountryLanguagePageClient({ mappings, availableLanguages, onSave
             <Breadcrumb>
                 <BreadcrumbList>
                     <BreadcrumbItem>
-                        <BreadcrumbLink href="/configuration/dashboard" icon={LayoutDashboard}>{t('dashboard', {ns: 'Navigation'})}</BreadcrumbLink>
+                        <BreadcrumbLink href="/configuration/ports" icon={Ship}>{t('ports', {ns: 'Navigation'})}</BreadcrumbLink>
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
                     <BreadcrumbItem>

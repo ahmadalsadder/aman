@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useMemo } from 'react';
@@ -7,13 +8,12 @@ import { DataTable } from '@/components/shared/data-table';
 import { GradientPageHeader } from '@/components/shared/gradient-page-header';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
-import { MoreHorizontal, PlusCircle, HardDrive, Eye, FilePenLine, Trash2, Check, Wifi, WifiOff } from 'lucide-react';
+import { MoreHorizontal, PlusCircle, HardDrive, Eye, FilePenLine, Trash2, Check, Wifi, WifiOff, Ship } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { useTranslations } from 'next-intl';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
-import { LayoutDashboard } from 'lucide-react';
 import type { ColumnDef } from '@tanstack/react-table';
 import type { Machine, Port, Terminal, Zone } from '@/types/configuration';
 import { DeleteMachineDialog } from './delete-machine-dialog';
@@ -103,7 +103,7 @@ export function MachinePageClient({ machines, ports, terminals, zones, onDeleteM
     <div className="space-y-6">
       <Breadcrumb>
         <BreadcrumbList>
-          <BreadcrumbItem><BreadcrumbLink href="/configuration/dashboard" icon={LayoutDashboard}>{t('dashboard', {ns: 'Navigation'})}</BreadcrumbLink></BreadcrumbItem>
+          <BreadcrumbItem><BreadcrumbLink href="/configuration/ports" icon={Ship}>{t('ports', {ns: 'Navigation'})}</BreadcrumbLink></BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem><BreadcrumbPage icon={HardDrive}>{t('pageTitle')}</BreadcrumbPage></BreadcrumbItem>
         </BreadcrumbList>

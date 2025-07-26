@@ -33,52 +33,46 @@ const getModuleSubNav = (module: Module, t: any): NavItem[] => {
     if (module === 'configuration') {
         return [
             {
-                href: `${moduleBaseUrl}/dashboard`,
-                label: t('dashboard'),
-                icon: LayoutDashboard,
-                permission: `configuration:dashboard:view` as Permission,
-            },
-            {
                 href: `${moduleBaseUrl}/ports`,
                 label: 'Ports',
                 icon: Ship,
-                // permission: `configuration:ports:view` as Permission, // Add permission later if needed
+                permission: `configuration:ports:view` as Permission,
             },
             {
                 href: `${moduleBaseUrl}/terminals`,
                 label: 'Terminals',
                 icon: Building,
-                // permission: `configuration:terminals:view` as Permission,
+                permission: `configuration:terminals:view` as Permission,
             },
             {
                 href: `${moduleBaseUrl}/zone`,
                 label: 'Zones',
                 icon: LandPlot,
-                // permission: `configuration:zones:view` as Permission,
+                permission: `configuration:zones:view` as Permission,
             },
              {
                 href: `${moduleBaseUrl}/machines`,
                 label: 'Machines',
                 icon: HardDrive,
-                // permission: `configuration:machines:view` as Permission,
+                permission: `configuration:machines:view` as Permission,
             },
              {
                 href: `${moduleBaseUrl}/country-passport`,
                 label: 'Country Passports',
                 icon: Globe,
-                // permission: `configuration:country-passport:view` as Permission,
+                permission: `configuration:country-passport:view` as Permission,
             },
             {
                 href: `${moduleBaseUrl}/country-language`,
                 label: 'Country Languages',
                 icon: Languages,
-                // permission: `configuration:country-language:view` as Permission,
+                permission: `configuration:country-language:view` as Permission,
             },
             {
                 href: `${moduleBaseUrl}/system-messages`,
                 label: 'System Messages',
                 icon: MessageSquare,
-                // permission: `configuration:system-messages:view` as Permission,
+                permission: `configuration:system-messages:view` as Permission,
             },
         ];
     }

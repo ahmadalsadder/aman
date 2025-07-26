@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useMemo } from 'react';
@@ -15,14 +16,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { MoreHorizontal, PlusCircle, MessageSquare, Eye, FilePenLine, Trash2, PauseCircle, PlayCircle } from 'lucide-react';
+import { MoreHorizontal, PlusCircle, MessageSquare, Eye, FilePenLine, Trash2, PauseCircle, PlayCircle, Ship } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
-import { LayoutDashboard } from 'lucide-react';
 import { DeleteSystemMessageDialog } from './delete-system-message-dialog';
 import { SystemMessageDetailsSheet } from './system-message-details-sheet';
 
@@ -81,7 +81,7 @@ export function SystemMessagesPageClient({ messages, onDeleteMessage, onToggleSt
     <div className="space-y-6">
       <Breadcrumb>
         <BreadcrumbList>
-          <BreadcrumbItem><BreadcrumbLink href="/configuration/dashboard" icon={LayoutDashboard}>{tNav('dashboard')}</BreadcrumbLink></BreadcrumbItem>
+          <BreadcrumbItem><BreadcrumbLink href="/configuration/ports" icon={Ship}>{tNav('ports')}</BreadcrumbLink></BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem><BreadcrumbPage icon={MessageSquare}>{t('pageTitle')}</BreadcrumbPage></BreadcrumbItem>
         </BreadcrumbList>
@@ -98,7 +98,7 @@ export function SystemMessagesPageClient({ messages, onDeleteMessage, onToggleSt
         <CardContent><DataTable columns={columns} data={messages} filterColumnId="name" /></CardContent>
       </Card>
       <SystemMessageDetailsSheet message={messageToView} isOpen={!!messageToView} onOpenChange={(isOpen) => !isOpen && setMessageToView(null)} />
-      <DeleteSystemMessageDialog message={messageToDelete} isOpen={!!messageToDelete} onOpenChange={(isOpen) => !isOpen && setMessageToDelete(null)} onConfirm={handleConfirmDelete} />
+      <DeleteSystemMessageDialog message={messageToDelete} isOpen={!!messageToDelete} onOpenChange={(isOpen) => !isOpen && setMessageHandler(null)} onConfirm={handleConfirmDelete} />
     </div>
   );
 }

@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 export default function ConfigurationPage() {
   const router = useRouter();
   useEffect(() => {
-    router.replace('/configuration/dashboard');
+    router.replace('/configuration/ports');
   }, [router]);
   return null;
 }

@@ -7,12 +7,11 @@ import type { CountryPassportMapping } from '@/types/configuration';
 import { DataTable } from '@/components/shared/data-table';
 import { GradientPageHeader } from '@/components/shared/gradient-page-header';
 import { Button } from '@/components/ui/button';
-import { Fingerprint, Save } from 'lucide-react';
+import { Fingerprint, Save, Ship } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useTranslations } from 'next-intl';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
-import { LayoutDashboard } from 'lucide-react';
 
 interface CountryPassportPageClientProps {
     mappings: CountryPassportMapping[];
@@ -73,7 +72,7 @@ export function CountryPassportPageClient({ mappings, onSave, canEdit }: Country
             <Breadcrumb>
                 <BreadcrumbList>
                     <BreadcrumbItem>
-                        <BreadcrumbLink href="/configuration/dashboard" icon={LayoutDashboard}>{t('dashboard', {ns: 'Navigation'})}</BreadcrumbLink>
+                        <BreadcrumbLink href="/configuration/ports" icon={Ship}>{t('ports', {ns: 'Navigation'})}</BreadcrumbLink>
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
                     <BreadcrumbItem>

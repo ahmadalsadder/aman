@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useMemo } from 'react';
@@ -16,7 +17,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
-import { LayoutDashboard, Ship } from 'lucide-react';
+import { Ship } from 'lucide-react';
 import { DeleteTerminalDialog } from './delete-terminal-dialog';
 import { TerminalDetailsSheet } from './terminal-details-sheet';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
@@ -122,9 +123,7 @@ export function TerminalPageClient({ terminals, ports, onDeleteTerminal, onToggl
     <div className="space-y-6">
       <Breadcrumb>
         <BreadcrumbList>
-          <BreadcrumbItem><BreadcrumbLink href="/configuration/dashboard" icon={LayoutDashboard}>{tNav('dashboard')}</BreadcrumbLink></BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem><BreadcrumbLink href="/configuration/ports" icon={Ship}>{t('portsPageTitle')}</BreadcrumbLink></BreadcrumbItem>
+          <BreadcrumbItem><BreadcrumbLink href="/configuration/ports" icon={Ship}>{tNav('ports')}</BreadcrumbLink></BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem><BreadcrumbPage icon={Building}>{t('pageTitle')}</BreadcrumbPage></BreadcrumbItem>
         </BreadcrumbList>

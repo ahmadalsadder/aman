@@ -23,7 +23,6 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
-import { LayoutDashboard } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { countries } from '@/lib/countries';
 
@@ -143,10 +142,6 @@ export function PortPageClient({ ports, onDeletePort, onToggleStatus, permission
     <div className="space-y-6">
         <Breadcrumb>
             <BreadcrumbList>
-                <BreadcrumbItem>
-                    <BreadcrumbLink href="/configuration/dashboard" icon={LayoutDashboard}>{tNav('dashboard')}</BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
                 <BreadcrumbItem>
                     <BreadcrumbPage icon={Ship}>{t('pageTitle')}</BreadcrumbPage>
                 </BreadcrumbItem>

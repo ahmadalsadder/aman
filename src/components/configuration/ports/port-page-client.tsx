@@ -120,13 +120,13 @@ export function PortPageClient({ ports, onDeletePort, onToggleStatus, permission
         
         return (
           <DropdownMenu>
-            <DropdownMenuTrigger asChild> <Button variant="ghost" className="h-8 w-8 p-0"> <span className="sr-only">Open menu</span> <MoreHorizontal className="h-4 w-4" /> </Button> </DropdownMenuTrigger>
+            <DropdownMenuTrigger asChild><Button variant="ghost" className="h-8 w-8 p-0"><span className="sr-only">Open menu</span><MoreHorizontal className="h-4 w-4" /></Button></DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => setPortToView(port)}> <Eye className="mr-2 h-4 w-4 text-primary" /> <span>{t('actions.view')}</span> </DropdownMenuItem>
-              {permissions.canEdit && <DropdownMenuItem asChild> <Link href={`/configuration/ports/edit/${port.id}`}> <FilePenLine className="mr-2 h-4 w-4 text-yellow-500" /> <span>{t('actions.edit')}</span> </Link> </DropdownMenuItem>}
-              {permissions.canEdit && (port.status === 'Active' ? ( <DropdownMenuItem onClick={() => onToggleStatus(port.id)}> <PauseCircle className="mr-2 h-4 w-4 text-orange-500" /> <span>{t('actions.deactivate')}</span> </DropdownMenuItem> ) : ( <DropdownMenuItem onClick={() => onToggleStatus(port.id)}> <PlayCircle className="mr-2 h-4 w-4 text-green-500" /> <span>{t('actions.activate')}</span> </DropdownMenuItem> ))}
+              <DropdownMenuItem onClick={() => setPortToView(port)}><Eye className="mr-2 h-4 w-4 text-primary" /><span>{t('actions.view')}</span></DropdownMenuItem>
+              {permissions.canEdit && <DropdownMenuItem asChild><Link href={`/configuration/ports/edit/${port.id}`}><FilePenLine className="mr-2 h-4 w-4 text-yellow-500" /><span>{t('actions.edit')}</span></Link></DropdownMenuItem>}
+              {permissions.canEdit && (port.status === 'Active' ? ( <DropdownMenuItem onClick={() => onToggleStatus(port.id)}><PauseCircle className="mr-2 h-4 w-4 text-orange-500" /><span>{t('actions.deactivate')}</span></DropdownMenuItem> ) : ( <DropdownMenuItem onClick={() => onToggleStatus(port.id)}><PlayCircle className="mr-2 h-4 w-4 text-green-500" /><span>{t('actions.activate')}</span></DropdownMenuItem> ))}
               {permissions.canDelete && <DropdownMenuSeparator />}
-              {permissions.canDelete && <DropdownMenuItem className="text-destructive focus:text-destructive" onClick={() => setPortToDelete(port)}> <Trash2 className="mr-2 h-4 w-4" /> <span>{t('actions.delete')}</span> </DropdownMenuItem>}
+              {permissions.canDelete && <DropdownMenuItem className="text-destructive focus:text-destructive" onClick={() => setPortToDelete(port)}><Trash2 className="mr-2 h-4 w-4" /><span>{t('actions.delete')}</span></DropdownMenuItem>}
             </DropdownMenuContent>
           </DropdownMenu>
         );
@@ -141,7 +141,10 @@ export function PortPageClient({ ports, onDeletePort, onToggleStatus, permission
                 <BreadcrumbItem>
                     <BreadcrumbLink href="/configuration/dashboard" icon={LayoutDashboard}>{tNav('dashboard')}</BreadcrumbLink>
                 </BreadcrumbItem>
-                <BreadcrumbPage icon={Ship}>{t('pageTitle')}</BreadcrumbPage>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                    <BreadcrumbPage icon={Ship}>{t('pageTitle')}</BreadcrumbPage>
+                </BreadcrumbItem>
             </BreadcrumbList>
         </Breadcrumb>
       <GradientPageHeader title={t('pageTitle')} description={t('pageDescription')} icon={Ship}>

@@ -42,6 +42,7 @@
     "analyst": "محلل",
     "shiftsupervisor": "مشرف الوردية",
     "control-room": "غرفة التحكم",
+    "configuration": "التكوين",
     "backToPortals": "العودة إلى البوابات",
     "transactions": "المعاملات",
     "liveProcessing": "المعالجة المباشرة",
@@ -789,244 +790,244 @@
     }
   },
    "DutyManager": {
-    "title": "مدير المناوبة",
-    "description": "مراجعة واتخاذ إجراء بشأن المعاملات التي تنتظر مراجعة المشرف.",
-    "pendingTransactions": "المعاملات المعلقة",
-    "pendingTransactionsDesc": "قائمة بجميع المعاملات التي تم تصعيدها لموافقة المشرف.",
+    "title": "Duty Manager",
+    "description": "Review and action transactions pending supervisor review.",
+    "pendingTransactions": "Pending Transactions",
+    "pendingTransactionsDesc": "A list of all transactions that have been escalated for supervisor approval.",
     "accessDenied": {
-      "title": "تم رفض الوصول",
-      "description": "ليس لديك إذن لعرض هذه الصفحة."
+      "title": "Access Denied",
+      "description": "You do not have permission to view this page."
     },
     "stats": {
-      "totalPending": "إجمالي المعاملات المعلقة",
-      "totalPendingDesc": "تتطلب مراجعة فورية",
-      "highRisk": "عالية المخاطر",
-      "highRiskDesc": "المعاملات ذات درجة مخاطر >75",
-      "mediumRisk": "متوسطة المخاطر",
-      "mediumRiskDesc": "المعاملات ذات درجة مخاطر 41-75"
+      "totalPending": "Total Pending",
+      "totalPendingDesc": "Require immediate review",
+      "highRisk": "High-Risk",
+      "highRiskDesc": "Transactions with risk score >75",
+      "mediumRisk": "Medium-Risk",
+      "mediumRiskDesc": "Transactions with risk score 41-75"
     },
     "columns": {
-      "id": "معرف المعاملة",
-      "passenger": "المسافر",
-      "type": "النوع",
-      "dateTime": "التاريخ/الوقت",
-      "riskScore": "درجة المخاطرة",
-      "escalatedBy": "تصعيد بواسطة"
+      "id": "Transaction ID",
+      "passenger": "Passenger",
+      "type": "Type",
+      "dateTime": "Date/Time",
+      "riskScore": "Risk Score",
+      "escalatedBy": "Escalated By"
     },
-    "filterPlaceholder": "تصفية برقم جواز السفر...",
-    "search": "بحث",
-    "reset": "إعادة تعيين"
+    "filterPlaceholder": "Filter by passport number...",
+    "search": "Search",
+    "reset": "Reset"
   },
   "Prediction": {
-    "title": "التحليلات التنبؤية",
-    "description": "توقع تدفق الركاب وأوقات المعالجة والطلب التشغيلي.",
-    "searchAndFilter": "بحث وتصفية",
-    "fromDate": "من تاريخ",
-    "toDate": "إلى تاريخ",
-    "reset": "إعادة تعيين",
-    "search": "بحث",
+    "title": "Predictive Analytics",
+    "description": "Forecast passenger flow, processing times, and operational demand.",
+    "searchAndFilter": "Search & Filter",
+    "fromDate": "From Date",
+    "toDate": "To Date",
+    "reset": "Reset",
+    "search": "Search",
     "stats": {
-      "passenger": "الركاب المتوقعون",
-      "vehicle": "المركبات المتوقعة",
-      "vessel": "السفن المتوقعة",
-      "processingTime": "متوسط وقت المعالجة المتوقع",
-      "staff": "الموظفون الموصى بهم"
+      "passenger": "Predicted Passengers",
+      "vehicle": "Predicted Vehicles",
+      "vessel": "Predicted Vessels",
+      "processingTime": "Predicted Avg. Processing Time",
+      "staff": "Recommended Staff"
     },
     "passengerFlow": {
-      "title": "تدفق الركاب/المركبات المتوقع",
-      "description": "حركة المرور المتوقعة بالساعة عبر جميع أنواع المنافذ."
+      "title": "Predicted Passenger/Vehicle Flow",
+      "description": "Forecasted hourly traffic across all port types."
     },
     "processingVelocity": {
-      "title": "سرعة المعالجة المتوقعة",
-      "description": "متوسط الوقت (بالثواني) لمعالجة كل نوع من أنواع الركاب."
+      "title": "Predicted Processing Velocity",
+      "description": "Average time in seconds to process each passenger type."
     },
     "queueDynamics": {
-      "title": "ديناميكيات طوابير الانتظار",
-      "description": "مقارنة بين أطوال طوابير الانتظار المتوقعة والبيانات التاريخية.",
-      "predicted": "المتوقع",
-      "historical": "التاريخي"
+      "title": "Queue Dynamics",
+      "description": "Comparison of predicted queue lengths against historical data.",
+      "predicted": "Predicted",
+      "historical": "Historical"
     },
     "schedule": {
-      "arrivals": "الوصول المجدول",
-      "departures": "المغادرة المجدولة",
-      "flight": "الرحلة",
-      "vessel": "السفينة",
-      "from": "من",
-      "to": "إلى",
-      "time": "الوقت",
-      "status": "الحالة",
-      "gate": "البوابة",
-      "berth": "الرصيف"
+      "arrivals": "Scheduled Arrivals",
+      "departures": "Scheduled Departures",
+      "flight": "Flight",
+      "vessel": "Vessel",
+      "from": "From",
+      "to": "To",
+      "time": "Time",
+      "status": "Status",
+      "gate": "Gate",
+      "berth": "Berth"
     }
   },
   "CivilRecords": {
-    "title": "السجلات المدنية",
-    "description": "بحث وعرض السجلات المدنية لجميع الأفراد في النظام.",
-    "filterTitle": "بحث وتصفية السجلات",
-    "filterEnglishName": "الاسم بالإنجليزية...",
-    "filterLocalizedName": "الاسم المحلي...",
-    "filterDocumentNumber": "رقم الوثيقة...",
-    "filterNationality": "الجنسية",
-    "searchNationality": "بحث عن جنسية...",
-    "noNationality": "لم يتم العثور على جنسية.",
-    "filterPersonType": "نوع الشخص",
-    "allTypes": "كل الأنواع",
-    "citizen": "مواطن",
-    "resident": "مقيم",
-    "visitor": "زائر",
-    "fromDate": "من تاريخ",
-    "toDate": "إلى تاريخ",
-    "reset": "إعادة تعيين",
-    "search": "بحث",
-    "recordsTitle": "نتائج السجلات",
-    "columnName": "الاسم",
-    "columnPersonType": "نوع الشخص",
-    "columnDocumentNumber": "رقم الوثيقة",
-    "columnNationality": "الجنسية",
-    "columnLastEntry": "تاريخ آخر دخول",
-    "noResults": "لا توجد سجلات تطابق المرشحات الحالية.",
+    "title": "Civil Records",
+    "description": "Search and view civil records for all individuals in the system.",
+    "filterTitle": "Search & Filter Records",
+    "filterEnglishName": "English Name...",
+    "filterLocalizedName": "Localized Name...",
+    "filterDocumentNumber": "Document Number...",
+    "filterNationality": "Nationality",
+    "searchNationality": "Search nationality...",
+    "noNationality": "No nationality found.",
+    "filterPersonType": "Person Type",
+    "allTypes": "All Types",
+    "citizen": "Citizen",
+    "resident": "Resident",
+    "visitor": "Visitor",
+    "fromDate": "From Date",
+    "toDate": "To Date",
+    "reset": "Reset",
+    "search": "Search",
+    "recordsTitle": "Record Results",
+    "columnName": "Name",
+    "columnPersonType": "Person Type",
+    "columnDocumentNumber": "Document Number",
+    "columnNationality": "Nationality",
+    "columnLastEntry": "Last Entry Date",
+    "noResults": "No records match the current filters.",
     "details": {
-      "title": "تفاصيل السجل المدني",
-      "close": "إغلاق",
-      "personalInfo": "المعلومات الشخصية",
-      "status": "الحالة",
-      "riskLevel": "مستوى المخاطرة",
-      "gender": "الجنس",
-      "dob": "تاريخ الميلاد",
-      "documentInfo": "معلومات الوثيقة",
-      "passportNo": "رقم الجواز",
-      "passportCountry": "بلد الإصدار",
-      "passportIssue": "تاريخ الإصدار",
-      "passportExpiry": "تاريخ انتهاء الصلاحية",
-      "nationalId": "الرقم القومي",
-      "visaInfo": "معلومات التأشيرة / الإقامة",
-      "visaNo": "رقم التأشيرة",
-      "visaType": "نوع التأشيرة",
-      "visaExpiry": "انتهاء صلاحية التأشيرة",
-      "residencyNo": "رقم ملف الإقامة"
+      "title": "Civil Record Details",
+      "close": "Close",
+      "personalInfo": "Personal Information",
+      "status": "Status",
+      "riskLevel": "Risk Level",
+      "gender": "Gender",
+      "dob": "Date of Birth",
+      "documentInfo": "Document Information",
+      "passportNo": "Passport No.",
+      "passportCountry": "Issuing Country",
+      "passportIssue": "Issue Date",
+      "passportExpiry": "Expiry Date",
+      "nationalId": "National ID",
+      "visaInfo": "Visa / Residency Information",
+      "visaNo": "Visa No.",
+      "visaType": "Visa Type",
+      "visaExpiry": "Visa Expiry",
+      "residencyNo": "Residency File No."
     },
-    "accessDenied": {
-      "title": "تم رفض الوصول",
-      "description": "ليس لديك إذن لعرض السجلات المدنية لهذا الوحدة."
+     "accessDenied": {
+      "title": "Access Denied",
+      "description": "You do not have permission to view civil records for this module."
     }
   },
   "WhitelistPage": {
     "form": {
-        "addTitle": "إضافة إلى القائمة البيضاء",
-        "addDescription": "منح تصريح خاص لفرد.",
-        "editTitle": "تعديل إدخال القائمة البيضاء",
-        "editDescription": "تعديل التفاصيل لـ {name}.",
+        "addTitle": "Add to Whitelist",
+        "addDescription": "Grant special clearance to an individual.",
+        "editTitle": "Edit Whitelist Entry",
+        "editDescription": "Modify the details for {name}.",
         "accessDenied": {
-            "title": "تم رفض الوصول",
-            "createDescription": "ليس لديك إذن لإضافة إدخالات جديدة إلى القائمة البيضاء لهذه الوحدة.",
-            "editDescription": "ليس لديك إذن لتعديل إدخالات القائمة البيضاء لهذه الوحدة."
+            "title": "Access Denied",
+            "createDescription": "You do not have permission to add new entries to the whitelist for this module.",
+            "editDescription": "You do not have permission to edit whitelist entries for this module."
         },
         "search": {
-            "title": "ربط بمسافر حالي (موصى به)",
-            "description": "ابحث عن مسافر برقم جواز سفره لربط إدخال القائمة البيضاء هذا بسجله.",
-            "placeholder": "أدخل رقم جواز السفر...",
-            "button": "بحث"
+            "title": "Link to Existing Passenger (Recommended)",
+            "description": "Search for a passenger by their passport number to link this whitelist entry to their record.",
+            "placeholder": "Enter passport number...",
+            "button": "Search"
         },
         "toast": {
-            "passengerFoundTitle": "تم العثور على المسافر",
-            "passengerNotFoundTitle": "لم يتم العثور على المسافر",
-            "passengerNotFoundDesc": "لم يتم العثور على سجل حالي. يرجى ملء التفاصيل يدويًا.",
-            "addSuccessTitle": "تمت إضافة الإدخال",
-            "addSuccessDesc": "تمت إضافة {name} إلى القائمة البيضاء.",
-            "updateSuccessTitle": "تم تحديث الإدخال",
-            "updateSuccessDesc": "تم تحديث إدخال القائمة البيضاء لـ {name}.",
-            "errorTitle": "فشلت العملية",
-            "errorDesc": "حدث خطأ. يرجى المحاولة مرة أخرى.",
-            "loadError": "فشل تحميل بيانات إدخال القائمة البيضاء."
+            "passengerFoundTitle": "Passenger Found",
+            "passengerNotFoundTitle": "Passenger Not Found",
+            "passengerNotFoundDesc": "No existing record found. Please fill details manually.",
+            "addSuccessTitle": "Entry Added",
+            "addSuccessDesc": "{name} has been added to the whitelist.",
+            "updateSuccessTitle": "Entry Updated",
+            "updateSuccessDesc": "{name}'s whitelist entry has been updated.",
+            "errorTitle": "Operation Failed",
+            "errorDesc": "An error occurred. Please try again.",
+            "loadError": "Failed to load whitelist entry data."
         },
         "common": {
-            "cancel": "إلغاء",
-            "save": "حفظ الإدخال"
+            "cancel": "Cancel",
+            "save": "Save Entry"
         },
         "details": {
-            "title": "تفاصيل القائمة البيضاء",
-            "description": "أدخل تفاصيل الفرد الذي سيتم إدراجه في القائمة البيضاء.",
-            "linkedTitle": "تم ربط سجل المسافر",
-            "linkedDesc": "تم ملء الحقول التالية مسبقًا من سجل {name} ولا يمكن تغييرها هنا.",
-            "name": "الاسم الكامل (باللغة الإنجليزية)",
-            "localizedName": "الاسم الكامل (مترجم)",
-            "passportNumber": "رقم جواز السفر",
-            "passportExpiry": "انتهاء صلاحية جواز السفر",
-            "nationality": "الجنسية",
-            "selectNationality": "اختر جنسية...",
-            "reason": "سبب الإدراج في القائمة البيضاء",
-            "pickDate": "اختر تاريخًا"
+            "title": "Whitelist Details",
+            "description": "Enter the details for the individual to be whitelisted.",
+            "linkedTitle": "Passenger Record Linked",
+            "linkedDesc": "The following fields are pre-filled from {name}'s record and cannot be changed here.",
+            "name": "Full Name (English)",
+            "localizedName": "Full Name (Localized)",
+            "passportNumber": "Passport Number",
+            "passportExpiry": "Passport Expiry",
+            "nationality": "Nationality",
+            "selectNationality": "Select a nationality...",
+            "reason": "Reason for Whitelisting",
+            "pickDate": "Pick a date"
         },
         "validity": {
-            "title": "الصلاحية والحالة",
-            "status": "الحالة",
-            "active": "نشط",
-            "expired": "منتهي الصلاحية",
-            "revoked": "ملغى",
-            "validFrom": "صالح من",
-            "validUntil": "صالح حتى"
+            "title": "Validity & Status",
+            "status": "Status",
+            "active": "Active",
+            "expired": "Expired",
+            "revoked": "Revoked",
+            "validFrom": "Valid From",
+            "validUntil": "Valid Until"
         },
         "attachments": {
-            "title": "الأدلة الداعمة",
-            "documentLabel": "مستند رسمي (مثل مذكرة دبلوماسية)"
+            "title": "Supporting Evidence",
+            "documentLabel": "Official Document (e.g., Diplomatic Note)"
         }
     }
   },
-    "BlacklistPage": {
+   "BlacklistPage": {
     "form": {
-        "addTitle": "إضافة إلى القائمة السوداء",
-        "addDescription": "الإبلاغ عن فرد لمخاطر أمنية.",
-        "editTitle": "تعديل إدخال القائمة السوداء",
-        "editDescription": "تعديل التفاصيل لـ {name}.",
+        "addTitle": "Add to Blacklist",
+        "addDescription": "Flag an individual for security risks.",
+        "editTitle": "Edit Blacklist Entry",
+        "editDescription": "Modify the details for {name}.",
         "accessDenied": {
-            "title": "تم رفض الوصول",
-            "createDescription": "ليس لديك إذن لإضافة إدخالات جديدة إلى القائمة السوداء لهذه الوحدة.",
-            "editDescription": "ليس لديك إذن لتعديل إدخالات القائمة السوداء لهذه الوحدة."
+            "title": "Access Denied",
+            "createDescription": "You do not have permission to add new entries to the blacklist for this module.",
+            "editDescription": "You do not have permission to edit blacklist entries for this module."
         },
         "search": {
-            "title": "ربط بمسافر حالي (موصى به)",
-            "description": "ابحث عن مسافر برقم جواز سفره لربط إدخال القائمة السوداء هذا بسجله.",
-            "placeholder": "أدخل رقم جواز السفر...",
-            "button": "بحث"
+            "title": "Link to Existing Passenger (Recommended)",
+            "description": "Search for a passenger by their passport number to link this blacklist entry to their record.",
+            "placeholder": "Enter passport number...",
+            "button": "Search"
         },
         "toast": {
-            "passengerFoundTitle": "تم العثور على المسافر",
-            "passengerNotFoundTitle": "لم يتم العثور على المسافر",
-            "passengerNotFoundDesc": "لم يتم العثور على سجل حالي. يرجى ملء التفاصيل يدويًا.",
-            "addSuccessTitle": "تمت إضافة الإدخال",
-            "addSuccessDesc": "تمت إضافة {name} إلى القائمة السوداء.",
-            "updateSuccessTitle": "تم تحديث الإدخال",
-            "updateSuccessDesc": "تم تحديث إدخال القائمة السوداء لـ {name}.",
-            "errorTitle": "فشلت العملية",
-            "errorDesc": "حدث خطأ. يرجى المحاولة مرة أخرى.",
-            "loadError": "فشل تحميل بيانات إدخال القائمة السوداء."
+            "passengerFoundTitle": "Passenger Found",
+            "passengerNotFoundTitle": "Passenger Not Found",
+            "passengerNotFoundDesc": "No existing record found. Please fill details manually.",
+            "addSuccessTitle": "Entry Added",
+            "addSuccessDesc": "{name} has been added to the blacklist.",
+            "updateSuccessTitle": "Entry Updated",
+            "updateSuccessDesc": "{name}'s blacklist entry has been updated.",
+            "errorTitle": "Operation Failed",
+            "errorDesc": "An error occurred. Please try again.",
+            "loadError": "Failed to load blacklist entry data."
         },
         "common": {
-            "cancel": "إلغاء",
-            "save": "حفظ الإدخال"
+            "cancel": "Cancel",
+            "save": "Save Entry"
         },
         "details": {
-            "title": "تفاصيل القائمة السوداء",
-            "description": "أدخل تفاصيل الفرد الذي سيتم إدراجه في القائمة السوداء.",
-            "linkedTitle": "تم ربط سجل المسافر",
-            "linkedDesc": "تم ملء الحقول التالية مسبقًا من سجل {name} ولا يمكن تغييرها هنا.",
-            "name": "الاسم الكامل",
-            "nationality": "الجنسية",
-            "selectNationality": "اختر جنسية...",
-            "reason": "سبب الإدراج في القائمة السوداء",
-            "notes": "ملاحظات"
+            "title": "Blacklist Details",
+            "description": "Enter the details for the individual to be blacklisted.",
+            "linkedTitle": "Passenger Record Linked",
+            "linkedDesc": "The following fields are pre-filled from {name}'s record and cannot be changed here.",
+            "name": "Full Name",
+            "nationality": "Nationality",
+            "selectNationality": "Select a nationality...",
+            "reason": "Reason for Blacklisting",
+            "notes": "Notes"
         },
         "category": {
-            "title": "الفئة",
-            "category": "فئة القائمة السوداء",
-            "noFly": "ممنوع من السفر",
-            "wanted": "مطلوب",
-            "financial": "مالي",
-            "other": "أخرى"
+            "title": "Category",
+            "category": "Blacklist Category",
+            "noFly": "No-Fly",
+            "wanted": "Wanted",
+            "financial": "Financial",
+            "other": "Other"
         },
         "attachments": {
-            "title": "الأدلة الداعمة",
-            "documentLabel": "مستند رسمي (مثل مذكرة، تنبيه)"
+            "title": "Supporting Evidence",
+            "documentLabel": "Official Document (e.g., Warrant, Alert)"
         }
     }
   },

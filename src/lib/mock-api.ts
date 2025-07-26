@@ -33,7 +33,7 @@ const users: User[] = [
     email: 'admin@example.com', 
     role: 'admin', 
     token: 'fake-admin-token', 
-    modules: ['landport', 'seaport', 'airport', 'egate', 'analyst', 'control-room', 'users', 'settings', 'duty-manager'],
+    modules: ['landport', 'seaport', 'airport', 'egate', 'analyst', 'control-room', 'users', 'settings', 'duty-manager', 'configuration'],
     permissions: [
         'users:manage', 'reports:view',
         // Airport
@@ -82,7 +82,8 @@ const users: User[] = [
         'analyst:records:view', 'analyst:records:create', 'analyst:records:edit', 'analyst:records:delete',
         'analyst:dashboard:view', 'analyst:dashboard:stats:view', 'analyst:dashboard:charts:view',
         'control-room:dashboard:view', 'control-room:dashboard:stats:view', 'control-room:dashboard:charts:view', 'control-room:dashboard:officer-performance:view',
-        'duty-manager:view'
+        'duty-manager:view',
+        'configuration:dashboard:view'
     ]
   },
   { 

@@ -18,6 +18,7 @@ const allModules: Record<string, Omit<NavItem, 'label' | 'href'>> = {
   egate: { icon: DoorOpen },
   analyst: { icon: PieChart },
   'control-room': { icon: RadioTower },
+  configuration: { icon: Settings },
 };
 
 const adminNavItems: Record<string, Omit<NavItem, 'label'>> = {

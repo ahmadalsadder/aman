@@ -1,5 +1,6 @@
 
 
+import type { User } from '.';
 
 export interface DayOfWeek {
     id: 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';

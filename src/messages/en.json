@@ -1,5 +1,4 @@
 
-
 {
   "LoginPage": {
     "title": "Welcome to Guardian Gate",
@@ -1150,7 +1149,46 @@
       "loadErrorDesc": "Could not fetch necessary data for the page. Please try again later.",
       "deleteSuccessTitle": "Assignment Deleted",
       "deleteSuccessDesc": "The officer assignment has been successfully deleted.",
-      "deleteErrorTitle": "Delete Failed"
+      "deleteErrorTitle": "Delete Failed",
+      "addSuccessTitle": "Assignment Added",
+      "addSuccessDesc": "New assignment has been created successfully.",
+      "updateSuccessTitle": "Assignment Updated",
+      "updateSuccessDesc": "The assignment has been updated successfully.",
+      "errorTitle": "Operation Failed",
+      "errorDesc": "An error occurred. Please try again."
+    },
+    "form": {
+        "addTitle": "Add New Assignment",
+        "addDescription": "Schedule an officer for a specific shift and location.",
+        "editTitle": "Edit Assignment",
+        "editDescription": "Update an existing officer assignment.",
+        "common": {
+            "cancel": "Cancel",
+            "save": "Save Changes",
+            "add": "Add Assignment"
+        },
+        "details": {
+            "title": "Assignment Details",
+            "description": "Select the officer, location, and shift.",
+            "officer": "Officer",
+            "selectOfficer": "Select an officer...",
+            "date": "Date",
+            "pickDate": "Pick a date",
+            "port": "Port",
+            "selectPort": "Select a port...",
+            "terminal": "Terminal",
+            "selectTerminal": "Select a terminal...",
+            "zone": "Zone",
+            "selectZone": "Select a zone...",
+            "shift": "Shift",
+            "selectShift": "Select a shift...",
+            "status": "Status",
+            "pending": "Pending",
+            "confirmed": "Confirmed",
+            "cancelled": "Cancelled",
+            "notes": "Notes",
+            "notesPlaceholder": "Add any relevant notes..."
+        }
     }
   }
 }

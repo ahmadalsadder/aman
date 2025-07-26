@@ -1,5 +1,4 @@
 
-
 {
   "LoginPage": {
     "title": "مرحبًا بك في بوابة الحماية",
@@ -1147,7 +1146,46 @@
       "loadErrorDesc": "تعذر جلب البيانات اللازمة للصفحة. يرجى المحاولة مرة أخرى لاحقًا.",
       "deleteSuccessTitle": "تم حذف التعيين",
       "deleteSuccessDesc": "تم حذف تعيين الضابط بنجاح.",
-      "deleteErrorTitle": "فشل الحذف"
+      "deleteErrorTitle": "فشل الحذف",
+      "addSuccessTitle": "تمت إضافة التعيين",
+      "addSuccessDesc": "تم إنشاء تعيين جديد بنجاح.",
+      "updateSuccessTitle": "تم تحديث التعيين",
+      "updateSuccessDesc": "تم تحديث التعيين بنجاح.",
+      "errorTitle": "فشلت العملية",
+      "errorDesc": "حدث خطأ. يرجى المحاولة مرة أخرى."
+    },
+    "form": {
+        "addTitle": "إضافة تعيين جديد",
+        "addDescription": "جدولة ضابط لوردية وموقع محددين.",
+        "editTitle": "تحرير التعيين",
+        "editDescription": "تحديث تعيين ضابط موجود.",
+        "common": {
+            "cancel": "إلغاء",
+            "save": "حفظ التغييرات",
+            "add": "إضافة تعيين"
+        },
+        "details": {
+            "title": "تفاصيل التعيين",
+            "description": "حدد الضابط والموقع والوردية.",
+            "officer": "الضابط",
+            "selectOfficer": "اختر ضابطًا...",
+            "date": "التاريخ",
+            "pickDate": "اختر تاريخًا",
+            "port": "المنفذ",
+            "selectPort": "اختر منفذًا...",
+            "terminal": "المحطة",
+            "selectTerminal": "اختر محطة...",
+            "zone": "المنطقة",
+            "selectZone": "اختر منطقة...",
+            "shift": "الوردية",
+            "selectShift": "اختر وردية...",
+            "status": "الحالة",
+            "pending": "معلق",
+            "confirmed": "مؤكد",
+            "cancelled": "ملغى",
+            "notes": "ملاحظات",
+            "notesPlaceholder": "أضف أي ملاحظات ذات صلة..."
+        }
     }
   }
 }

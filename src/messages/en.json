@@ -562,6 +562,45 @@
           "errorDesc": "There was an error saving the zone data."
         }
       }
+    },
+    "Machines": {
+      "pageTitle": "Machine Management",
+      "pageDescription": "Configure and manage all hardware like scanners and cameras.",
+      "addMachine": "Add Machine",
+      "table": {
+        "title": "Machine Records",
+        "description": "A list of all machines in the system.",
+        "machineName": "Machine Name",
+        "port": "Port",
+        "terminal": "Terminal",
+        "zone": "Zone",
+        "type": "Type",
+        "status": "Status"
+      },
+      "actions": {
+        "view": "View details",
+        "edit": "Edit",
+        "toggleStatus": "Toggle Status",
+        "delete": "Delete"
+      },
+      "deleteDialog": {
+        "title": "Are you sure?",
+        "description": "This will permanently delete the machine {machineName}.",
+        "cancel": "Cancel",
+        "confirm": "Yes, Delete"
+      },
+      "detailsSheet": {
+        "description": "{type} Machine",
+        "status": "Status",
+        "port": "Port",
+        "terminal": "Terminal",
+        "zone": "Zone",
+        "ipAddress": "IP Address",
+        "macAddress": "MAC Address",
+        "lastModified": "Last Modified",
+        "createdBy": "Created By",
+        "close": "Close"
+      }
     }
   },
   "Transactions": {

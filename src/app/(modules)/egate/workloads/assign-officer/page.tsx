@@ -1,5 +1,95 @@
 
 'use client';
-// E-Gate reuses the airport assignment page logic for now.
-import AirportAssignOfficerPage from '@/app/(modules)/airport/workloads/assign-officer/page';
-export default AirportAssignOfficerPage;
+
+import { AssignOfficerPageComponent } from '@/components/workloads/assign-officer/assign-officer-page-component';
+import { api } from '@/lib/api';
+import type { OfficerAssignment, Port, Terminal, Zone, Shift, User } from '@/types';
+import { useAuth } from '@/hooks/use-auth';
+import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useToast } from '@/hooks/use-toast';
+import { useTranslations } from 'next-intl';
+
+export default function EgateAssignOfficerPage() {
+    const { hasPermission } = useAuth();
+    const { toast } = useToast();
+    const t = useTranslations('AssignOfficer');
+    const module = 'egate';
+
+    const [assignments, setAssignments] = useState<OfficerAssignment[]>([]);
+    const [pageData, setPageData] = useState<{
+        officers: User[];
+        shifts: Shift[];
+        ports: Port[];
+        terminals: Terminal[];
+        zones: Zone[];
+    } | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    const canView = useMemo(() => hasPermission([`${module}:workload:view`]), [hasPermission, module]);
+
+    const fetchAssignments = useCallback(async () => {
+        const result = await api.get<OfficerAssignment[]>(`/data/officer-assignments?module=${module}`);
+        if (result.isSuccess) {
+            setAssignments(result.data || []);
+        } else {
+            toast({ title: t('toast.loadErrorTitle'), description: t('toast.loadErrorDesc'), variant: 'destructive' });
+        }
+    }, [module, t, toast]);
+
+    useEffect(() => {
+        if (!canView) {
+            setLoading(false);
+            return;
+        }
+
+        const fetchPageData = async () => {
+            setLoading(true);
+            const [assignmentsRes, officersRes, shiftsRes, portsRes, terminalsRes, zonesRes] = await Promise.all([
+                api.get<OfficerAssignment[]>(`/data/officer-assignments?module=${module}`),
+                api.get<User[]>('/data/users?role=officer'),
+                api.get<Shift[]>(`/data/shifts?module=${module}`),
+                api.get<Port[]>(`/data/ports?moduleType=${module}`),
+                api.get<Terminal[]>('/data/terminals'),
+                api.get<Zone[]>('/data/zones'),
+            ]);
+
+            if (assignmentsRes.isSuccess) setAssignments(assignmentsRes.data || []);
+            
+            if (officersRes.isSuccess && shiftsRes.isSuccess && portsRes.isSuccess && terminalsRes.isSuccess && zonesRes.isSuccess) {
+                setPageData({
+                    officers: officersRes.data!,
+                    shifts: shiftsRes.data!,
+                    ports: portsRes.data!,
+                    terminals: terminalsRes.data!,
+                    zones: zonesRes.data!,
+                });
+            } else {
+                toast({ title: t('toast.loadErrorTitle'), description: t('toast.loadErrorDesc'), variant: 'destructive' });
+            }
+            setLoading(false);
+        };
+        fetchPageData();
+    }, [canView, module, t, toast]);
+
+    const handleDeleteAssignment = async (assignmentId: string): Promise<boolean> => {
+        const result = await api.post('/data/officer-assignments/delete', { id: assignmentId });
+        if (result.isSuccess) {
+            toast({ title: t('toast.deleteSuccessTitle'), description: t('toast.deleteSuccessDesc') });
+            await fetchAssignments(); // Refetch the list
+            return true;
+        } else {
+            toast({ title: t('toast.deleteErrorTitle'), description: result.errors?.[0]?.message, variant: 'destructive' });
+            return false;
+        }
+    };
+    
+    return (
+        <AssignOfficerPageComponent
+            module={module}
+            assignments={assignments}
+            pageData={pageData}
+            loading={loading}
+            onDeleteAssignment={handleDeleteAssignment}
+        />
+    );
+}

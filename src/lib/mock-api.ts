@@ -1,15 +1,33 @@
 
 
 
+
 import type { User } from '@/types';
 import { Result, ApiError } from '@/types/api/result';
 import { mockVisaDatabase, mockPorts, mockTerminals, mockZones, mockWorkflows, mockRiskProfiles, setMockOfficerDesks, setMockGates, setMockMedia, setMockWhitelist, setMockBlacklist, setMockPassengers, setMockShifts, getMockPassengers, getMockTransactions, getMockOfficerDesks, getMockGates, getMockMedia, getMockWhitelist, getMockBlacklist, getMockShifts } from './mock-data';
 import { assessPassengerRisk } from '@/ai/flows/assess-risk-flow';
 import { countries } from './countries';
-import { Fingerprint, ScanLine, UserCheck, ShieldAlert, User } from 'lucide-react';
+import { Fingerprint, ScanLine, UserCheck, ShieldAlert, User as UserIcon } from 'lucide-react';
 import { extractPassportData } from '@/ai/flows/extract-passport-data-flow';
 import type { Transaction, Gate, CivilRecord, Media, BlacklistEntry, WhitelistEntry, Passenger, Shift } from '@/types/live-processing';
 import type { OfficerDesk } from '@/types/configuration';
+
+const getAuthInfo = (): Partial<User> => {
+  try {
+    const authCookie = document.cookie
+      .split('; ')
+      .find((row) => row.startsWith('guardian-gate-auth='))
+      ?.split('=')[1];
+      
+    if (authCookie) {
+      // The cookie is URI encoded
+      return JSON.parse(decodeURIComponent(authCookie));
+    }
+  } catch (error) {
+    console.error('Failed to parse auth data from cookie', error);
+  }
+  return {};
+};
 
 const users: User[] = [
   { 
@@ -745,7 +763,7 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
             { id: 'data_confirmation', name: 'Identity Confirmation', status: 'completed', Icon: UserCheck },
             { id: 'biometric_capture', name: 'Biometric Capture', status: 'completed', Icon: Fingerprint },
             { id: 'security_ai_checks', name: 'Security & AI Checks', status: 'completed', Icon: ShieldAlert },
-            { id: 'officer_review', name: 'Officer Review', status: 'in-progress', Icon: User }
+            { id: 'officer_review', name: 'Officer Review', status: 'in-progress', Icon: UserIcon }
         ];
     
         const responsePayload = {
@@ -912,7 +930,7 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
 
     if (method === 'POST' && url.pathname === '/data/shifts/save') {
         const shiftData = JSON.parse(body as string) as Shift;
-        const { name, createdBy } = getAuthInfo();
+        const { name } = getAuthInfo();
         const isNew = !shiftData.id;
 
         let updatedShift: Shift;

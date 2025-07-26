@@ -29,24 +29,6 @@ function ApiContextSnatcher() {
 // We'll add it to the AuthProvider.
 export { ApiContextSnatcher };
 
-
-const getAuthInfo = (): Partial<User> => {
-  try {
-    const authCookie = document.cookie
-      .split('; ')
-      .find((row) => row.startsWith('guardian-gate-auth='))
-      ?.split('=')[1];
-      
-    if (authCookie) {
-      // The cookie is URI encoded
-      return JSON.parse(decodeURIComponent(authCookie));
-    }
-  } catch (error) {
-    console.error('Failed to parse auth data from cookie', error);
-  }
-  return {};
-};
-
 type ApiOptions = Omit<RequestInit, 'method' | 'body'>;
 
 
@@ -55,8 +37,6 @@ async function performApiCall<T>(endpoint: string, options: RequestInit = {}): P
   try {
     const result = await mockApi<T>(endpoint, options);
     
-    const { role } = getAuthInfo();
-
     if (!result.isSuccess && result.errors) {
         toast({
             variant: 'destructive',

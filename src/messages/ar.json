@@ -1084,5 +1084,70 @@
         "errorDesc": "حدث خطأ أثناء حفظ بيانات الوردية."
       }
     }
+  },
+  "AssignOfficer": {
+    "title": "تعيين ضابط",
+    "description": "تعيين ضباط للورديات والمواقع.",
+    "addAssignment": "إضافة تعيين",
+    "stats": {
+      "total": "إجمالي التعيينات",
+      "totalDesc": "جميع التعيينات المجدولة",
+      "confirmed": "التعيينات المؤكدة",
+      "confirmedDesc": "ورديات نشطة ومؤكدة",
+      "pending": "التعيينات المعلقة",
+      "pendingDesc": "في انتظار التأكيد"
+    },
+    "filter": {
+      "title": "بحث وتصفية التعيينات",
+      "officer": "ضابط",
+      "port": "المنفذ",
+      "terminal": "المحطة",
+      "zone": "المنطقة",
+      "shift": "وردية",
+      "assignmentDate": "تاريخ التعيين",
+      "reset": "إعادة تعيين",
+      "search": "بحث"
+    },
+    "table": {
+      "title": "تعيينات الضباط",
+      "description": "قائمة بجميع تعيينات الضباط في النظام.",
+      "officer": "ضابط",
+      "date": "التاريخ",
+      "shift": "وردية",
+      "port": "المنفذ",
+      "terminal": "المحطة",
+      "zone": "المنطقة",
+      "status": "الحالة"
+    },
+    "actions": {
+      "view": "عرض التفاصيل",
+      "edit": "تحرير التعيين",
+      "delete": "حذف"
+    },
+    "detailsSheet": {
+      "title": "تفاصيل التعيين",
+      "description": "التعيين لـ {officerName} في {date}",
+      "officer": "ضابط",
+      "status": "الحالة",
+      "date": "التاريخ",
+      "shift": "وردية",
+      "port": "المنفذ",
+      "terminal": "المحطة",
+      "zone": "المنطقة",
+      "close": "إغلاق"
+    },
+    "deleteDialog": {
+      "title": "هل أنت متأكد؟",
+      "description": "لا يمكن التراجع عن هذا الإجراء. سيؤدي هذا إلى حذف التعيين لـ {officerName} نهائيًا.",
+      "cancel": "إلغاء",
+      "confirm": "نعم، احذف"
+    },
+    "toast": {
+      "loadErrorTitle": "خطأ في تحميل البيانات",
+      "loadErrorDesc": "تعذر جلب البيانات اللازمة للصفحة. يرجى المحاولة مرة أخرى لاحقًا.",
+      "deleteSuccessTitle": "تم حذف التعيين",
+      "deleteSuccessDesc": "تم حذف تعيين الضابط بنجاح.",
+      "deleteErrorTitle": "فشل الحذف"
+    }
   }
 }

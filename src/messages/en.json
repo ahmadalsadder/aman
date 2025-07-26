@@ -1087,5 +1087,70 @@
         "errorDesc": "There was an error saving the shift data."
       }
     }
+  },
+  "AssignOfficer": {
+    "title": "Assign Officer",
+    "description": "Assign officers to shifts and locations.",
+    "addAssignment": "Add Assignment",
+    "stats": {
+      "total": "Total Assignments",
+      "totalDesc": "All scheduled assignments",
+      "confirmed": "Confirmed Assignments",
+      "confirmedDesc": "Active and confirmed shifts",
+      "pending": "Pending Assignments",
+      "pendingDesc": "Awaiting confirmation"
+    },
+    "filter": {
+      "title": "Search & Filter Assignments",
+      "officer": "Officer",
+      "port": "Port",
+      "terminal": "Terminal",
+      "zone": "Zone",
+      "shift": "Shift",
+      "assignmentDate": "Assignment Date",
+      "reset": "Reset",
+      "search": "Search"
+    },
+    "table": {
+      "title": "Officer Assignments",
+      "description": "A list of all officer assignments in the system.",
+      "officer": "Officer",
+      "date": "Date",
+      "shift": "Shift",
+      "port": "Port",
+      "terminal": "Terminal",
+      "zone": "Zone",
+      "status": "Status"
+    },
+    "actions": {
+      "view": "View details",
+      "edit": "Edit assignment",
+      "delete": "Delete"
+    },
+    "detailsSheet": {
+      "title": "Assignment Details",
+      "description": "Assignment for {officerName} on {date}",
+      "officer": "Officer",
+      "status": "Status",
+      "date": "Date",
+      "shift": "Shift",
+      "port": "Port",
+      "terminal": "Terminal",
+      "zone": "Zone",
+      "close": "Close"
+    },
+    "deleteDialog": {
+      "title": "Are you sure?",
+      "description": "This action cannot be undone. This will permanently delete the assignment for {officerName}.",
+      "cancel": "Cancel",
+      "confirm": "Yes, Delete"
+    },
+    "toast": {
+      "loadErrorTitle": "Error Loading Data",
+      "loadErrorDesc": "Could not fetch necessary data for the page. Please try again later.",
+      "deleteSuccessTitle": "Assignment Deleted",
+      "deleteSuccessDesc": "The officer assignment has been successfully deleted.",
+      "deleteErrorTitle": "Delete Failed"
+    }
   }
 }

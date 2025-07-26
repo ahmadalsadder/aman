@@ -1,5 +1,6 @@
 
 
+
 export interface DayOfWeek {
     id: 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
     label: string;
@@ -39,4 +40,7 @@ export interface OfficerAssignment {
     assignmentDate: string; // YYYY-MM-DD
     status: 'Confirmed' | 'Pending' | 'Cancelled';
     module: string;
+    createdBy?: string;
+    lastModified?: string;
+    notes?: string;
 }

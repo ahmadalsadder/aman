@@ -8,7 +8,7 @@ import { DataTable } from '@/components/shared/data-table';
 import { GradientPageHeader } from '@/components/shared/gradient-page-header';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
-import { MoreHorizontal, PlusCircle, HardDrive, Eye, FilePenLine, Trash2, Check, Wifi, WifiOff, Ship } from 'lucide-react';
+import { MoreHorizontal, PlusCircle, HardDrive, Eye, FilePenLine, Trash2, Wifi, WifiOff, Ship } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -90,7 +90,6 @@ export function MachinePageClient({ machines, ports, terminals, zones, onDeleteM
           <DropdownMenuContent align="end">
             <DropdownMenuItem onClick={() => setMachineToView(row.original)}><Eye className="mr-2 h-4 w-4" />{t('actions.view')}</DropdownMenuItem>
             {permissions.canEdit && <DropdownMenuItem asChild><Link href={`/configuration/machines/edit/${row.original.id}`}><FilePenLine className="mr-2 h-4 w-4" />{t('actions.edit')}</Link></DropdownMenuItem>}
-            {permissions.canEdit && <DropdownMenuItem onClick={() => onToggleStatus(row.original.id, row.original.status)}><Check className="mr-2 h-4 w-4" />{t('actions.toggleStatus')}</DropdownMenuItem>}
             {permissions.canDelete && <DropdownMenuSeparator />}
             {permissions.canDelete && <DropdownMenuItem className="text-destructive focus:text-destructive" onClick={() => setMachineToDelete(row.original)}><Trash2 className="mr-2 h-4 w-4" />{t('actions.delete')}</DropdownMenuItem>}
           </DropdownMenuContent>

@@ -27,7 +27,7 @@ import { Calendar } from '@/components/ui/calendar';
 import { format } from 'date-fns';
 import { Combobox } from '@/components/ui/combobox';
 import { DeleteAssignmentDialog } from '@/components/workloads/assign-officer/delete-assignment-dialog';
-import { AssignmentDetailsSheet } from '@/components/workloads/assign-officer/AssignmentDetailsSheet';
+import { AssignmentDetailsSheet } from '@/components/workloads/assign-officer/assignment-details-sheet';
 import CalendarIcon from '@/components/icons/calendar-icon';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAuth } from '@/hooks/use-auth';

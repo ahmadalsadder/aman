@@ -1,6 +1,7 @@
+
 'use client';
 
-import { AssignOfficerPageComponent } from '@/components/workloads/assign-officer/assign-officer-page';
+import { AssignOfficerPageComponent } from '@/components/workloads/assign-officer/assign-officer-page-component';
 import { api } from '@/lib/api';
 import type { OfficerAssignment, Port, Terminal, Zone, Shift, User } from '@/types';
 import { useAuth } from '@/hooks/use-auth';

@@ -1,6 +1,6 @@
 
 'use client';
-import { Shield, LayoutDashboard, BarChart3, Users, Settings, Activity, Ship, LandPlot, DoorOpen, PieChart, UserCog, RadioTower, Home, Plane, ArrowRightLeft, Monitor, ClipboardList, AlertTriangle, ShieldAlert, BrainCircuit, IdCard, Music, ListChecks, ShieldOff, UserPlus, FilePenLine, CalendarDays } from 'lucide-react';
+import { Shield, LayoutDashboard, BarChart3, Users, Settings, Activity, Ship, LandPlot, DoorOpen, PieChart, UserCog, RadioTower, Home, Plane, ArrowRightLeft, Monitor, ClipboardList, AlertTriangle, ShieldAlert, BrainCircuit, IdCard, Music, ListChecks, ShieldOff, UserPlus, FilePenLine, CalendarDays, Globe, Languages, Building, MessageSquare, HardDrive } from 'lucide-react';
 import type { Role, Module, Permission } from '@/types';
 
 export interface NavItem {
@@ -30,6 +30,59 @@ const getModuleSubNav = (module: Module, t: any): NavItem[] => {
     const subNav: NavItem[] = [];
     const moduleBaseUrl = `/${module}`;
 
+    if (module === 'configuration') {
+        return [
+            {
+                href: `${moduleBaseUrl}/dashboard`,
+                label: t('dashboard'),
+                icon: LayoutDashboard,
+                permission: `configuration:dashboard:view` as Permission,
+            },
+            {
+                href: `${moduleBaseUrl}/ports`,
+                label: 'Ports',
+                icon: Ship,
+                // permission: `configuration:ports:view` as Permission, // Add permission later if needed
+            },
+            {
+                href: `${moduleBaseUrl}/terminals`,
+                label: 'Terminals',
+                icon: Building,
+                // permission: `configuration:terminals:view` as Permission,
+            },
+            {
+                href: `${moduleBaseUrl}/zone`,
+                label: 'Zones',
+                icon: LandPlot,
+                // permission: `configuration:zones:view` as Permission,
+            },
+             {
+                href: `${moduleBaseUrl}/machines`,
+                label: 'Machines',
+                icon: HardDrive,
+                // permission: `configuration:machines:view` as Permission,
+            },
+             {
+                href: `${moduleBaseUrl}/country-passport`,
+                label: 'Country Passports',
+                icon: Globe,
+                // permission: `configuration:country-passport:view` as Permission,
+            },
+            {
+                href: `${moduleBaseUrl}/country-language`,
+                label: 'Country Languages',
+                icon: Languages,
+                // permission: `configuration:country-language:view` as Permission,
+            },
+            {
+                href: `${moduleBaseUrl}/system-messages`,
+                label: 'System Messages',
+                icon: MessageSquare,
+                // permission: `configuration:system-messages:view` as Permission,
+            },
+        ];
+    }
+    
     subNav.push({
         href: `${moduleBaseUrl}/dashboard`,
         label: t('dashboard'),

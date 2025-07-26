@@ -1,4 +1,5 @@
 
+
 export * from './live-processing';
 export * from './configuration';
 export * from './workload';
@@ -63,6 +64,7 @@ export type Permission =
   | 'airport:transactions:view'
   | 'landport:transactions:view'
   | 'seaport:transactions:view'
+  | 'egate:transactions:view'
   | 'airport:prediction:view'
   | 'landport:prediction:view'
   | 'seaport:prediction:view'

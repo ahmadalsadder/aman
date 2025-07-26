@@ -36,7 +36,7 @@ const getModuleSubNav = (module: Module, t: any): NavItem[] => {
         permission: `${module}:dashboard:view` as Permission,
     });
     
-    if (['airport', 'landport', 'seaport'].includes(module)) {
+    if (['airport', 'landport', 'seaport', 'egate'].includes(module)) {
         const transactionChildren: NavItem[] = [
             {
                 href: `${moduleBaseUrl}/transactions`,
@@ -44,7 +44,10 @@ const getModuleSubNav = (module: Module, t: any): NavItem[] => {
                 icon: ArrowRightLeft,
                 permission: `${module}:transactions:view` as Permission,
             },
-            {
+        ];
+
+        if (['airport', 'landport', 'seaport'].includes(module)) {
+            transactionChildren.push({
                 href: `${moduleBaseUrl}/transactions/live-processing`,
                 label: t('liveProcessing'),
                 icon: RadioTower,
@@ -55,9 +58,9 @@ const getModuleSubNav = (module: Module, t: any): NavItem[] => {
                 label: t('dutyManager'),
                 icon: ShieldAlert,
                 permission: 'duty-manager:view' as Permission,
-            },
-            
-        ];
+            });
+        }
+
 
         subNav.push({
             href: `${moduleBaseUrl}/transactions`, 
@@ -67,12 +70,14 @@ const getModuleSubNav = (module: Module, t: any): NavItem[] => {
             children: transactionChildren
         });
         
-        subNav.push({
-            href: `${moduleBaseUrl}/officer-desks`,
-            label: t('officerDesks'),
-            icon: Monitor,
-            permission: `${module}:desks:view` as Permission,
-        });
+        if (['airport', 'landport', 'seaport'].includes(module)) {
+            subNav.push({
+                href: `${moduleBaseUrl}/officer-desks`,
+                label: t('officerDesks'),
+                icon: Monitor,
+                permission: `${module}:desks:view` as Permission,
+            });
+        }
     }
 
     if (module === 'egate' || ['airport', 'landport', 'seaport'].includes(module)) {

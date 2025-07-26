@@ -4,7 +4,7 @@
 import { useState, useEffect } from 'react';
 import { GradientPageHeader } from '@/components/shared/gradient-page-header';
 import { AssignmentForm, type AssignmentFormValues } from '@/components/workloads/assign-officer/assignment-form';
-import { FilePenLine, AlertTriangle, UserPlus, LayoutDashboard } from 'lucide-react';
+import { FilePenLine, AlertTriangle, UserPlus, LayoutDashboard, CalendarDays } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter, useParams } from 'next/navigation';
 import { api } from '@/lib/api';
@@ -137,6 +137,10 @@ export default function EditAirportAssignOfficerPage() {
                 <BreadcrumbList>
                     <BreadcrumbItem>
                         <BreadcrumbLink href={`/${module}/dashboard`} icon={LayoutDashboard}>{tNav('dashboard')}</BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                        <BreadcrumbLink href={`/${module}/workloads/shift-management`} icon={CalendarDays}>{tNav('shiftManagement')}</BreadcrumbLink>
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
                     <BreadcrumbItem>

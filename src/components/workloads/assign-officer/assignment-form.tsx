@@ -76,12 +76,12 @@ export function AssignmentForm({
   const terminalId = form.watch('terminalId');
 
   useEffect(() => {
-    if (portId) form.resetField('terminalId', { defaultValue: '' });
-  }, [portId, form]);
+    if (portId && !assignment) form.resetField('terminalId', { defaultValue: '' });
+  }, [portId, form, assignment]);
 
   useEffect(() => {
-    if (terminalId) form.resetField('zoneId', { defaultValue: '' });
-  }, [terminalId, form]);
+    if (terminalId && !assignment) form.resetField('zoneId', { defaultValue: '' });
+  }, [terminalId, form, assignment]);
 
   const officerOptions = useMemo(() => pageData.officers.map(o => ({ value: o.id, label: o.name })), [pageData.officers]);
   const shiftOptions = useMemo(() => pageData.shifts.map(s => ({ value: s.id, label: s.name })), [pageData.shifts]);

@@ -4,12 +4,12 @@
 import { useState, useEffect } from 'react';
 import { GradientPageHeader } from '@/components/shared/gradient-page-header';
 import { AssignmentForm, type AssignmentFormValues } from '@/components/workloads/assign-officer/assignment-form';
-import { PlusCircle, AlertTriangle, UserPlus, LayoutDashboard } from 'lucide-react';
+import { PlusCircle, AlertTriangle, UserPlus, LayoutDashboard, CalendarDays } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
 import { useAuth } from '@/hooks/use-auth';
-import type { Port, Terminal, Zone, Workflow, RiskProfile, User, Shift, OfficerAssignment } from '@/types';
+import type { Port, Terminal, Zone, Shift, User, OfficerAssignment } from '@/types';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useTranslations } from 'next-intl';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
@@ -30,7 +30,7 @@ export default function AddAirportAssignOfficerPage() {
         shifts: Shift[];
         ports: Port[],
         terminals: Terminal[];
-        zones: Zone[],
+        zones: Zone[];
     } | null>(null);
     
     const canCreate = hasPermission([`${module}:workload:view`]);
@@ -131,6 +131,10 @@ export default function AddAirportAssignOfficerPage() {
                 <BreadcrumbList>
                     <BreadcrumbItem>
                         <BreadcrumbLink href={`/${module}/dashboard`} icon={LayoutDashboard}>{tNav('dashboard')}</BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                        <BreadcrumbLink href={`/${module}/workloads/shift-management`} icon={CalendarDays}>{tNav('shiftManagement')}</BreadcrumbLink>
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
                     <BreadcrumbItem>

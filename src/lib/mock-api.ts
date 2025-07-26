@@ -1,16 +1,12 @@
 
-
-
-
 import type { User } from '@/types';
 import { Result, ApiError } from '@/types/api/result';
-import { mockVisaDatabase, mockPorts, mockTerminals, mockZones, mockWorkflows, mockRiskProfiles, setMockOfficerDesks, setMockGates, setMockMedia, setMockWhitelist, setMockBlacklist, setMockPassengers, setMockShifts, getMockPassengers, getMockTransactions, getMockOfficerDesks, getMockGates, getMockMedia, getMockWhitelist, getMockBlacklist, getMockShifts } from './mock-data';
+import { mockVisaDatabase, mockPorts, mockTerminals, mockZones, mockWorkflows, mockRiskProfiles, setMockOfficerDesks, setMockGates, setMockMedia, setMockWhitelist, setMockBlacklist, setMockPassengers, setMockShifts, getMockPassengers, getMockTransactions, getMockOfficerDesks, getMockGates, getMockMedia, getMockWhitelist, getMockBlacklist, getMockShifts, setMockOfficerAssignments, getMockOfficerAssignments } from './mock-data';
 import { assessPassengerRisk } from '@/ai/flows/assess-risk-flow';
 import { countries } from './countries';
 import { Fingerprint, ScanLine, UserCheck, ShieldAlert, User as UserIcon } from 'lucide-react';
 import { extractPassportData } from '@/ai/flows/extract-passport-data-flow';
-import type { Transaction, Gate, CivilRecord, Media, BlacklistEntry, WhitelistEntry, Passenger, Shift } from '@/types/live-processing';
-import type { OfficerDesk } from '@/types/configuration';
+import type { Transaction, Gate, CivilRecord, Media, BlacklistEntry, WhitelistEntry, Passenger, Shift, OfficerAssignment } from '@/types/live-processing';
 
 const getAuthInfo = (): Partial<User> => {
   try {
@@ -575,6 +571,16 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
         
         return Result.success(user) as Result<T>;
     }
+    
+    // USERS
+    if (method === 'GET' && url.pathname === '/data/users') {
+        const role = url.searchParams.get('role');
+        if(role) {
+            return Result.success(users.filter(u => u.role === role)) as Result<T>;
+        }
+        return Result.success(users) as Result<T>;
+    }
+
 
     // COUNTRIES
     if (method === 'GET' && url.pathname === '/data/countries') {
@@ -971,6 +977,56 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
         return updatedShift 
             ? Result.success(updatedShift) as Result<T> 
             : Result.failure([new ApiError('NOT_FOUND', 'Shift not found.')]) as Result<T>;
+    }
+
+    // OFFICER ASSIGNMENTS
+    if (method === 'GET' && url.pathname === '/data/officer-assignments') {
+        const assignments = getMockOfficerAssignments().map(a => {
+            const officer = users.find(u => u.id === a.officerId);
+            const shift = getMockShifts().find(s => s.id === a.shiftId);
+            const zone = mockZones.find(z => z.id === a.zoneId);
+            const terminal = mockTerminals.find(t => t.id === zone?.terminalId);
+            const port = mockPorts.find(p => p.id === terminal?.portId);
+            return {
+                ...a,
+                officerName: officer?.name || 'N/A',
+                shiftName: shift?.name || 'N/A',
+                portName: port?.name || 'N/A',
+                terminalName: terminal?.name || 'N/A',
+                zoneName: zone?.name || 'N/A',
+                portId: port?.id,
+            };
+        });
+        return Result.success(assignments) as Result<T>;
+    }
+
+    if (method === 'GET' && url.pathname.startsWith('/data/officer-assignments/')) {
+        const id = pathParts[pathParts.length - 1];
+        const assignment = getMockOfficerAssignments().find(a => a.id === id);
+        if (assignment) {
+            return Result.success({ assignment }) as Result<T>;
+        }
+        return Result.failure([new ApiError('NOT_FOUND', 'Assignment not found.')]) as Result<T>;
+    }
+
+    if (method === 'POST' && url.pathname === '/data/officer-assignments/save') {
+        const assignmentData = JSON.parse(body as string) as OfficerAssignment;
+        const isNew = !assignmentData.id;
+        let updatedAssignment: OfficerAssignment;
+        if (isNew) {
+            updatedAssignment = { ...assignmentData, id: `ASSIGN-NEW-${Date.now()}` };
+            setMockOfficerAssignments([...getMockOfficerAssignments(), updatedAssignment]);
+        } else {
+            updatedAssignment = { ...assignmentData };
+            setMockOfficerAssignments(getMockOfficerAssignments().map(a => a.id === assignmentData.id ? updatedAssignment : a));
+        }
+        return Result.success(updatedAssignment) as Result<T>;
+    }
+
+    if (method === 'POST' && url.pathname === '/data/officer-assignments/delete') {
+        const { id } = JSON.parse(body as string);
+        setMockOfficerAssignments(getMockOfficerAssignments().filter(a => a.id !== id));
+        return Result.success({ id }) as Result<T>;
     }
 
 

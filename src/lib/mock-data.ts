@@ -1,6 +1,5 @@
 
-
-import type { Passenger, Transaction, OfficerDesk, Gate, Media, WhitelistEntry, BlacklistEntry } from "@/types/live-processing";
+import type { Passenger, Transaction, OfficerDesk, Gate, Media, WhitelistEntry, BlacklistEntry, OfficerAssignment } from "@/types/live-processing";
 import type { Shift, DayOfWeek } from "@/types/workload";
 import { Plane, Car, Ship } from "lucide-react";
 import type { Port, Terminal, Zone, Workflow, RiskProfile, User } from '@/types';
@@ -267,6 +266,12 @@ let mockShifts: Shift[] = [
     { id: 'S004', name: 'Weekend Day', startTime: '09:00', endTime: '21:00', days: ['saturday', 'sunday'], status: 'Active', lastModified: '2023-05-19' },
 ];
 
+let mockOfficerAssignments: OfficerAssignment[] = [
+  { id: 'ASSIGN-001', officerId: '3', officerName: 'Viewer User', shiftId: 'S001', portId: 'PORT-DXB', terminalId: 'TERM-DXB-1', zoneId: 'ZONE-A', assignmentDate: '2023-10-25', status: 'Confirmed', module: 'airport' },
+  { id: 'ASSIGN-002', officerId: '7', officerName: 'Landport Officer', shiftId: 'S002', portId: 'PORT-HE', terminalId: 'TERM-HE-1', zoneId: 'ZONE-LA', assignmentDate: '2023-10-25', status: 'Confirmed', module: 'landport' },
+  { id: 'ASSIGN-003', officerId: '3', officerName: 'Viewer User', shiftId: 'S004', portId: 'PORT-PC', terminalId: 'TERM-PC-1', zoneId: 'ZONE-SA', assignmentDate: '2023-10-28', status: 'Pending', module: 'seaport' },
+];
+
 
 // Getters
 export const getMockPassengers = () => mockPassengers;
@@ -277,6 +282,7 @@ export const getMockMedia = () => mockMedia;
 export const getMockWhitelist = () => mockWhitelist;
 export const getMockBlacklist = () => mockBlacklist;
 export const getMockShifts = () => mockShifts;
+export const getMockOfficerAssignments = () => mockOfficerAssignments;
 
 
 // Setters
@@ -304,6 +310,10 @@ export const setMockBlacklist = (newBlacklist: BlacklistEntry[]) => {
 export const setMockShifts = (newShifts: Shift[]) => {
     mockShifts = newShifts;
 };
+export const setMockOfficerAssignments = (newAssignments: OfficerAssignment[]) => {
+    mockOfficerAssignments = newAssignments;
+};
+
 
 // Re-export other mock data if needed
 export const mockData = {

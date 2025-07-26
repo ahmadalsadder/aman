@@ -1,5 +1,4 @@
 
-
 'use client';
 import { Shield, LayoutDashboard, BarChart3, Users, Settings, Activity, Ship, LandPlot, DoorOpen, PieChart, UserCog, RadioTower, Home, Plane, ArrowRightLeft, Monitor, ClipboardList, AlertTriangle, ShieldAlert, BrainCircuit, IdCard, Music, ListChecks, ShieldOff, UserPlus, FilePenLine, CalendarDays } from 'lucide-react';
 import type { Role, Module, Permission } from '@/types';
@@ -140,8 +139,8 @@ const getModuleSubNav = (module: Module, t: any): NavItem[] => {
             {
                 href: `${moduleBaseUrl}/workloads/assign-officer`,
                 label: t('assignOfficer'),
-                icon: UserCog,
-                permission: `${module}:workload:view` as Permission, // Assuming same permission for now
+                icon: UserPlus,
+                permission: `${module}:workload:view` as Permission,
             }
         ];
 

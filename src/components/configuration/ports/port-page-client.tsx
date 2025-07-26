@@ -25,6 +25,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { LayoutDashboard } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { countries } from '@/lib/countries';
 
 const statusColors: { [key: string]: string } = {
   Active: 'bg-green-500/20 text-green-700 border-green-500/30',
@@ -93,7 +94,10 @@ export function PortPageClient({ ports, onDeletePort, onToggleStatus, permission
   };
   
   const filteredData = useMemo(() => {
-    return ports.filter(port => {
+    return ports.map(p => ({
+      ...p,
+      country: countries.find(c => c.value === p.country)?.label || p.country,
+    })).filter(port => {
       const nameLower = appliedFilters.name.toLowerCase();
 
       if (nameLower && !port.name.toLowerCase().includes(nameLower)) return false;

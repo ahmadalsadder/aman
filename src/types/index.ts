@@ -64,6 +64,7 @@ export type Permission =
   | 'configuration:dashboard:view'
   | 'configuration:country-language:view' | 'configuration:country-language:edit'
   | 'configuration:country-passport:view' | 'configuration:country-passport:edit'
+  | 'configuration:ports:view' | 'configuration:ports:create' | 'configuration:ports:edit' | 'configuration:ports:delete'
   | 'airport:transactions:view' | 'egate:transactions:view'
   | 'landport:transactions:view'
   | 'seaport:transactions:view'

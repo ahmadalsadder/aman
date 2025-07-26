@@ -1,9 +1,19 @@
 
+export type PortType = 'Airport' | 'Seaport' | 'Landport';
 
 export interface Port {
     id: string;
     name: string;
-    type: 'Airport' | 'Seaport' | 'Landport';
+    shortName?: string;
+    localizedName?: string;
+    city: string;
+    country: string;
+    type: PortType;
+    status: 'Active' | 'Inactive';
+    lastModified: string;
+    createdBy: string;
+    address?: string;
+    localizedAddress?: string;
 }
 
 export interface Terminal {

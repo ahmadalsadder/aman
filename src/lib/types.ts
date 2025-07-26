@@ -1,7 +1,7 @@
 
 
 export type Role = 'admin' | 'auditor' | 'viewer' | 'shiftsupervisor' | 'control-room' | 'analyst' | 'officer';
-export type Module = 'landport' | 'seaport' | 'airport' | 'egate' | 'analyst' | 'shiftsupervisor' | 'control-room' | 'duty-manager' | 'users' | 'settings' | 'passengers';
+export type Module = 'landport' | 'seaport' | 'airport' | 'egate' | 'analyst' | 'shiftsupervisor' | 'control-room' | 'duty-manager' | 'users' | 'settings' | 'passengers' | 'configuration';
 export type Permission = 
   // Passenger permissions
   | 'airport:passengers:view' | 'airport:passengers:create' | 'airport:passengers:edit' | 'airport:passengers:delete'
@@ -25,7 +25,7 @@ export type Permission =
   | 'airport:records:create' | 'airport:records:edit' | 'airport:records:delete'
   | 'landport:records:create' | 'landport:records:edit' | 'landport:records:delete'
   | 'seaport:records:create' | 'seaport:records:edit' | 'seaport:records:delete'
-  | 'egate:records:create' | 'egate:records:edit' | 'egate:records:delete'
+  | 'egate:records:view' | 'egate:records:create' | 'egate:records:edit' | 'egate:records:delete'
   | 'analyst:records:view' | 'analyst:records:create' | 'analyst:records:edit' | 'analyst:records:delete'
   | 'control-room:records:view' | 'control-room:records:create' | 'control-room:records:edit' | 'control-room:records:delete'
   | 'airport:civil-records:view' 
@@ -39,10 +39,10 @@ export type Permission =
   | 'seaport:desks:view' | 'seaport:desks:create' | 'seaport:desks:edit' | 'seaport:desks:delete'
   
   // Workload permissions
-  | 'airport:workload:view'
-  | 'landport:workload:view'
-  | 'seaport:workload:view'
-  | 'egate:workload:view'
+  | 'airport:workload:view' | 'airport:workload:create' | 'airport:workload:edit' | 'airport:workload:delete'
+  | 'landport:workload:view' | 'landport:workload:create' | 'landport:workload:edit' | 'landport:workload:delete'
+  | 'seaport:workload:view' | 'seaport:workload:create' | 'seaport:workload:edit' | 'seaport:workload:delete'
+  | 'egate:workload:view' | 'egate:workload:create' | 'egate:workload:edit' | 'egate:workload:delete'
 
   // E-Gate media permissions
   | 'egate:media:view' | 'egate:media:create' | 'egate:media:edit' | 'egate:media:delete'
@@ -57,9 +57,13 @@ export type Permission =
   | 'egate:dashboard:view'
   | 'analyst:dashboard:view'
   | 'control-room:dashboard:view'
-  | 'airport:transactions:view'
+  | 'configuration:dashboard:view'
+  | 'configuration:country-language:view' | 'configuration:country-language:edit'
+  | 'configuration:country-passport:view' | 'configuration:country-passport:edit'
+  | 'airport:transactions:view' | 'egate:transactions:view'
   | 'landport:transactions:view'
   | 'seaport:transactions:view'
+  | 'egate:transactions:view'
   | 'airport:prediction:view'
   | 'landport:prediction:view'
   | 'seaport:prediction:view'
@@ -100,4 +104,51 @@ export interface User {
   token: string;
   modules: Module[];
   permissions: Permission[];
+}
+
+// Configuration Types
+export type PortType = 'Airport' | 'Seaport' | 'Land Border';
+
+export interface Port {
+    id: string;
+    name: string;
+    shortName?: string;
+    localizedName?: string;
+    city: string;
+    country: string;
+    type: PortType;
+    status: 'Active' | 'Inactive';
+    lastModified: string;
+    createdBy: string;
+    address?: string;
+    localizedAddress?: string;
+}
+
+export interface Terminal {
+    id: string;
+    name: string;
+    portId: string;
+}
+
+export interface Zone {
+    id: string;
+    name: string;
+    terminalId: string;
+}
+
+export interface Machine {
+    id: string;
+    name: string;
+    type: 'Scanner' | 'Biometric' | 'Camera';
+    ipAddress: string;
+    macAddress: string;
+    status: 'Online' | 'Offline' | 'Maintenance';
+    portId: string;
+    terminalId: string;
+    zoneId: string;
+    portName?: string;
+    terminalName?: string;
+    zoneName?: string;
+    lastModified: string;
+    createdBy: string;
 }

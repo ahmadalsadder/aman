@@ -1111,210 +1111,210 @@
     }
   },
   "MediaManagement": {
-    "pageTitle": "Gestión de Medios",
-    "pageDescription": "Gestione todo el contenido multimedia como archivos de audio y video.",
-    "addMedia": "Añadir Medios",
-    "recordsTitle": "Registros de Medios",
-    "recordsDescription": "Una lista de todo el contenido multimedia en el sistema.",
+    "pageTitle": "Media Management",
+    "pageDescription": "Manage all media content like audio and video files.",
+    "addMedia": "Add Media",
+    "recordsTitle": "Media Records",
+    "recordsDescription": "A list of all media content in the system.",
     "accessDenied": {
-      "title": "Acceso Denegado",
-      "description": "No tiene permiso para ver el contenido multimedia.",
-      "createDescription": "No tiene permiso para crear nuevo contenido multimedia."
+      "title": "Access Denied",
+      "description": "You do not have permission to view media content.",
+      "createDescription": "You do not have permission to create new media content."
     },
     "filters": {
-      "title": "Buscar y Filtrar Medios",
-      "namePlaceholder": "Nombre del Medio...",
-      "typePlaceholder": "Tipo",
-      "allTypes": "Todos los Tipos",
-      "statusPlaceholder": "Estado",
-      "allStatuses": "Todos los Estados",
-      "reset": "Restablecer",
-      "search": "Buscar"
+      "title": "Search & Filter Media",
+      "namePlaceholder": "Media Name...",
+      "typePlaceholder": "Type",
+      "allTypes": "All Types",
+      "statusPlaceholder": "Status",
+      "allStatuses": "All Statuses",
+      "reset": "Reset",
+      "search": "Search"
     },
     "table": {
-      "name": "Nombre",
-      "type": "Tipo",
-      "status": "Estado",
-      "lastModified": "Última Modificación",
+      "name": "Name",
+      "type": "Type",
+      "status": "Status",
+      "lastModified": "Last Modified",
       "actions": {
-        "view": "Ver detalles",
-        "edit": "Editar",
-        "delete": "Eliminar"
+        "view": "View details",
+        "edit": "Edit",
+        "delete": "Delete"
       }
     },
     "deleteDialog": {
-      "title": "¿Está seguro?",
-      "description": "Esta acción no se puede deshacer. Esto eliminará permanentemente el contenido multimedia '{name}'.",
-      "cancel": "Cancelar",
-      "confirm": "Sí, Eliminar Medios",
-      "successTitle": "Medios Eliminados",
-      "successDesc": "El medio '{name}' ha sido eliminado.",
-      "errorTitle": "Error al Eliminar"
+      "title": "Are you sure?",
+      "description": "This action cannot be undone. This will permanently delete the media content '{name}'.",
+      "cancel": "Cancel",
+      "confirm": "Yes, Delete Media",
+      "successTitle": "Media Deleted",
+      "successDesc": "The media '{name}' has been deleted.",
+      "errorTitle": "Delete Failed"
     },
     "detailsSheet": {
-      "title": "Detalles de los Medios",
-      "close": "Cerrar",
-      "name": "Nombre",
-      "localizedName": "Nombre Localizado",
-      "type": "Tipo",
-      "status": "Estado",
-      "url": "URL del Archivo",
-      "description": "Descripción",
-      "lastModified": "Última Modificación",
-      "createdBy": "Creado por"
+      "title": "Media Details",
+      "close": "Close",
+      "name": "Name",
+      "localizedName": "Localized Name",
+      "type": "Type",
+      "status": "Status",
+      "url": "File URL",
+      "description": "Description",
+      "lastModified": "Last Modified",
+      "createdBy": "Created By"
     },
     "form": {
-      "addTitle": "Añadir Nuevos Medios",
-      "addDescription": "Definir una nueva entrada de contenido multimedia para el sistema.",
-      "editTitle": "Editar Medios",
-      "editDescription": "Actualizar los detalles del contenido multimedia: {name}.",
+      "addTitle": "Add New Media",
+      "addDescription": "Define a new media content entry for the system.",
+      "editTitle": "Edit Media",
+      "editDescription": "Update media content details: {name}.",
       "toast": {
-        "loadError": "No se pudieron cargar los datos de los medios.",
-        "addSuccessTitle": "Medios Añadidos",
-        "addSuccessDesc": "Nuevos medios '{name}' creados.",
-        "updateSuccessTitle": "Medios Actualizados",
-        "updateSuccessDesc": "Medios '{name}' actualizados.",
-        "errorTitle": "Operación Fallida",
-        "errorDesc": "Ocurrió un error. Por favor, inténtelo de nuevo."
+        "loadError": "Could not load media data.",
+        "addSuccessTitle": "Media Added",
+        "addSuccessDesc": "New media '{name}' created.",
+        "updateSuccessTitle": "Media Updated",
+        "updateSuccessDesc": "Media '{name}' updated.",
+        "errorTitle": "Operation Failed",
+        "errorDesc": "An error occurred. Please try again."
       }
     }
   },
   "GatesPage": {
-    "pageTitle": "Gestión de Puertas",
-    "pageDescription": "Estado y rendimiento en tiempo real de todas las puertas de control de fronteras.",
-    "addGate": "Añadir Puerta",
-    "noResults": "No hay puertas que coincidan con los filtros actuales.",
+    "pageTitle": "Gate Management",
+    "pageDescription": "Real-time status and performance of all border control gates.",
+    "addGate": "Add Gate",
+    "noResults": "No gates match the current filters.",
     "accessDenied": {
-      "title": "Acceso Denegado",
-      "description": "No tiene permiso para ver los registros de la Puerta Electrónica."
+      "title": "Access Denied",
+      "description": "You do not have permission to view E-Gate records."
     },
     "stats": {
-      "total": "Puertas Totales",
-      "totalDesc": "Todas las puertas configuradas",
-      "active": "Puertas Activas",
-      "activeDesc": "Actualmente operativas",
-      "maintenance": "En Mantenimiento",
-      "maintenanceDesc": "En mantenimiento",
-      "offline": "Puertas Desconectadas",
-      "offlineDesc": "No operativas"
+      "total": "Total Gates",
+      "totalDesc": "All configured gates",
+      "active": "Active Gates",
+      "activeDesc": "Currently operational",
+      "maintenance": "In Maintenance",
+      "maintenanceDesc": "Undergoing maintenance",
+      "offline": "Offline Gates",
+      "offlineDesc": "Not operational"
     },
     "filters": {
-      "title": "Buscar y Filtrar Puertas",
-      "namePlaceholder": "Nombre de la Puerta o Terminal...",
+      "title": "Search & Filter Gates",
+      "namePlaceholder": "Gate Name or Terminal...",
       "terminalPlaceholder": "Terminal",
-      "allTerminals": "Todas las Terminales",
-      "typePlaceholder": "Tipo",
-      "allTypes": "Todos los Tipos",
-      "statusPlaceholder": "Estado",
-      "allStatuses": "Todos los Estados",
-      "reset": "Restablecer",
-      "search": "Buscar"
+      "allTerminals": "All Terminals",
+      "typePlaceholder": "Type",
+      "allTypes": "All Types",
+      "statusPlaceholder": "Status",
+      "allStatuses": "All Statuses",
+      "reset": "Reset",
+      "search": "Search"
     },
     "card": {
-      "openMenu": "Abrir menú",
-      "viewDetails": "Ver detalles",
-      "editGate": "Editar puerta",
-      "deactivate": "Desactivar",
-      "activate": "Activar",
-      "delete": "Eliminar",
-      "load": "Carga",
-      "queue": "Cola",
-      "avgTime": "Tiempo Promedio",
-      "lastMaintenance": "Último Mantenimiento"
+      "openMenu": "Open menu",
+      "viewDetails": "View details",
+      "editGate": "Edit gate",
+      "deactivate": "Deactivate",
+      "activate": "Activate",
+      "delete": "Delete",
+      "load": "Load",
+      "queue": "Queue",
+      "avgTime": "Avg. Time",
+      "lastMaintenance": "Last Maintenance"
     },
     "detailsSheet": {
-      "title": "Detalles de la Puerta",
-      "status": "Estado",
-      "type": "Tipo",
+      "title": "Gate Details",
+      "status": "Status",
+      "type": "Type",
       "terminal": "Terminal",
-      "ipAddress": "Dirección IP",
-      "macAddress": "Dirección MAC",
-      "lastModified": "Última Modificación",
-      "lastMaintenance": "Último Mantenimiento",
-      "equipmentStatus": "Estado del Equipo",
-      "close": "Cerrar"
+      "ipAddress": "IP Address",
+      "macAddress": "MAC Address",
+      "lastModified": "Last Modified",
+      "lastMaintenance": "Last Maintenance",
+      "equipmentStatus": "Equipment Status",
+      "close": "Close"
     },
     "deleteDialog": {
-      "title": "¿Está seguro?",
-      "description": "Esta acción no se puede deshacer. Esto eliminará permanentemente la puerta '{name}'.",
-      "cancel": "Cancelar",
-      "confirm": "Sí, Eliminar Puerta"
+      "title": "Are you sure?",
+      "description": "This action cannot be undone. This will permanently delete the gate '{name}'.",
+      "cancel": "Cancel",
+      "confirm": "Yes, Delete Gate"
     },
     "toast": {
       "statusUpdated": {
-        "title": "Puerta {status, select, Active {Activada} other {Desactivada}}",
-        "description": "La puerta \"{name}\" ha sido establecida a {status, select, Active {activa} other {desconectada}}."
+        "title": "Gate {status, select, Active {Activated} other {Deactivated}}",
+        "description": "Gate \"{name}\" has been set to {status, select, Active {active} other {inactive}}."
       },
       "deleteSuccess": {
-        "title": "Puerta Eliminada",
-        "description": "La puerta ha sido eliminada permanentemente."
+        "title": "Gate Deleted",
+        "description": "The gate has been permanently deleted."
       },
       "error": {
-        "title": "Operación Fallida",
-        "description": "Ocurrió un error. Por favor, inténtelo de nuevo."
+        "title": "Operation Failed",
+        "description": "An error occurred. Please try again."
       }
     },
     "form": {
-        "addTitle": "Añadir Nueva E-Gate",
-        "addDescription": "Configurar una nueva puerta automática para el procesamiento de pasajeros.",
-        "editTitle": "Editar E-Gate",
-        "editDescription": "Actualizar la configuración para la puerta {gateName}.",
+        "addTitle": "Add New E-Gate",
+        "addDescription": "Configure a new automated gate for passenger processing.",
+        "editTitle": "Edit E-Gate",
+        "editDescription": "Update the configuration for gate {gateName}.",
         "common": {
-            "cancel": "Cancelar",
-            "save": "Guardar Cambios",
-            "add": "Añadir Puerta"
+            "cancel": "Cancel",
+            "save": "Save Changes",
+            "add": "Add Gate"
         },
         "basicInfo": {
-            "title": "Información Básica",
-            "description": "Detalles de identificación y ubicación principales de la puerta.",
-            "name": "Nombre de la Puerta",
-            "code": "Código de la Puerta",
-            "port": "Puerto",
-            "selectPort": "Seleccione un puerto...",
+            "title": "Basic Information",
+            "description": "The gate's primary identification and location details.",
+            "name": "Gate Name",
+            "code": "Gate Code",
+            "port": "Port",
+            "selectPort": "Select a port...",
             "terminal": "Terminal",
-            "selectTerminal": "Seleccione una terminal...",
-            "zone": "Zona",
-            "selectZone": "Seleccione una zona..."
+            "selectTerminal": "Select a terminal...",
+            "zone": "Zone",
+            "selectZone": "Select a zone..."
         },
         "technicalInfo": {
-            "title": "Detalles Técnicos",
-            "description": "Identificadores de red e información de hardware.",
-            "ipAddress": "Dirección IP",
-            "macAddress": "Dirección MAC"
+            "title": "Technical Details",
+            "description": "Network identifiers and hardware information.",
+            "ipAddress": "IP Address",
+            "macAddress": "MAC Address"
         },
         "config": {
-            "title": "Configuración Operativa",
-            "description": "Defina cómo funciona la puerta.",
-            "status": "Estado",
-            "type": "Tipo de Puerta",
-            "warrantyStart": "Fecha de Inicio de la Garantía",
-            "warrantyEnd": "Fecha de Fin de la Garantía",
-            "pickDate": "Seleccione una fecha"
+            "title": "Operational Configuration",
+            "description": "Define how the gate operates.",
+            "status": "Status",
+            "type": "Gate Type",
+            "warrantyStart": "Warranty Start Date",
+            "warrantyEnd": "Warranty End Date",
+            "pickDate": "Pick a date"
         },
         "entryConfig": {
-            "title": "Configuración de Entrada",
-            "workflow": "Flujo de Trabajo de Entrada",
-            "selectWorkflow": "Seleccione un flujo de trabajo...",
-            "riskProfile": "Perfil de Riesgo de Entrada",
-            "selectRiskProfile": "Seleccione un perfil de riesgo...",
-            "capacity": "Capacidad de la Cola"
+            "title": "Entry Configuration",
+            "workflow": "Entry Workflow",
+            "selectWorkflow": "Select a workflow...",
+            "riskProfile": "Entry Risk Profile",
+            "selectRiskProfile": "Select a risk profile...",
+            "capacity": "Queue Capacity"
         },
         "exitConfig": {
-            "title": "Configuración de Salida",
-            "workflow": "Flujo de Trabajo de Salida",
-            "selectWorkflow": "Seleccione un flujo de trabajo...",
-            "riskProfile": "Perfil de Riesgo de Salida",
-            "selectRiskProfile": "Seleccione un perfil de riesgo...",
-            "capacity": "Capacidad de la Cola"
+            "title": "Exit Configuration",
+            "workflow": "Exit Workflow",
+            "selectWorkflow": "Select a workflow...",
+            "riskProfile": "Exit Risk Profile",
+            "selectRiskProfile": "Select a risk profile...",
+            "capacity": "Queue Capacity"
         },
         "toast": {
-            "updateSuccessTitle": "Puerta Actualizada",
-            "updateSuccessDesc": "La puerta '{gateName}' ha sido actualizada exitosamente.",
-            "addSuccessTitle": "Puerta Añadida",
-            "addSuccessDesc": "La nueva puerta '{gateName}' ha sido creada exitosamente.",
-            "errorTitle": "Operación Fallida",
-            "errorDesc": "Ocurrió un error. Por favor, inténtelo de nuevo.",
-            "loadError": "No se pudieron cargar los datos de la puerta. Por favor, inténtelo de nuevo más tarde."
+            "updateSuccessTitle": "Gate Updated",
+            "updateSuccessDesc": "Gate '{gateName}' has been successfully updated.",
+            "addSuccessTitle": "Gate Added",
+            "addSuccessDesc": "New gate '{gateName}' has been successfully created.",
+            "errorTitle": "Operation Failed",
+            "errorDesc": "An error occurred. Please try again.",
+            "loadError": "Could not load gate data. Please try again later."
         }
     }
   },
@@ -1561,160 +1561,160 @@
     }
   },
   "ShiftManagement": {
-    "pageTitle": "Gestión de Turnos",
-    "pageDescription": "Definir y gestionar los turnos de trabajo de los oficiales.",
-    "addShift": "Añadir Turno",
-    "totalShifts": "Turnos Totales",
-    "totalShiftsDesc": "Todos los turnos configurados",
-    "activeShifts": "Turnos Activos",
-    "activeShiftsDesc": "Turnos actualmente operativos",
-    "inactiveShifts": "Turnos Inactivos",
-    "inactiveShiftsDesc": "Turnos actualmente inactivos",
-    "filterTitle": "Buscar y Filtrar Turnos",
-    "filterNamePlaceholder": "Nombre del Turno...",
-    "filterStatusPlaceholder": "Estado",
-    "filterAllStatuses": "Todos los Estados",
-    "filterDayPlaceholder": "Día de la Semana",
-    "reset": "Restablecer",
-    "search": "Buscar",
-    "recordsTitle": "Registros de Turnos",
-    "recordsDescription": "Una lista de todos los turnos configurados en el sistema.",
+    "pageTitle": "Shift Management",
+    "pageDescription": "Define and manage officer work shifts.",
+    "addShift": "Add Shift",
+    "totalShifts": "Total Shifts",
+    "totalShiftsDesc": "All configured shifts",
+    "activeShifts": "Active Shifts",
+    "activeShiftsDesc": "Currently operational shifts",
+    "inactiveShifts": "Inactive Shifts",
+    "inactiveShiftsDesc": "Currently inactive shifts",
+    "filterTitle": "Search & Filter Shifts",
+    "filterNamePlaceholder": "Shift Name...",
+    "filterStatusPlaceholder": "Status",
+    "filterAllStatuses": "All Statuses",
+    "filterDayPlaceholder": "Day of Week",
+    "reset": "Reset",
+    "search": "Search",
+    "recordsTitle": "Shift Records",
+    "recordsDescription": "A list of all configured shifts in the system.",
     "form": {
-      "addTitle": "Añadir Nuevo Turno",
-      "addDescription": "Definir un nuevo turno de trabajo para los oficiales.",
-      "editTitle": "Editar Turno",
-      "editDescription": "Editando el turno: {name}",
+      "addTitle": "Add New Shift",
+      "addDescription": "Define a new work shift for officers.",
+      "editTitle": "Edit Shift",
+      "editDescription": "Editing shift: {name}",
       "details": {
-        "title": "Detalles del Turno",
-        "description": "Establecer las propiedades principales del turno.",
-        "name": "Nombre del Turno",
-        "namePlaceholder": "p. ej., Turno de Mañana Terminal Principal",
-        "startTime": "Hora de Inicio",
-        "endTime": "Hora de Finalización",
-        "status": "Estado",
-        "active": "Activo",
-        "inactive": "Inactivo"
+        "title": "Shift Details",
+        "description": "Set the core properties of the shift.",
+        "name": "Shift Name",
+        "namePlaceholder": "e.g., Main Terminal Morning Shift",
+        "startTime": "Start Time",
+        "endTime": "End Time",
+        "status": "Status",
+        "active": "Active",
+        "inactive": "Inactive"
       },
       "operatingDays": {
-        "title": "Días de Operación",
-        "description": "Seleccione los días de la semana en que este turno está activo."
+        "title": "Operating Days",
+        "description": "Select the days of the week this shift is active."
       },
       "common": {
-        "cancel": "Cancelar",
-        "save": "Guardar Cambios",
-        "add": "Añadir Turno"
+        "cancel": "Cancel",
+        "save": "Save Changes",
+        "add": "Add Shift"
       },
       "toast": {
-        "addSuccessTitle": "Turno Añadido",
-        "addSuccessDesc": "Se ha añadido un nuevo turno correctamente.",
-        "updateSuccessTitle": "Turno Actualizado",
-        "updateSuccessDesc": "El turno se ha actualizado correctamente.",
-        "errorTitle": "Error al Guardar",
-        "errorDesc": "Hubo un error al guardar los datos del turno."
+        "addSuccessTitle": "Shift Added",
+        "addSuccessDesc": "A new shift has been added successfully.",
+        "updateSuccessTitle": "Shift Updated",
+        "updateSuccessDesc": "The shift has been updated successfully.",
+        "errorTitle": "Save Failed",
+        "errorDesc": "There was an error saving the shift data."
       }
     }
   },
   "AssignOfficer": {
-    "title": "Asignar Oficial",
-    "description": "Asignar oficiales a turnos y ubicaciones.",
-    "addAssignment": "Añadir Asignación",
+    "title": "Assign Officer",
+    "description": "Assign officers to shifts and locations.",
+    "addAssignment": "Add Assignment",
     "stats": {
-      "total": "Asignaciones Totales",
-      "totalDesc": "Todas las asignaciones programadas",
-      "confirmed": "Asignaciones Confirmadas",
-      "confirmedDesc": "Turnos activos y confirmados",
-      "pending": "Asignaciones Pendientes",
-      "pendingDesc": "Pendientes de confirmación"
+      "total": "Total Assignments",
+      "totalDesc": "All scheduled assignments",
+      "confirmed": "Confirmed Assignments",
+      "confirmedDesc": "Active and confirmed shifts",
+      "pending": "Pending Assignments",
+      "pendingDesc": "Awaiting confirmation"
     },
     "filter": {
-      "title": "Buscar y Filtrar Asignaciones",
-      "officer": "Oficial",
-      "port": "Puerto",
+      "title": "Search & Filter Assignments",
+      "officer": "Officer",
+      "port": "Port",
       "terminal": "Terminal",
-      "zone": "Zona",
-      "shift": "Turno",
-      "assignmentDate": "Fecha de Asignación",
-      "reset": "Restablecer",
-      "search": "Buscar"
+      "zone": "Zone",
+      "shift": "Shift",
+      "assignmentDate": "Assignment Date",
+      "reset": "Reset",
+      "search": "Search"
     },
     "table": {
-      "title": "Asignaciones de Oficiales",
-      "description": "Una lista de todas las asignaciones de oficiales en el sistema.",
-      "officer": "Oficial",
-      "date": "Fecha",
-      "shift": "Turno",
-      "port": "Puerto",
+      "title": "Officer Assignments",
+      "description": "A list of all officer assignments in the system.",
+      "officer": "Officer",
+      "date": "Date",
+      "shift": "Shift",
+      "port": "Port",
       "terminal": "Terminal",
-      "zone": "Zona",
-      "status": "Estado"
+      "zone": "Zone",
+      "status": "Status"
     },
     "actions": {
-      "view": "Ver detalles",
-      "edit": "Editar asignación",
-      "delete": "Eliminar"
+      "view": "View details",
+      "edit": "Edit assignment",
+      "delete": "Delete"
     },
     "detailsSheet": {
-      "title": "Detalles de la Asignación",
-      "description": "Asignación para {officerName} el {date}",
-      "officer": "Oficial",
-      "status": "Estado",
-      "date": "Fecha",
-      "shift": "Turno",
-      "port": "Puerto",
+      "title": "Assignment Details",
+      "description": "Assignment for {officerName} on {date}",
+      "officer": "Officer",
+      "status": "Status",
+      "date": "Date",
+      "shift": "Shift",
+      "port": "Port",
       "terminal": "Terminal",
-      "zone": "Zona",
-      "close": "Cerrar"
+      "zone": "Zone",
+      "close": "Close"
     },
     "deleteDialog": {
-      "title": "¿Está seguro?",
-      "description": "Esta acción no se puede deshacer. Esto eliminará permanentemente la asignación para {officerName}.",
-      "cancel": "Cancelar",
-      "confirm": "Sí, Eliminar"
+      "title": "Are you sure?",
+      "description": "This action cannot be undone. This will permanently delete the assignment for {officerName}.",
+      "cancel": "Cancel",
+      "confirm": "Yes, Delete"
     },
     "toast": {
-      "loadErrorTitle": "Error al Cargar Datos",
-      "loadErrorDesc": "No se pudieron obtener los datos necesarios para la página. Por favor, inténtelo de nuevo más tarde.",
-      "deleteSuccessTitle": "Asignación Eliminada",
-      "deleteSuccessDesc": "La asignación del oficial ha sido eliminada exitosamente.",
-      "deleteErrorTitle": "Error al Eliminar",
-      "addSuccessTitle": "Asignación Añadida",
-      "addSuccessDesc": "Se ha creado una nueva asignación exitosamente.",
-      "updateSuccessTitle": "Asignación Actualizada",
-      "updateSuccessDesc": "La asignación ha sido actualizada exitosamente.",
-      "errorTitle": "Operación Fallida",
-      "errorDesc": "Ocurrió un error. Por favor, inténtelo de nuevo."
+      "loadErrorTitle": "Error Loading Data",
+      "loadErrorDesc": "Could not fetch necessary data for the page. Please try again later.",
+      "deleteSuccessTitle": "Assignment Deleted",
+      "deleteSuccessDesc": "The officer's assignment has been successfully deleted.",
+      "deleteErrorTitle": "Delete Failed",
+      "addSuccessTitle": "Assignment Added",
+      "addSuccessDesc": "A new assignment has been successfully created.",
+      "updateSuccessTitle": "Assignment Updated",
+      "updateSuccessDesc": "The assignment has been successfully updated.",
+      "errorTitle": "Operation Failed",
+      "errorDesc": "An error occurred. Please try again."
     },
     "form": {
-        "addTitle": "Añadir Nueva Asignación",
-        "addDescription": "Programar a un oficial para un turno y ubicación específicos.",
-        "editTitle": "Editar Asignación",
-        "editDescription": "Actualizar una asignación de oficial existente.",
+        "addTitle": "Add New Assignment",
+        "addDescription": "Schedule an officer for a specific shift and location.",
+        "editTitle": "Edit Assignment",
+        "editDescription": "Update an existing officer assignment.",
         "common": {
-            "cancel": "Cancelar",
-            "save": "Guardar Cambios",
-            "add": "Añadir Asignación"
+            "cancel": "Cancel",
+            "save": "Save Changes",
+            "add": "Add Assignment"
         },
         "details": {
-            "title": "Detalles de la Asignación",
-            "description": "Seleccione el oficial, la ubicación y el turno.",
-            "officer": "Oficial",
-            "selectOfficer": "Seleccione un oficial...",
-            "date": "Fecha",
-            "pickDate": "Seleccione una fecha",
-            "port": "Puerto",
-            "selectPort": "Seleccione un puerto...",
+            "title": "Assignment Details",
+            "description": "Select the officer, location, and shift.",
+            "officer": "Officer",
+            "selectOfficer": "Select an officer...",
+            "date": "Date",
+            "pickDate": "Pick a date",
+            "port": "Port",
+            "selectPort": "Select a port...",
             "terminal": "Terminal",
-            "selectTerminal": "Seleccione una terminal...",
-            "zone": "Zona",
-            "selectZone": "Seleccione una zona...",
-            "shift": "Turno",
-            "selectShift": "Seleccione un turno...",
-            "status": "Estado",
-            "pending": "Pendiente",
-            "confirmed": "Confirmado",
-            "cancelled": "Cancelado",
-            "notes": "Notas",
-            "notesPlaceholder": "Añada cualquier nota relevante..."
+            "selectTerminal": "Select a terminal...",
+            "zone": "Zone",
+            "selectZone": "Select a zone...",
+            "shift": "Shift",
+            "selectShift": "Select a shift...",
+            "status": "Status",
+            "pending": "Pending",
+            "confirmed": "Confirmed",
+            "cancelled": "Cancelled",
+            "notes": "Notes",
+            "notesPlaceholder": "Add any relevant notes..."
         }
     }
   }

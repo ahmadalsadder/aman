@@ -601,16 +601,28 @@
         "createdBy": "تم إنشاؤه بواسطة",
         "close": "إغلاق"
       },
+      "accessDenied": {
+        "title": "تم رفض الوصول",
+        "description": "ليس لديك إذن لعرض تكوينات الأجهزة.",
+        "createDescription": "ليس لديك إذن لإنشاء أجهزة جديدة.",
+        "editDescription": "ليس لديك إذن لتحرير الأجهزة."
+      },
+      "toast": {
+        "deleteSuccessTitle": "تم حذف الجهاز",
+        "deleteSuccessDesc": "تم حذف الجهاز بنجاح.",
+        "deleteErrorTitle": "فشل الحذف",
+        "deleteErrorDesc": "لا يمكن حذف الجهاز.",
+        "statusUpdateTitle": "تم تحديث الحالة",
+        "statusUpdateDesc": "تم تحديث حالة الجهاز {name} إلى {status}.",
+        "statusUpdateErrorTitle": "فشل تحديث الحالة",
+        "loadErrorTitle": "خطأ",
+        "loadErrorDesc": "تعذر تحميل بيانات الجهاز."
+      },
       "form": {
         "addTitle": "إضافة جهاز جديد",
         "addDescription": "تكوين جهاز جديد للنظام.",
         "editTitle": "تحرير الجهاز",
         "editDescription": "تحديث التفاصيل لـ {name}.",
-        "accessDenied": {
-          "title": "تم رفض الوصول",
-          "createDescription": "ليس لديك إذن لإنشاء أجهزة جديدة.",
-          "editDescription": "ليس لديك إذن لتحرير الأجهزة."
-        },
         "details": {
           "title": "تفاصيل الجهاز",
           "description": "أدخل تفاصيل التعريف والنوع والموقع.",

@@ -29,7 +29,7 @@ export type Permission =
   | 'airport:records:create' | 'airport:records:edit' | 'airport:records:delete'
   | 'landport:records:create' | 'landport:records:edit' | 'landport:records:delete'
   | 'seaport:records:create' | 'seaport:records:edit' | 'seaport:records:delete'
-  | 'egate:records:create' | 'egate:records:edit' | 'egate:records:delete'
+  | 'egate:records:view' | 'egate:records:create' | 'egate:records:edit' | 'egate:records:delete'
   | 'analyst:records:view' | 'analyst:records:create' | 'analyst:records:edit' | 'analyst:records:delete'
   | 'control-room:records:view' | 'control-room:records:create' | 'control-room:records:edit' | 'control-room:records:delete'
   | 'airport:civil-records:view' 
@@ -43,10 +43,10 @@ export type Permission =
   | 'seaport:desks:view' | 'seaport:desks:create' | 'seaport:desks:edit' | 'seaport:desks:delete'
   
   // Workload permissions
-  | 'airport:workload:view'
-  | 'landport:workload:view'
-  | 'seaport:workload:view'
-  | 'egate:workload:view'
+  | 'airport:workload:view' | 'airport:workload:create' | 'airport:workload:edit' | 'airport:workload:delete'
+  | 'landport:workload:view' | 'landport:workload:create' | 'landport:workload:edit' | 'landport:workload:delete'
+  | 'seaport:workload:view' | 'seaport:workload:create' | 'seaport:workload:edit' | 'seaport:workload:delete'
+  | 'egate:workload:view' | 'egate:workload:create' | 'egate:workload:edit' | 'egate:workload:delete'
 
   // E-Gate media permissions
   | 'egate:media:view' | 'egate:media:create' | 'egate:media:edit' | 'egate:media:delete'

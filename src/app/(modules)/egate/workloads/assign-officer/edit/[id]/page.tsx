@@ -9,7 +9,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useRouter, useParams } from 'next/navigation';
 import { api } from '@/lib/api';
 import { useAuth } from '@/hooks/use-auth';
-import type { Port, Terminal, Zone, Shift, User, OfficerAssignment } from '@/types';
+import type { Port, Terminal, Zone, Shift, User, OfficerAssignment, Permission } from '@/types';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useTranslations } from 'next-intl';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
@@ -36,7 +36,7 @@ export default function EditEgateAssignOfficerPage() {
         zones: Zone[];
     } | null>(null);
     
-    const canEdit = hasPermission([`${module}:workload:view`]);
+    const canEdit = hasPermission([`${module}:workload:edit` as Permission]);
 
     useEffect(() => {
         if (!canEdit || !id) {

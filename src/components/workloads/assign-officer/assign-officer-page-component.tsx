@@ -27,7 +27,7 @@ import { Calendar } from '@/components/ui/calendar';
 import { format } from 'date-fns';
 import { Combobox } from '@/components/ui/combobox';
 import { DeleteAssignmentDialog } from '@/components/workloads/assign-officer/delete-assignment-dialog';
-import { AssignmentDetailsSheet } from '@/components/workloads/assign-officer/AssignmentDetailsSheet';
+import { AssignmentDetailsSheet } from '@/components/workloads/assign-officer/assignment-details-sheet';
 import CalendarIcon from '@/components/icons/calendar-icon';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAuth } from '@/hooks/use-auth';
@@ -78,9 +78,9 @@ export function AssignOfficerPageComponent({ module, assignments, pageData, load
   const [assignmentToView, setAssignmentToView] = useState<OfficerAssignment | null>(null);
   const [assignmentToDelete, setAssignmentToDelete] = useState<OfficerAssignment | null>(null);
   
-  const canCreate = useMemo(() => hasPermission([`${module}:workload:view` as Permission]), [hasPermission, module]);
-  const canEdit = useMemo(() => hasPermission([`${module}:workload:view` as Permission]), [hasPermission, module]);
-  const canDelete = useMemo(() => hasPermission([`${module}:workload:view` as Permission]), [hasPermission, module]);
+  const canCreate = hasPermission([`${module}:workload:create` as Permission]);
+  const canEdit = hasPermission([`${module}:workload:edit` as Permission]);
+  const canDelete = hasPermission([`${module}:workload:delete` as Permission]);
 
   const officerOptions = useMemo(() => pageData?.officers.map(o => ({ value: o.id, label: o.name })) || [], [pageData]);
   const shiftOptions = useMemo(() => pageData?.shifts.map(s => ({ value: s.id, label: s.name })) || [], [pageData]);

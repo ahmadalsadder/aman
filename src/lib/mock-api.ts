@@ -46,7 +46,7 @@ const users: User[] = [
         'airport:transactions:live',
         'airport:dashboard:view', 'airport:dashboard:stats:view', 'airport:prediction:view', 'airport:dashboard:charts:view', 'airport:dashboard:officer-performance:view',
         'airport:desks:view', 'airport:desks:create', 'airport:desks:edit', 'airport:desks:delete',
-        'airport:workload:view',
+        'airport:workload:view', 'airport:workload:create', 'airport:workload:edit', 'airport:workload:delete',
         // Landport
         'landport:passengers:view', 'landport:passengers:create', 'landport:passengers:edit', 'landport:passengers:delete',
         'landport:whitelist:view', 'landport:whitelist:create', 'landport:whitelist:edit', 'landport:whitelist:delete',
@@ -57,7 +57,7 @@ const users: User[] = [
         'landport:transactions:live',
         'landport:dashboard:view', 'landport:dashboard:stats:view', 'landport:prediction:view', 'landport:dashboard:charts:view', 'landport:dashboard:officer-performance:view',
         'landport:desks:view', 'landport:desks:create', 'landport:desks:edit', 'landport:desks:delete',
-        'landport:workload:view',
+        'landport:workload:view', 'landport:workload:create', 'landport:workload:edit', 'landport:workload:delete',
         // Seaport
         'seaport:passengers:view', 'seaport:passengers:create', 'seaport:passengers:edit', 'seaport:passengers:delete',
         'seaport:whitelist:view', 'seaport:whitelist:create', 'seaport:whitelist:edit', 'seaport:whitelist:delete',
@@ -68,7 +68,7 @@ const users: User[] = [
         'seaport:transactions:live',
         'seaport:dashboard:view', 'seaport:dashboard:stats:view', 'seaport:prediction:view', 'seaport:dashboard:charts:view', 'seaport:dashboard:officer-performance:view',
         'seaport:desks:view', 'seaport:desks:create', 'seaport:desks:edit', 'seaport:desks:delete',
-        'seaport:workload:view',
+        'seaport:workload:view', 'seaport:workload:create', 'seaport:workload:edit', 'seaport:workload:delete',
         // E-Gate
         'egate:passengers:view', 'egate:passengers:create', 'egate:passengers:edit', 'egate:passengers:delete',
         'egate:whitelist:view', 'egate:whitelist:create', 'egate:whitelist:edit', 'egate:whitelist:delete',
@@ -77,7 +77,7 @@ const users: User[] = [
         'egate:transactions:view',
         'egate:civil-records:view',
         'egate:dashboard:view', 'egate:dashboard:stats:view', 'egate:prediction:view', 'egate:dashboard:charts:view', 'egate:media:view', 'egate:media:create', 'egate:media:edit', 'egate:media:delete',
-        'egate:workload:view',
+        'egate:workload:view', 'egate:workload:create', 'egate:workload:edit', 'egate:workload:delete',
         // Other Modules
         'analyst:records:view', 'analyst:records:create', 'analyst:records:edit', 'analyst:records:delete',
         'analyst:dashboard:view', 'analyst:dashboard:stats:view', 'analyst:dashboard:charts:view',

@@ -9,7 +9,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
 import { useAuth } from '@/hooks/use-auth';
-import type { Port, Terminal, Zone, Shift, User, OfficerAssignment } from '@/types';
+import type { Port, Terminal, Zone, Shift, User, OfficerAssignment, Permission } from '@/types';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useTranslations } from 'next-intl';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
@@ -28,12 +28,12 @@ export default function AddLandportAssignOfficerPage() {
     const [pageData, setPageData] = useState<{
         officers: User[];
         shifts: Shift[];
-        ports: Port[],
+        ports: Port[];
         terminals: Terminal[];
         zones: Zone[];
     } | null>(null);
     
-    const canCreate = hasPermission([`${module}:workload:view`]);
+    const canCreate = hasPermission([`${module}:workload:create` as Permission]);
 
     useEffect(() => {
         if (!canCreate) {

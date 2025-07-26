@@ -41,7 +41,7 @@ export interface Machine {
     type: 'Scanner' | 'Biometric' | 'Camera';
     ipAddress: string;
     macAddress: string;
-    status: 'Online' | 'Offline' | 'Maintenance';
+    status: 'Active' | 'Inactive' | 'Maintenance';
     portId: string;
     terminalId: string;
     zoneId: string;

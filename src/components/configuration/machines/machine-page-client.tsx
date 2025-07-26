@@ -8,7 +8,7 @@ import { DataTable } from '@/components/shared/data-table';
 import { GradientPageHeader } from '@/components/shared/gradient-page-header';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
-import { MoreHorizontal, PlusCircle, HardDrive, Eye, FilePenLine, Trash2, Wifi, WifiOff, Ship } from 'lucide-react';
+import { MoreHorizontal, PlusCircle, HardDrive, Eye, FilePenLine, Trash2, Wifi, WifiOff, Ship, PlayCircle, PauseCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -20,8 +20,8 @@ import { DeleteMachineDialog } from './delete-machine-dialog';
 import { MachineDetailsSheet } from './machine-details-sheet';
 
 const statusColors: { [key: string]: string } = {
-  Online: 'bg-green-500/20 text-green-700 border-green-500/30',
-  Offline: 'bg-red-500/20 text-red-700 border-red-500/30',
+  Active: 'bg-green-500/20 text-green-700 border-green-500/30',
+  Inactive: 'bg-gray-500/20 text-gray-700 border-gray-500/30',
   Maintenance: 'bg-yellow-500/20 text-yellow-700 border-yellow-500/30',
 };
 
@@ -80,7 +80,7 @@ export function MachinePageClient({ machines, ports, terminals, zones, onDeleteM
     { accessorKey: 'type', header: t('table.type'), cell: ({ row }) => <Badge variant="outline" className={cn(typeColors[row.original.type])}>{row.original.type}</Badge> },
     { accessorKey: 'status', header: t('table.status'), cell: ({ row }) => (
         <Badge variant="outline" className={cn(statusColors[row.original.status])}>
-            {row.original.status === 'Online' ? <Wifi className="mr-2 h-3 w-3" /> : <WifiOff className="mr-2 h-3 w-3" />}
+            {row.original.status === 'Active' ? <Wifi className="mr-2 h-3 w-3" /> : <WifiOff className="mr-2 h-3 w-3" />}
             {row.original.status}
         </Badge>
     )},
@@ -90,6 +90,19 @@ export function MachinePageClient({ machines, ports, terminals, zones, onDeleteM
           <DropdownMenuContent align="end">
             <DropdownMenuItem onClick={() => setMachineToView(row.original)}><Eye className="mr-2 h-4 w-4" />{t('actions.view')}</DropdownMenuItem>
             {permissions.canEdit && <DropdownMenuItem asChild><Link href={`/configuration/machines/edit/${row.original.id}`}><FilePenLine className="mr-2 h-4 w-4" />{t('actions.edit')}</Link></DropdownMenuItem>}
+            {permissions.canEdit && (
+                row.original.status === 'Active' ? (
+                    <DropdownMenuItem onClick={() => onToggleStatus(row.original.id, row.original.status)}>
+                        <PauseCircle className="mr-2 h-4 w-4" />
+                        {t('actions.deactivate')}
+                    </DropdownMenuItem>
+                ) : row.original.status === 'Inactive' ? (
+                    <DropdownMenuItem onClick={() => onToggleStatus(row.original.id, row.original.status)}>
+                        <PlayCircle className="mr-2 h-4 w-4" />
+                        {t('actions.activate')}
+                    </DropdownMenuItem>
+                ) : null
+            )}
             {permissions.canDelete && <DropdownMenuSeparator />}
             {permissions.canDelete && <DropdownMenuItem className="text-destructive focus:text-destructive" onClick={() => setMachineToDelete(row.original)}><Trash2 className="mr-2 h-4 w-4" />{t('actions.delete')}</DropdownMenuItem>}
           </DropdownMenuContent>

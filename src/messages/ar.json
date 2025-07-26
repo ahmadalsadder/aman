@@ -581,6 +581,8 @@
         "view": "عرض التفاصيل",
         "edit": "تحرير",
         "toggleStatus": "تغيير الحالة",
+        "activate": "تنشيط",
+        "deactivate": "إلغاء التنشيط",
         "delete": "حذف"
       },
       "deleteDialog": {

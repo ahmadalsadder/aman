@@ -581,6 +581,8 @@
         "view": "Ver detalles",
         "edit": "Editar",
         "toggleStatus": "Cambiar Estado",
+        "activate": "Activar",
+        "deactivate": "Desactivar",
         "delete": "Eliminar"
       },
       "deleteDialog": {

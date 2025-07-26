@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -70,7 +71,7 @@ export default function MachinesPage() {
   };
   
   const handleToggleStatus = async (machineId: string, currentStatus: string): Promise<boolean> => {
-    const newStatus = currentStatus === 'Online' ? 'Offline' : 'Online';
+    const newStatus = currentStatus === 'Active' ? 'Inactive' : 'Active';
     const result = await api.post<Machine>('/data/machines/toggle-status', { id: machineId, status: newStatus });
     if (result.isSuccess) {
         toast({

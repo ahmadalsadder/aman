@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -24,7 +25,7 @@ const formSchema = z.object({
   ipAddress: z.string().ip({ version: "v4", message: "Invalid IP address format." }),
   macAddress: z.string().regex(/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/, { message: "Invalid MAC address format." }),
   type: z.enum(['Scanner', 'Biometric', 'Camera']),
-  status: z.enum(['Online', 'Offline', 'Maintenance']),
+  status: z.enum(['Active', 'Inactive', 'Maintenance']),
 });
 
 export type MachineFormValues = z.infer<typeof formSchema>;
@@ -59,7 +60,7 @@ export function MachineForm({
       ipAddress: '',
       macAddress: '',
       type: 'Scanner',
-      status: 'Online',
+      status: 'Active',
     },
   });
 
@@ -102,7 +103,7 @@ export function MachineForm({
           <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <FormField control={form.control} name="name" render={({ field }) => ( <FormItem><FormLabel required>{t('details.name')}</FormLabel><FormControl><Input placeholder={t('details.namePlaceholder')} {...field} /></FormControl><FormMessage /></FormItem> )} />
             <FormField control={form.control} name="type" render={({ field }) => ( <FormItem><FormLabel required>{t('details.type')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue /></SelectTrigger></FormControl><SelectContent><SelectItem value="Scanner">Scanner</SelectItem><SelectItem value="Biometric">Biometric</SelectItem><SelectItem value="Camera">Camera</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
-            <FormField control={form.control} name="status" render={({ field }) => ( <FormItem><FormLabel required>{t('details.status')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue /></SelectTrigger></FormControl><SelectContent><SelectItem value="Online">Online</SelectItem><SelectItem value="Offline">Offline</SelectItem><SelectItem value="Maintenance">Maintenance</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
+            <FormField control={form.control} name="status" render={({ field }) => ( <FormItem><FormLabel required>{t('details.status')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue /></SelectTrigger></FormControl><SelectContent><SelectItem value="Active">Active</SelectItem><SelectItem value="Inactive">Inactive</SelectItem><SelectItem value="Maintenance">Maintenance</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
             <FormField control={form.control} name="ipAddress" render={({ field }) => ( <FormItem><FormLabel required>{t('details.ipAddress')}</FormLabel><FormControl><Input placeholder="192.168.1.1" {...field} /></FormControl><FormMessage /></FormItem> )} />
             <FormField control={form.control} name="macAddress" render={({ field }) => ( <FormItem><FormLabel required>{t('details.macAddress')}</FormLabel><FormControl><Input placeholder="00:1A:2B:3C:4D:5E" {...field} /></FormControl><FormMessage /></FormItem> )} />
             <div />

@@ -607,6 +607,8 @@
         "view": "View details",
         "edit": "Edit",
         "toggleStatus": "Toggle Status",
+        "activate": "Activate",
+        "deactivate": "Deactivate",
         "delete": "Delete"
       },
       "deleteDialog": {

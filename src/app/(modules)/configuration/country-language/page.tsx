@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -63,7 +64,8 @@ export default function CountryLanguagePage() {
                 description: t('toast.saveSuccessDesc'),
                 variant: 'success',
             });
-            setMappings(result.data || []);
+            // Update state with the same mappings that were sent, ensuring type safety.
+            setMappings(updatedMappings);
         } else {
             toast({
                 title: t('toast.saveErrorTitle'),

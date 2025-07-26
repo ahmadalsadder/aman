@@ -61,14 +61,16 @@ const getModuleSubNav = (module: Module, t: any): NavItem[] => {
             });
         }
 
-
-        subNav.push({
-            href: `${moduleBaseUrl}/transactions`, 
-            label: t('transactions'),
-            icon: ArrowRightLeft,
-            permission: `${module}:transactions:view` as Permission,
-            children: transactionChildren
-        });
+        // Add the parent "Transactions" item if there are any children to show
+        if(transactionChildren.length > 0) {
+            subNav.push({
+                href: `${moduleBaseUrl}/transactions`, 
+                label: t('transactions'),
+                icon: ArrowRightLeft,
+                permission: `${module}:transactions:view` as Permission,
+                children: transactionChildren
+            });
+        }
         
         if (['airport', 'landport', 'seaport'].includes(module)) {
             subNav.push({

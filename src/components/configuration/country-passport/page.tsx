@@ -57,7 +57,7 @@ export default function CountryPassportPage() {
                 description: t('toast.saveSuccessDesc'),
                 variant: 'success',
             });
-            setMappings(result.data || []);
+            setMappings(updatedMappings);
         } else {
             toast({
                 title: t('toast.saveErrorTitle'),

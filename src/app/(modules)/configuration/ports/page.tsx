@@ -67,7 +67,7 @@ export default function PortsPage() {
       toast({
         title: t('toast.statusUpdateTitle'),
         description: t('toast.statusUpdateDesc', { name: result.data.name, status: result.data.status }),
-        variant: 'success',
+        variant: 'default',
       });
     } else {
       toast({

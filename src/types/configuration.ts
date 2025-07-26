@@ -1,4 +1,5 @@
 
+
 export interface Port {
     id: string;
     name: string;
@@ -44,4 +45,10 @@ export interface Workflow {
 export interface RiskProfile {
     id: string;
     name: string;
+}
+
+export interface CountryLanguageMapping {
+    countryCode: string;
+    countryName: string;
+    language: string;
 }

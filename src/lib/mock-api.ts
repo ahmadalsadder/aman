@@ -1,12 +1,13 @@
 
+
 import type { User } from '@/types';
 import { Result, ApiError } from '@/types/api/result';
-import { mockVisaDatabase, mockPorts, mockTerminals, mockZones, mockWorkflows, mockRiskProfiles, setMockOfficerDesks, setMockGates, setMockMedia, setMockWhitelist, setMockBlacklist, setMockPassengers, setMockShifts, getMockPassengers, getMockTransactions, getMockOfficerDesks, getMockGates, getMockMedia, getMockWhitelist, getMockBlacklist, getMockShifts, setMockOfficerAssignments, getMockOfficerAssignments } from './mock-data';
+import { mockVisaDatabase, mockPorts, mockTerminals, mockZones, mockWorkflows, mockRiskProfiles, setMockOfficerDesks, setMockGates, setMockMedia, setMockWhitelist, setMockBlacklist, setMockPassengers, setMockShifts, getMockPassengers, getMockTransactions, getMockOfficerDesks, getMockGates, getMockMedia, getMockWhitelist, getMockBlacklist, getMockShifts, setMockOfficerAssignments, getMockOfficerAssignments, mockCountryLanguageMapping, availableLanguages } from './mock-data';
 import { assessPassengerRisk } from '@/ai/flows/assess-risk-flow';
 import { countries } from './countries';
 import { Fingerprint, ScanLine, UserCheck, ShieldAlert, User as UserIcon } from 'lucide-react';
 import { extractPassportData } from '@/ai/flows/extract-passport-data-flow';
-import type { Transaction, Gate, CivilRecord, Media, BlacklistEntry, WhitelistEntry, Passenger, Shift, OfficerAssignment } from '@/types/live-processing';
+import type { Transaction, Gate, CivilRecord, Media, BlacklistEntry, WhitelistEntry, Passenger, Shift, OfficerAssignment, CountryLanguageMapping } from '@/types/live-processing';
 
 const getAuthInfo = (): Partial<User> => {
   try {
@@ -83,7 +84,8 @@ const users: User[] = [
         'analyst:dashboard:view', 'analyst:dashboard:stats:view', 'analyst:dashboard:charts:view',
         'control-room:dashboard:view', 'control-room:dashboard:stats:view', 'control-room:dashboard:charts:view', 'control-room:dashboard:officer-performance:view',
         'duty-manager:view',
-        'configuration:dashboard:view'
+        'configuration:dashboard:view',
+        'configuration:country-language:view', 'configuration:country-language:edit'
     ]
   },
   { 
@@ -1033,6 +1035,18 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
 
 
     // CONFIGURATION DATA
+    if (method === 'GET' && url.pathname === '/data/country-language-mappings') {
+        return Result.success(mockCountryLanguageMapping) as Result<T>;
+    }
+    if (method === 'GET' && url.pathname === '/data/available-languages') {
+        return Result.success(availableLanguages) as Result<T>;
+    }
+    if (method === 'POST' && url.pathname === '/data/country-language-mappings/save') {
+        const newMappings = JSON.parse(body as string) as CountryLanguageMapping[];
+        // In a real app, you'd save this to a database. Here we just return it.
+        return Result.success(newMappings) as Result<T>;
+    }
+
     if(method === 'GET' && url.pathname === '/data/desks') {
         const moduleType = url.searchParams.get('moduleType');
         const allPorts = mockPorts.filter(p => p.type.toLowerCase() === moduleType);

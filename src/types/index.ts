@@ -1,4 +1,5 @@
 
+
 export * from './live-processing';
 export * from './configuration';
 export * from './workload';
@@ -61,6 +62,7 @@ export type Permission =
   | 'analyst:dashboard:view'
   | 'control-room:dashboard:view'
   | 'configuration:dashboard:view'
+  | 'configuration:country-language:view' | 'configuration:country-language:edit'
   | 'airport:transactions:view'
   | 'landport:transactions:view'
   | 'seaport:transactions:view'

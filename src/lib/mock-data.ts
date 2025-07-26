@@ -1,8 +1,9 @@
 
+
 import type { Passenger, Transaction, OfficerDesk, Gate, Media, WhitelistEntry, BlacklistEntry, OfficerAssignment } from "@/types/live-processing";
 import type { Shift, DayOfWeek } from "@/types/workload";
 import { Plane, Car, Ship } from "lucide-react";
-import type { Port, Terminal, Zone, Workflow, RiskProfile, User } from '@/types';
+import type { Port, Terminal, Zone, Workflow, RiskProfile, User, CountryLanguageMapping } from '@/types';
 
 // This is the correct order for initialization.
 // Define data first, then functions that use it.
@@ -271,6 +272,14 @@ let mockOfficerAssignments: OfficerAssignment[] = [
   { id: 'ASSIGN-002', officerId: '7', officerName: 'Landport Officer', shiftId: 'S002', portId: 'PORT-HE', terminalId: 'TERM-HE-1', zoneId: 'ZONE-LA', assignmentDate: '2023-10-25', status: 'Confirmed', module: 'landport' },
   { id: 'ASSIGN-003', officerId: '3', officerName: 'Viewer User', shiftId: 'S004', portId: 'PORT-PC', terminalId: 'TERM-PC-1', zoneId: 'ZONE-SA', assignmentDate: '2023-10-28', status: 'Pending', module: 'seaport' },
 ];
+
+export const mockCountryLanguageMapping: CountryLanguageMapping[] = [
+    { countryCode: 'USA', countryName: 'United States', language: 'English' },
+    { countryCode: 'FRA', countryName: 'France', language: 'French' },
+    { countryCode: 'SAU', countryName: 'Saudi Arabia', language: 'Arabic' },
+    { countryCode: 'CHN', countryName: 'China', language: 'English' },
+];
+export const availableLanguages = ['English', 'Arabic', 'French', 'Spanish', 'Urdu'];
 
 
 // Getters

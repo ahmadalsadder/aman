@@ -5,7 +5,7 @@ import { AssignOfficerPageComponent } from '@/components/workloads/assign-office
 import { api } from '@/lib/api';
 import type { OfficerAssignment, Port, Terminal, Zone, Shift, User } from '@/types';
 import { useAuth } from '@/hooks/use-auth';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { useTranslations } from 'next-intl';
 
@@ -27,13 +27,23 @@ export default function AirportAssignOfficerPage() {
 
     const canView = useMemo(() => hasPermission([`${module}:workload:view`]), [hasPermission, module]);
 
+    const fetchAssignments = useCallback(async () => {
+        const result = await api.get<OfficerAssignment[]>(`/data/officer-assignments?module=${module}`);
+        if (result.isSuccess) {
+            setAssignments(result.data || []);
+        } else {
+            toast({ title: t('toast.loadErrorTitle'), description: t('toast.loadErrorDesc'), variant: 'destructive' });
+        }
+    }, [module, t, toast]);
+
+
     useEffect(() => {
         if (!canView) {
             setLoading(false);
             return;
         }
 
-        const fetchData = async () => {
+        const fetchPageData = async () => {
             setLoading(true);
             const [assignmentsRes, officersRes, shiftsRes, portsRes, terminalsRes, zonesRes] = await Promise.all([
                 api.get<OfficerAssignment[]>(`/data/officer-assignments?module=${module}`),
@@ -59,14 +69,14 @@ export default function AirportAssignOfficerPage() {
             }
             setLoading(false);
         };
-        fetchData();
+        fetchPageData();
     }, [canView, module, t, toast]);
 
     const handleDeleteAssignment = async (assignmentId: string): Promise<boolean> => {
         const result = await api.post('/data/officer-assignments/delete', { id: assignmentId });
         if (result.isSuccess) {
             toast({ title: t('toast.deleteSuccessTitle'), description: t('toast.deleteSuccessDesc') });
-            setAssignments(prev => prev.filter(a => a.id !== assignmentId));
+            await fetchAssignments(); // Refetch the list
             return true;
         } else {
             toast({ title: t('toast.deleteErrorTitle'), description: result.errors?.[0]?.message, variant: 'destructive' });

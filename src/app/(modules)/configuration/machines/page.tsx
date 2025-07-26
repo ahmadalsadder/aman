@@ -55,7 +55,7 @@ export default function MachinesPage() {
       toast({
         title: t('toast.deleteSuccessTitle'),
         description: t('toast.deleteSuccessDesc'),
-        variant: 'info',
+        variant: 'default',
       });
       setMachines(prev => prev.filter(p => p.id !== machineId));
       return true;

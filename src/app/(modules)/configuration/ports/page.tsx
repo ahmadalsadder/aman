@@ -46,7 +46,7 @@ export default function PortsPage() {
       toast({
         title: t('toast.deleteSuccessTitle'),
         description: t('toast.deleteSuccessDesc'),
-        variant: 'info',
+        variant: 'default',
       });
       setPorts(prev => prev.filter(p => p.id !== portId));
       return true;

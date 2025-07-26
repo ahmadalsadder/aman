@@ -46,7 +46,7 @@ export default function SystemMessagesPage() {
             toast({
                 title: t('toast.deleteSuccessTitle'),
                 description: t('toast.deleteSuccessDesc'),
-                variant: 'info',
+                variant: 'default',
             });
             setMessages(prev => prev.filter(m => m.id !== messageId));
             return true;

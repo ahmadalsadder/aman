@@ -404,7 +404,7 @@
         }
       }
     },
-     "Terminals": {
+    "Terminals": {
       "portsPageTitle": "Puertos",
       "pageTitle": "Gestión de Terminales",
       "pageDescription": "Configurar y gestionar todas las terminales portuarias.",
@@ -483,6 +483,49 @@
           "errorTitle": "Error al Guardar",
           "errorDesc": "Hubo un error al guardar los datos de la terminal."
         }
+      }
+    },
+    "Zones": {
+      "pageTitle": "Gestión de Zonas",
+      "pageDescription": "Configurar y gestionar todas las zonas dentro de las terminales.",
+      "addZone": "Añadir Zona",
+      "filters": {
+        "title": "Buscar y Filtrar Zonas",
+        "namePlaceholder": "Nombre de la Zona...",
+        "portPlaceholder": "Puerto",
+        "terminalPlaceholder": "Terminal",
+        "reset": "Restablecer",
+        "search": "Buscar"
+      },
+      "table": {
+        "title": "Registros de Zonas",
+        "description": "Una lista de todas las zonas en el sistema.",
+        "zoneName": "Nombre de la Zona",
+        "terminal": "Terminal",
+        "port": "Puerto",
+        "status": "Estado"
+      },
+      "actions": {
+        "view": "Ver detalles",
+        "edit": "Editar",
+        "deactivate": "Desactivar",
+        "activate": "Activar",
+        "delete": "Eliminar"
+      },
+      "detailsSheet": {
+        "description": "Zona en {terminalName}",
+        "status": "Estado",
+        "port": "Puerto",
+        "terminal": "Terminal",
+        "lastModified": "Última Modificación",
+        "createdBy": "Creado por",
+        "close": "Cerrar"
+      },
+      "deleteDialog": {
+        "title": "¿Está seguro?",
+        "description": "Esto eliminará permanentemente la zona {zoneName}.",
+        "cancel": "Cancelar",
+        "confirm": "Sí, Eliminar"
       }
     }
   },
@@ -614,7 +657,7 @@
     },
     "verification": {
       "title": "2. Verificación del Oficial",
-      "description": "Confirme manualmente que todas las comprobaciones están completas.",
+      "description": "Confirme manually que todas las comprobaciones están completas.",
       "transactionType": "Tipo de Transacción",
       "entry": "Entrada",
       "exit": "Salida",
@@ -1460,4 +1503,3 @@
     }
   }
 }
-

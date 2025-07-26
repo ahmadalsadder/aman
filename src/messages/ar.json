@@ -484,6 +484,49 @@
           "errorDesc": "حدث خطأ أثناء حفظ بيانات المحطة."
         }
       }
+    },
+    "Zones": {
+      "pageTitle": "إدارة المناطق",
+      "pageDescription": "تكوين وإدارة جميع المناطق داخل المحطات.",
+      "addZone": "إضافة منطقة",
+      "filters": {
+        "title": "بحث وتصفية المناطق",
+        "namePlaceholder": "اسم المنطقة...",
+        "portPlaceholder": "المنفذ",
+        "terminalPlaceholder": "المحطة",
+        "reset": "إعادة تعيين",
+        "search": "بحث"
+      },
+      "table": {
+        "title": "سجلات المناطق",
+        "description": "قائمة بجميع المناطق في النظام.",
+        "zoneName": "اسم المنطقة",
+        "terminal": "المحطة",
+        "port": "المنفذ",
+        "status": "الحالة"
+      },
+      "actions": {
+        "view": "عرض التفاصيل",
+        "edit": "تحرير",
+        "deactivate": "إلغاء التنشيط",
+        "activate": "تنشيط",
+        "delete": "حذف"
+      },
+      "detailsSheet": {
+        "description": "منطقة في {terminalName}",
+        "status": "الحالة",
+        "port": "المنفذ",
+        "terminal": "المحطة",
+        "lastModified": "آخر تعديل",
+        "createdBy": "تم إنشاؤه بواسطة",
+        "close": "إغلاق"
+      },
+      "deleteDialog": {
+        "title": "هل أنت متأكد؟",
+        "description": "سيؤدي هذا إلى حذف المنطقة {zoneName} بشكل دائم.",
+        "cancel": "إلغاء",
+        "confirm": "نعم، حذف"
+      }
     }
   },
   "Transactions": {
@@ -614,7 +657,7 @@
     },
     "verification": {
       "title": "2. Verificación del Oficial",
-      "description": "Confirme manualmente que todas las comprobaciones están completas.",
+      "description": "Confirme manually que todas las comprobaciones están completas.",
       "transactionType": "Tipo de Transacción",
       "entry": "Entrada",
       "exit": "Salida",

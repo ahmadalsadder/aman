@@ -446,8 +446,6 @@
         "confirm": "Yes, Delete"
       },
       "form": {
-        "portsPageTitle": "Ports",
-        "pageTitle": "Terminals",
         "addTitle": "Add New Terminal",
         "addDescription": "Configure a new terminal within a port.",
         "editTitle": "Edit Terminal",
@@ -483,6 +481,49 @@
           "errorTitle": "Save Failed",
           "errorDesc": "There was an error saving the terminal data."
         }
+      }
+    },
+    "Zones": {
+      "pageTitle": "Zone Management",
+      "pageDescription": "Configure and manage all zones within terminals.",
+      "addZone": "Add Zone",
+      "filters": {
+        "title": "Search & Filter Zones",
+        "namePlaceholder": "Zone Name...",
+        "portPlaceholder": "Port",
+        "terminalPlaceholder": "Terminal",
+        "reset": "Reset",
+        "search": "Search"
+      },
+      "table": {
+        "title": "Zone Records",
+        "description": "A list of all zones in the system.",
+        "zoneName": "Zone Name",
+        "terminal": "Terminal",
+        "port": "Port",
+        "status": "Status"
+      },
+      "actions": {
+        "view": "View details",
+        "edit": "Edit",
+        "deactivate": "Deactivate",
+        "activate": "Activate",
+        "delete": "Delete"
+      },
+      "detailsSheet": {
+        "description": "Zone in {terminalName}",
+        "status": "Status",
+        "port": "Port",
+        "terminal": "Terminal",
+        "lastModified": "Last Modified",
+        "createdBy": "Created By",
+        "close": "Close"
+      },
+      "deleteDialog": {
+        "title": "Are you sure?",
+        "description": "This will permanently delete the zone {zoneName}.",
+        "cancel": "Cancel",
+        "confirm": "Yes, Delete"
       }
     }
   },
@@ -1460,4 +1501,3 @@
     }
   }
 }
-

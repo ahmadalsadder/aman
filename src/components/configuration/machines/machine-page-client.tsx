@@ -47,13 +47,13 @@ interface MachinePageClientProps {
 
 export function MachinePageClient({ machines, ports, terminals, zones, onDeleteMachine, onToggleStatus, permissions }: MachinePageClientProps) {
   const t = useTranslations('Configuration.Machines');
-  const [machineToView, setMachineToView] = useState<Machine | null>(null);
+  const [machineToView, setMachineToView] = useState<(Machine & { portName?: string; terminalName?: string; zoneName?: string }) | null>(null);
   const [machineToDelete, setMachineToDelete] = useState<Machine | null>(null);
 
   const enrichedMachines = useMemo(() => {
     return machines.map(machine => {
       const terminal = terminals.find(t => t.id === machine.terminalId);
-      const port = ports.find(p => p.id === terminal?.portId);
+      const port = ports.find(p => p.id === machine.portId);
       const zone = zones.find(z => z.id === machine.zoneId);
       return {
         ...machine,

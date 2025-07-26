@@ -49,7 +49,7 @@ interface TerminalPageClientProps {
 export function TerminalPageClient({ terminals, ports, onDeleteTerminal, onToggleStatus, permissions }: TerminalPageClientProps) {
   const t = useTranslations('Configuration.Terminals');
   const tNav = useTranslations('Navigation');
-  const [terminalToView, setTerminalToView] = useState<Terminal | null>(null);
+  const [terminalToView, setTerminalToView] = useState<(Terminal & { portName?: string }) | null>(null);
   const [terminalToDelete, setTerminalToDelete] = useState<Terminal | null>(null);
   const [filters, setFilters] = useState(initialFilters);
   const [appliedFilters, setAppliedFilters] = useState(initialFilters);

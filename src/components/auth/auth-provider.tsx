@@ -49,17 +49,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
-    try {
-      const storedUser = getCookie(AUTH_COOKIE_NAME);
-      if (storedUser) {
-        setUser(JSON.parse(storedUser));
-      }
-    } catch (error) {
-      console.error('Failed to parse auth data from cookie', error);
-      eraseCookie(AUTH_COOKIE_NAME);
-    } finally {
-      setLoading(false);
-    }
+    const checkUser = () => {
+        try {
+            const storedUser = getCookie(AUTH_COOKIE_NAME);
+            if (storedUser) {
+                setUser(JSON.parse(decodeURIComponent(storedUser)));
+            }
+        } catch (error) {
+            console.error('Failed to parse auth data from cookie', error);
+            eraseCookie(AUTH_COOKIE_NAME);
+        } finally {
+            setLoading(false);
+        }
+    };
+    checkUser();
   }, []);
 
   const login = async (email: string, password: string) => {

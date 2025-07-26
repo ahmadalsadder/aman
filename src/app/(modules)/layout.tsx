@@ -23,7 +23,7 @@ export default function ModulesLayout({ children }: { children: React.ReactNode 
     }
   }, [user, loading, router]);
 
-  if (loading) {
+  if (loading || !user) {
     return (
       <div className="flex h-screen w-full flex-col items-center justify-center bg-background">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
@@ -32,22 +32,16 @@ export default function ModulesLayout({ children }: { children: React.ReactNode 
     );
   }
 
-  // Render the layout only if the user is verified
-  if (user) {
-    return (
-      <SidebarProvider>
-        <AppSidebar />
-        <SidebarInset className="relative flex flex-col">
-          <Background />
-          <Header />
-          <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">
-            {children}
-          </main>
-        </SidebarInset>
-      </SidebarProvider>
-    );
-  }
-  
-  // Return null or a loader while the redirect is happening
-  return null;
+  return (
+    <SidebarProvider>
+      <AppSidebar />
+      <SidebarInset className="relative flex flex-col">
+        <Background />
+        <Header />
+        <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">
+          {children}
+        </main>
+      </SidebarInset>
+    </SidebarProvider>
+  );
 }

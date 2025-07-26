@@ -404,15 +404,86 @@
         }
       }
     },
-    "Terminals": {
-        "detailsSheet": {
-            "description": "Terminal at {portName}",
-            "status": "Status",
-            "port": "Port",
-            "lastModified": "Last Modified",
-            "createdBy": "Created By",
-            "close": "Close"
+     "Terminals": {
+      "portsPageTitle": "Ports",
+      "pageTitle": "Terminal Management",
+      "pageDescription": "Configure and manage all port terminals.",
+      "addTerminal": "Add Terminal",
+      "filters": {
+        "title": "Search & Filter Terminals",
+        "namePlaceholder": "Terminal Name...",
+        "portPlaceholder": "Port",
+        "reset": "Reset",
+        "search": "Search"
+      },
+      "table": {
+        "title": "Terminal Records",
+        "description": "A list of all terminals in the system.",
+        "terminalName": "Terminal Name",
+        "port": "Port",
+        "status": "Status",
+        "lastModified": "Last Modified"
+      },
+      "actions": {
+        "view": "View details",
+        "edit": "Edit",
+        "deactivate": "Deactivate",
+        "activate": "Activate",
+        "delete": "Delete"
+      },
+      "detailsSheet": {
+        "description": "Terminal at {portName}",
+        "status": "Status",
+        "port": "Port",
+        "lastModified": "Last Modified",
+        "createdBy": "Created By",
+        "close": "Close"
+      },
+      "deleteDialog": {
+        "title": "Are you sure?",
+        "description": "This will permanently delete the terminal {terminalName}.",
+        "cancel": "Cancel",
+        "confirm": "Yes, Delete"
+      },
+      "form": {
+        "portsPageTitle": "Ports",
+        "pageTitle": "Terminals",
+        "addTitle": "Add New Terminal",
+        "addDescription": "Configure a new terminal within a port.",
+        "editTitle": "Edit Terminal",
+        "editDescription": "Update the details for {name}.",
+        "accessDenied": {
+          "title": "Access Denied",
+          "createDescription": "You do not have permission to create new terminals.",
+          "editDescription": "You do not have permission to edit terminals."
+        },
+        "details": {
+          "title": "Terminal Details",
+          "description": "Enter the identification and location details for the terminal.",
+          "port": "Port",
+          "selectPort": "Select a port...",
+          "name": "Terminal Name",
+          "namePlaceholder": "e.g., Terminal 3",
+          "status": "Status",
+          "active": "Active",
+          "inactive": "Inactive"
+        },
+        "common": {
+          "cancel": "Cancel",
+          "save": "Save Changes",
+          "add": "Add Terminal"
+        },
+        "toast": {
+          "loadErrorTitle": "Error",
+          "loadErrorDesc": "Could not load terminal data.",
+          "updateSuccessTitle": "Terminal Updated",
+          "updateSuccessDesc": "Terminal {name} has been updated successfully.",
+          "addSuccessTitle": "Terminal Added",
+          "addSuccessDesc": "New terminal {name} has been created successfully.",
+          "errorTitle": "Save Failed",
+          "errorDesc": "There was an error saving the terminal data."
         }
+      }
     }
   },
   "Transactions": {

@@ -405,14 +405,85 @@
       }
     },
     "Terminals": {
-        "detailsSheet": {
-            "description": "Terminal en {portName}",
-            "status": "Estado",
-            "port": "Puerto",
-            "lastModified": "Última Modificación",
-            "createdBy": "Creado por",
-            "close": "Cerrar"
+      "portsPageTitle": "Puertos",
+      "pageTitle": "Gestión de Terminales",
+      "pageDescription": "Configurar y gestionar todas las terminales portuarias.",
+      "addTerminal": "Añadir Terminal",
+      "filters": {
+        "title": "Buscar y Filtrar Terminales",
+        "namePlaceholder": "Nombre de la Terminal...",
+        "portPlaceholder": "Puerto",
+        "reset": "Restablecer",
+        "search": "Buscar"
+      },
+      "table": {
+        "title": "Registros de Terminales",
+        "description": "Una lista de todas las terminales en el sistema.",
+        "terminalName": "Nombre de la Terminal",
+        "port": "Puerto",
+        "status": "Estado",
+        "lastModified": "Última Modificación"
+      },
+      "actions": {
+        "view": "Ver detalles",
+        "edit": "Editar",
+        "deactivate": "Desactivar",
+        "activate": "Activar",
+        "delete": "Eliminar"
+      },
+      "detailsSheet": {
+        "description": "Terminal en {portName}",
+        "status": "Estado",
+        "port": "Puerto",
+        "lastModified": "Última Modificación",
+        "createdBy": "Creado por",
+        "close": "Cerrar"
+      },
+      "deleteDialog": {
+        "title": "¿Está seguro?",
+        "description": "Esto eliminará permanentemente la terminal {terminalName}.",
+        "cancel": "Cancelar",
+        "confirm": "Sí, Eliminar"
+      },
+      "form": {
+        "portsPageTitle": "Puertos",
+        "pageTitle": "Terminales",
+        "addTitle": "Añadir Nueva Terminal",
+        "addDescription": "Configurar una nueva terminal dentro de un puerto.",
+        "editTitle": "Editar Terminal",
+        "editDescription": "Actualizar los detalles para {name}.",
+        "accessDenied": {
+          "title": "Acceso Denegado",
+          "createDescription": "No tiene permiso para crear nuevas terminales.",
+          "editDescription": "No tiene permiso para editar terminales."
+        },
+        "details": {
+          "title": "Detalles de la Terminal",
+          "description": "Introduzca los detalles de identificación y ubicación de la terminal.",
+          "port": "Puerto",
+          "selectPort": "Seleccione un puerto...",
+          "name": "Nombre de la Terminal",
+          "namePlaceholder": "p. ej., Terminal 3",
+          "status": "Estado",
+          "active": "Activo",
+          "inactive": "Inactivo"
+        },
+        "common": {
+          "cancel": "Cancelar",
+          "save": "Guardar Cambios",
+          "add": "Añadir Terminal"
+        },
+        "toast": {
+          "loadErrorTitle": "Error",
+          "loadErrorDesc": "No se pudieron cargar los datos de la terminal.",
+          "updateSuccessTitle": "Terminal Actualizada",
+          "updateSuccessDesc": "La terminal {name} ha sido actualizada exitosamente.",
+          "addSuccessTitle": "Terminal Añadida",
+          "addSuccessDesc": "La nueva terminal {name} ha sido creada exitosamente.",
+          "errorTitle": "Error al Guardar",
+          "errorDesc": "Hubo un error al guardar los datos de la terminal."
         }
+      }
     }
   },
   "Transactions": {

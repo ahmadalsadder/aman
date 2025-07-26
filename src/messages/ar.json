@@ -286,133 +286,204 @@
       }
     },
     "Ports": {
-      "pageTitle": "Port Management",
-      "pageDescription": "Configure and manage all airports, seaports, and landports.",
-      "addPort": "Add Port",
+      "pageTitle": "إدارة الموانئ",
+      "pageDescription": "تكوين وإدارة جميع المطارات والموانئ البحرية والبرية.",
+      "addPort": "إضافة ميناء",
       "stats": {
-        "total": "Total Ports",
-        "totalDesc": "All configured ports",
-        "active": "Active Ports",
-        "activeDesc": "Currently operational",
-        "airports": "Airports",
-        "airportsDesc": "Total airports",
-        "seaports": "Seaports",
-        "seaportsDesc": "Total seaports"
+        "total": "إجمالي الموانئ",
+        "totalDesc": "جميع الموانئ المكونة",
+        "active": "الموانئ النشطة",
+        "activeDesc": "تعمل حاليًا",
+        "airports": "المطارات",
+        "airportsDesc": "إجمالي المطارات",
+        "seaports": "الموانئ البحرية",
+        "seaportsDesc": "إجمالي الموانئ البحرية"
       },
       "filters": {
-        "title": "Search & Filter Ports",
-        "namePlaceholder": "Port Name...",
-        "typePlaceholder": "Type",
-        "allTypes": "All Types",
-        "statusPlaceholder": "Status",
-        "allStatuses": "All Statuses",
-        "reset": "Reset",
-        "search": "Search"
+        "title": "بحث وتصفية الموانئ",
+        "namePlaceholder": "اسم الميناء...",
+        "typePlaceholder": "النوع",
+        "allTypes": "جميع الأنواع",
+        "statusPlaceholder": "الحالة",
+        "allStatuses": "جميع الحالات",
+        "reset": "إعادة تعيين",
+        "search": "بحث"
       },
       "table": {
-        "title": "Port Records",
-        "description": "A list of all ports in the system.",
-        "portName": "Port Name",
-        "city": "City",
-        "type": "Type",
-        "status": "Status"
+        "title": "سجلات الموانئ",
+        "description": "قائمة بجميع الموانئ في النظام.",
+        "portName": "اسم الميناء",
+        "city": "المدينة",
+        "type": "النوع",
+        "status": "الحالة"
       },
       "actions": {
-        "view": "View details",
-        "edit": "Edit",
-        "deactivate": "Deactivate",
-        "activate": "Activate",
-        "delete": "Delete"
+        "view": "عرض التفاصيل",
+        "edit": "تحرير",
+        "deactivate": "إلغاء التنشيط",
+        "activate": "تنشيط",
+        "delete": "حذف"
       },
       "toast": {
-        "deleteSuccessTitle": "Port Deleted",
-        "deleteSuccessDesc": "The port has been successfully deleted.",
-        "deleteErrorTitle": "Delete Failed",
-        "deleteErrorDesc": "Could not delete the port.",
-        "statusUpdateTitle": "Status Updated",
-        "statusUpdateDesc": "Port {name}'s status has been updated to {status}.",
-        "statusUpdateErrorTitle": "Status Update Failed"
+        "deleteSuccessTitle": "تم حذف الميناء",
+        "deleteSuccessDesc": "تم حذف الميناء بنجاح.",
+        "deleteErrorTitle": "فشل الحذف",
+        "deleteErrorDesc": "لا يمكن حذف الميناء.",
+        "statusUpdateTitle": "تم تحديث الحالة",
+        "statusUpdateDesc": "تم تحديث حالة الميناء {name} إلى {status}.",
+        "statusUpdateErrorTitle": "فشل تحديث الحالة"
       },
       "accessDenied": {
-        "title": "Access Denied",
-        "description": "You do not have permission to view this page."
+        "title": "تم رفض الوصول",
+        "description": "ليس لديك إذن لعرض هذه الصفحة."
       },
       "deleteDialog": {
-        "title": "Are you sure?",
-        "description": "This will permanently delete the port {portName}.",
-        "cancel": "Cancel",
-        "confirm": "Yes, Delete"
+        "title": "هل أنت متأكد؟",
+        "description": "سيؤدي هذا إلى حذف الميناء {portName} بشكل دائم.",
+        "cancel": "إلغاء",
+        "confirm": "نعم، حذف"
       },
       "detailsSheet": {
-        "description": "{type} Port",
-        "status": "Status",
-        "city": "City",
-        "country": "Country",
-        "address": "Address",
-        "localizedAddress": "Localized Address",
-        "lastModified": "Last Modified",
-        "createdBy": "Created By",
-        "close": "Close"
+        "description": "ميناء {type}",
+        "status": "الحالة",
+        "city": "المدينة",
+        "country": "البلد",
+        "address": "العنوان",
+        "localizedAddress": "العنوان المترجم",
+        "lastModified": "آخر تعديل",
+        "createdBy": "تم إنشاؤه بواسطة",
+        "close": "إغلاق"
       },
       "form": {
-        "addTitle": "Add New Port",
-        "addDescription": "Configure a new point of entry for the system.",
-        "editTitle": "Edit Port",
-        "editDescription": "Update the details for {name}.",
+        "addTitle": "إضافة ميناء جديد",
+        "addDescription": "تكوين نقطة دخول جديدة للنظام.",
+        "editTitle": "تحرير الميناء",
+        "editDescription": "تحديث التفاصيل لـ {name}.",
         "accessDenied": {
-          "title": "Access Denied",
-          "createDescription": "You do not have permission to create new ports.",
-          "editDescription": "You do not have permission to edit ports."
+          "title": "تم رفض الوصول",
+          "createDescription": "ليس لديك إذن لإنشاء منافذ جديدة.",
+          "editDescription": "ليس لديك إذن لتحرير المنافذ."
         },
         "details": {
-          "title": "Port Details",
-          "description": "Enter the identification and location details for the port.",
-          "name": "Port Name",
-          "namePlaceholder": "e.g., Dubai International Airport",
-          "shortName": "Short Name",
-          "shortNamePlaceholder": "e.g., DXB",
-          "localizedName": "Localized Name",
-          "localizedNamePlaceholder": "e.g., مطار دبي الدولي",
-          "city": "City",
-          "cityPlaceholder": "e.g., Dubai",
-          "country": "Country",
-          "countryPlaceholder": "Select a country...",
-          "address": "Address",
-          "addressPlaceholder": "Enter the full address...",
-          "localizedAddress": "Localized Address",
-          "localizedAddressPlaceholder": "Enter the address in local language...",
-          "type": "Type",
-          "status": "Status",
-          "active": "Active",
-          "inactive": "Inactive"
+          "title": "تفاصيل الميناء",
+          "description": "أدخل تفاصيل التعريف والموقع للمنفذ.",
+          "name": "اسم الميناء",
+          "namePlaceholder": "على سبيل المثال، مطار دبي الدولي",
+          "shortName": "اسم قصير",
+          "shortNamePlaceholder": "على سبيل المثال، DXB",
+          "localizedName": "الاسم المترجم",
+          "localizedNamePlaceholder": "على سبيل المثال، مطار دبي الدولي",
+          "city": "المدينة",
+          "cityPlaceholder": "على سبيل المثال، دبي",
+          "country": "البلد",
+          "countryPlaceholder": "اختر دولة...",
+          "address": "العنوان",
+          "addressPlaceholder": "أدخل العنوان الكامل...",
+          "localizedAddress": "العنوان المترجم",
+          "localizedAddressPlaceholder": "أدخل العنوان باللغة المحلية...",
+          "type": "النوع",
+          "status": "الحالة",
+          "active": "نشط",
+          "inactive": "غير نشط"
         },
         "common": {
-          "cancel": "Cancel",
-          "save": "Save Changes",
-          "add": "Add Port"
+          "cancel": "إلغاء",
+          "save": "حفظ التغييرات",
+          "add": "إضافة منفذ"
         },
         "toast": {
-          "loading": "Loading port data...",
-          "loadErrorTitle": "Error",
-          "loadErrorDesc": "Could not load port data.",
-          "updateSuccessTitle": "Port Updated",
-          "updateSuccessDesc": "Port {name} has been updated successfully.",
-          "addSuccessTitle": "Port Added",
-          "addSuccessDesc": "New port {name} has been created successfully.",
-          "errorTitle": "Save Failed",
-          "errorDesc": "There was an error saving the port data."
+          "loading": "جارٍ تحميل بيانات المنفذ...",
+          "loadErrorTitle": "خطأ",
+          "loadErrorDesc": "تعذر تحميل بيانات المنفذ.",
+          "updateSuccessTitle": "تم تحديث المنفذ",
+          "updateSuccessDesc": "تم تحديث المنفذ {name} بنجاح.",
+          "addSuccessTitle": "تمت إضافة المنفذ",
+          "addSuccessDesc": "تم إنشاء منفذ جديد {name} بنجاح.",
+          "errorTitle": "فشل الحفظ",
+          "errorDesc": "حدث خطأ أثناء حفظ بيانات المنفذ."
         }
       }
     },
     "Terminals": {
-        "detailsSheet": {
-            "description": "Terminal at {portName}",
-            "status": "Estado",
-            "port": "Puerto",
-            "lastModified": "Última Modificación",
-            "createdBy": "Creado por",
-            "close": "Cerrar"
+      "portsPageTitle": "الموانئ",
+      "pageTitle": "إدارة المحطات",
+      "pageDescription": "تكوين وإدارة جميع محطات الموانئ.",
+      "addTerminal": "إضافة محطة",
+      "filters": {
+        "title": "بحث وتصفية المحطات",
+        "namePlaceholder": "اسم المحطة...",
+        "portPlaceholder": "المنفذ",
+        "reset": "إعادة تعيين",
+        "search": "بحث"
+      },
+      "table": {
+        "title": "سجلات المحطات",
+        "description": "قائمة بجميع المحطات في النظام.",
+        "terminalName": "اسم المحطة",
+        "port": "المنفذ",
+        "status": "الحالة",
+        "lastModified": "آخر تعديل"
+      },
+      "actions": {
+        "view": "عرض التفاصيل",
+        "edit": "تحرير",
+        "deactivate": "إلغاء التنشيط",
+        "activate": "تنشيط",
+        "delete": "حذف"
+      },
+      "detailsSheet": {
+        "description": "محطة في {portName}",
+        "status": "الحالة",
+        "port": "المنفذ",
+        "lastModified": "آخر تعديل",
+        "createdBy": "تم إنشاؤه بواسطة",
+        "close": "إغلاق"
+      },
+      "deleteDialog": {
+        "title": "هل أنت متأكد؟",
+        "description": "سيؤدي هذا إلى حذف المحطة {terminalName} بشكل دائم.",
+        "cancel": "إلغاء",
+        "confirm": "نعم، حذف"
+      },
+      "form": {
+        "portsPageTitle": "الموانئ",
+        "pageTitle": "المحطات",
+        "addTitle": "إضافة محطة جديدة",
+        "addDescription": "تكوين محطة جديدة داخل منفذ.",
+        "editTitle": "تحرير المحطة",
+        "editDescription": "تحديث التفاصيل لـ {name}.",
+        "accessDenied": {
+          "title": "تم رفض الوصول",
+          "createDescription": "ليس لديك إذن لإنشاء محطات جديدة.",
+          "editDescription": "ليس لديك إذن لتحرير المحطات."
+        },
+        "details": {
+          "title": "تفاصيل المحطة",
+          "description": "أدخل تفاصيل التعريف والموقع للمحطة.",
+          "port": "المنفذ",
+          "selectPort": "اختر منفذًا...",
+          "name": "اسم المحطة",
+          "namePlaceholder": "على سبيل المثال، مبنى 3",
+          "status": "الحالة",
+          "active": "نشط",
+          "inactive": "غير نشط"
+        },
+        "common": {
+          "cancel": "إلغاء",
+          "save": "حفظ التغييرات",
+          "add": "إضافة محطة"
+        },
+        "toast": {
+          "loadErrorTitle": "خطأ",
+          "loadErrorDesc": "تعذر تحميل بيانات المحطة.",
+          "updateSuccessTitle": "تم تحديث المحطة",
+          "updateSuccessDesc": "تم تحديث المحطة {name} بنجاح.",
+          "addSuccessTitle": "تمت إضافة المحطة",
+          "addSuccessDesc": "تم إنشاء محطة جديدة {name} بنجاح.",
+          "errorTitle": "فشل الحفظ",
+          "errorDesc": "حدث خطأ أثناء حفظ بيانات المحطة."
         }
+      }
     }
   },
   "Transactions": {

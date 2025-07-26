@@ -4,29 +4,33 @@ import { useMemo, useState, useEffect, useCallback } from 'react';
 import { ShiftManagementPage } from '@/components/workloads/shift-management/shift-management-page';
 import { useAuth } from '@/hooks/use-auth';
 import type { Permission, Shift } from '@/types';
-import { AlertTriangle } from 'lucide-react';
+import { AlertTriangle, LayoutDashboard, CalendarDays } from 'lucide-react';
 import { api } from '@/lib/api';
 import { useToast } from '@/hooks/use-toast';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
+import { useTranslations } from 'next-intl';
 
 export default function EgateShiftManagementPage() {
     const { hasPermission } = useAuth();
-    const canView = useMemo(() => hasPermission(['egate:workload:view' as Permission]), [hasPermission]);
     const { toast } = useToast();
+    const t = useTranslations('Navigation');
+    const module = 'egate';
+    const canView = useMemo(() => hasPermission([`${module}:workload:view` as Permission]), [hasPermission, module]);
 
     const [shifts, setShifts] = useState<Shift[]>([]);
     const [loading, setLoading] = useState(true);
 
     const fetchShifts = useCallback(async () => {
         setLoading(true);
-        const result = await api.get<Shift[]>('/data/shifts?module=egate');
+        const result = await api.get<Shift[]>(`/data/shifts?module=${module}`);
         if (result.isSuccess) {
             setShifts(result.data || []);
         } else {
             toast({ title: 'Error', description: 'Failed to load shifts.', variant: 'destructive' });
         }
         setLoading(false);
-    }, [toast]);
+    }, [toast, module]);
 
     useEffect(() => {
         if (canView) {
@@ -85,11 +89,26 @@ export default function EgateShiftManagementPage() {
         );
     }
     
-    return <ShiftManagementPage 
-        module="egate" 
-        shifts={shifts}
-        loading={loading}
-        onDeleteShift={handleDeleteShift}
-        onToggleStatus={handleToggleStatus}
-    />;
+    return (
+        <div className="space-y-6">
+             <Breadcrumb>
+                <BreadcrumbList>
+                    <BreadcrumbItem>
+                        <BreadcrumbLink href={`/${module}/dashboard`} icon={LayoutDashboard}>{t('dashboard')}</BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                        <BreadcrumbPage icon={CalendarDays}>{t('shiftManagement')}</BreadcrumbPage>
+                    </BreadcrumbItem>
+                </BreadcrumbList>
+            </Breadcrumb>
+            <ShiftManagementPage 
+                module={module} 
+                shifts={shifts}
+                loading={loading}
+                onDeleteShift={handleDeleteShift}
+                onToggleStatus={handleToggleStatus}
+            />
+        </div>
+    );
 }

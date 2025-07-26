@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import type { ColumnDef } from '@tanstack/react-table';
 import type { Shift, DayOfWeek, Module, Permission } from '@/types';
 import { daysOfWeek } from '@/lib/mock-data';
@@ -198,7 +198,7 @@ export function ShiftManagementPage({ module, shifts, loading, onDeleteShift, on
   ];
 
   return (
-    <div className="space-y-6">
+    <>
       <GradientPageHeader
         title="Shift Management"
         description="Define and manage officer work shifts."
@@ -284,6 +284,6 @@ export function ShiftManagementPage({ module, shifts, loading, onDeleteShift, on
         onOpenChange={(isOpen) => !isOpen && setShiftToDelete(null)}
         onConfirm={handleConfirmDelete}
       />
-    </div>
+    </>
   );
 }

@@ -431,6 +431,19 @@
         "activate": "Activate",
         "delete": "Delete"
       },
+      "toast": {
+        "deleteSuccessTitle": "Terminal Deleted",
+        "deleteSuccessDesc": "The terminal has been successfully deleted.",
+        "deleteErrorTitle": "Delete Failed",
+        "deleteErrorDesc": "Could not delete the terminal.",
+        "statusUpdateTitle": "Status Updated",
+        "statusUpdateDesc": "Terminal {name}'s status has been updated to {status}.",
+        "statusUpdateErrorTitle": "Status Update Failed"
+      },
+      "accessDenied": {
+        "title": "Access Denied",
+        "description": "You do not have permission to view this page."
+      },
       "detailsSheet": {
         "description": "Terminal at {portName}",
         "status": "Status",
@@ -524,6 +537,19 @@
         "description": "This will permanently delete the zone {zoneName}.",
         "cancel": "Cancel",
         "confirm": "Yes, Delete"
+      },
+      "toast": {
+        "deleteSuccessTitle": "Zone Deleted",
+        "deleteSuccessDesc": "The zone has been successfully deleted.",
+        "deleteErrorTitle": "Delete Failed",
+        "deleteErrorDesc": "Could not delete the zone.",
+        "statusUpdateTitle": "Status Updated",
+        "statusUpdateDesc": "Zone {name}'s status has been updated to {status}.",
+        "statusUpdateErrorTitle": "Status Update Failed"
+      },
+      "accessDenied": {
+        "title": "Access Denied",
+        "description": "You do not have permission to view this page."
       },
       "form": {
         "addTitle": "Add New Zone",

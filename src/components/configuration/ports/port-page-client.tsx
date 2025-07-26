@@ -58,6 +58,7 @@ interface PortPageClientProps {
 
 export function PortPageClient({ ports, onDeletePort, onToggleStatus, permissions }: PortPageClientProps) {
   const t = useTranslations('Configuration.Ports');
+  const tNav = useTranslations('Navigation');
   
   const [portToView, setPortToView] = useState<Port | null>(null);
   const [portToDelete, setPortToDelete] = useState<Port | null>(null);
@@ -138,7 +139,7 @@ export function PortPageClient({ ports, onDeletePort, onToggleStatus, permission
         <Breadcrumb>
             <BreadcrumbList>
                 <BreadcrumbItem>
-                    <BreadcrumbLink href="/configuration/dashboard" icon={LayoutDashboard}>{t('dashboard', {ns: 'Navigation'})}</BreadcrumbLink>
+                    <BreadcrumbLink href="/configuration/dashboard" icon={LayoutDashboard}>{tNav('dashboard')}</BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbPage icon={Ship}>{t('pageTitle')}</BreadcrumbPage>
             </BreadcrumbList>

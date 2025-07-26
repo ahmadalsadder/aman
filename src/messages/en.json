@@ -1,5 +1,4 @@
 
-
 {
   "LoginPage": {
     "title": "Welcome to Guardian Gate",
@@ -221,55 +220,187 @@
     "notYourPortals": "Don't see the portal you're looking for? Contact your administrator."
   },
   "Configuration": {
+    "Dashboard": {
+      "title": "Dashboard",
+      "description": "Manage system-wide settings.",
+      "accessDenied": {
+        "title": "Access Denied",
+        "description": "You do not have permission to view the Configuration module."
+      },
+      "welcome": {
+        "title": "Welcome to the Configuration Module",
+        "description": "This is the central hub for managing all aspects of the Guardian Gate system.",
+        "content": "Use the navigation on the left to manage ports, terminals, machines, system messages, and more. These settings ensure that all modules operate smoothly according to your operational requirements."
+      }
+    },
     "CountryLanguage": {
-        "pageTitle": "Country Language Mapping",
-        "pageDescription": "Assign a primary language for each country for localized content.",
-        "saveChanges": "Save Changes",
-        "table": {
-            "title": "Language Assignments",
-            "description": "Select the default language to use for media and messages for each country.",
-            "country": "Country",
-            "assignedLanguage": "Assigned Language",
-            "selectLanguage": "Select language"
-        },
-        "toast": {
-            "accessDeniedTitle": "Access Denied",
-            "accessDeniedDesc": "You do not have permission to save changes.",
-            "saveSuccessTitle": "Mappings Saved",
-            "saveSuccessDesc": "Country to language mappings have been successfully updated.",
-            "saveErrorTitle": "Save Failed",
-            "saveErrorDesc": "There was an error saving the mapping data."
-        },
-         "accessDenied": {
-          "title": "Access Denied",
-          "description": "You do not have permission to view this page."
-        }
+      "pageTitle": "Country Language Mapping",
+      "pageDescription": "Assign a primary language for each country for localized content.",
+      "saveChanges": "Save Changes",
+      "table": {
+        "title": "Language Assignments",
+        "description": "Select the default language to use for media and messages for each country.",
+        "country": "Country",
+        "assignedLanguage": "Assigned Language",
+        "selectLanguage": "Select language"
+      },
+      "toast": {
+        "accessDeniedTitle": "Access Denied",
+        "accessDeniedDesc": "You do not have permission to save changes.",
+        "saveSuccessTitle": "Mappings Saved",
+        "saveSuccessDesc": "Country to language mappings have been successfully updated.",
+        "saveErrorTitle": "Save Failed",
+        "saveErrorDesc": "There was an error saving the mapping data."
+      },
+      "accessDenied": {
+        "title": "Access Denied",
+        "description": "You do not have permission to view this page."
+      }
     },
     "CountryPassport": {
-        "pageTitle": "Country Passport Mapping",
-        "pageDescription": "Assign the passport type for each country to determine required checks.",
-        "saveChanges": "Save Changes",
-        "ePassport": "E-Passport",
-        "normal": "Normal",
-        "table": {
-            "title": "Passport Type Assignments",
-            "description": "Select the default passport type used by each country.",
-            "country": "Country",
-            "assignedType": "Assigned Passport Type",
-            "selectType": "Select type"
+      "pageTitle": "Country Passport Mapping",
+      "pageDescription": "Assign the passport type for each country to determine required checks.",
+      "saveChanges": "Save Changes",
+      "ePassport": "E-Passport",
+      "normal": "Normal",
+      "table": {
+        "title": "Passport Type Assignments",
+        "description": "Select the default passport type used by each country.",
+        "country": "Country",
+        "assignedType": "Assigned Passport Type",
+        "selectType": "Select type"
+      },
+      "toast": {
+        "accessDeniedTitle": "Access Denied",
+        "accessDeniedDesc": "You do not have permission to save changes.",
+        "saveSuccessTitle": "Mappings Saved",
+        "saveSuccessDesc": "Country to passport type mappings have been successfully updated.",
+        "saveErrorTitle": "Save Failed",
+        "saveErrorDesc": "There was an error saving the mapping data."
+      },
+      "accessDenied": {
+        "title": "Access Denied",
+        "description": "You do not have permission to view this page."
+      }
+    },
+    "Ports": {
+      "pageTitle": "Port Management",
+      "pageDescription": "Configure and manage all airports, seaports, and landports.",
+      "addPort": "Add Port",
+      "stats": {
+        "total": "Total Ports",
+        "totalDesc": "All configured ports",
+        "active": "Active Ports",
+        "activeDesc": "Currently operational",
+        "airports": "Airports",
+        "airportsDesc": "Total airports",
+        "seaports": "Seaports",
+        "seaportsDesc": "Total seaports"
+      },
+      "filters": {
+        "title": "Search & Filter Ports",
+        "namePlaceholder": "Port Name...",
+        "typePlaceholder": "Type",
+        "allTypes": "All Types",
+        "statusPlaceholder": "Status",
+        "allStatuses": "All Statuses",
+        "reset": "Reset",
+        "search": "Search"
+      },
+      "table": {
+        "title": "Port Records",
+        "description": "A list of all ports in the system.",
+        "portName": "Port Name",
+        "city": "City",
+        "type": "Type",
+        "status": "Status"
+      },
+      "actions": {
+        "view": "View details",
+        "edit": "Edit",
+        "deactivate": "Deactivate",
+        "activate": "Activate",
+        "delete": "Delete"
+      },
+      "toast": {
+        "deleteSuccessTitle": "Port Deleted",
+        "deleteSuccessDesc": "The port has been successfully deleted.",
+        "deleteErrorTitle": "Delete Failed",
+        "deleteErrorDesc": "Could not delete the port.",
+        "statusUpdateTitle": "Status Updated",
+        "statusUpdateDesc": "Port {name}'s status has been updated to {status}.",
+        "statusUpdateErrorTitle": "Status Update Failed"
+      },
+      "accessDenied": {
+        "title": "Access Denied",
+        "description": "You do not have permission to view this page."
+      },
+      "deleteDialog": {
+        "title": "Are you sure?",
+        "description": "This will permanently delete the port {portName}.",
+        "cancel": "Cancel",
+        "confirm": "Yes, Delete"
+      },
+      "detailsSheet": {
+        "description": "{type} Port",
+        "status": "Status",
+        "city": "City",
+        "country": "Country",
+        "address": "Address",
+        "localizedAddress": "Localized Address",
+        "lastModified": "Last Modified",
+        "createdBy": "Created By",
+        "close": "Close"
+      },
+      "form": {
+        "addTitle": "Add New Port",
+        "addDescription": "Configure a new point of entry for the system.",
+        "editTitle": "Edit Port",
+        "editDescription": "Update the details for {name}.",
+        "accessDenied": {
+          "title": "Access Denied",
+          "createDescription": "You do not have permission to create new ports.",
+          "editDescription": "You do not have permission to edit ports."
+        },
+        "details": {
+          "title": "Port Details",
+          "description": "Enter the identification and location details for the port.",
+          "name": "Port Name",
+          "namePlaceholder": "e.g., Dubai International Airport",
+          "shortName": "Short Name",
+          "shortNamePlaceholder": "e.g., DXB",
+          "localizedName": "Localized Name",
+          "localizedNamePlaceholder": "e.g., مطار دبي الدولي",
+          "city": "City",
+          "cityPlaceholder": "e.g., Dubai",
+          "country": "Country",
+          "countryPlaceholder": "Select a country...",
+          "address": "Address",
+          "addressPlaceholder": "Enter the full address...",
+          "localizedAddress": "Localized Address",
+          "localizedAddressPlaceholder": "Enter the address in local language...",
+          "type": "Type",
+          "status": "Status",
+          "active": "Active",
+          "inactive": "Inactive"
+        },
+        "common": {
+          "cancel": "Cancel",
+          "save": "Save Changes",
+          "add": "Add Port"
         },
         "toast": {
-            "accessDeniedTitle": "Access Denied",
-            "accessDeniedDesc": "You do not have permission to save changes.",
-            "saveSuccessTitle": "Mappings Saved",
-            "saveSuccessDesc": "Country to passport type mappings have been successfully updated.",
-            "saveErrorTitle": "Save Failed",
-            "saveErrorDesc": "There was an error saving the mapping data."
-        },
-         "accessDenied": {
-          "title": "Access Denied",
-          "description": "You do not have permission to view this page."
+          "loading": "Loading port data...",
+          "loadErrorTitle": "Error",
+          "loadErrorDesc": "Could not load port data.",
+          "updateSuccessTitle": "Port Updated",
+          "updateSuccessDesc": "Port {name} has been updated successfully.",
+          "addSuccessTitle": "Port Added",
+          "addSuccessDesc": "New port {name} has been created successfully.",
+          "errorTitle": "Save Failed",
+          "errorDesc": "There was an error saving the port data."
         }
+      }
     }
   },
   "Transactions": {

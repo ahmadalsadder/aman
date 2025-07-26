@@ -57,7 +57,9 @@
     "civilRecords": "Registros Civiles",
     "workloads": "Cargas de trabajo",
     "shiftManagement": "Gestión de turnos",
-    "assignOfficer": "Asignar Oficial"
+    "assignOfficer": "Asignar Oficial",
+    "whitelist": "Lista Blanca",
+    "blacklist": "Lista Negra"
   },
   "ModulePage": {
     "verifyingAccess": "Verificando acceso...",
@@ -217,977 +219,188 @@
     "openModule": "Abrir Módulo",
     "notYourPortals": "¿No ve el portal que está buscando? Contacte a su administrador."
   },
-  "Transactions": {
-    "processTransaction": "Procesar Transacción",
-    "manualEntry": "Entrada Manual",
-    "filterTitle": "Buscar y Filtrar Transacciones",
-    "filterId": "ID de Transacción...",
-    "filterPassengerName": "Nombre del Pasajero...",
-    "filterPassportNumber": "Número de Pasaporte...",
-    "filterType": "Tipo",
-    "filterAllTypes": "Todos los Tipos",
-    "filterEntrance": "Tipo de Entrada",
-    "filterAllEntrances": "Todos los Tipos de Entrada",
-    "filterGate": "Seleccionar Puerta Electrónica...",
-    "filterDesk": "Seleccionar Escritorio de Oficial...",
-    "filterStatus": "Estado",
-    "filterAllStatuses": "Todos los Estados",
-    "filterFromDate": "Desde la Fecha",
-    "filterToDate": "Hasta la Fecha",
-    "reset": "Reiniciar",
-    "search": "Buscar",
-    "recordsTitle": "Registros de Transacciones",
-    "columnId": "ID de Transacción",
-    "columnPassenger": "Pasajero",
-    "columnType": "Tipo",
-    "columnEntrance": "Entrada",
-    "columnGate": "Puerta/Escritorio",
-    "columnDateTime": "Fecha/Hora",
-    "columnStatus": "Estado",
-    "columnRisk": "Puntuación de Riesgo",
-    "noResults": "No hay resultados.",
-    "rowsSelected": "{count, plural, one {# fila seleccionada.} other {# filas seleccionadas.}}",
-    "of": "de",
-    "previous": "Anterior",
-    "next": "Siguiente",
-    "totalTransactions": "Transacciones Totales",
-    "totalTransactionsDesc": "Transacciones de todos los tiempos",
-    "todayTransactions": "Transacciones de Hoy",
-    "todayTransactionsDesc": "Procesadas hoy",
-    "avgTime": "Tiempo de Proc. Prom.",
-    "avgTimeDesc": "Minutos:Segundos",
-    "pendingReview": "Revisión Pendiente",
-    "pendingReviewDesc": "Requieren atención",
-    "deleteDialogTitle": "¿Está absolutely seguro?",
-    "deleteDialogDescription": "Esta acción no se puede deshacer. Esto eliminará permanentemente el registro de la transacción para {passengerName} (ID: {transactionId}).",
-    "deleteDialogCancel": "Cancelar",
-    "deleteDialogConfirm": "Sí, eliminar transacción",
-    "deleteSuccess": "Transacción Eliminada",
-    "deleteSuccessDesc": "La transacción {id} ha sido eliminada.",
-    "deleteError": "Fallo al Eliminar",
-    "deleteErrorDesc": "Hubo un error al eliminar los datos de la transacción.",
-    "detailTitle": "Detalles de la Transacción",
-    "workflowSteps": "Pasos del Flujo de Trabajo",
-    "docDetails": "Detalles del Documento",
-    "docImagePassport": "Foto del Pasaporte",
-    "docImageFace": "Escaneo Facial",
-    "docImageLeftIris": "Iris Izquierdo",
-    "docImageRightIris": "Iris Derecho",
-    "docImageFingerprint": "Huella Dactilar",
-    "docImageClickToView": "{name} - Clic para ver",
-    "docImages": "Imágenes del Documento",
-    "biometricImages": "Imágenes Biométricas",
-    "biometricMatch": "Resultados de Coincidencia Biométrica",
-    "irisMatch": "Coincidencia de IRIS",
-    "faceMatch": "Coincidencia Facial",
-    "viewProfile": "Ver Perfil del Pasajero",
-    "labelPassport": "Número de Pasaporte",
-    "labelNationality": "Nacionalidad",
-    "labelDob": "Fecha de Nacimiento",
-    "labelGender": "Género",
-    "riskAssessment": "Evaluación de Riesgos",
-    "riskLevel": "Riesgo {level} ({score})",
-    "processingDuration": "Duración del Procesamiento: {duration}",
-    "triggeredRules": "Reglas Activadas:",
-    "noRules": "No se activaron reglas.",
-    "officerNotes": "Notas del Oficial",
-    "noNotes": "No se proporcionaron notas.",
-    "backToTransactions": "Volver a Transacciones",
-    "civilRecord": "Registro Civil",
-    "civilFileType": "Tipo de Archivo",
-    "civilFileNumber": "Número de Archivo",
-    "civilNationalId": "ID Nacional",
-    "civilFileExpiry": "Vencimiento del Archivo",
-    "flightDetails": "Detalles del Vuelo",
-    "flightNumber": "Número de Vuelo",
-    "carrier": "Aerolínea",
-    "departureCountry": "País de Salida",
-    "seatNumber": "Número de Asiento",
-    "vehicleDetails": "Detalles del Vehículo",
-    "plateNumber": "Número de Matrícula",
-    "vehicleType": "Tipo de Vehículo",
-    "make": "Marca",
-    "laneNumber": "Número de Carril",
-    "vesselDetails": "Detalles del Buque",
-    "vesselName": "Nombre del Buque",
-    "voyageNumber": "Número de Viaje",
-    "berth": "Atraque",
-    "lastPortOfCall": "Último Puerto de Escala"
-  },
-  "ManualEntry": {
-    "common": {
-      "cancel": "Cancelar",
-      "completeTransaction": "Completar Transacción"
-    },
-    "toast": {
-        "passengerFoundTitle": "Pasajero Encontrado",
-        "passengerFoundDesc": "Los detalles del pasajero se han rellenado previamente.",
-        "passengerNotFoundTitle": "Pasajero No Encontrado",
-        "passengerNotFoundDesc": "No se encontró ningún registro existente. Por favor, rellene los detalles manualmente.",
-        "transactionRecordedTitle": "Transacción Registrada",
-        "transactionRecordedDesc": "La transacción para {passengerName} se procesó con la decisión: {decision}."
-    },
-    "passengerSearch": {
-      "title": "1. Buscar Pasajero",
-      "description": "Buscar un pasajero existente por su número de pasaporte.",
-      "passportLabel": "Número de Pasaporte",
-      "passportPlaceholder": "Introduzca el número de pasaporte..."
-    },
-    "passengerDetails": {
-      "title": "Detalles del Pasajero",
-      "firstName": "Nombre",
-      "lastName": "Apellido",
-      "passportNumber": "Número de Pasaporte",
-      "dob": "Fecha de Nacimiento",
-      "nationality": "Nacionalidad",
-      "selectNationality": "Seleccione una nacionalidad...",
-      "gender": "Género"
-    },
-    "verification": {
-      "title": "2. Verificación del Oficial",
-      "description": "Confirmar manualmente que todas las comprobaciones están completas.",
-      "transactionType": "Tipo de Transacción",
-      "entry": "Entrada",
-      "exit": "Salida",
-      "passportVerified": "Pasaporte Verificado",
-      "visaVerified": "Visa Verificada",
-      "biometricsVerified": "Biometría Verificada"
-    },
-    "decision": {
-      "title": "3. Decisión Final",
-      "description": "Registrar el resultado final y cualquier nota relevante.",
-      "notesLabel": "Notas del Oficial",
-      "notesPlaceholder": "Añada cualquier nota relevante...",
-      "decisionLabel": "Decisión Final",
-      "approve": "Aprobar",
-      "reject": "Rechazar",
-      "refer": "Remitir al Supervisor (Revisión Manual)",
-      "highRiskTitle": "Pasajero de Alto Riesgo",
-      "highRiskDesc": "Este pasajero está marcado como de alto riesgo. Proceda con precaución y siga el protocolo.",
-      "attachmentsTitle": "Archivos Adjuntos",
-      "attachmentsDesc": "Cargar documentos de respaldo (opcional)."
-    }
-  },
-  "LiveProcessingFlow": {
-    "toast": {
-      "extractionFailedTitle": "Error en la extracción de datos",
-      "extractionFailedDescription": "No se pudieron leer los datos del documento. Inténtelo de nuevo con una imagen más clara.",
-      "missingInfoTitle": "Falta información",
-      "missingInfoDescription": "Se requiere el escaneo facial para continuar.",
-      "analysisFailedTitle": "Falló el análisis de IA",
-      "missingDataTitle": "Faltan datos",
-      "missingDataDescription": "No se puede completar la transacción debido a la falta de datos.",
-      "saveFailedTitle": "Error al guardar",
-      "saveFailedDescription": "No se pudieron guardar los datos de la transacción.",
-      "decisionRequiredTitle": "Se requiere una decisión",
-      "decisionRequiredDescription": "Seleccione Aprobar o Rechazar.",
-      "transactionCompleteTitle": "Transacción completada",
-      "transactionCompleteDescription": "Pasajero procesado y registro guardado. Decisión: {decision}",
-      "transferredTitle": "Transferido al Gerente de Turno",
-      "transferredDescription": "La transacción {id} se envió para revisión del supervisor.",
-      "transferFailedDescription": "No se pudo transferir al gerente de turno debido a la falta de datos del pasajero.",
-      "cameraDeniedTitle": "Acceso a la cámara denegado.",
-      "cameraErrorTitle": "Error de la cámara",
-      "cameraErrorDescription": "La transmisión de la cámara aún no está lista. Espere un momento y vuelva a intentarlo."
-    },
-    "alert": {
-      "visaRequired": "Visa requerida - No encontrada",
-      "escalatedNotes": "El pasajero requiere una visa pero no se encontró ninguna. Escalado al Gerente de Turno.",
-      "missingVisaTitle": "Acción requerida: Falta visa válida",
-      "missingVisaDescription": "Este pasajero requiere una visa, pero no se encontró una válida. Esta transacción debe ser escalada."
-    },
-    "common": {
-      "name": "Nombre",
-      "nationality": "Nacionalidad",
-      "dob": "Fecha de nacimiento",
-      "passportNo": "Pasaporte #",
-      "gender": "Género",
-      "issueDate": "Fecha de emisión",
-      "expiryDate": "Fecha de vencimiento",
-      "firstName": "Nombre",
-      "lastName": "Apellido",
-      "issuingCountry": "País emisor",
-      "backAndRescan": "Volver y volver a escanear",
-      "rescanDocument": "Volver a escanear el documento",
-      "confirmAndProceed": "Confirmar y continuar",
-      "back": "Atrás",
-      "riskLevel": "Nivel de riesgo",
-      "cancelTransaction": "Cancelar transacción"
-    },
-    "workflow": {
-      "title": "Flujo de trabajo de procesamiento",
-      "docScan": "Escaneo de documentos",
-      "visaCheck": "Verificación de visa",
-      "identity": "Confirmación de identidad",
-      "biometric": "Captura biométrica",
-      "security": "Controles de seguridad e IA",
-      "review": "Revisión del oficial",
-      "skipped": "Omitido"
-    },
-    "scanCard": {
-      "preview": "Vista previa de {title}",
-      "rescan": "Volver a escanear el documento",
-      "scan": "Escanear documento",
-      "clear": "Borrar escaneo"
-    },
-    "captureCard": {
-      "retake": "Retomar",
-      "capture": "Capturar"
-    },
-    "uploadDocument": {
-      "title": "1. Escanear documento",
-      "description": "Coloque el pasaporte del pasajero en el escáner o cargue una imagen para comenzar.",
-      "passport": "Pasaporte"
-    },
-    "matchFound": {
-      "title": "Coincidencia de pasajero encontrada",
-      "description": "Se encontró un registro existente. Revíselo y elija cómo proceder.",
-      "existingRecord": "Registro existente",
-      "scannedData": "Nuevos datos escaneados",
-      "transfer": "Transferir al Gerente de Turno",
-      "chooseAction": "Elegir acción",
-      "chooseActionDescription": "Seleccione cómo proceder con este pasajero.",
-      "updateAll": "Actualizar toda la información con escaneo y continuar",
-      "updateImages": "Actualizar solo imágenes y continuar"
-    },
-    "confirmNew": {
-      "title": "2. Confirmar datos del pasajero",
-      "description": "Verifique los datos extraídos del documento."
-    },
-    "capturePhoto": {
-      "title": "3. Capturar datos biométricos",
-      "description": "Tome escaneos biométricos en vivo del pasajero. Se requiere escaneo facial.",
-      "cameraNotAvailable": "Cámara no disponible",
-      "faceScan": "Escaneo facial",
-      "leftIris": "Iris izquierdo",
-      "rightIris": "Iris derecho",
-      "fingerprint": "Huella dactilar",
-      "next": "Siguiente: Analizar datos"
-    },
-    "analyzing": {
-      "title": "Analizando...",
-      "description": "La IA está evaluando el riesgo en función de los datos proporcionados. Espere por favor."
-    },
-    "review": {
-      "title": "4. Revisión y decisión del oficial",
-      "description": "Revise la evaluación de la IA y tome una decisión final.",
-      "aiAssessment": "Evaluación de riesgos de la IA",
-      "riskScore": "Puntuación de riesgo",
-      "aiRecommendation": "Recomendación de la IA",
-      "assessmentSummary": "Resumen de la evaluación",
-      "finalDecision": "Decisión final",
-      "approve": "Aprobar",
-      "reject": "Rechazar",
-      "notesPlaceholder": "Agregar notas del oficial (opcional)...",
-      "complete": "Completar transacción",
-      "backToCapture": "Volver a la captura",
-      "alerts": {
-        "title": "Alertas que requieren acuse de recibo",
-        "acknowledge": "Acusar recibo",
-        "acknowledged": "Recibido"
+  "Configuration": {
+    "Dashboard": {
+      "title": "Tablero",
+      "description": "Gestionar la configuración de todo el sistema.",
+      "accessDenied": {
+        "title": "Acceso Denegado",
+        "description": "No tiene permiso para ver el módulo de Configuración."
+      },
+      "welcome": {
+        "title": "Bienvenido al Módulo de Configuración",
+        "description": "Este es el centro neurálgico para gestionar todos los aspectos del sistema Guardian Gate.",
+        "content": "Utilice la navegación de la izquierda para gestionar puertos, terminales, máquinas, mensajes del sistema y más. Esta configuración garantiza que todos los módulos funcionen sin problemas de acuerdo con sus requisitos operativos."
       }
     },
-    "completed": {
-      "title": "Transacción completada",
-      "description": "La transacción se ha registrado correctamente.",
-      "startNew": "Iniciar nueva transacción",
-      "viewAll": "Ver todas las transacciones"
-    }
-  },
-  "OfficerDesks": {
-    "pageTitle": "Gestión de Escritorios de Oficial",
-    "pageDescription": "Estado y configuración en tiempo real de todos los escritorios de oficiales.",
-    "addDesk": "Añadir Escritorio",
-    "filterTitle": "Buscar y Filtrar Escritorios",
-    "filterPlaceholder": "Nombre del Escritorio o Terminal...",
-    "port": "Puerto",
-    "terminal": "Terminal",
-    "movementType": "Tipo de Movimiento",
-    "allTypes": "Todos los Tipos",
-    "status": "Estado",
-    "allStatuses": "Todos los Estados",
-    "reset": "Reiniciar",
-    "search": "Buscar",
-    "noDesks": "No hay escritorios que coincidan con los filtros actuales.",
-    "totalDesks": "Escritorios Totales",
-    "totalDesksDesc": "Todos los escritorios configurados",
-    "activeDesks": "Escritorios Activos",
-    "activeDesksDesc": "Actualmente operativos",
-    "inactiveDesks": "Escritorios Inactivos",
-    "inactiveDesksDesc": "Temporalmente inactivos",
-    "closedDesks": "Escritorios Cerrados",
-    "closedDesksDesc": "No operativos",
-    "deskCard": {
-      "openMenu": "Abrir menú",
-      "viewDetails": "Ver detalles",
-      "editDesk": "Editar escritorio",
-      "deactivate": "Desactivar",
-      "activate": "Activar",
-      "delete": "Eliminar",
-      "ipAddress": "Dirección IP",
-      "macAddress": "Dirección MAC",
-      "lastUpdated": "Última Actualización",
-      "workflow": "Flujo de Trabajo",
-      "riskProfile": "Perfil de Riesgo"
-    },
-    "detailsSheet": {
-      "title": "Detalles del Escritorio",
-      "close": "Cerrar"
-    },
-    "deleteDialog": {
-      "title": "¿Está seguro de que desea eliminar este escritorio?",
-      "description": "Esta acción no se puede deshacer. Esto eliminará permanentemente el escritorio '{deskName}'.",
-      "cancel": "Cancelar",
-      "confirm": "Sí, Eliminar Escritorio"
-    },
-    "form": {
-      "addTitle": "Añadir Nuevo Escritorio de Oficial",
-      "addDescription": "Configurar un nuevo escritorio para el procesamiento de pasajeros.",
-      "editTitle": "Editar Escritorio de Oficial",
-      "editDescription": "Actualizar la configuración para {deskName}.",
-      "deskInfo": "Información del Escritorio",
-      "deskInfoDesc": "Identificación básica y ubicación.",
-      "deskName": "Nombre del Escritorio",
-      "deskNamePlaceholder": "p. ej., A-12",
-      "port": "Puerto",
-      "selectPort": "Seleccione un puerto...",
-      "terminal": "Terminal",
-      "selectTerminal": "Seleccione una terminal...",
-      "zone": "Zona",
-      "selectZone": "Seleccione una zona...",
-      "technicalInfo": "Información Técnica",
-      "technicalInfoDesc": "Identificadores de red y hardware.",
-      "ipAddress": "Dirección IP",
-      "ipAddressPlaceholder": "p. ej., 192.168.1.101",
-      "macAddress": "Dirección MAC",
-      "macAddressPlaceholder": "p. ej., 00:1A:2B:3C:4D:5E",
-      "configInfo": "Configuración",
-      "configInfoDesc": "Parámetros operativos para este escritorio.",
-      "status": "Estado",
-      "movementType": "Tipo de Movimiento",
-      "workflow": "Perfil de Flujo de Trabajo",
-      "selectWorkflow": "Seleccione un flujo de trabajo...",
-      "riskProfile": "Perfil de Regla de Riesgo",
-      "selectRiskProfile": "Seleccione un perfil de riesgo...",
-      "cancel": "Cancelar",
-      "save": "Guardar Cambios",
-      "add": "Añadir Escritorio",
+    "CountryLanguage": {
+      "pageTitle": "Asignación de Idioma por País",
+      "pageDescription": "Asigne un idioma principal a cada país para contenido localizado.",
+      "saveChanges": "Guardar Cambios",
+      "table": {
+        "title": "Asignaciones de Idiomas",
+        "description": "Seleccione el idioma predeterminado para medios y mensajes de cada país.",
+        "country": "País",
+        "assignedLanguage": "Idioma Asignado",
+        "selectLanguage": "Seleccione un idioma"
+      },
       "toast": {
-        "updateSuccessTitle": "Escritorio Actualizado",
-        "updateSuccessDesc": "El escritorio '{deskName}' ha sido actualizado exitosamente.",
-        "addSuccessTitle": "Escritorio Añadido",
-        "addSuccessDesc": "El nuevo escritorio '{deskName}' ha sido creado exitosamente.",
-        "errorTitle": "Operación Fallida",
-        "errorDesc": "Ocurrió un error. Por favor, inténtelo de nuevo."
+        "accessDeniedTitle": "Acceso Denegado",
+        "accessDeniedDesc": "No tiene permiso para guardar cambios.",
+        "saveSuccessTitle": "Asignaciones Guardadas",
+        "saveSuccessDesc": "Las asignaciones de país a idioma se han actualizado correctamente.",
+        "saveErrorTitle": "Error al Guardar",
+        "saveErrorDesc": "Hubo un error al guardar los datos de asignación."
+      },
+      "accessDenied": {
+        "title": "Acceso Denegado",
+        "description": "No tiene permiso para ver esta página."
       }
-    }
-  },
-  "MediaManagement": {
-    "pageTitle": "Gestión de Medios",
-    "pageDescription": "Gestionar todo el contenido multimedia como archivos de audio y vídeo.",
-    "addMedia": "Añadir Medios",
-    "recordsTitle": "Registros de Medios",
-    "recordsDescription": "Una lista de todo el contenido multimedia en el sistema.",
-    "accessDenied": {
-      "title": "Acceso Denegado",
-      "description": "No tiene permiso para ver el contenido multimedia.",
-      "createDescription": "No tiene permiso para crear nuevo contenido multimedia."
     },
-    "filters": {
-      "title": "Buscar y Filtrar Medios",
-      "namePlaceholder": "Nombre del Medio...",
-      "typePlaceholder": "Tipo",
-      "allTypes": "Todos los Tipos",
-      "statusPlaceholder": "Estado",
-      "allStatuses": "Todos los Estados",
-      "reset": "Reiniciar",
-      "search": "Buscar"
+    "CountryPassport": {
+      "pageTitle": "Asignación de Pasaportes por País",
+      "pageDescription": "Asigne el tipo de pasaporte para cada país para determinar las comprobaciones requeridas.",
+      "saveChanges": "Guardar Cambios",
+      "ePassport": "Pasaporte Electrónico",
+      "normal": "Normal",
+      "table": {
+        "title": "Asignaciones de Tipo de Pasaporte",
+        "description": "Seleccione el tipo de pasaporte predeterminado utilizado por cada país.",
+        "country": "País",
+        "assignedType": "Tipo de Pasaporte Asignado",
+        "selectType": "Seleccione un tipo"
+      },
+      "toast": {
+        "accessDeniedTitle": "Acceso Denegado",
+        "accessDeniedDesc": "No tiene permiso para guardar cambios.",
+        "saveSuccessTitle": "Asignaciones Guardadas",
+        "saveSuccessDesc": "Las asignaciones de tipo de pasaporte por país se han actualizado correctamente.",
+        "saveErrorTitle": "Error al Guardar",
+        "saveErrorDesc": "Hubo un error al guardar los datos de asignación."
+      },
+      "accessDenied": {
+        "title": "Acceso Denegado",
+        "description": "No tiene permiso para ver esta página."
+      }
     },
-    "table": {
-      "name": "Nombre",
-      "type": "Tipo",
-      "status": "Estado",
-      "lastModified": "Última Modificación",
+    "Ports": {
+      "pageTitle": "Gestión de Puertos",
+      "pageDescription": "Configure y gestione todos los aeropuertos, puertos marítimos y terrestres.",
+      "addPort": "Añadir Puerto",
+      "stats": {
+        "total": "Puertos Totales",
+        "totalDesc": "Todos los puertos configurados",
+        "active": "Puertos Activos",
+        "activeDesc": "Actualmente operativos",
+        "airports": "Aeropuertos",
+        "airportsDesc": "Total de aeropuertos",
+        "seaports": "Puertos Marítimos",
+        "seaportsDesc": "Total de puertos marítimos"
+      },
+      "filters": {
+        "title": "Buscar y Filtrar Puertos",
+        "namePlaceholder": "Nombre del Puerto...",
+        "typePlaceholder": "Tipo",
+        "allTypes": "Todos los Tipos",
+        "statusPlaceholder": "Estado",
+        "allStatuses": "Todos los Estados",
+        "reset": "Restablecer",
+        "search": "Buscar"
+      },
+      "table": {
+        "title": "Registros de Puertos",
+        "description": "Una lista de todos los puertos en el sistema.",
+        "portName": "Nombre del Puerto",
+        "city": "Ciudad",
+        "type": "Tipo",
+        "status": "Estado"
+      },
       "actions": {
         "view": "Ver detalles",
         "edit": "Editar",
+        "deactivate": "Desactivar",
+        "activate": "Activar",
         "delete": "Eliminar"
-      }
-    },
-    "deleteDialog": {
-      "title": "¿Está seguro?",
-      "description": "Esta acción no se puede deshacer. Esto eliminará permanentemente el contenido multimedia '{name}'.",
-      "cancel": "Cancelar",
-      "confirm": "Sí, Eliminar Medios",
-      "successTitle": "Medios Eliminados",
-      "successDesc": "Los medios '{name}' han sido eliminados.",
-      "errorTitle": "Fallo al Eliminar"
-    },
-    "detailsSheet": {
-      "title": "Detalles del Medio",
-      "close": "Cerrar",
-      "name": "Nombre",
-      "localizedName": "Nombre Localizado",
-      "type": "Tipo",
-      "status": "Estado",
-      "url": "URL del Archivo",
-      "description": "Descripción",
-      "lastModified": "Última Modificación",
-      "createdBy": "Creado por"
-    },
-    "form": {
-      "addTitle": "Añadir Nuevo Medio",
-      "addDescription": "Definir una nueva entrada de contenido multimedia para el sistema.",
-      "editTitle": "Editar Medio",
-      "editDescription": "Actualizar los detalles del contenido multimedia: {name}.",
-      "toast": {
-        "loadError": "Error al cargar los datos del medio.",
-        "addSuccessTitle": "Medio Añadido",
-        "addSuccessDesc": "Nuevo medio '{name}' creado.",
-        "updateSuccessTitle": "Medio Actualizado",
-        "updateSuccessDesc": "Medio '{name}' actualizado.",
-        "errorTitle": "Operación Fallida",
-        "errorDesc": "Ocurrió un error. Por favor, inténtelo de nuevo."
-      }
-    }
-  },
-  "GatesPage": {
-    "pageTitle": "Gestión de Puertas",
-    "pageDescription": "Estado y rendimiento en tiempo real de todas las puertas de control fronterizo.",
-    "addGate": "Añadir Puerta",
-    "noResults": "No hay puertas que coincidan con los filtros actuales.",
-    "accessDenied": {
-      "title": "Acceso Denegado",
-      "description": "No tiene permiso para ver los registros de la Puerta Electrónica."
-    },
-    "stats": {
-      "total": "Puertas Totales",
-      "totalDesc": "Todas las puertas configuradas",
-      "active": "Puertas Activas",
-      "activeDesc": "Actualmente operativas",
-      "maintenance": "En Mantenimiento",
-      "maintenanceDesc": "En mantenimiento",
-      "offline": "Puertas Fuera de Línea",
-      "offlineDesc": "No operativas"
-    },
-    "filters": {
-      "title": "Buscar y Filtrar Puertas",
-      "namePlaceholder": "Nombre de la Puerta o Terminal...",
-      "terminalPlaceholder": "Terminal",
-      "allTerminals": "Todas las Terminales",
-      "typePlaceholder": "Tipo",
-      "allTypes": "Todos los Tipos",
-      "statusPlaceholder": "Estado",
-      "allStatuses": "Todos los Estados",
-      "reset": "Reiniciar",
-      "search": "Buscar"
-    },
-    "card": {
-      "openMenu": "Abrir menú",
-      "viewDetails": "Ver detalles",
-      "editGate": "Editar puerta",
-      "deactivate": "Desactivar",
-      "activate": "Activar",
-      "delete": "Eliminar",
-      "load": "Carga",
-      "queue": "Cola",
-      "avgTime": "Tiempo Prom.",
-      "lastMaintenance": "Último Mant."
-    },
-    "detailsSheet": {
-      "title": "Detalles de la Puerta",
-      "status": "Estado",
-      "type": "Tipo",
-      "terminal": "Terminal",
-      "ipAddress": "Dirección IP",
-      "macAddress": "Dirección MAC",
-      "lastModified": "Última Modificación",
-      "lastMaintenance": "Último Mantenimiento",
-      "equipmentStatus": "Estado del Equipo",
-      "close": "Cerrar"
-    },
-    "deleteDialog": {
-      "title": "¿Está seguro?",
-      "description": "Esta acción no se puede deshacer. Esto eliminará permanentemente la puerta '{name}'.",
-      "cancel": "Cancelar",
-      "confirm": "Sí, Eliminar Puerta"
-    },
-    "toast": {
-      "statusUpdated": {
-        "title": "Puerta {status, select, Active {Activada} other {Desactivada}}",
-        "description": "La puerta \"{name}\" se ha establecido como {status, select, Active {activa} other {fuera de línea}}."
-      },
-      "deleteSuccess": {
-        "title": "Puerta Eliminada",
-        "description": "La puerta ha sido eliminada permanentemente."
-      },
-      "error": {
-        "title": "Operación Fallida",
-        "description": "Ocurrió un error. Por favor, inténtelo de nuevo."
-      }
-    },
-    "form": {
-        "addTitle": "Añadir Nueva Puerta Electrónica",
-        "addDescription": "Configurar una nueva puerta automatizada para el procesamiento de pasajeros.",
-        "editTitle": "Editar Puerta Electrónica",
-        "editDescription": "Actualizar la configuración para la puerta {gateName}.",
-        "common": {
-            "cancel": "Cancelar",
-            "save": "Guardar Cambios",
-            "add": "Añadir Puerta"
-        },
-        "basicInfo": {
-            "title": "Información Básica",
-            "description": "Detalles de identificación y ubicación principales de la puerta.",
-            "name": "Nombre de la Puerta",
-            "code": "Código de la Puerta",
-            "port": "Puerto",
-            "selectPort": "Seleccione un puerto...",
-            "terminal": "Terminal",
-            "selectTerminal": "Seleccione una terminal...",
-            "zone": "Zona",
-            "selectZone": "Seleccione una zona..."
-        },
-        "technicalInfo": {
-            "title": "Detalles Técnicos",
-            "description": "Identificadores de red e información de hardware.",
-            "ipAddress": "Dirección IP",
-            "macAddress": "Dirección MAC"
-        },
-        "config": {
-            "title": "Configuración Operativa",
-            "description": "Definir cómo funciona la puerta.",
-            "status": "Estado",
-            "type": "Tipo de Puerta",
-            "warrantyStart": "Fecha de Inicio de la Garantía",
-            "warrantyEnd": "Fecha de Fin de la Garantía",
-            "pickDate": "Elija una fecha"
-        },
-        "entryConfig": {
-            "title": "Configuración de Entrada",
-            "workflow": "Flujo de Trabajo de Entrada",
-            "selectWorkflow": "Seleccione un flujo de trabajo...",
-            "riskProfile": "Perfil de Riesgo de Entrada",
-            "selectRiskProfile": "Seleccione un perfil de riesgo...",
-            "capacity": "Capacidad de la Cola"
-        },
-        "exitConfig": {
-            "title": "Configuración de Salida",
-            "workflow": "Flujo de Trabajo de Salida",
-            "selectWorkflow": "Seleccione un flujo de trabajo...",
-            "riskProfile": "Perfil de Riesgo de Salida",
-            "selectRiskProfile": "Seleccione un perfil de riesgo...",
-            "capacity": "Capacidad de la Cola"
-        },
-        "toast": {
-            "updateSuccessTitle": "Puerta Actualizada",
-            "updateSuccessDesc": "La puerta '{gateName}' ha sido actualizada exitosamente.",
-            "addSuccessTitle": "Puerta Añadida",
-            "addSuccessDesc": "La nueva puerta '{gateName}' ha sido creada exitosamente.",
-            "errorTitle": "Operación Fallida",
-            "errorDesc": "Ocurrió un error. Por favor, inténtelo de nuevo.",
-            "loadError": "Error al cargar los datos de la puerta. Por favor, inténtelo de nuevo más tarde."
-        }
-    }
-  },
-   "DutyManager": {
-    "title": "Duty Manager",
-    "description": "Review and action transactions pending supervisor review.",
-    "pendingTransactions": "Pending Transactions",
-    "pendingTransactionsDesc": "A list of all transactions that have been escalated for supervisor approval.",
-    "accessDenied": {
-      "title": "Access Denied",
-      "description": "You do not have permission to view this page."
-    },
-    "stats": {
-      "totalPending": "Total Pending",
-      "totalPendingDesc": "Require immediate review",
-      "highRisk": "High-Risk",
-      "highRiskDesc": "Transactions with risk score >75",
-      "mediumRisk": "Medium-Risk",
-      "mediumRiskDesc": "Transactions with risk score 41-75"
-    },
-    "columns": {
-      "id": "Transaction ID",
-      "passenger": "Passenger",
-      "type": "Type",
-      "dateTime": "Date/Time",
-      "riskScore": "Risk Score",
-      "escalatedBy": "Escalated By"
-    },
-    "filterPlaceholder": "Filter by passport number...",
-    "search": "Search",
-    "reset": "Reset"
-  },
-  "Prediction": {
-    "title": "Predictive Analytics",
-    "description": "Forecast passenger flow, processing times, and operational demand.",
-    "searchAndFilter": "Search & Filter",
-    "fromDate": "From Date",
-    "toDate": "To Date",
-    "reset": "Reset",
-    "search": "Search",
-    "stats": {
-      "passenger": "Predicted Passengers",
-      "vehicle": "Predicted Vehicles",
-      "vessel": "Predicted Vessels",
-      "processingTime": "Predicted Avg. Processing Time",
-      "staff": "Recommended Staff"
-    },
-    "passengerFlow": {
-      "title": "Predicted Passenger/Vehicle Flow",
-      "description": "Forecasted hourly traffic across all port types."
-    },
-    "processingVelocity": {
-      "title": "Predicted Processing Velocity",
-      "description": "Average time in seconds to process each passenger type."
-    },
-    "queueDynamics": {
-      "title": "Queue Dynamics",
-      "description": "Comparison of predicted queue lengths against historical data.",
-      "predicted": "Predicted",
-      "historical": "Historical"
-    },
-    "schedule": {
-      "arrivals": "Scheduled Arrivals",
-      "departures": "Scheduled Departures",
-      "flight": "Flight",
-      "vessel": "Vessel",
-      "from": "From",
-      "to": "To",
-      "time": "Time",
-      "status": "Status",
-      "gate": "Gate",
-      "berth": "Berth"
-    }
-  },
-  "CivilRecords": {
-    "title": "Civil Records",
-    "description": "Search and view civil records for all individuals in the system.",
-    "filterTitle": "Search & Filter Records",
-    "filterEnglishName": "English Name...",
-    "filterLocalizedName": "Localized Name...",
-    "filterDocumentNumber": "Document Number...",
-    "filterNationality": "Nationality",
-    "searchNationality": "Search nationality...",
-    "noNationality": "No nationality found.",
-    "filterPersonType": "Person Type",
-    "allTypes": "All Types",
-    "citizen": "Citizen",
-    "resident": "Resident",
-    "visitor": "Visitor",
-    "fromDate": "From Date",
-    "toDate": "To Date",
-    "reset": "Reset",
-    "search": "Search",
-    "recordsTitle": "Record Results",
-    "columnName": "Name",
-    "columnPersonType": "Person Type",
-    "columnDocumentNumber": "Document Number",
-    "columnNationality": "Nationality",
-    "columnLastEntry": "Last Entry Date",
-    "noResults": "No records match the current filters.",
-    "details": {
-      "title": "Civil Record Details",
-      "close": "Close",
-      "personalInfo": "Personal Information",
-      "status": "Status",
-      "riskLevel": "Risk Level",
-      "gender": "Gender",
-      "dob": "Date of Birth",
-      "documentInfo": "Document Information",
-      "passportNo": "Passport No.",
-      "passportCountry": "Issuing Country",
-      "passportIssue": "Issue Date",
-      "passportExpiry": "Expiry Date",
-      "nationalId": "National ID",
-      "visaInfo": "Visa / Residency Information",
-      "visaNo": "Visa No.",
-      "visaType": "Visa Type",
-      "visaExpiry": "Visa Expiry",
-      "residencyNo": "Residency File No."
-    },
-     "accessDenied": {
-      "title": "Access Denied",
-      "description": "You do not have permission to view civil records for this module."
-    }
-  },
-  "WhitelistPage": {
-    "form": {
-        "addTitle": "Add to Whitelist",
-        "addDescription": "Grant special clearance to an individual.",
-        "editTitle": "Edit Whitelist Entry",
-        "editDescription": "Modify the details for {name}.",
-        "accessDenied": {
-            "title": "Access Denied",
-            "createDescription": "You do not have permission to add new entries to the whitelist for this module.",
-            "editDescription": "You do not have permission to edit whitelist entries for this module."
-        },
-        "search": {
-            "title": "Link to Existing Passenger (Recommended)",
-            "description": "Search for a passenger by their passport number to link this whitelist entry to their record.",
-            "placeholder": "Enter passport number...",
-            "button": "Search"
-        },
-        "toast": {
-            "passengerFoundTitle": "Passenger Found",
-            "passengerNotFoundTitle": "Passenger Not Found",
-            "passengerNotFoundDesc": "No existing record found. Please fill details manually.",
-            "addSuccessTitle": "Entry Added",
-            "addSuccessDesc": "{name} has been added to the whitelist.",
-            "updateSuccessTitle": "Entry Updated",
-            "updateSuccessDesc": "{name}'s whitelist entry has been updated.",
-            "errorTitle": "Operation Failed",
-            "errorDesc": "An error occurred. Please try again.",
-            "loadError": "Failed to load whitelist entry data."
-        },
-        "common": {
-            "cancel": "Cancel",
-            "save": "Save Entry"
-        },
-        "details": {
-            "title": "Whitelist Details",
-            "description": "Enter the details for the individual to be whitelisted.",
-            "linkedTitle": "Passenger Record Linked",
-            "linkedDesc": "The following fields are pre-filled from {name}'s record and cannot be changed here.",
-            "name": "Full Name (English)",
-            "localizedName": "Full Name (Localized)",
-            "passportNumber": "Passport Number",
-            "passportExpiry": "Passport Expiry",
-            "nationality": "Nationality",
-            "selectNationality": "Select a nationality...",
-            "reason": "Reason for Whitelisting",
-            "pickDate": "Pick a date"
-        },
-        "validity": {
-            "title": "Validity & Status",
-            "status": "Status",
-            "active": "Active",
-            "expired": "Expired",
-            "revoked": "Revoked",
-            "validFrom": "Valid From",
-            "validUntil": "Valid Until"
-        },
-        "attachments": {
-            "title": "Supporting Evidence",
-            "documentLabel": "Official Document (e.g., Diplomatic Note)"
-        }
-    }
-  },
-   "BlacklistPage": {
-    "form": {
-        "addTitle": "Add to Blacklist",
-        "addDescription": "Flag an individual for security risks.",
-        "editTitle": "Edit Blacklist Entry",
-        "editDescription": "Modify the details for {name}.",
-        "accessDenied": {
-            "title": "Access Denied",
-            "createDescription": "You do not have permission to add new entries to the blacklist for this module.",
-            "editDescription": "You do not have permission to edit blacklist entries for this module."
-        },
-        "search": {
-            "title": "Link to Existing Passenger (Recommended)",
-            "description": "Search for a passenger by their passport number to link this blacklist entry to their record.",
-            "placeholder": "Enter passport number...",
-            "button": "Search"
-        },
-        "toast": {
-            "passengerFoundTitle": "Passenger Found",
-            "passengerNotFoundTitle": "Passenger Not Found",
-            "passengerNotFoundDesc": "No existing record found. Please fill details manually.",
-            "addSuccessTitle": "Entry Added",
-            "addSuccessDesc": "{name} has been added to the blacklist.",
-            "updateSuccessTitle": "Entry Updated",
-            "updateSuccessDesc": "{name}'s blacklist entry has been updated.",
-            "errorTitle": "Operation Failed",
-            "errorDesc": "An error occurred. Please try again.",
-            "loadError": "Failed to load blacklist entry data."
-        },
-        "common": {
-            "cancel": "Cancel",
-            "save": "Save Entry"
-        },
-        "details": {
-            "title": "Blacklist Details",
-            "description": "Enter the details for the individual to be blacklisted.",
-            "linkedTitle": "Passenger Record Linked",
-            "linkedDesc": "The following fields are pre-filled from {name}'s record and cannot be changed here.",
-            "name": "Full Name",
-            "nationality": "Nationality",
-            "selectNationality": "Select a nationality...",
-            "reason": "Reason for Blacklisting",
-            "notes": "Notes"
-        },
-        "category": {
-            "title": "Category",
-            "category": "Blacklist Category",
-            "noFly": "No-Fly",
-            "wanted": "Wanted",
-            "financial": "Financial",
-            "other": "Other"
-        },
-        "attachments": {
-            "title": "Supporting Evidence",
-            "documentLabel": "Official Document (e.g., Warrant, Alert)"
-        }
-    }
-  },
-  "ShiftManagement": {
-    "pageTitle": "Shift Management",
-    "pageDescription": "Define and manage officer work shifts.",
-    "addShift": "Add Shift",
-    "totalShifts": "Total Shifts",
-    "totalShiftsDesc": "All configured shifts",
-    "activeShifts": "Active Shifts",
-    "activeShiftsDesc": "Currently operational shifts",
-    "inactiveShifts": "Inactive Shifts",
-    "inactiveShiftsDesc": "Currently inactive shifts",
-    "filterTitle": "Search & Filter Shifts",
-    "filterNamePlaceholder": "Shift Name...",
-    "filterStatusPlaceholder": "Status",
-    "filterAllStatuses": "All Statuses",
-    "filterDayPlaceholder": "Day of Week",
-    "reset": "Reset",
-    "search": "Search",
-    "recordsTitle": "Shift Records",
-    "recordsDescription": "A list of all configured shifts in the system.",
-    "form": {
-      "addTitle": "Add New Shift",
-      "addDescription": "Define a new work shift for officers.",
-      "editTitle": "Edit Shift",
-      "editDescription": "Editing the shift: {name}",
-      "details": {
-        "title": "Shift Details",
-        "description": "Set the core properties of the shift.",
-        "name": "Shift Name",
-        "namePlaceholder": "e.g., Morning Main Terminal",
-        "startTime": "Start Time",
-        "endTime": "End Time",
-        "status": "Status",
-        "active": "Active",
-        "inactive": "Inactive"
-      },
-      "operatingDays": {
-        "title": "Operating Days",
-        "description": "Select the days of the week this shift is active."
-      },
-      "common": {
-        "cancel": "Cancel",
-        "save": "Save Changes",
-        "add": "Add Shift"
       },
       "toast": {
-        "addSuccessTitle": "Shift Added",
-        "addSuccessDesc": "A new shift has been successfully added.",
-        "updateSuccessTitle": "Shift Updated",
-        "updateSuccessDesc": "The shift has been successfully updated.",
-        "errorTitle": "Save Failed",
-        "errorDesc": "There was an error saving the shift data."
-      }
-    }
-  },
-  "AssignOfficer": {
-    "title": "Assign Officer",
-    "description": "Assign officers to shifts and locations.",
-    "addAssignment": "Add Assignment",
-    "stats": {
-      "total": "Total Assignments",
-      "totalDesc": "All scheduled assignments",
-      "confirmed": "Confirmed Assignments",
-      "confirmedDesc": "Active and confirmed shifts",
-      "pending": "Pending Assignments",
-      "pendingDesc": "Awaiting confirmation"
-    },
-    "filter": {
-      "title": "Search & Filter Assignments",
-      "officer": "Officer",
-      "port": "Port",
-      "terminal": "Terminal",
-      "zone": "Zone",
-      "shift": "Shift",
-      "assignmentDate": "Assignment Date",
-      "reset": "Reset",
-      "search": "Search"
-    },
-    "table": {
-      "title": "Officer Assignments",
-      "description": "A list of all officer assignments in the system.",
-      "officer": "Officer",
-      "date": "Date",
-      "shift": "Shift",
-      "port": "Port",
-      "terminal": "Terminal",
-      "zone": "Zone",
-      "status": "Status"
-    },
-    "actions": {
-      "view": "View details",
-      "edit": "Edit assignment",
-      "delete": "Delete"
-    },
-    "detailsSheet": {
-      "title": "Assignment Details",
-      "description": "Assignment for {officerName} on {date}",
-      "officer": "Officer",
-      "status": "Status",
-      "date": "Date",
-      "shift": "Shift",
-      "port": "Port",
-      "terminal": "Terminal",
-      "zone": "Zone",
-      "close": "Close"
-    },
-    "deleteDialog": {
-      "title": "Are you sure?",
-      "description": "This action cannot be undone. This will permanently delete the assignment for {officerName}.",
-      "cancel": "Cancel",
-      "confirm": "Yes, Delete"
-    },
-    "toast": {
-      "loadErrorTitle": "Error Loading Data",
-      "loadErrorDesc": "Could not fetch necessary data for the page. Please try again later.",
-      "deleteSuccessTitle": "Assignment Deleted",
-      "deleteSuccessDesc": "The officer assignment has been successfully deleted.",
-      "deleteErrorTitle": "Delete Failed",
-      "addSuccessTitle": "Assignment Added",
-      "addSuccessDesc": "New assignment has been created successfully.",
-      "updateSuccessTitle": "Assignment Updated",
-      "updateSuccessDesc": "The assignment has been updated successfully.",
-      "errorTitle": "Operation Failed",
-      "errorDesc": "An error occurred. Please try again."
-    },
-    "form": {
-        "addTitle": "Add New Assignment",
-        "addDescription": "Schedule an officer for a specific shift and location.",
-        "editTitle": "Edit Assignment",
-        "editDescription": "Update an existing officer assignment.",
-        "common": {
-            "cancel": "Cancel",
-            "save": "Save Changes",
-            "add": "Add Assignment"
+        "deleteSuccessTitle": "Puerto Eliminado",
+        "deleteSuccessDesc": "El puerto ha sido eliminado exitosamente.",
+        "deleteErrorTitle": "Error al Eliminar",
+        "deleteErrorDesc": "No se pudo eliminar el puerto.",
+        "statusUpdateTitle": "Estado Actualizado",
+        "statusUpdateDesc": "El estado del puerto {name} ha sido actualizado a {status}.",
+        "statusUpdateErrorTitle": "Error al Actualizar el Estado"
+      },
+      "accessDenied": {
+        "title": "Acceso Denegado",
+        "description": "No tiene permiso para ver esta página."
+      },
+      "deleteDialog": {
+        "title": "¿Está seguro?",
+        "description": "Esto eliminará permanentemente el puerto {portName}.",
+        "cancel": "Cancelar",
+        "confirm": "Sí, Eliminar"
+      },
+      "detailsSheet": {
+        "description": "Puerto de tipo {type}",
+        "status": "Estado",
+        "city": "Ciudad",
+        "country": "País",
+        "address": "Dirección",
+        "localizedAddress": "Dirección Localizada",
+        "lastModified": "Última Modificación",
+        "createdBy": "Creado por",
+        "close": "Cerrar"
+      },
+      "form": {
+        "addTitle": "Añadir Nuevo Puerto",
+        "addDescription": "Configurar un nuevo punto de entrada para el sistema.",
+        "editTitle": "Editar Puerto",
+        "editDescription": "Actualizar los detalles para {name}.",
+        "accessDenied": {
+          "title": "Acceso Denegado",
+          "createDescription": "No tiene permiso para crear nuevos puertos.",
+          "editDescription": "No tiene permiso para editar puertos."
         },
         "details": {
-            "title": "Assignment Details",
-            "description": "Select the officer, location, and shift.",
-            "officer": "Officer",
-            "selectOfficer": "Select an officer...",
-            "date": "Date",
-            "pickDate": "Pick a date",
-            "port": "Port",
-            "selectPort": "Select a port...",
-            "terminal": "Terminal",
-            "selectTerminal": "Select a terminal...",
-            "zone": "Zone",
-            "selectZone": "Select a zone...",
-            "shift": "Shift",
-            "selectShift": "Select a shift...",
-            "status": "Status",
-            "pending": "Pending",
-            "confirmed": "Confirmed",
-            "cancelled": "Cancelled",
-            "notes": "Notes",
-            "notesPlaceholder": "Add any relevant notes..."
+          "title": "Detalles del Puerto",
+          "description": "Introduzca los detalles de identificación y ubicación del puerto.",
+          "name": "Nombre del Puerto",
+          "namePlaceholder": "p. ej., Aeropuerto Internacional de Dubai",
+          "shortName": "Nombre Corto",
+          "shortNamePlaceholder": "p. ej., DXB",
+          "localizedName": "Nombre Localizado",
+          "localizedNamePlaceholder": "p. ej., مطار دبي الدولي",
+          "city": "Ciudad",
+          "cityPlaceholder": "p. ej., Dubai",
+          "country": "País",
+          "countryPlaceholder": "Seleccione un país...",
+          "address": "Dirección",
+          "addressPlaceholder": "Introduzca la dirección completa...",
+          "localizedAddress": "Dirección Localizada",
+          "localizedAddressPlaceholder": "Introduzca la dirección en el idioma local...",
+          "type": "Tipo",
+          "status": "Estado",
+          "active": "Activo",
+          "inactive": "Inactivo"
+        },
+        "common": {
+          "cancel": "Cancelar",
+          "save": "Guardar Cambios",
+          "add": "Añadir Puerto"
+        },
+        "toast": {
+          "loading": "Cargando datos del puerto...",
+          "loadErrorTitle": "Error",
+          "loadErrorDesc": "No se pudieron cargar los datos del puerto.",
+          "updateSuccessTitle": "Puerto Actualizado",
+          "updateSuccessDesc": "El puerto {name} ha sido actualizado exitosamente.",
+          "addSuccessTitle": "Puerto Añadido",
+          "addSuccessDesc": "El nuevo puerto {name} ha sido creado exitosamente.",
+          "errorTitle": "Error al Guardar",
+          "errorDesc": "Hubo un error al guardar los datos del puerto."
         }
+      }
     }
   }
 }

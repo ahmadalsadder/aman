@@ -52,3 +52,9 @@ export interface CountryLanguageMapping {
     countryName: string;
     language: string;
 }
+
+export interface CountryPassportMapping {
+    countryCode: string;
+    countryName: string;
+    passportType: 'Normal' | 'E-Passport';
+}

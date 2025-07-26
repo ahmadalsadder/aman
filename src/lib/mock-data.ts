@@ -3,7 +3,7 @@
 import type { Passenger, Transaction, OfficerDesk, Gate, Media, WhitelistEntry, BlacklistEntry, OfficerAssignment } from "@/types/live-processing";
 import type { Shift, DayOfWeek } from "@/types/workload";
 import { Plane, Car, Ship } from "lucide-react";
-import type { Port, Terminal, Zone, Workflow, RiskProfile, User, CountryLanguageMapping } from '@/types';
+import type { Port, Terminal, Zone, Workflow, RiskProfile, User, CountryLanguageMapping, CountryPassportMapping } from '@/types';
 
 // This is the correct order for initialization.
 // Define data first, then functions that use it.
@@ -281,6 +281,12 @@ export const mockCountryLanguageMapping: CountryLanguageMapping[] = [
 ];
 export const availableLanguages = ['English', 'Arabic', 'French', 'Spanish', 'Urdu'];
 
+export const mockCountryPassportMapping: CountryPassportMapping[] = [
+    { countryCode: 'USA', countryName: 'United States', passportType: 'E-Passport' },
+    { countryCode: 'GBR', countryName: 'United Kingdom', passportType: 'E-Passport' },
+    { countryCode: 'IND', countryName: 'India', passportType: 'Normal' },
+    { countryCode: 'SYR', countryName: 'Syrian Arab Republic', passportType: 'Normal' },
+];
 
 // Getters
 export const getMockPassengers = () => mockPassengers;

@@ -2,12 +2,12 @@
 
 import type { User } from '@/types';
 import { Result, ApiError } from '@/types/api/result';
-import { mockVisaDatabase, mockPorts, mockTerminals, mockZones, mockWorkflows, mockRiskProfiles, setMockOfficerDesks, setMockGates, setMockMedia, setMockWhitelist, setMockBlacklist, setMockPassengers, setMockShifts, getMockPassengers, getMockTransactions, getMockOfficerDesks, getMockGates, getMockMedia, getMockWhitelist, getMockBlacklist, getMockShifts, setMockOfficerAssignments, getMockOfficerAssignments, mockCountryLanguageMapping, availableLanguages } from './mock-data';
+import { mockVisaDatabase, mockPorts, mockTerminals, mockZones, mockWorkflows, mockRiskProfiles, setMockOfficerDesks, setMockGates, setMockMedia, setMockWhitelist, setMockBlacklist, setMockPassengers, setMockShifts, getMockPassengers, getMockTransactions, getMockOfficerDesks, getMockGates, getMockMedia, getMockWhitelist, getMockBlacklist, getMockShifts, setMockOfficerAssignments, getMockOfficerAssignments, mockCountryLanguageMapping, availableLanguages, mockCountryPassportMapping } from './mock-data';
 import { assessPassengerRisk } from '@/ai/flows/assess-risk-flow';
 import { countries } from './countries';
 import { Fingerprint, ScanLine, UserCheck, ShieldAlert, User as UserIcon } from 'lucide-react';
 import { extractPassportData } from '@/ai/flows/extract-passport-data-flow';
-import type { Transaction, Gate, CivilRecord, Media, BlacklistEntry, WhitelistEntry, Passenger, Shift, OfficerAssignment, CountryLanguageMapping } from '@/types/live-processing';
+import type { Transaction, Gate, CivilRecord, Media, BlacklistEntry, WhitelistEntry, Passenger, Shift, OfficerAssignment, CountryLanguageMapping, CountryPassportMapping } from '@/types/live-processing';
 
 const getAuthInfo = (): Partial<User> => {
   try {
@@ -85,7 +85,8 @@ const users: User[] = [
         'control-room:dashboard:view', 'control-room:dashboard:stats:view', 'control-room:dashboard:charts:view', 'control-room:dashboard:officer-performance:view',
         'duty-manager:view',
         'configuration:dashboard:view',
-        'configuration:country-language:view', 'configuration:country-language:edit'
+        'configuration:country-language:view', 'configuration:country-language:edit',
+        'configuration:country-passport:view', 'configuration:country-passport:edit'
     ]
   },
   { 
@@ -1046,6 +1047,14 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
         // In a real app, you'd save this to a database. Here we just return it.
         return Result.success(newMappings) as Result<T>;
     }
+     if (method === 'GET' && url.pathname === '/data/country-passport-mappings') {
+        return Result.success(mockCountryPassportMapping) as Result<T>;
+    }
+    if (method === 'POST' && url.pathname === '/data/country-passport-mappings/save') {
+        const newMappings = JSON.parse(body as string) as CountryPassportMapping[];
+        return Result.success(newMappings) as Result<T>;
+    }
+
 
     if(method === 'GET' && url.pathname === '/data/desks') {
         const moduleType = url.searchParams.get('moduleType');

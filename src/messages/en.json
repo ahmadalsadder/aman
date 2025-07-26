@@ -1,4 +1,5 @@
 
+
 {
   "LoginPage": {
     "title": "Welcome to Guardian Gate",
@@ -218,6 +219,58 @@
     "cardDescription": "Access the {module} dashboard and tools.",
     "openModule": "Open Module",
     "notYourPortals": "Don't see the portal you're looking for? Contact your administrator."
+  },
+  "Configuration": {
+    "CountryLanguage": {
+        "pageTitle": "Country Language Mapping",
+        "pageDescription": "Assign a primary language for each country for localized content.",
+        "saveChanges": "Save Changes",
+        "table": {
+            "title": "Language Assignments",
+            "description": "Select the default language to use for media and messages for each country.",
+            "country": "Country",
+            "assignedLanguage": "Assigned Language",
+            "selectLanguage": "Select language"
+        },
+        "toast": {
+            "accessDeniedTitle": "Access Denied",
+            "accessDeniedDesc": "You do not have permission to save changes.",
+            "saveSuccessTitle": "Mappings Saved",
+            "saveSuccessDesc": "Country to language mappings have been successfully updated.",
+            "saveErrorTitle": "Save Failed",
+            "saveErrorDesc": "There was an error saving the mapping data."
+        },
+         "accessDenied": {
+          "title": "Access Denied",
+          "description": "You do not have permission to view this page."
+        }
+    },
+    "CountryPassport": {
+        "pageTitle": "Country Passport Mapping",
+        "pageDescription": "Assign the passport type for each country to determine required checks.",
+        "saveChanges": "Save Changes",
+        "ePassport": "E-Passport",
+        "normal": "Normal",
+        "table": {
+            "title": "Passport Type Assignments",
+            "description": "Select the default passport type used by each country.",
+            "country": "Country",
+            "assignedType": "Assigned Passport Type",
+            "selectType": "Select type"
+        },
+        "toast": {
+            "accessDeniedTitle": "Access Denied",
+            "accessDeniedDesc": "You do not have permission to save changes.",
+            "saveSuccessTitle": "Mappings Saved",
+            "saveSuccessDesc": "Country to passport type mappings have been successfully updated.",
+            "saveErrorTitle": "Save Failed",
+            "saveErrorDesc": "There was an error saving the mapping data."
+        },
+         "accessDenied": {
+          "title": "Access Denied",
+          "description": "You do not have permission to view this page."
+        }
+    }
   },
   "Transactions": {
     "processTransaction": "Process Transaction",

@@ -601,6 +601,96 @@
         "createdBy": "تم إنشاؤه بواسطة",
         "close": "إغلاق"
       }
+    },
+    "SystemMessages": {
+      "pageTitle": "إدارة رسائل النظام",
+      "pageDescription": "إنشاء وتعديل وإدارة رسائل النظام المعروضة على الشاشات.",
+      "addMessage": "إضافة رسالة",
+      "table": {
+        "title": "رسائل النظام",
+        "description": "قائمة بجميع رسائل النظام القابلة للتكوين.",
+        "name": "اسم الرسالة",
+        "category": "الفئة",
+        "status": "الحالة",
+        "lastModified": "آخر تعديل"
+      },
+      "actions": {
+        "view": "عرض التفاصيل",
+        "edit": "تحرير",
+        "deactivate": "إلغاء التنشيط",
+        "activate": "تنشيط",
+        "delete": "حذف"
+      },
+      "toast": {
+        "deleteSuccessTitle": "تم حذف الرسالة",
+        "deleteSuccessDesc": "تم حذف رسالة النظام بنجاح.",
+        "deleteErrorTitle": "فشل الحذف",
+        "deleteErrorDesc": "لا يمكن حذف الرسالة.",
+        "statusUpdateTitle": "تم تحديث الحالة",
+        "statusUpdateDesc": "تم تحديث حالة الرسالة '{name}' إلى {status}.",
+        "statusUpdateErrorTitle": "فشل تحديث الحالة"
+      },
+      "accessDenied": {
+        "title": "تم رفض الوصول",
+        "description": "ليس لديك إذن لعرض رسائل النظام."
+      },
+      "deleteDialog": {
+        "title": "هل أنت متأكد؟",
+        "description": "سيؤدي هذا إلى حذف الرسالة '{messageName}' بشكل دائم.",
+        "cancel": "إلغاء",
+        "confirm": "نعم، حذف"
+      },
+      "detailsSheet": {
+        "description": "رسالة {category}",
+        "status": "الحالة",
+        "category": "الفئة",
+        "englishDescription": "الوصف (الإنجليزية)",
+        "localizedName": "الاسم المترجم",
+        "localizedDescription": "الوصف المترجم",
+        "lastModified": "آخر تعديل",
+        "createdBy": "تم إنشاؤه بواسطة",
+        "close": "إغلاق"
+      },
+      "form": {
+        "addTitle": "إضافة رسالة نظام جديدة",
+        "addDescription": "إنشاء رسالة جديدة لعرضها على شاشات النظام.",
+        "editTitle": "تحرير رسالة النظام",
+        "editDescription": "تحديث التفاصيل لـ '{name}'.",
+        "accessDenied": {
+          "title": "تم رفض الوصول",
+          "createDescription": "ليس لديك إذن لإنشاء رسائل نظام جديدة.",
+          "editDescription": "ليس لديك إذن لتحرير رسائل النظام."
+        },
+        "details": {
+          "title": "تفاصيل الرسالة",
+          "description": "أدخل محتوى وخصائص الرسالة.",
+          "name": "اسم / معرف الرسالة",
+          "namePlaceholder": "على سبيل المثال، WelcomeMessage_DXB",
+          "localizedName": "الاسم المترجم",
+          "localizedNamePlaceholder": "على سبيل المثال، رسالة الترحيب",
+          "descriptionField": "الوصف (الإنجليزية)",
+          "descriptionPlaceholder": "أدخل محتوى الرسالة بالكامل...",
+          "localizedDescription": "الوصف المترجم",
+          "localizedDescriptionPlaceholder": "أدخل الرسالة باللغة المحلية...",
+          "category": "الفئة",
+          "status": "الحالة"
+        },
+        "common": {
+          "cancel": "إلغاء",
+          "save": "حفظ التغييرات",
+          "add": "إضافة رسالة"
+        },
+        "toast": {
+          "loadErrorTitle": "خطأ",
+          "loadErrorDesc": "تعذر تحميل بيانات الرسالة.",
+          "updateSuccessTitle": "تم تحديث الرسالة",
+          "updateSuccessDesc": "تم تحديث الرسالة '{name}' بنجاح.",
+          "addSuccessTitle": "تمت إضافة الرسالة",
+          "addSuccessDesc": "تم إنشاء رسالة جديدة '{name}' بنجاح.",
+          "errorTitle": "فشل الحفظ",
+          "errorDesc": "حدث خطأ أثناء حفظ بيانات الرسالة."
+        }
+      }
     }
   },
   "Transactions": {

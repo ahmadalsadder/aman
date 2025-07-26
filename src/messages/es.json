@@ -286,121 +286,121 @@
       }
     },
     "Ports": {
-      "pageTitle": "Port Management",
-      "pageDescription": "Configure and manage all airports, seaports, and landports.",
-      "addPort": "Add Port",
+      "pageTitle": "Gestión de Puertos",
+      "pageDescription": "Configurar y gestionar todos los aeropuertos, puertos marítimos y terrestres.",
+      "addPort": "Añadir Puerto",
       "stats": {
-        "total": "Total Ports",
-        "totalDesc": "All configured ports",
-        "active": "Active Ports",
-        "activeDesc": "Currently operational",
-        "airports": "Airports",
-        "airportsDesc": "Total airports",
-        "seaports": "Seaports",
-        "seaportsDesc": "Total seaports"
+        "total": "Puertos Totales",
+        "totalDesc": "Todos los puertos configurados",
+        "active": "Puertos Activos",
+        "activeDesc": "Actualmente operativos",
+        "airports": "Aeropuertos",
+        "airportsDesc": "Total de aeropuertos",
+        "seaports": "Puertos Marítimos",
+        "seaportsDesc": "Total de puertos marítimos"
       },
       "filters": {
-        "title": "Search & Filter Ports",
-        "namePlaceholder": "Port Name...",
-        "typePlaceholder": "Type",
-        "allTypes": "All Types",
-        "statusPlaceholder": "Status",
-        "allStatuses": "All Statuses",
-        "reset": "Reset",
-        "search": "Search"
+        "title": "Buscar y Filtrar Puertos",
+        "namePlaceholder": "Nombre del Puerto...",
+        "typePlaceholder": "Tipo",
+        "allTypes": "Todos los Tipos",
+        "statusPlaceholder": "Estado",
+        "allStatuses": "Todos los Estados",
+        "reset": "Restablecer",
+        "search": "Buscar"
       },
       "table": {
-        "title": "Port Records",
-        "description": "A list of all ports in the system.",
-        "portName": "Port Name",
-        "city": "City",
-        "type": "Type",
-        "status": "Status"
+        "title": "Registros de Puertos",
+        "description": "Una lista de todos los puertos en el sistema.",
+        "portName": "Nombre del Puerto",
+        "city": "Ciudad",
+        "type": "Tipo",
+        "status": "Estado"
       },
       "actions": {
-        "view": "View details",
-        "edit": "Edit",
-        "deactivate": "Deactivate",
-        "activate": "Activate",
-        "delete": "Delete"
+        "view": "Ver detalles",
+        "edit": "Editar",
+        "deactivate": "Desactivar",
+        "activate": "Activar",
+        "delete": "Eliminar"
       },
       "toast": {
-        "deleteSuccessTitle": "Port Deleted",
-        "deleteSuccessDesc": "The port has been successfully deleted.",
-        "deleteErrorTitle": "Delete Failed",
-        "deleteErrorDesc": "Could not delete the port.",
-        "statusUpdateTitle": "Status Updated",
-        "statusUpdateDesc": "Port {name}'s status has been updated to {status}.",
-        "statusUpdateErrorTitle": "Status Update Failed"
+        "deleteSuccessTitle": "Puerto Eliminado",
+        "deleteSuccessDesc": "El puerto ha sido eliminado exitosamente.",
+        "deleteErrorTitle": "Error al Eliminar",
+        "deleteErrorDesc": "No se pudo eliminar el puerto.",
+        "statusUpdateTitle": "Estado Actualizado",
+        "statusUpdateDesc": "El estado del puerto {name} ha sido actualizado a {status}.",
+        "statusUpdateErrorTitle": "Error al Actualizar Estado"
       },
       "accessDenied": {
-        "title": "Access Denied",
-        "description": "You do not have permission to view this page."
+        "title": "Acceso Denegado",
+        "description": "No tiene permiso para ver esta página."
       },
       "deleteDialog": {
-        "title": "Are you sure?",
-        "description": "This will permanently delete the port {portName}.",
-        "cancel": "Cancel",
-        "confirm": "Yes, Delete"
+        "title": "¿Está seguro?",
+        "description": "Esto eliminará permanentemente el puerto {portName}.",
+        "cancel": "Cancelar",
+        "confirm": "Sí, Eliminar"
       },
       "detailsSheet": {
-        "description": "{type} Port",
-        "status": "Status",
-        "city": "City",
-        "country": "Country",
-        "address": "Address",
-        "localizedAddress": "Localized Address",
-        "lastModified": "Last Modified",
-        "createdBy": "Created By",
-        "close": "Close"
+        "description": "Puerto {type}",
+        "status": "Estado",
+        "city": "Ciudad",
+        "country": "País",
+        "address": "Dirección",
+        "localizedAddress": "Dirección Localizada",
+        "lastModified": "Última Modificación",
+        "createdBy": "Creado por",
+        "close": "Cerrar"
       },
       "form": {
-        "addTitle": "Add New Port",
-        "addDescription": "Configure a new point of entry for the system.",
-        "editTitle": "Edit Port",
-        "editDescription": "Update the details for {name}.",
+        "addTitle": "Añadir Nuevo Puerto",
+        "addDescription": "Configurar un nuevo punto de entrada para el sistema.",
+        "editTitle": "Editar Puerto",
+        "editDescription": "Actualizar los detalles de {name}.",
         "accessDenied": {
-          "title": "Access Denied",
-          "createDescription": "You do not have permission to create new ports.",
-          "editDescription": "You do not have permission to edit ports."
+          "title": "Acceso Denegado",
+          "createDescription": "No tiene permiso para crear nuevos puertos.",
+          "editDescription": "No tiene permiso para editar puertos."
         },
         "details": {
-          "title": "Port Details",
-          "description": "Enter the identification and location details for the port.",
-          "name": "Port Name",
-          "namePlaceholder": "e.g., Dubai International Airport",
-          "shortName": "Short Name",
-          "shortNamePlaceholder": "e.g., DXB",
-          "localizedName": "Localized Name",
-          "localizedNamePlaceholder": "e.g., مطار دبي الدولي",
-          "city": "City",
-          "cityPlaceholder": "e.g., Dubai",
-          "country": "Country",
-          "countryPlaceholder": "Select a country...",
-          "address": "Address",
-          "addressPlaceholder": "Enter the full address...",
-          "localizedAddress": "Localized Address",
-          "localizedAddressPlaceholder": "Enter the address in local language...",
-          "type": "Type",
-          "status": "Status",
-          "active": "Active",
-          "inactive": "Inactive"
+          "title": "Detalles del Puerto",
+          "description": "Introduzca los detalles de identificación y ubicación del puerto.",
+          "name": "Nombre del Puerto",
+          "namePlaceholder": "p. ej., Aeropuerto Internacional de Dubai",
+          "shortName": "Nombre Corto",
+          "shortNamePlaceholder": "p. ej., DXB",
+          "localizedName": "Nombre Localizado",
+          "localizedNamePlaceholder": "p. ej., مطار دبي الدولي",
+          "city": "Ciudad",
+          "cityPlaceholder": "p. ej., Dubai",
+          "country": "País",
+          "countryPlaceholder": "Seleccione un país...",
+          "address": "Dirección",
+          "addressPlaceholder": "Introduzca la dirección completa...",
+          "localizedAddress": "Dirección Localizada",
+          "localizedAddressPlaceholder": "Introduzca la dirección en el idioma local...",
+          "type": "Tipo",
+          "status": "Estado",
+          "active": "Activo",
+          "inactive": "Inactivo"
         },
         "common": {
-          "cancel": "Cancel",
-          "save": "Save Changes",
-          "add": "Add Port"
+          "cancel": "Cancelar",
+          "save": "Guardar Cambios",
+          "add": "Añadir Puerto"
         },
         "toast": {
-          "loading": "Loading port data...",
+          "loading": "Cargando datos del puerto...",
           "loadErrorTitle": "Error",
-          "loadErrorDesc": "Could not load port data.",
-          "updateSuccessTitle": "Port Updated",
-          "updateSuccessDesc": "Port {name} has been updated successfully.",
-          "addSuccessTitle": "Port Added",
-          "addSuccessDesc": "New port {name} has been created successfully.",
-          "errorTitle": "Save Failed",
-          "errorDesc": "There was an error saving the port data."
+          "loadErrorDesc": "No se pudieron cargar los datos del puerto.",
+          "updateSuccessTitle": "Puerto Actualizado",
+          "updateSuccessDesc": "El puerto {name} ha sido actualizado exitosamente.",
+          "addSuccessTitle": "Puerto Añadido",
+          "addSuccessDesc": "El nuevo puerto {name} ha sido creado exitosamente.",
+          "errorTitle": "Error al Guardar",
+          "errorDesc": "Hubo un error al guardar los datos del puerto."
         }
       }
     },
@@ -600,6 +600,96 @@
         "lastModified": "Última Modificación",
         "createdBy": "Creado por",
         "close": "Cerrar"
+      }
+    },
+    "SystemMessages": {
+      "pageTitle": "Gestión de Mensajes del Sistema",
+      "pageDescription": "Crear, editar y gestionar mensajes de todo el sistema que se muestran en las pantallas.",
+      "addMessage": "Añadir Mensaje",
+      "table": {
+        "title": "Mensajes del Sistema",
+        "description": "Una lista de todos los mensajes configurables del sistema.",
+        "name": "Nombre del Mensaje",
+        "category": "Categoría",
+        "status": "Estado",
+        "lastModified": "Última Modificación"
+      },
+      "actions": {
+        "view": "Ver detalles",
+        "edit": "Editar",
+        "deactivate": "Desactivar",
+        "activate": "Activar",
+        "delete": "Eliminar"
+      },
+      "toast": {
+        "deleteSuccessTitle": "Mensaje Eliminado",
+        "deleteSuccessDesc": "El mensaje del sistema ha sido eliminado exitosamente.",
+        "deleteErrorTitle": "Error al Eliminar",
+        "deleteErrorDesc": "No se pudo eliminar el mensaje.",
+        "statusUpdateTitle": "Estado Actualizado",
+        "statusUpdateDesc": "El mensaje '{name}' ha sido establecido a {status}.",
+        "statusUpdateErrorTitle": "Error al Actualizar Estado"
+      },
+      "accessDenied": {
+        "title": "Acceso Denegado",
+        "description": "No tiene permiso para ver los mensajes del sistema."
+      },
+      "deleteDialog": {
+        "title": "¿Está seguro?",
+        "description": "Esto eliminará permanentemente el mensaje '{messageName}'.",
+        "cancel": "Cancelar",
+        "confirm": "Sí, Eliminar"
+      },
+      "detailsSheet": {
+        "description": "Mensaje de {category}",
+        "status": "Estado",
+        "category": "Categoría",
+        "englishDescription": "Descripción (Inglés)",
+        "localizedName": "Nombre Localizado",
+        "localizedDescription": "Descripción Localizada",
+        "lastModified": "Última Modificación",
+        "createdBy": "Creado por",
+        "close": "Cerrar"
+      },
+      "form": {
+        "addTitle": "Añadir Nuevo Mensaje del Sistema",
+        "addDescription": "Crear un nuevo mensaje para mostrar en las pantallas del sistema.",
+        "editTitle": "Editar Mensaje del Sistema",
+        "editDescription": "Actualizar los detalles para '{name}'.",
+        "accessDenied": {
+          "title": "Acceso Denegado",
+          "createDescription": "No tiene permiso para crear nuevos mensajes del sistema.",
+          "editDescription": "No tiene permiso para editar mensajes del sistema."
+        },
+        "details": {
+          "title": "Detalles del Mensaje",
+          "description": "Introduzca el contenido y las propiedades del mensaje.",
+          "name": "Nombre / ID del Mensaje",
+          "namePlaceholder": "p. ej., WelcomeMessage_DXB",
+          "localizedName": "Nombre Localizado",
+          "localizedNamePlaceholder": "p. ej., رسالة الترحيب",
+          "descriptionField": "Descripción (Inglés)",
+          "descriptionPlaceholder": "Introduzca el contenido completo del mensaje...",
+          "localizedDescription": "Descripción Localizada",
+          "localizedDescriptionPlaceholder": "Introduzca el mensaje en el idioma local...",
+          "category": "Categoría",
+          "status": "Estado"
+        },
+        "common": {
+          "cancel": "Cancelar",
+          "save": "Guardar Cambios",
+          "add": "Añadir Mensaje"
+        },
+        "toast": {
+          "loadErrorTitle": "Error",
+          "loadErrorDesc": "No se pudieron cargar los datos del mensaje.",
+          "updateSuccessTitle": "Mensaje Actualizado",
+          "updateSuccessDesc": "El mensaje '{name}' ha sido actualizado exitosamente.",
+          "addSuccessTitle": "Mensaje Añadido",
+          "addSuccessDesc": "El nuevo mensaje '{name}' ha sido creado exitosamente.",
+          "errorTitle": "Error al Guardar",
+          "errorDesc": "Hubo un error al guardar los datos del mensaje."
+        }
       }
     }
   },

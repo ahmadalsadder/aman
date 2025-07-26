@@ -44,12 +44,11 @@ const initialFilters = {
 interface ShiftManagementPageProps {
     module: Module;
     shifts: Shift[];
-    loading: boolean;
     onDeleteShift: (shiftId: string) => Promise<boolean>;
     onToggleStatus: (shiftId: string) => Promise<boolean>;
 }
 
-export function ShiftManagementPage({ module, shifts, loading, onDeleteShift, onToggleStatus }: ShiftManagementPageProps) {
+export function ShiftManagementPage({ module, shifts, onDeleteShift, onToggleStatus }: ShiftManagementPageProps) {
   const router = useRouter();
   const { hasPermission } = useAuth();
 

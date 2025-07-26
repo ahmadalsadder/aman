@@ -105,7 +105,6 @@ export default function AirportShiftManagementPage() {
             <ShiftManagementPage 
                 module={module} 
                 shifts={shifts}
-                loading={loading}
                 onDeleteShift={handleDeleteShift}
                 onToggleStatus={handleToggleStatus}
             />

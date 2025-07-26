@@ -11,11 +11,11 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { useTranslations } from 'next-intl';
 
-export default function EgateShiftManagementPage() {
+export default function LandportShiftManagementPage() {
     const { hasPermission } = useAuth();
     const { toast } = useToast();
     const t = useTranslations('Navigation');
-    const module = 'egate';
+    const module = 'landport';
     const canView = useMemo(() => hasPermission([`${module}:workload:view` as Permission]), [hasPermission, module]);
 
     const [shifts, setShifts] = useState<Shift[]>([]);
@@ -77,6 +77,7 @@ export default function EgateShiftManagementPage() {
         );
     }
 
+
     if (!canView) {
         return (
             <div className="flex h-full w-full flex-col items-center justify-center gap-4 text-center">
@@ -88,10 +89,10 @@ export default function EgateShiftManagementPage() {
             </div>
         );
     }
-    
+
     return (
-        <div className="space-y-6">
-             <Breadcrumb>
+         <div className="space-y-6">
+            <Breadcrumb>
                 <BreadcrumbList>
                     <BreadcrumbItem>
                         <BreadcrumbLink href={`/${module}/dashboard`} icon={LayoutDashboard}>{t('dashboard')}</BreadcrumbLink>
@@ -103,7 +104,7 @@ export default function EgateShiftManagementPage() {
                 </BreadcrumbList>
             </Breadcrumb>
             <ShiftManagementPage 
-                module={module} 
+                module={module}
                 shifts={shifts}
                 onDeleteShift={handleDeleteShift}
                 onToggleStatus={handleToggleStatus}

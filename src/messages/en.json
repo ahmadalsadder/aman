@@ -404,7 +404,7 @@
         }
       }
     },
-     "Terminals": {
+    "Terminals": {
       "portsPageTitle": "Ports",
       "pageTitle": "Terminal Management",
       "pageDescription": "Configure and manage all port terminals.",
@@ -1460,3 +1460,4 @@
     }
   }
 }
+

@@ -98,7 +98,7 @@ export function SystemMessagesPageClient({ messages, onDeleteMessage, onToggleSt
         <CardContent><DataTable columns={columns} data={messages} filterColumnId="name" /></CardContent>
       </Card>
       <SystemMessageDetailsSheet message={messageToView} isOpen={!!messageToView} onOpenChange={(isOpen) => !isOpen && setMessageToView(null)} />
-      <DeleteSystemMessageDialog message={messageToDelete} isOpen={!!messageToDelete} onOpenChange={(isOpen) => !isOpen && setMessageHandler(null)} onConfirm={handleConfirmDelete} />
+      <DeleteSystemMessageDialog message={messageToDelete} isOpen={!!messageToDelete} onOpenChange={(isOpen) => !isOpen && setMessageToDelete(null)} onConfirm={handleConfirmDelete} />
     </div>
   );
 }

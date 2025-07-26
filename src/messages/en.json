@@ -405,11 +405,13 @@
       }
     },
     "Terminals": {
-        "deleteDialog": {
-            "title": "Are you sure?",
-            "description": "This action cannot be undone. This will permanently delete the terminal '{terminalName}'. Deleting a terminal will also delete all associated zones.",
-            "cancel": "Cancel",
-            "confirm": "Yes, Delete Terminal"
+        "detailsSheet": {
+            "description": "Terminal at {portName}",
+            "status": "Status",
+            "port": "Port",
+            "lastModified": "Last Modified",
+            "createdBy": "Created By",
+            "close": "Close"
         }
     }
   },

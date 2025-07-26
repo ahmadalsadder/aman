@@ -405,11 +405,13 @@
       }
     },
     "Terminals": {
-        "deleteDialog": {
-            "title": "¿Está seguro?",
-            "description": "Esta acción no se puede deshacer. Esto eliminará permanentemente la terminal '{terminalName}'. Al eliminar una terminal también se eliminarán todas las zonas asociadas.",
-            "cancel": "Cancelar",
-            "confirm": "Sí, Eliminar Terminal"
+        "detailsSheet": {
+            "description": "Terminal en {portName}",
+            "status": "Estado",
+            "port": "Puerto",
+            "lastModified": "Última Modificación",
+            "createdBy": "Creado por",
+            "close": "Cerrar"
         }
     }
   },

@@ -4,12 +4,12 @@
 
 import type { User } from '@/types';
 import { Result, ApiError } from '@/types/api/result';
-import { mockVisaDatabase, getMockPorts, setMockPorts, getMockTerminals, setMockTerminals, getMockZones, setMockZones, mockWorkflows, mockRiskProfiles, setMockOfficerDesks, setMockGates, setMockMedia, setMockWhitelist, setMockBlacklist, setMockPassengers, setMockShifts, getMockPassengers, getMockTransactions, getMockOfficerDesks, getMockGates, getMockMedia, getMockWhitelist, getMockBlacklist, getMockShifts, setMockOfficerAssignments, getMockOfficerAssignments, mockCountryLanguageMapping, availableLanguages, mockCountryPassportMapping, getMockMachines, setMockMachines } from './mock-data';
+import { mockVisaDatabase, getMockPorts, setMockPorts, getMockTerminals, setMockTerminals, getMockZones, setMockZones, mockWorkflows, mockRiskProfiles, setMockOfficerDesks, setMockGates, setMockMedia, setMockWhitelist, setMockBlacklist, setMockPassengers, setMockShifts, getMockPassengers, getMockTransactions, getMockOfficerDesks, getMockGates, getMockMedia, getMockWhitelist, getMockBlacklist, getMockShifts, setMockOfficerAssignments, getMockOfficerAssignments, mockCountryLanguageMapping, availableLanguages, mockCountryPassportMapping, getMockMachines, setMockMachines, getMockSystemMessages, setMockSystemMessages } from './mock-data';
 import { assessPassengerRisk } from '@/ai/flows/assess-risk-flow';
 import { countries } from './countries';
 import { Fingerprint, ScanLine, UserCheck, ShieldAlert, User as UserIcon } from 'lucide-react';
 import { extractPassportData } from '@/ai/flows/extract-passport-data-flow';
-import type { Transaction, Gate, CivilRecord, Media, BlacklistEntry, WhitelistEntry, Passenger, Shift, OfficerAssignment, CountryLanguageMapping, CountryPassportMapping, Machine, Terminal, Zone, Port } from '@/types/live-processing';
+import type { Transaction, Gate, CivilRecord, Media, BlacklistEntry, WhitelistEntry, Passenger, Shift, OfficerAssignment, CountryLanguageMapping, CountryPassportMapping, Machine, Terminal, Zone, Port, SystemMessage } from '@/types/live-processing';
 
 const getAuthInfo = (): Partial<User> => {
   try {
@@ -1040,6 +1040,45 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
         const { id } = JSON.parse(body as string);
         setMockOfficerAssignments(getMockOfficerAssignments().filter(a => a.id !== id));
         return Result.success({ id }) as Result<T>;
+    }
+
+    // SYSTEM MESSAGES
+    if (method === 'GET' && url.pathname.startsWith('/data/system-messages/')) {
+        const id = pathParts[pathParts.length - 1];
+        const message = getMockSystemMessages().find(m => m.id === id);
+        return message ? Result.success({ message }) as Result<T> : Result.failure([new ApiError('NOT_FOUND', 'Message not found')]) as Result<T>;
+    }
+    if (method === 'GET' && url.pathname === '/data/system-messages') {
+        return Result.success(getMockSystemMessages()) as Result<T>;
+    }
+    if (method === 'POST' && url.pathname === '/data/system-messages/save') {
+        const messageData = JSON.parse(body as string) as SystemMessage;
+        const isNew = !messageData.id;
+        let updatedMessage: SystemMessage;
+        if (isNew) {
+            updatedMessage = { ...messageData, id: `MSG-NEW-${Date.now()}`, lastModified: new Date().toISOString() };
+            setMockSystemMessages([...getMockSystemMessages(), updatedMessage]);
+        } else {
+            updatedMessage = { ...messageData, lastModified: new Date().toISOString() };
+            setMockSystemMessages(getMockSystemMessages().map(m => m.id === messageData.id ? updatedMessage : m));
+        }
+        return Result.success(updatedMessage) as Result<T>;
+    }
+    if (method === 'POST' && url.pathname === '/data/system-messages/delete') {
+        const { id } = JSON.parse(body as string);
+        setMockSystemMessages(getMockSystemMessages().filter(m => m.id !== id));
+        return Result.success({ id }) as Result<T>;
+    }
+    if (method === 'POST' && url.pathname === '/data/system-messages/toggle-status') {
+        const { id } = JSON.parse(body as string);
+        const currentMessages = getMockSystemMessages();
+        const message = currentMessages.find(m => m.id === id);
+        if (message) {
+            message.status = message.status === 'Active' ? 'Inactive' : 'Active';
+            setMockSystemMessages(currentMessages);
+            return Result.success(message) as Result<T>;
+        }
+        return Result.failure([new ApiError('NOT_FOUND', 'Message not found.')]) as Result<T>;
     }
 
 

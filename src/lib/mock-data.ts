@@ -3,7 +3,7 @@
 import type { Passenger, Transaction, OfficerDesk, Gate, Media, WhitelistEntry, BlacklistEntry, OfficerAssignment } from "@/types/live-processing";
 import type { Shift, DayOfWeek } from "@/types/workload";
 import { Plane, Car, Ship } from "lucide-react";
-import type { Port, Terminal, Zone, Workflow, RiskProfile, User, CountryLanguageMapping, CountryPassportMapping, Machine } from '@/types';
+import type { Port, Terminal, Zone, Workflow, RiskProfile, User, CountryLanguageMapping, CountryPassportMapping, Machine, SystemMessage } from '@/types';
 
 // This is the correct order for initialization.
 // Define data first, then functions that use it.
@@ -168,9 +168,9 @@ let mockZones: Zone[] = [
 ];
 
 let mockMachines: Machine[] = [
-    { id: 'MACHINE-01', name: 'Passport Scanner A1-1', type: 'Scanner', ipAddress: '192.168.1.200', macAddress: '1A:2B:3C:4D:5E:6F', status: 'Online', portId: 'PORT-DXB', terminalId: 'TERM-DXB-1', zoneId: 'ZONE-A', lastModified: '2023-05-21', createdBy: 'Admin User' },
-    { id: 'MACHINE-02', name: 'Face Camera A1-1', type: 'Camera', ipAddress: '192.168.1.201', macAddress: '1A:2B:3C:4D:5E:70', status: 'Online', portId: 'PORT-DXB', terminalId: 'TERM-DXB-1', zoneId: 'ZONE-A', lastModified: '2023-05-21', createdBy: 'Admin User' },
-    { id: 'MACHINE-03', name: 'Biometric Reader B2-1', type: 'Biometric', ipAddress: '192.168.2.200', macAddress: '1A:2B:3C:4D:5E:71', status: 'Offline', portId: 'PORT-DXB', terminalId: 'TERM-DXB-2', zoneId: 'ZONE-B', lastModified: '2023-05-20', createdBy: 'Admin User' },
+    { id: 'MACHINE-01', name: 'Passport Scanner A1-1', type: 'Scanner', ipAddress: '192.168.1.200', macAddress: '1A:2B:3C:4D:5E:6F', status: 'Active', portId: 'PORT-DXB', terminalId: 'TERM-DXB-1', zoneId: 'ZONE-A', lastModified: '2023-05-21', createdBy: 'Admin User' },
+    { id: 'MACHINE-02', name: 'Face Camera A1-1', type: 'Camera', ipAddress: '192.168.1.201', macAddress: '1A:2B:3C:4D:5E:70', status: 'Active', portId: 'PORT-DXB', terminalId: 'TERM-DXB-1', zoneId: 'ZONE-A', lastModified: '2023-05-21', createdBy: 'Admin User' },
+    { id: 'MACHINE-03', name: 'Biometric Reader B2-1', type: 'Biometric', ipAddress: '192.168.2.200', macAddress: '1A:2B:3C:4D:5E:71', status: 'Inactive', portId: 'PORT-DXB', terminalId: 'TERM-DXB-2', zoneId: 'ZONE-B', lastModified: '2023-05-20', createdBy: 'Admin User' },
     { id: 'MACHINE-04', name: 'Seaport Scanner S1-1', type: 'Scanner', ipAddress: '10.0.1.50', macAddress: 'DE:AD:BE:EF:00:01', status: 'Maintenance', portId: 'PORT-PC', terminalId: 'TERM-PC-1', zoneId: 'ZONE-SA', lastModified: '2023-05-19', createdBy: 'Admin User' },
 ];
 
@@ -295,6 +295,42 @@ export const mockCountryPassportMapping: CountryPassportMapping[] = [
     { countryCode: 'SYR', countryName: 'Syrian Arab Republic', passportType: 'Normal' },
 ];
 
+let mockSystemMessages: SystemMessage[] = [
+    {
+        id: 'MSG-001',
+        name: 'WelcomeMessage_DXB',
+        description: 'Welcome to Dubai International Airport. Please have your travel documents ready.',
+        localizedName: 'رسالة الترحيب',
+        localizedDescription: 'مرحباً بكم في مطار دبي الدولي. يرجى تجهيز وثائق السفر الخاصة بكم.',
+        category: 'General Alert',
+        status: 'Active',
+        lastModified: '2023-05-20',
+        createdBy: 'Admin User',
+    },
+    {
+        id: 'MSG-002',
+        name: 'EGateDown_T3',
+        description: 'E-Gates in Terminal 3 are temporarily out of service. Please proceed to the manual counters.',
+        localizedName: 'تعطل البوابات الإلكترونية',
+        localizedDescription: 'البوابات الإلكترونية في مبنى 3 خارج الخدمة مؤقتاً. يرجى التوجه إلى الكاونترات اليدوية.',
+        category: 'Machine Issue',
+        status: 'Active',
+        lastModified: '2023-10-28',
+        createdBy: 'Admin User',
+    },
+    {
+        id: 'MSG-003',
+        name: 'LiquidWarning',
+        description: 'Please ensure all liquids in your carry-on are under 100ml and in a clear bag.',
+        localizedName: 'تنبيه السوائل',
+        localizedDescription: 'يرجى التأكد من أن جميع السوائل في حقائبكم المحمولة أقل من 100 مل وفي كيس شفاف.',
+        category: 'General Alert',
+        status: 'Inactive',
+        lastModified: '2023-01-15',
+        createdBy: 'Admin User',
+    },
+];
+
 // Getters
 export const getMockPassengers = () => mockPassengers;
 export { getMockTransactions };
@@ -309,6 +345,7 @@ export const getMockBlacklist = () => mockBlacklist;
 export const getMockShifts = () => mockShifts;
 export const getMockOfficerAssignments = () => mockOfficerAssignments;
 export const getMockMachines = () => mockMachines;
+export const getMockSystemMessages = () => mockSystemMessages;
 
 
 // Setters
@@ -350,6 +387,9 @@ export const setMockTerminals = (newTerminals: Terminal[]) => {
 };
 export const setMockZones = (newZones: Zone[]) => {
     mockZones = newZones;
+};
+export const setMockSystemMessages = (newSystemMessages: SystemMessage[]) => {
+    mockSystemMessages = newSystemMessages;
 };
 
 

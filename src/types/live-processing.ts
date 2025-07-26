@@ -144,6 +144,19 @@ export interface Passenger {
 export interface OfficerDesk {
     id: string;
     name: string;
+    portId: string;
+    terminalId: string;
+    zoneId: string;
+    portName?: string;
+    terminalName?: string;
+    zoneName?: string;
+    ipAddress: string;
+    macAddress: string;
+    status: 'Active' | 'Inactive' | 'Closed';
+    lastUpdatedAt: string;
+    movementType: 'Entry' | 'Exit' | 'Bidirectional';
+    workflowId: string;
+    riskRuleId: string;
 }
 
 export interface Gate {
@@ -161,8 +174,8 @@ export interface Gate {
     macAddress: string;
     lastMaintenance: string;
     lastModified: string;
-    warrantyStartDate?: string;
-    warrantyEndDate?: string;
+    warrantyStartDate?: Date;
+    warrantyEndDate?: Date;
     currentLoad?: number;
     passengerCount?: number;
     avgProcessingTime?: string;

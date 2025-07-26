@@ -45,9 +45,6 @@ export interface Machine {
     portId: string;
     terminalId: string;
     zoneId: string;
-    portName?: string;
-    terminalName?: string;
-    zoneName?: string;
     lastModified: string;
     createdBy: string;
 }

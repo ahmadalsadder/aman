@@ -1,4 +1,5 @@
 
+
 {
   "LoginPage": {
     "title": "مرحبًا بك في بوابة الحماية",
@@ -651,7 +652,7 @@
   },
   "GatesPage": {
     "pageTitle": "إدارة البوابات",
-    "pageDescription": "الحالة والأداء في الوقت الفعلي لجميع بوابات مراقبة الحدود.",
+    "pageDescription": "الحالة والأداء في الوقت الحقيقي لجميع بوابات مراقبة الحدود.",
     "addGate": "إضافة بوابة",
     "noResults": "لا توجد بوابات تطابق المرشحات الحالية.",
     "accessDenied": {
@@ -1030,7 +1031,25 @@
         }
     }
   },
-   "ShiftManagement": {
+  "ShiftManagement": {
+    "pageTitle": "إدارة الورديات",
+    "pageDescription": "تحديد وإدارة ورديات عمل الضباط.",
+    "addShift": "إضافة وردية",
+    "totalShifts": "إجمالي الورديات",
+    "totalShiftsDesc": "جميع الورديات المكونة",
+    "activeShifts": "الورديات النشطة",
+    "activeShiftsDesc": "الورديات العاملة حاليًا",
+    "inactiveShifts": "الورديات غير النشطة",
+    "inactiveShiftsDesc": "الورديات غير النشطة حاليًا",
+    "filterTitle": "بحث وتصفية الورديات",
+    "filterNamePlaceholder": "اسم الوردية...",
+    "filterStatusPlaceholder": "الحالة",
+    "filterAllStatuses": "جميع الحالات",
+    "filterDayPlaceholder": "يوم الأسبوع",
+    "reset": "إعادة تعيين",
+    "search": "بحث",
+    "recordsTitle": "سجلات الورديات",
+    "recordsDescription": "قائمة بجميع الورديات المكونة في النظام.",
     "form": {
       "addTitle": "إضافة وردية جديدة",
       "addDescription": "تحديد وردية عمل جديدة للضباط.",

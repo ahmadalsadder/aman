@@ -29,6 +29,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { ShiftDetailsSheet } from '@/components/workloads/shift-details-sheet';
 import { DeleteShiftDialog } from '@/components/workloads/delete-shift-dialog';
 import { useAuth } from '@/hooks/use-auth';
+import { useTranslations } from 'next-intl';
 
 const statusColors: { [key: string]: string } = {
   Active: 'bg-green-500/20 text-green-700 border-green-500/30',
@@ -51,6 +52,7 @@ interface ShiftManagementPageProps {
 export function ShiftManagementPage({ module, shifts, onDeleteShift, onToggleStatus }: ShiftManagementPageProps) {
   const router = useRouter();
   const { hasPermission } = useAuth();
+  const t = useTranslations('ShiftManagement');
 
   const canCreate = useMemo(() => hasPermission([`${module}:workload:view` as Permission]), [hasPermission, module]);
   const canEdit = useMemo(() => hasPermission([`${module}:workload:view` as Permission]), [hasPermission, module]);
@@ -199,23 +201,23 @@ export function ShiftManagementPage({ module, shifts, onDeleteShift, onToggleSta
   return (
     <>
       <GradientPageHeader
-        title="Shift Management"
-        description="Define and manage officer work shifts."
+        title={t('pageTitle')}
+        description={t('pageDescription')}
         icon={CalendarDays}
       >
         {canCreate && (
           <Button asChild className="bg-white font-semibold text-primary hover:bg-white/90">
             <Link href={`/${module}/workloads/shift-management/add`}>
-              <PlusCircle className="mr-2 h-4 w-4" /> Add Shift
+              <PlusCircle className="mr-2 h-4 w-4" /> {t('addShift')}
             </Link>
           </Button>
         )}
       </GradientPageHeader>
       
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <TransactionStatsCard title="Total Shifts" value={shiftStats.total.toString()} description="All configured shifts" icon={ListTodo} iconColor="text-blue-500" />
-        <TransactionStatsCard title="Active Shifts" value={shiftStats.active.toString()} description="Currently operational shifts" icon={CheckCircle} iconColor="text-green-500" />
-        <TransactionStatsCard title="Inactive Shifts" value={shiftStats.inactive.toString()} description="Currently inactive shifts" icon={PauseCircle} iconColor="text-gray-500" />
+        <TransactionStatsCard title={t('totalShifts')} value={shiftStats.total.toString()} description={t('totalShiftsDesc')} icon={ListTodo} iconColor="text-blue-500" />
+        <TransactionStatsCard title={t('activeShifts')} value={shiftStats.active.toString()} description={t('activeShiftsDesc')} icon={CheckCircle} iconColor="text-green-500" />
+        <TransactionStatsCard title={t('inactiveShifts')} value={shiftStats.inactive.toString()} description={t('inactiveShiftsDesc')} icon={PauseCircle} iconColor="text-gray-500" />
       </div>
 
       <Card>
@@ -224,7 +226,7 @@ export function ShiftManagementPage({ module, shifts, onDeleteShift, onToggleSta
             <div className="flex w-full cursor-pointer items-center justify-between p-4">
               <div className="flex items-center gap-3">
                 <Filter className="h-5 w-5" />
-                <h2 className="text-lg font-semibold">Search & Filter Shifts</h2>
+                <h2 className="text-lg font-semibold">{t('filterTitle')}</h2>
               </div>
               <ChevronDown className="h-5 w-5 transition-transform duration-300 [&[data-state=open]]:rotate-180" />
             </div>
@@ -232,17 +234,17 @@ export function ShiftManagementPage({ module, shifts, onDeleteShift, onToggleSta
           <CollapsibleContent>
             <div className="p-6 pt-0">
               <div className="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2 md:grid-cols-3">
-                <Input placeholder="Shift Name..." value={filters.name} onChange={(e) => handleUpdateFilter('name', e.target.value)} />
+                <Input placeholder={t('filterNamePlaceholder')} value={filters.name} onChange={(e) => handleUpdateFilter('name', e.target.value)} />
                 <Select value={filters.status} onValueChange={(value) => handleUpdateFilter('status', value === 'all' ? '' : value)}>
-                  <SelectTrigger><SelectValue placeholder="Status" /></SelectTrigger>
+                  <SelectTrigger><SelectValue placeholder={t('filterStatusPlaceholder')} /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Statuses</SelectItem>
+                    <SelectItem value="all">{t('filterAllStatuses')}</SelectItem>
                     <SelectItem value="Active">Active</SelectItem>
                     <SelectItem value="Inactive">Inactive</SelectItem>
                   </SelectContent>
                 </Select>
                  <Select value={filters.day} onValueChange={(value) => handleUpdateFilter('day', value === 'all' ? '' : value)}>
-                  <SelectTrigger><SelectValue placeholder="Day of Week" /></SelectTrigger>
+                  <SelectTrigger><SelectValue placeholder={t('filterDayPlaceholder')} /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">Any Day</SelectItem>
                     {daysOfWeek.map(d => <SelectItem key={d.id} value={d.id}>{d.label}</SelectItem>)}
@@ -250,8 +252,8 @@ export function ShiftManagementPage({ module, shifts, onDeleteShift, onToggleSta
                 </Select>
               </div>
               <div className="mt-6 flex justify-end gap-2">
-                <Button onClick={clearFilters} variant="outline"><X className="mr-2 h-4 w-4"/>Reset</Button>
-                <Button onClick={handleSearch}><Search className="mr-2 h-4 w-4"/>Search</Button>
+                <Button onClick={clearFilters} variant="outline"><X className="mr-2 h-4 w-4"/>{t('reset')}</Button>
+                <Button onClick={handleSearch}><Search className="mr-2 h-4 w-4"/>{t('search')}</Button>
               </div>
             </div>
           </CollapsibleContent>
@@ -260,8 +262,8 @@ export function ShiftManagementPage({ module, shifts, onDeleteShift, onToggleSta
 
       <Card>
         <CardHeader>
-            <CardTitle>Shift Records</CardTitle>
-            <CardDescription>A list of all configured shifts in the system.</CardDescription>
+            <CardTitle>{t('recordsTitle')}</CardTitle>
+            <CardDescription>{t('recordsDescription')}</CardDescription>
         </CardHeader>
         <CardContent>
             <DataTable

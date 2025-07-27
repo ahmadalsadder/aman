@@ -23,6 +23,7 @@ import { useAuth } from '@/hooks/use-auth';
 import Link from 'next/link';
 import type { Module, Permission } from '@/types';
 import { cn } from '@/lib/utils';
+import { LocaleSwitcher } from '@/components/i18n-provider';
 
 export default function Header() {
   const { user, logout, hasPermission } = useAuth();
@@ -30,24 +31,11 @@ export default function Header() {
   const pathname = usePathname();
   const t = useTranslations('Header');
 
-  const [currentLocale, setCurrentLocale] = React.useState('en');
-  
   const currentModule = pathname.split('/')[1] as Module;
 
   const showQuickActions = ['airport', 'landport', 'seaport', 'shiftsupervisor'].includes(currentModule);
   const canProcessLive = React.useMemo(() => hasPermission([`${currentModule}:transactions:live` as Permission]), [hasPermission, currentModule]);
 
-
-  React.useEffect(() => {
-    const handleLocaleChange = (event: CustomEvent) => {
-      setCurrentLocale(event.detail);
-    };
-    window.addEventListener('locale-changed', handleLocaleChange as EventListener);
-    // Set initial value
-    const storedLocale = localStorage.getItem('locale') || 'en';
-    setCurrentLocale(storedLocale);
-    return () => window.removeEventListener('locale-changed', handleLocaleChange as EventListener);
-  }, []);
 
   const handleLogout = () => {
     logout();
@@ -58,15 +46,10 @@ export default function Header() {
     return name.split(' ').map(n => n[0]).join('').toUpperCase();
   };
 
-  const handleLocaleChange = (locale: string) => {
-    localStorage.setItem('locale', locale);
-    window.location.reload();
-  };
-
   return (
     <header className="sticky top-0 z-10 flex h-16 w-full items-center justify-between border-b bg-card px-4 md:px-6">
       <div className="flex items-center">
-        <div className="md:hidden">
+        <div>
             <SidebarTrigger />
         </div>
       </div>
@@ -89,22 +72,7 @@ export default function Header() {
                 </DropdownMenuContent>
             </DropdownMenu>
         )}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon">
-              <Globe className="h-5 w-5" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56" align="end">
-            <DropdownMenuLabel>{t('language')}</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuRadioGroup value={currentLocale} onValueChange={handleLocaleChange}>
-              <DropdownMenuRadioItem value="en">English</DropdownMenuRadioItem>
-              <DropdownMenuRadioItem value="es">Español</DropdownMenuRadioItem>
-              <DropdownMenuRadioItem value="ar">العربية</DropdownMenuRadioItem>
-            </DropdownMenuRadioGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <LocaleSwitcher />
 
         {user && (
           <DropdownMenu>

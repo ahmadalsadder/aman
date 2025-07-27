@@ -61,7 +61,8 @@
     "whitelist": "Lista Blanca",
     "blacklist": "Lista Negra",
     "ports": "Puertos",
-    "terminals": "Terminales"
+    "terminals": "Terminales",
+    "gateLog": "Registro de Puerta"
   },
   "ModulePage": {
     "verifyingAccess": "Verificando acceso...",
@@ -206,6 +207,41 @@
     "activeGates": "Puertas activas",
     "avgProcessingTime": "Tiempo de procesamiento prom.",
     "activeAlerts": "Alertas activas"
+  },
+  "ControlRoom": {
+    "gateLog": {
+        "title": "Registro de Eventos de Puerta",
+        "description": "Un feed en tiempo real de todos los eventos de las E-Gates.",
+        "nav": {
+            "dashboard": "Tablero",
+            "gateLog": "Registro de Puerta"
+        },
+        "filters": {
+            "title": "Buscar y Filtrar Registros",
+            "gateNamePlaceholder": "Nombre de la Puerta...",
+            "eventTypePlaceholder": "Tipo de Evento",
+            "fromDate": "Desde Fecha",
+            "toDate": "Hasta Fecha",
+            "reset": "Restablecer",
+            "search": "Buscar"
+        },
+        "records": {
+            "title": "Registros de Log",
+            "description": "Lista detallada de todos los eventos relacionados con las puertas."
+        },
+        "table": {
+            "timestamp": "Marca de Tiempo",
+            "gate": "Puerta",
+            "eventType": "Tipo de Evento",
+            "status": "Estado",
+            "description": "Descripción",
+            "actor": "Actor"
+        },
+        "accessDenied": {
+            "title": "Acceso Denegado",
+            "description": "No tiene permiso para ver el registro de puertas."
+        }
+    }
   },
   "ControlRoomModule": {
     "title": "Módulo de Sala de Control",
@@ -430,6 +466,19 @@
         "deactivate": "Desactivar",
         "activate": "Activar",
         "delete": "Eliminar"
+      },
+      "toast": {
+        "deleteSuccessTitle": "Terminal Eliminada",
+        "deleteSuccessDesc": "La terminal ha sido eliminada exitosamente.",
+        "deleteErrorTitle": "Error al Eliminar",
+        "deleteErrorDesc": "No se pudo eliminar la terminal.",
+        "statusUpdateTitle": "Estado Actualizado",
+        "statusUpdateDesc": "El estado de la terminal {name} ha sido actualizado a {status}.",
+        "statusUpdateErrorTitle": "Error al Actualizar Estado"
+      },
+      "accessDenied": {
+        "title": "Acceso Denegado",
+        "description": "No tiene permiso para ver esta página."
       },
       "detailsSheet": {
         "description": "Terminal en {portName}",
@@ -1721,3 +1770,5 @@
     }
   }
 }
+
+    

@@ -216,7 +216,7 @@ const getModuleSubNav = (module: Module, t: any): NavItem[] => {
 export const getSidebarNavItems = (role: Role, modules: Module[], t: any): NavItem[] => {
     const nav: NavItem[] = [];
 
-    const navigableModules = modules.filter(m => !['duty-manager', 'shiftsupervisor', 'users', 'settings'].includes(m));
+    const navigableModules = modules.filter(m => !['duty-manager', 'shiftsupervisor'].includes(m) && allModules[m]);
 
     navigableModules.forEach(moduleKey => {
         const moduleInfo = allModules[moduleKey];

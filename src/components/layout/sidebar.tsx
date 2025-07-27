@@ -39,29 +39,35 @@ export default function AppSidebar() {
     
     // Correctly filter modules based on whether the user has permission for the module
     // itself OR any of its children.
-    return allItems.filter(module => {
-      // If user has permission for the top-level module link, show it.
-      if (module.permission && hasPermission([module.permission])) {
+    return allItems.filter(item => {
+      // If the item has no specific permission, show it.
+      if (!item.permission) {
         return true;
       }
-      // If the module has children, check if the user has permission for ANY of them.
-      if (module.children) {
-        // First, filter the children themselves.
-        const permittedChildren = module.children.filter(child => {
-            if (child.children) { // Handle nested children
-                 child.children = child.children.filter(subChild => !subChild.permission || hasPermission([subChild.permission]));
-                 return child.children.length > 0;
-            }
-            return !child.permission || hasPermission([child.permission]);
-        });
-        module.children = permittedChildren;
+      
+      // If the user has permission for the top-level item, show it.
+      if (hasPermission([item.permission])) {
+        return true;
+      }
+      
+      // If the item has children, check if the user has permission for ANY of them.
+      if (item.children) {
+        const filterChildren = (items: NavItem[]): NavItem[] => {
+            return items.filter(child => {
+                if (!child.permission || hasPermission([child.permission])) {
+                    if (child.children) {
+                        child.children = filterChildren(child.children);
+                    }
+                    return true;
+                }
+                return false;
+            });
+        };
+        item.children = filterChildren(item.children);
         // Then, if any children remain, the parent module should be visible.
-        return module.children.length > 0;
+        return item.children.length > 0;
       }
-      // If no permission is set on the module and it has no children, show it by default.
-      if (!module.permission && !module.children) {
-        return true;
-      }
+
       // Otherwise, hide it.
       return false;
     });
@@ -103,6 +109,90 @@ export default function AppSidebar() {
 
   const moduleDashboardHref = user?.modules?.[0] ? `/${user.modules[0]}/dashboard` : '/';
 
+  const renderNavItem = (item: NavItem) => {
+    if (!item.children || item.children.length === 0) {
+        return (
+            <SidebarMenuItem key={item.href}>
+                <SidebarMenuButton
+                    asChild
+                    isActive={pathname.startsWith(item.href)}
+                    tooltip={{ children: item.label }}
+                    className="w-full justify-start"
+                >
+                    <Link href={item.href} className='flex items-center gap-2'>
+                        <item.icon />
+                        <span>{item.label}</span>
+                    </Link>
+                </SidebarMenuButton>
+            </SidebarMenuItem>
+        );
+    }
+    
+    return (
+        <Collapsible key={item.href} open={openCollapsibles[item.href] || false} onOpenChange={() => toggleCollapsible(item.href)}>
+            <SidebarMenuItem>
+                  <CollapsibleTrigger asChild>
+                    <SidebarMenuButton
+                        tooltip={{ children: item.label }}
+                        className="w-full justify-between"
+                    >
+                        <div className='flex items-center gap-2'>
+                            <item.icon />
+                            <span>{item.label}</span>
+                        </div>
+                        <ChevronDown className={cn("h-4 w-4 transition-transform", openCollapsibles[item.href] && "rotate-180")} />
+                    </SidebarMenuButton>
+                </CollapsibleTrigger>
+            </SidebarMenuItem>
+            <CollapsibleContent>
+                <SidebarMenuSub>
+                {item.children?.map(child => (
+                    <SidebarMenuSubItem key={child.href}>
+                         {child.children ? (
+                             <Collapsible>
+                                 <CollapsibleTrigger asChild>
+                                    <SidebarMenuSubButton className="justify-between">
+                                         <div className="flex items-center gap-2">
+                                            {child.icon && <child.icon className="h-4 w-4 text-primary" />}
+                                            <span>{child.label}</span>
+                                        </div>
+                                         <ChevronDown className="h-4 w-4" />
+                                    </SidebarMenuSubButton>
+                                 </CollapsibleTrigger>
+                                 <CollapsibleContent>
+                                     <SidebarMenuSub>
+                                         {child.children.map(subChild => (
+                                             <SidebarMenuSubItem key={subChild.href}>
+                                                 <SidebarMenuSubButton asChild isActive={pathname.startsWith(subChild.href)}>
+                                                     <Link href={subChild.href} className='flex items-center gap-2 pl-4'>
+                                                        {subChild.icon && <subChild.icon className="h-4 w-4 text-primary" />}
+                                                        <span>{subChild.label}</span>
+                                                     </Link>
+                                                 </SidebarMenuSubButton>
+                                             </SidebarMenuSubItem>
+                                         ))}
+                                     </SidebarMenuSub>
+                                 </CollapsibleContent>
+                             </Collapsible>
+                         ) : (
+                            <SidebarMenuSubButton
+                                asChild
+                                isActive={pathname.startsWith(child.href)}
+                            >
+                                <Link href={child.href} className='flex items-center gap-2'>
+                                    {child.icon && <child.icon className="h-4 w-4 text-primary" />}
+                                    <span>{child.label}</span>
+                                </Link>
+                            </SidebarMenuSubButton>
+                         )}
+                    </SidebarMenuSubItem>
+                ))}
+                </SidebarMenuSub>
+            </CollapsibleContent>
+        </Collapsible>
+    )
+  }
+
   return (
     <Sidebar variant="inset" collapsible="icon">
       <SidebarHeader>
@@ -113,69 +203,7 @@ export default function AppSidebar() {
       </SidebarHeader>
       <SidebarContent>
         <SidebarMenu>
-          {navItems.map((item: NavItem) => (
-            <Collapsible key={item.href} open={openCollapsibles[item.href] || false} onOpenChange={() => toggleCollapsible(item.href)}>
-                <SidebarMenuItem>
-                      <CollapsibleTrigger asChild>
-                        <SidebarMenuButton
-                            tooltip={{ children: item.label }}
-                            className="w-full justify-between"
-                        >
-                            <div className='flex items-center gap-2'>
-                                <item.icon />
-                                <span>{item.label}</span>
-                            </div>
-                            <ChevronDown className={cn("h-4 w-4 transition-transform", openCollapsibles[item.href] && "rotate-180")} />
-                        </SidebarMenuButton>
-                    </CollapsibleTrigger>
-                </SidebarMenuItem>
-                <CollapsibleContent>
-                    <SidebarMenuSub>
-                    {item.children?.map(child => (
-                        <SidebarMenuSubItem key={child.href}>
-                             {child.children ? (
-                                 <Collapsible>
-                                     <CollapsibleTrigger asChild>
-                                        <SidebarMenuSubButton className="justify-between">
-                                             <div className="flex items-center gap-2">
-                                                {child.icon && <child.icon className="h-4 w-4 text-primary" />}
-                                                <span>{child.label}</span>
-                                            </div>
-                                             <ChevronDown className="h-4 w-4" />
-                                        </SidebarMenuSubButton>
-                                     </CollapsibleTrigger>
-                                     <CollapsibleContent>
-                                         <SidebarMenuSub>
-                                             {child.children.map(subChild => (
-                                                 <SidebarMenuSubItem key={subChild.href}>
-                                                     <SidebarMenuSubButton asChild isActive={pathname.startsWith(subChild.href)}>
-                                                         <Link href={subChild.href} className='flex items-center gap-2 pl-4'>
-                                                            {subChild.icon && <subChild.icon className="h-4 w-4 text-primary" />}
-                                                            <span>{subChild.label}</span>
-                                                         </Link>
-                                                     </SidebarMenuSubButton>
-                                                 </SidebarMenuSubItem>
-                                             ))}
-                                         </SidebarMenuSub>
-                                     </CollapsibleContent>
-                                 </Collapsible>
-                             ) : (
-                                <SidebarMenuSubButton
-                                    asChild
-                                    isActive={pathname.startsWith(child.href)}
-                                >
-                                    <Link href={child.href} className='flex items-center gap-2'>
-                                        {child.icon && <child.icon className="h-4 w-4 text-primary" />}
-                                        <span>{child.label}</span>
-                                    </Link>
-                                </SidebarMenuSubButton>
-                             )}
-                        </SidebarMenuSubItem>
-                    ))}
-                    </SidebarMenuSub>
-                </CollapsibleContent>
-            </Collapsible>
-          ))}
+          {navItems.map((item) => renderNavItem(item))}
         </SidebarMenu>
       </SidebarContent>
       <SidebarSeparator />

@@ -4,7 +4,7 @@
 
 import type { User } from '@/types';
 import { Result, ApiError } from '@/types/api/result';
-import { mockVisaDatabase, getMockPorts, setMockPorts, getMockTerminals, setMockTerminals, getMockZones, setMockZones, mockWorkflows, mockRiskProfiles, setMockOfficerDesks, setMockGates, setMockMedia, setMockWhitelist, setMockBlacklist, setMockPassengers, setMockShifts, getMockPassengers, getMockTransactions, getMockOfficerDesks, getMockGates, getMockMedia, getMockWhitelist, getMockBlacklist, getMockShifts, setMockOfficerAssignments, getMockOfficerAssignments, mockCountryLanguageMapping, availableLanguages, mockCountryPassportMapping, getMockMachines, setMockMachines, getMockSystemMessages, setMockSystemMessages } from './mock-data';
+import { mockVisaDatabase, getMockPorts, setMockPorts, getMockTerminals, setMockTerminals, getMockZones, setMockZones, mockWorkflows, mockRiskProfiles, setMockOfficerDesks, setMockGates, setMockMedia, setMockWhitelist, setMockBlacklist, setMockPassengers, setMockShifts, getMockPassengers, getMockTransactions, getMockOfficerDesks, getMockGates, getMockMedia, getMockWhitelist, getMockBlacklist, getMockShifts, setMockOfficerAssignments, getMockOfficerAssignments, mockCountryLanguageMapping, availableLanguages, mockCountryPassportMapping, getMockMachines, setMockMachines, getMockSystemMessages, setMockSystemMessages, getMockGateLogs } from './mock-data';
 import { assessPassengerRisk } from '@/ai/flows/assess-risk-flow';
 import { countries } from './countries';
 import { Fingerprint, ScanLine, UserCheck, ShieldAlert, User as UserIcon } from 'lucide-react';
@@ -84,6 +84,7 @@ const users: User[] = [
         // Control Room
         'control-room:records:view', 'control-room:records:create', 'control-room:records:edit', 'control-room:records:delete',
         'control-room:dashboard:view', 'control-room:dashboard:stats:view', 'control-room:dashboard:charts:view', 'control-room:dashboard:forecasts:view', 'control-room:dashboard:officer-performance:view',
+        'control-room:gate-log:view',
         // Configuration
         'configuration:dashboard:view',
         'configuration:country-language:view', 'configuration:country-language:edit',
@@ -133,7 +134,7 @@ const users: User[] = [
         'airport:dashboard:view', 'airport:dashboard:stats:view', 'airport:prediction:view', 'airport:dashboard:charts:view', 'airport:dashboard:officer-performance:view',
         'landport:dashboard:view', 'landport:dashboard:stats:view', 'landport:prediction:view', 'landport:dashboard:charts:view', 'landport:dashboard:officer-performance:view',
         'seaport:dashboard:view', 'seaport:dashboard:stats:view', 'seaport:prediction:view', 'seaport:dashboard:charts:view', 'seaport:dashboard:officer-performance:view',
-        'control-room:dashboard:view', 'control-room:dashboard:stats:view', 'control-room:dashboard:charts:view', 'control-room:dashboard:officer-performance:view',
+        'control-room:dashboard:view', 'control-room:dashboard:stats:view', 'control-room:dashboard:charts:view', 'control-room:dashboard:officer-performance:view', 'control-room:gate-log:view',
         'duty-manager:view',
         'airport:workload:view', 'landport:workload:view', 'seaport:workload:view',
         // Granular permissions for editing across modules they supervise
@@ -160,7 +161,7 @@ const users: User[] = [
     role: 'control-room',
     token: 'fake-control-room-token',
     modules: ['control-room'],
-    permissions: ['control-room:records:view', 'reports:view', 'control-room:dashboard:view', 'control-room:dashboard:stats:view', 'control-room:dashboard:charts:view']
+    permissions: ['control-room:records:view', 'reports:view', 'control-room:dashboard:view', 'control-room:dashboard:stats:view', 'control-room:dashboard:charts:view', 'control-room:gate-log:view']
   },
   {
     id: '7',
@@ -1078,6 +1079,11 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
         }
         return Result.failure([new ApiError('NOT_FOUND', 'Message not found.')]) as Result<T>;
     }
+    
+    // GATE LOGS
+    if(method === 'GET' && url.pathname === '/data/gate-logs') {
+        return Result.success(getMockGateLogs()) as Result<T>;
+    }
 
 
     // CONFIGURATION DATA
@@ -1390,4 +1396,5 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
 
     return Result.failure([new ApiError('NOT_FOUND', `Mock endpoint ${method} ${endpoint} not found.`)]) as Result<T>;
 }
+
 

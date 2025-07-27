@@ -21,8 +21,8 @@ const allModules: Record<string, Omit<NavItem, 'label' | 'href'>> = {
   configuration: { icon: Settings },
 };
 
-const adminNavItems: Record<string, Omit<NavItem, 'label'>> = {
-    users: { href: '/users', icon: Users },
+const adminNavItems: Record<string, Omit<NavItem, 'label' | 'href'>> = {
+    users: { href: '/users', icon: Users, permission: 'users:manage' },
     settings: { href: '/settings', icon: Settings },
 };
 
@@ -216,7 +216,7 @@ const getModuleSubNav = (module: Module, t: any): NavItem[] => {
 export const getSidebarNavItems = (role: Role, modules: Module[], t: any): NavItem[] => {
     const nav: NavItem[] = [];
 
-    const navigableModules = modules.filter(m => !['duty-manager', 'shiftsupervisor'].includes(m));
+    const navigableModules = modules.filter(m => !['duty-manager', 'shiftsupervisor', 'users', 'settings'].includes(m));
 
     navigableModules.forEach(moduleKey => {
         const moduleInfo = allModules[moduleKey];
@@ -234,7 +234,7 @@ export const getSidebarNavItems = (role: Role, modules: Module[], t: any): NavIt
     // Add admin-specific items if the role is admin
     if (role === 'admin') {
          if (adminNavItems.users) {
-            nav.push({ ...adminNavItems.users, href: `${adminNavItems.users.href}`, label: t('userManagement') });
+            nav.push({ ...adminNavItems.users, href: `${adminNavItems.users.href}`, label: t('userManagement'), permission: adminNavItems.users.permission });
          }
          if (adminNavItems.settings) {
             nav.push({ ...adminNavItems.settings, href: `${adminNavItems.settings.href}`, label: t('systemSettings') });

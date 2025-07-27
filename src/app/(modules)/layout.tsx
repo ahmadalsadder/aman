@@ -33,15 +33,17 @@ export default function ModulesLayout({ children }: { children: React.ReactNode 
   }
 
   return (
-    <SidebarProvider>
-      <AppSidebar />
-      <SidebarInset className="relative flex flex-col">
-        <Background />
-        <Header />
-        <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">
-          {children}
-        </main>
-      </SidebarInset>
-    </SidebarProvider>
+    <div className="h-screen w-full overflow-hidden">
+        <SidebarProvider>
+            <AppSidebar />
+            <SidebarInset className="relative flex flex-col">
+                <Background />
+                <Header />
+                <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">
+                {children}
+                </main>
+            </SidebarInset>
+        </SidebarProvider>
+    </div>
   );
 }

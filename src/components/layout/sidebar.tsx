@@ -63,9 +63,16 @@ export default function AppSidebar() {
                 return false;
             });
         };
+        const originalChildren = item.children;
         item.children = filterChildren(item.children);
+
         // Then, if any children remain, the parent module should be visible.
-        return item.children.length > 0;
+        const hasVisibleChildren = item.children.length > 0;
+        
+        // Restore original children to not permanently mutate the nav config
+        item.children = originalChildren;
+
+        return hasVisibleChildren;
       }
 
       // Otherwise, hide it.
@@ -104,7 +111,15 @@ export default function AppSidebar() {
   }, [pathname, navItems]);
 
   const toggleCollapsible = (href: string) => {
-    setOpenCollapsibles(prev => ({ ...prev, [href]: !prev[href] }));
+    setOpenCollapsibles(prev => {
+        const isCurrentlyOpen = !!prev[href];
+        const newStates: Record<string, boolean> = {}; // Reset all states
+        if (!isCurrentlyOpen) {
+            newStates[href] = true; // Open the clicked one
+        }
+        // If it was open, it will now be closed because newStates is empty.
+        return newStates;
+    });
   };
 
   const moduleDashboardHref = user?.modules?.[0] ? `/${user.modules[0]}/dashboard` : '/';
@@ -128,6 +143,9 @@ export default function AppSidebar() {
         );
     }
     
+    const hasVisibleChildren = item.children.some(child => !child.permission || hasPermission([child.permission]));
+    if (!hasVisibleChildren && !hasPermission([item.permission!])) return null;
+
     return (
         <Collapsible key={item.href} open={openCollapsibles[item.href] || false} onOpenChange={() => toggleCollapsible(item.href)}>
             <SidebarMenuItem>
@@ -146,7 +164,7 @@ export default function AppSidebar() {
             </SidebarMenuItem>
             <CollapsibleContent>
                 <SidebarMenuSub>
-                {item.children?.map(child => (
+                {item.children?.filter(child => !child.permission || hasPermission([child.permission])).map(child => (
                     <SidebarMenuSubItem key={child.href}>
                          {child.children ? (
                              <Collapsible>

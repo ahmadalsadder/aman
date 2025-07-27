@@ -1,7 +1,7 @@
 
 {
   "LoginPage": {
-    "title": "Bienvenido a Guardian Gate",
+    "title": "Bienvenido a Aman",
     "titleAman": "Aman",
     "description": "Acceda de forma segura al sistema de control de fronteras.",
     "usernameLabel": "Nombre de usuario o correo electrónico",
@@ -20,7 +20,7 @@
     "demoCredentialsMessage": "Utilice cualquier nombre de usuario simulado (p. ej., `admin`, `officer.jones`) con la contraseña: `password`."
   },
   "HomePage": {
-    "initializing": "Inicializando Guardian Gate..."
+    "initializing": "Inicializando Aman..."
   },
   "ModulesLayout": {
     "securingSession": "Asegurando su sesión..."
@@ -31,7 +31,7 @@
     "language": "Idioma"
   },
   "Navigation": {
-    "title": "Guardian Gate",
+    "title": "Aman",
     "dashboard": "Tablero",
     "userManagement": "Gestión de usuarios",
     "systemSettings": "Configuración del sistema",

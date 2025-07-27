@@ -1,7 +1,7 @@
 
 {
   "LoginPage": {
-    "title": "مرحبًا بك في بوابة الحماية",
+    "title": "مرحبًا بك في أمان",
     "titleAman": "أمان",
     "description": "الوصول الآمن إلى نظام مراقبة الحدود.",
     "usernameLabel": "اسم المستخدم أو البريد الإلكتروني",
@@ -20,7 +20,7 @@
     "demoCredentialsMessage": "استخدم أي اسم مستخدم وهمي (مثل `admin`, `officer.jones`) مع كلمة المرور: `password`."
   },
   "HomePage": {
-    "initializing": "جاري تهيئة بوابة الحماية..."
+    "initializing": "جاري تهيئة أمان..."
   },
   "ModulesLayout": {
     "securingSession": "تأمين جلستك..."
@@ -31,7 +31,7 @@
     "language": "اللغة"
   },
   "Navigation": {
-    "title": "بوابة الحماية",
+    "title": "أمان",
     "dashboard": "لوحة التحكم",
     "userManagement": "إدارة المستخدمين",
     "systemSettings": "إعدادات النظام",
@@ -206,6 +206,41 @@
     "activeGates": "البوابات النشطة",
     "avgProcessingTime": "متوسط وقت المعالجة",
     "activeAlerts": "التنبيهات النشطة"
+  },
+  "ControlRoom": {
+    "gateLog": {
+        "title": "Gate Event Log",
+        "description": "A real-time feed of all E-Gate events.",
+        "nav": {
+            "dashboard": "Dashboard",
+            "gateLog": "Gate Log"
+        },
+        "filters": {
+            "title": "Search & Filter Logs",
+            "gateNamePlaceholder": "Gate Name...",
+            "eventTypePlaceholder": "Event Type",
+            "fromDate": "From Date",
+            "toDate": "To Date",
+            "reset": "Reset",
+            "search": "Search"
+        },
+        "records": {
+            "title": "Log Records",
+            "description": "Detailed list of all gate-related events."
+        },
+        "table": {
+            "timestamp": "Timestamp",
+            "gate": "Gate",
+            "eventType": "Event Type",
+            "status": "Status",
+            "description": "Description",
+            "actor": "Actor"
+        },
+        "accessDenied": {
+            "title": "Access Denied",
+            "description": "You do not have permission to view the gate log."
+        }
+    }
   },
   "ControlRoomModule": {
     "title": "وحدة غرفة التحكم",
@@ -1721,3 +1756,5 @@
     }
   }
 }
+
+    

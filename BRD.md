@@ -1,18 +1,18 @@
 
 # Business Requirements Document (BRD)
-## Guardian Gate Unified Border Control System
+## Aman Unified Border Control System
 
 ---
 
 ### 1. Executive Summary
-This document provides a comprehensive analysis and technical specification for the **Guardian Gate Unified Border Control System**. It is intended for technical stakeholders, including solution architects, developers, and project managers, to guide the development, integration, and deployment of the platform. Guardian Gate is a modular, web-based application designed to unify and streamline border control operations across multiple entry points, leveraging AI for enhanced security and operational efficiency. This BRD outlines the system's architecture, functional modules, user roles, data entities, business rules, and key process flows.
+This document provides a comprehensive analysis and technical specification for the **Aman Unified Border Control System**. It is intended for technical stakeholders, including solution architects, developers, and project managers, to guide the development, integration, and deployment of the platform. Aman is a modular, web-based application designed to unify and streamline border control operations across multiple entry points, leveraging AI for enhanced security and operational efficiency. This BRD outlines the system's architecture, functional modules, user roles, data entities, business rules, and key process flows.
 
 ---
 
 ### 2. System Overview
 
 #### 2.1 System Architecture
-Guardian Gate is a modern, web-based application built on a prescribed technology stack.
+Aman is a modern, web-based application built on a prescribed technology stack.
 
 -   **Frontend:** Next.js with React and TypeScript, using the App Router for server-centric rendering.
 -   **UI Components:** ShadCN UI for pre-built, accessible components.
@@ -253,4 +253,5 @@ graph TD
 - **Open Point/Missing Information:** The specific protocols and API contracts for interfacing with physical hardware (scanners, cameras, E-Gates) are not defined. This requires a separate hardware integration specification.
 - **Open Point/Missing Information:** The details for third-party system integrations (e.g., national watchlist APIs, visa databases) are not defined. A dedicated discovery and integration phase will be required.
 - **Assumption:** The current role and permission structure is complete and accurate. It should be reviewed and signed off by business stakeholders before backend implementation.
+
 

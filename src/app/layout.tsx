@@ -7,7 +7,7 @@ import { LoaderProvider } from '@/components/loader-provider';
 import { GlobalLoader } from '@/components/global-loader';
 
 export const metadata: Metadata = {
-  title: 'Guardian Gate Unified',
+  title: 'Aman Unified',
   description: 'Unified Security and Access Management',
 };
 

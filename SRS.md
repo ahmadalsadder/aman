@@ -1,15 +1,15 @@
 
-# Project Deliverables: Guardian Gate Unified Border Control System
+# Project Deliverables: Aman Unified Border Control System
 
 ## 1. Software Requirements Specification (SRS)
 
 ### 1.0 Introduction
 
 #### 1.1 Purpose
-This document specifies the software requirements for the Guardian Gate Unified Border Control System. Its purpose is to provide a comprehensive overview of the system's functionalities, constraints, and requirements for stakeholders, including developers, project managers, and quality assurance teams.
+This document specifies the software requirements for the Aman Unified Border Control System. Its purpose is to provide a comprehensive overview of the system's functionalities, constraints, and requirements for stakeholders, including developers, project managers, and quality assurance teams.
 
 #### 1.2 Scope
-Guardian Gate is a modular, web-based platform designed to unify and streamline border control operations across multiple entry points (Airport, Landport, Seaport, E-Gate). It provides role-based access to dashboards, live transaction processing, passenger record management, list management (blacklist/whitelist), workload scheduling, and system configuration. The system leverages AI for risk assessment and data extraction to enhance security and operational efficiency.
+Aman is a modular, web-based platform designed to unify and streamline border control operations across multiple entry points (Airport, Landport, Seaport, E-Gate). It provides role-based access to dashboards, live transaction processing, passenger record management, list management (blacklist/whitelist), workload scheduling, and system configuration. The system leverages AI for risk assessment and data extraction to enhance security and operational efficiency.
 
 #### 1.3 Definitions, Acronyms, and Abbreviations
 - **SRS:** Software Requirements Specification
@@ -23,10 +23,10 @@ Guardian Gate is a modular, web-based platform designed to unify and streamline 
 ### 2.0 Overall Description
 
 #### 2.1 Product Perspective
-Guardian Gate is a self-contained, web-based application intended to replace or augment existing fragmented border control systems. It serves as a central hub for various operational roles, providing real-time data, analytics, and management tools. It is built on a modern web stack (Next.js, React) and designed for modular expansion.
+Aman is a self-contained, web-based application intended to replace or augment existing fragmented border control systems. It serves as a central hub for various operational roles, providing real-time data, analytics, and management tools. It is built on a modern web stack (Next.js, React) and designed for modular expansion.
 
 #### 2.2 Product Functions
-The major functions of the Guardian Gate system are:
+The major functions of the Aman system are:
 -   **Multi-Module Operations:** Provides distinct operational views for Airport, Landport, Seaport, E-Gate, Control Room, and Analyst roles.
 -   **Role-Based Access Control:** A sophisticated permission system that tailors UI and functionality based on user roles (Admin, Officer, Supervisor, etc.).
 -   **Dashboard & Analytics:** Visual dashboards display key performance indicators (KPIs), transaction volumes, and predictive analytics for each module.

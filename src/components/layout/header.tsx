@@ -1,7 +1,7 @@
 
 'use client';
 
-import { LogOut, User as UserIcon, Globe, Zap, RadioTower } from 'lucide-react';
+import { LogOut, User as UserIcon, Zap, RadioTower, Menu } from 'lucide-react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import * as React from 'react';
@@ -14,15 +14,12 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem
 } from '@/components/ui/dropdown-menu';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/hooks/use-auth';
 import Link from 'next/link';
 import type { Module, Permission } from '@/types';
-import { cn } from '@/lib/utils';
 import { LocaleSwitcher } from '@/components/i18n-provider';
 
 export default function Header() {
@@ -50,7 +47,9 @@ export default function Header() {
     <header className="sticky top-0 z-10 flex h-16 w-full items-center justify-between border-b bg-card px-4 md:px-6">
       <div className="flex items-center">
         <div>
-            <SidebarTrigger />
+            <SidebarTrigger>
+                <Menu />
+            </SidebarTrigger>
         </div>
       </div>
       <div className="flex items-center gap-4">

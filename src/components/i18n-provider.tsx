@@ -1,13 +1,49 @@
-
 'use client';
 import { useEffect, useState, ReactNode } from 'react';
-import { NextIntlClientProvider } from 'next-intl';
-import { Loader2 } from 'lucide-react';
+import { NextIntlClientProvider, useLocale, useTranslations } from 'next-intl';
+import { Loader2, Globe } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Button } from './ui/button';
 
 type Locale = 'en' | 'es' | 'ar';
 
 async function getMessages(locale: Locale) {
   return (await import(`@/messages/${locale}.json`)).default;
+}
+
+export function LocaleSwitcher() {
+  const locale = useLocale();
+  const t = useTranslations('Header');
+
+  const handleLocaleChange = (newLocale: string) => {
+    localStorage.setItem('locale', newLocale);
+    // This will cause a full page reload, which is necessary to re-render with the new locale from the root
+    window.location.reload();
+  };
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" size="icon">
+          <Globe className="h-5 w-5" />
+          <span className="sr-only">{t('language')}</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuRadioGroup value={locale} onValueChange={handleLocaleChange}>
+          <DropdownMenuRadioItem value="en">English</DropdownMenuRadioItem>
+          <DropdownMenuRadioItem value="es">Español</DropdownMenuRadioItem>
+          <DropdownMenuRadioItem value="ar">العربية</DropdownMenuRadioItem>
+        </DropdownMenuRadioGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
 }
 
 export function I18nProvider({ children }: { children: ReactNode }) {

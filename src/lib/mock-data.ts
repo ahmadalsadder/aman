@@ -1,6 +1,7 @@
 
 
-import type { Passenger, Transaction, OfficerDesk, Gate, Media, WhitelistEntry, BlacklistEntry, OfficerAssignment } from "@/types/live-processing";
+
+import type { Passenger, Transaction, OfficerDesk, Gate, Media, WhitelistEntry, BlacklistEntry, OfficerAssignment, GateLogEntry } from "@/types/live-processing";
 import type { Shift, DayOfWeek } from "@/types/workload";
 import { Plane, Car, Ship } from "lucide-react";
 import type { Port, Terminal, Zone, Workflow, RiskProfile, User, CountryLanguageMapping, CountryPassportMapping, Machine, SystemMessage } from '@/types';
@@ -331,6 +332,14 @@ let mockSystemMessages: SystemMessage[] = [
     },
 ];
 
+let mockGateLogs: GateLogEntry[] = [
+    { id: 'LOG-001', timestamp: '2023-10-29 14:30:05', gateId: 'EGATE-01', gateName: 'Main Entry Gate', eventType: 'Transaction', status: 'Success', description: 'Passenger P001 processed successfully.', actor: 'System' },
+    { id: 'LOG-002', timestamp: '2023-10-29 14:32:15', gateId: 'EGATE-02', gateName: 'Main Entry Gate 2', eventType: 'Error', status: 'Error', description: 'Biometric scanner failed to initialize. Error code: 503', actor: 'System' },
+    { id: 'LOG-003', timestamp: '2023-10-29 14:35:00', gateId: 'EGATE-03', gateName: 'Business Class Gate', eventType: 'StatusChange', status: 'Offline', description: 'Gate taken offline for scheduled maintenance.', actor: 'Control Room' },
+    { id: 'LOG-004', timestamp: '2023-10-29 14:40:22', gateId: 'EGATE-01', gateName: 'Main Entry Gate', eventType: 'Transaction', status: 'Failure', description: 'Passenger rejected due to biometric mismatch (78%).', actor: 'System' },
+];
+
+
 // Getters
 export const getMockPassengers = () => mockPassengers;
 export { getMockTransactions };
@@ -346,6 +355,7 @@ export const getMockShifts = () => mockShifts;
 export const getMockOfficerAssignments = () => mockOfficerAssignments;
 export const getMockMachines = () => mockMachines;
 export const getMockSystemMessages = () => mockSystemMessages;
+export const getMockGateLogs = () => mockGateLogs;
 
 
 // Setters
@@ -390,6 +400,9 @@ export const setMockZones = (newZones: Zone[]) => {
 };
 export const setMockSystemMessages = (newSystemMessages: SystemMessage[]) => {
     mockSystemMessages = newSystemMessages;
+};
+export const setMockGateLogs = (newGateLogs: GateLogEntry[]) => {
+    mockGateLogs = newGateLogs;
 };
 
 

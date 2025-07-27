@@ -1,5 +1,6 @@
 
 
+
 import type { Port, Terminal, Zone, Workflow, RiskProfile, Machine, SystemMessage } from './configuration';
 import type { OfficerAssignment } from './workload';
 
@@ -252,6 +253,17 @@ export interface BlacklistEntry {
   // Validity
   validFrom?: string;
   validUntil?: string;
+}
+
+export interface GateLogEntry {
+  id: string;
+  timestamp: string;
+  gateId: string;
+  gateName: string;
+  eventType: 'StatusChange' | 'Transaction' | 'Error' | 'Maintenance';
+  status: 'Online' | 'Offline' | 'Error' | 'Success' | 'Failure';
+  description: string;
+  actor: string; // e.g., 'System', 'Officer John Doe'
 }
 
 

@@ -1,6 +1,6 @@
 
 'use client';
-import { Shield, LayoutDashboard, BarChart3, Users, Settings, Activity, Ship, LandPlot, DoorOpen, PieChart, UserCog, RadioTower, Home, Plane, ArrowRightLeft, Monitor, ClipboardList, AlertTriangle, ShieldAlert, BrainCircuit, IdCard, Music, ListChecks, ShieldOff, UserPlus, FilePenLine, CalendarDays, Globe, Languages, Building, MessageSquare, HardDrive } from 'lucide-react';
+import { Shield, LayoutDashboard, BarChart3, Users, Settings, Activity, Ship, LandPlot, DoorOpen, PieChart, UserCog, RadioTower, Home, Plane, ArrowRightLeft, Monitor, ClipboardList, AlertTriangle, ShieldAlert, BrainCircuit, IdCard, Music, ListChecks, ShieldOff, UserPlus, FilePenLine, CalendarDays, Globe, Languages, Building, MessageSquare, HardDrive, ListOrdered } from 'lucide-react';
 import type { Role, Module, Permission } from '@/types';
 
 export interface NavItem {
@@ -128,6 +128,15 @@ const getModuleSubNav = (module: Module, t: any): NavItem[] => {
                 permission: `${module}:desks:view` as Permission,
             });
         }
+    }
+
+    if (module === 'control-room') {
+         subNav.push({
+            href: `${moduleBaseUrl}/gate-log`,
+            label: t('gateLog'),
+            icon: ListOrdered,
+            permission: 'control-room:gate-log:view' as Permission,
+        });
     }
 
     if (module === 'egate' || ['airport', 'landport', 'seaport'].includes(module)) {

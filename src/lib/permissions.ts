@@ -43,6 +43,7 @@ export const allPermissions: Permission[] = [
     'landport:civil-records:view',
     'seaport:civil-records:view',
     'egate:civil-records:view',
+    'control-room:gate-log:view',
   
     // Desk configuration permissions
     'airport:desks:view', 'airport:desks:create', 'airport:desks:edit', 'airport:desks:delete',

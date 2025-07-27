@@ -23,7 +23,6 @@ const allModules: Record<string, Omit<NavItem, 'label' | 'href'>> = {
 
 const adminNavItems: Record<string, Omit<NavItem, 'label' | 'href'>> = {
     users: { href: '/users', icon: Users, permission: 'users:manage' },
-    settings: { href: '/settings', icon: Settings },
 };
 
 const getModuleSubNav = (module: Module, t: any): NavItem[] => {
@@ -244,9 +243,6 @@ export const getSidebarNavItems = (role: Role, modules: Module[], t: any): NavIt
     if (role === 'admin') {
          if (adminNavItems.users) {
             nav.push({ ...adminNavItems.users, href: `${adminNavItems.users.href}`, label: t('userManagement'), permission: adminNavItems.users.permission });
-         }
-         if (adminNavItems.settings) {
-            nav.push({ ...adminNavItems.settings, href: `${adminNavItems.settings.href}`, label: t('systemSettings') });
          }
     }
 

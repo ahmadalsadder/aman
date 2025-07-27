@@ -6,7 +6,7 @@ export * from './configuration';
 export * from './workload';
 
 export type Role = 'admin' | 'auditor' | 'viewer' | 'shiftsupervisor' | 'control-room' | 'analyst' | 'officer';
-export type Module = 'landport' | 'seaport' | 'airport' | 'egate' | 'analyst' | 'shiftsupervisor' | 'control-room' | 'duty-manager' | 'users' | 'settings' | 'passengers' | 'configuration';
+export type Module = 'landport' | 'seaport' | 'airport' | 'egate' | 'analyst' | 'shiftsupervisor' | 'control-room' | 'duty-manager' | 'users' | 'passengers' | 'configuration';
 export type Permission = 
   // Passenger permissions
   | 'airport:passengers:view' | 'airport:passengers:create' | 'airport:passengers:edit' | 'airport:passengers:delete'

@@ -122,10 +122,10 @@ export default function GateLogPage() {
                         <div className="p-6 pt-0">
                             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                                 <Input placeholder={t('filters.gateNamePlaceholder')} value={filters.gateName} onChange={(e) => setFilters({...filters, gateName: e.target.value})} />
-                                <Select value={filters.eventType} onValueChange={(v) => setFilters({...filters, eventType: v})}>
+                                <Select value={filters.eventType} onValueChange={(v) => setFilters({...filters, eventType: v === 'all' ? '' : v})}>
                                     <SelectTrigger><SelectValue placeholder={t('filters.eventTypePlaceholder')} /></SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="">All Types</SelectItem>
+                                        <SelectItem value="all">All Types</SelectItem>
                                         {Object.keys(eventTypeColors).map(type => <SelectItem key={type} value={type}>{type}</SelectItem>)}
                                     </SelectContent>
                                 </Select>

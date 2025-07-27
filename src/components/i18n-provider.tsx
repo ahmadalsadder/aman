@@ -1,3 +1,4 @@
+
 'use client';
 import { useEffect, useState, ReactNode } from 'react';
 import { NextIntlClientProvider } from 'next-intl';

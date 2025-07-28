@@ -50,17 +50,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
-    // This effect should only run once on component mount to check for the cookie.
+    let isMounted = true;
     try {
-        const storedUser = getCookie(AUTH_COOKIE_NAME);
-        if (storedUser) {
+      const storedUser = getCookie(AUTH_COOKIE_NAME);
+      if (storedUser) {
+        if (isMounted) {
             setUser(JSON.parse(storedUser));
         }
+      }
     } catch (error) {
-        console.error('Failed to parse auth data from cookie', error);
-        eraseCookie(AUTH_COOKIE_NAME);
+      console.error('Failed to parse auth data from cookie', error);
+      eraseCookie(AUTH_COOKIE_NAME);
     } finally {
-        setLoading(false);
+        if (isMounted) {
+            setLoading(false);
+        }
+    }
+    
+    return () => {
+        isMounted = false;
     }
   }, []);
 

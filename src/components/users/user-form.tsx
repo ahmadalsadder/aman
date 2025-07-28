@@ -2,7 +2,7 @@
 
 'use client';
 
-import { useForm, useFieldArray, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Button } from '@/components/ui/button';
@@ -10,7 +10,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import type { User, Role, Module, Permission, Port } from '@/types';
+import type { User, Role, Port } from '@/types';
 import { useRouter } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -58,6 +58,37 @@ export function UserForm({ userToEdit, onSave, isLoading }: UserFormProps) {
     },
   });
 
+  const selectedModules = form.watch('modules');
+
+  useEffect(() => {
+    if (!userToEdit) { // Only run this logic for new users or when modules change
+        const currentPermissions = new Set(form.getValues('permissions'));
+        const permissionsForSelectedModules = new Set<string>();
+
+        selectedModules.forEach(moduleId => {
+            const moduleInfo = modulePermissions.find(m => m.id === moduleId);
+            if (moduleInfo) {
+                moduleInfo.permissions.forEach(p => permissionsForSelectedModules.add(p));
+            }
+        });
+
+        // Add permissions for newly selected modules
+        permissionsForSelectedModules.forEach(p => currentPermissions.add(p));
+        
+        // Remove permissions for deselected modules
+        const allPossibleModulePermissions = new Set(modulePermissions.flatMap(m => m.permissions));
+        allPossibleModulePermissions.forEach(p => {
+             const moduleOfPermission = p.split(':')[0];
+             if(!selectedModules.includes(moduleOfPermission) && !['users:manage', 'duty-manager:view'].includes(p)) {
+                 currentPermissions.delete(p);
+             }
+        });
+
+        form.setValue('permissions', Array.from(currentPermissions), { shouldValidate: true });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedModules, userToEdit]);
+
   useEffect(() => {
     const fetchPorts = async () => {
       setLoadingPorts(true);
@@ -70,9 +101,9 @@ export function UserForm({ userToEdit, onSave, isLoading }: UserFormProps) {
     fetchPorts();
   }, []);
   
-  const portOptions = ports.map(port => ({
-      value: port.type.toLowerCase(),
-      label: port.name
+  const portOptions = modulePermissions.map(mod => ({
+      value: mod.id,
+      label: mod.label
   }));
 
 
@@ -99,7 +130,7 @@ export function UserForm({ userToEdit, onSave, isLoading }: UserFormProps) {
                                         options={portOptions}
                                         value={field.value}
                                         onChange={field.onChange}
-                                        placeholder="Select ports..."
+                                        placeholder="Select modules..."
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -114,45 +145,7 @@ export function UserForm({ userToEdit, onSave, isLoading }: UserFormProps) {
                     <CardTitle>Permissions</CardTitle>
                     <CardDescription>Select the modules and specific permissions this user can access.</CardDescription>
                 </CardHeader>
-                <CardContent className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                        <h4 className="font-semibold">Module Access</h4>
-                        <p className="text-sm text-muted-foreground">Select all modules the user can see in their sidebar. This does not grant permissions.</p>
-                        {loadingPorts ? <Skeleton className="h-64 w-full" /> : (
-                            <FormField
-                                control={form.control} name="modules"
-                                render={() => (
-                                <FormItem>
-                                    <ScrollArea className="h-64 rounded-md border p-4">
-                                        {modulePermissions.map((mod) => (
-                                            <FormField
-                                                key={mod.id} control={form.control} name="modules"
-                                                render={({ field }) => {
-                                                return (
-                                                    <FormItem key={mod.id} className="flex flex-row items-start space-x-3 space-y-0 mb-4">
-                                                    <FormControl>
-                                                        <Checkbox
-                                                            checked={field.value?.includes(mod.id)}
-                                                            onCheckedChange={(checked) => {
-                                                                return checked
-                                                                    ? field.onChange([...(field.value || []), mod.id])
-                                                                    : field.onChange(field.value?.filter((value) => value !== mod.id))
-                                                            }}
-                                                        />
-                                                    </FormControl>
-                                                    <FormLabel className="font-normal">{mod.label}</FormLabel>
-                                                    </FormItem>
-                                                )
-                                                }}
-                                            />
-                                        ))}
-                                    </ScrollArea>
-                                    <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                        )}
-                    </div>
+                <CardContent>
                     <div className="space-y-2">
                         <h4 className="font-semibold">Granular Permissions</h4>
                         <p className="text-sm text-muted-foreground">Expand a module to assign specific actions.</p>
@@ -160,7 +153,7 @@ export function UserForm({ userToEdit, onSave, isLoading }: UserFormProps) {
                             control={form.control} name="permissions"
                             render={() => (
                                 <FormItem>
-                                <ScrollArea className="h-64 rounded-md border">
+                                <ScrollArea className="h-96 rounded-md border">
                                     <Accordion type="multiple" className="w-full">
                                     {modulePermissions.map((mod) => (
                                         <AccordionItem value={mod.id} key={mod.id}>

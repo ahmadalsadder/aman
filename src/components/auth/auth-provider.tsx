@@ -25,6 +25,7 @@ function setCookie(name: string, value: string, days: number) {
         date.setTime(date.getTime() + (days*24*60*60*1000));
         expires = "; expires=" + date.toUTCString();
     }
+    // No need to encode if the value is a valid JSON string
     document.cookie = name + "=" + (value || "")  + expires + "; path=/";
 }
 
@@ -49,20 +50,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
-    const checkUser = () => {
-        try {
-            const storedUser = getCookie(AUTH_COOKIE_NAME);
-            if (storedUser) {
-                setUser(JSON.parse(storedUser));
-            }
-        } catch (error) {
-            console.error('Failed to parse auth data from cookie', error);
-            eraseCookie(AUTH_COOKIE_NAME);
-        } finally {
-            setLoading(false);
+    // This effect should only run once on component mount to check for the cookie.
+    try {
+        const storedUser = getCookie(AUTH_COOKIE_NAME);
+        if (storedUser) {
+            setUser(JSON.parse(storedUser));
         }
-    };
-    checkUser();
+    } catch (error) {
+        console.error('Failed to parse auth data from cookie', error);
+        eraseCookie(AUTH_COOKIE_NAME);
+    } finally {
+        setLoading(false);
+    }
   }, []);
 
   const login = async (email: string, password: string) => {

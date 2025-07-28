@@ -1,5 +1,6 @@
 
 
+
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -14,17 +15,17 @@ import type { Shift } from '@/types';
 import { useRouter } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
-import { daysOfWeek } from '@/lib/mock-data';
 import { useTranslations } from 'next-intl';
+import { DayOfWeek, Status } from '@/lib/enums';
 
 const formSchema = z.object({
   name: z.string().min(2, "Shift name must be at least 2 characters."),
   startTime: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, "Invalid time format (HH:MM)"),
   endTime: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, "Invalid time format (HH:MM)"),
-  days: z.array(z.string()).refine((value) => value.some((item) => item), {
+  days: z.array(z.nativeEnum(DayOfWeek)).refine((value) => value.some((item) => item), {
     message: "You have to select at least one day.",
   }),
-  status: z.enum(['Active', 'Inactive']),
+  status: z.nativeEnum(Status),
 });
 
 export type ShiftFormValues = z.infer<typeof formSchema>;
@@ -38,6 +39,7 @@ interface ShiftFormProps {
 export function ShiftForm({ shiftToEdit, onSave, isLoading }: ShiftFormProps) {
   const router = useRouter();
   const t = useTranslations('ShiftManagement.form');
+  const tEnum = useTranslations('Enums');
 
   const form = useForm<ShiftFormValues>({
     resolver: zodResolver(formSchema),
@@ -45,8 +47,8 @@ export function ShiftForm({ shiftToEdit, onSave, isLoading }: ShiftFormProps) {
       name: '',
       startTime: '08:00',
       endTime: '16:00',
-      days: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'],
-      status: 'Active',
+      days: [DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday],
+      status: Status.Active,
     },
   });
 
@@ -64,7 +66,7 @@ export function ShiftForm({ shiftToEdit, onSave, isLoading }: ShiftFormProps) {
                     <FormField control={form.control} name="startTime" render={({ field }) => ( <FormItem><FormLabel required>{t('details.startTime')}</FormLabel><FormControl><Input type="time" {...field} /></FormControl><FormMessage /></FormItem> )} />
                     <FormField control={form.control} name="endTime" render={({ field }) => ( <FormItem><FormLabel required>{t('details.endTime')}</FormLabel><FormControl><Input type="time" {...field} /></FormControl><FormMessage /></FormItem> )} />
                 </div>
-                <FormField control={form.control} name="status" render={({ field }) => ( <FormItem><FormLabel required>{t('details.status')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue/></SelectTrigger></FormControl><SelectContent><SelectItem value="Active">{t('details.active')}</SelectItem><SelectItem value="Inactive">{t('details.inactive')}</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
+                <FormField control={form.control} name="status" render={({ field }) => ( <FormItem><FormLabel required>{t('details.status')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue/></SelectTrigger></FormControl><SelectContent>{Object.values(Status).map(s => <SelectItem key={s} value={s}>{tEnum(`Status.${s}`)}</SelectItem>)}</SelectContent></Select><FormMessage /></FormItem> )} />
             </CardContent>
         </Card>
         <Card>
@@ -79,33 +81,33 @@ export function ShiftForm({ shiftToEdit, onSave, isLoading }: ShiftFormProps) {
                     render={() => (
                         <FormItem>
                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                            {daysOfWeek.map((item) => (
+                            {Object.values(DayOfWeek).map((dayValue) => (
                             <FormField
-                                key={item.id}
+                                key={dayValue}
                                 control={form.control}
                                 name="days"
                                 render={({ field }) => {
                                 return (
                                     <FormItem
-                                    key={item.id}
+                                    key={dayValue}
                                     className="flex flex-row items-start space-x-3 space-y-0"
                                     >
                                     <FormControl>
                                         <Checkbox
-                                        checked={field.value?.includes(item.id)}
+                                        checked={field.value?.includes(dayValue)}
                                         onCheckedChange={(checked) => {
                                             return checked
-                                            ? field.onChange([...(field.value || []), item.id])
+                                            ? field.onChange([...(field.value || []), dayValue])
                                             : field.onChange(
                                                 field.value?.filter(
-                                                (value) => value !== item.id
+                                                (value) => value !== dayValue
                                                 )
                                             )
                                         }}
                                         />
                                     </FormControl>
                                     <FormLabel className="font-normal">
-                                        {item.label}
+                                        {tEnum(`DayOfWeek.${dayValue}`)}
                                     </FormLabel>
                                     </FormItem>
                                 )

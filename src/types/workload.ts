@@ -1,13 +1,11 @@
 
 
-import type { User } from '.';
-import { Status } from '@/lib/enums';
 
-export interface DayOfWeek {
-    id: 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
-    label: string;
-}
-  
+import type { User } from '.';
+import { Status, DayOfWeek } from '@/lib/enums';
+
+export { DayOfWeek };
+
 export interface Officer {
     id: string;
     name: string;
@@ -19,7 +17,7 @@ export interface Shift {
     name:string;
     startTime: string;
     endTime: string;
-    days: DayOfWeek['id'][];
+    days: DayOfWeek[];
     status: Status;
     assignedOfficers?: Officer[];
     lastModified: string;
@@ -46,3 +44,4 @@ export interface OfficerAssignment {
     lastModified?: string;
     notes?: string;
 }
+

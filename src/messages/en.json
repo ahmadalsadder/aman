@@ -1,4 +1,5 @@
 
+
 {
   "Enums": {
     "Status": {
@@ -9,6 +10,15 @@
       "Airport": "Airport",
       "Seaport": "Seaport",
       "Landport": "Landport"
+    },
+    "DayOfWeek": {
+      "monday": "Monday",
+      "tuesday": "Tuesday",
+      "wednesday": "Wednesday",
+      "thursday": "Thursday",
+      "friday": "Friday",
+      "saturday": "Saturday",
+      "sunday": "Sunday"
     }
   },
   "LoginPage": {
@@ -1663,160 +1673,160 @@
     }
   },
   "ShiftManagement": {
-    "pageTitle": "Shift Management",
-    "pageDescription": "Define and manage officer work shifts.",
-    "addShift": "Add Shift",
-    "totalShifts": "Total Shifts",
-    "totalShiftsDesc": "All configured shifts",
-    "activeShifts": "Active Shifts",
-    "activeShiftsDesc": "Currently operational shifts",
-    "inactiveShifts": "Inactive Shifts",
-    "inactiveShiftsDesc": "Currently inactive shifts",
-    "filterTitle": "Search & Filter Shifts",
-    "filterNamePlaceholder": "Shift Name...",
-    "filterStatusPlaceholder": "Status",
-    "filterAllStatuses": "All Statuses",
-    "filterDayPlaceholder": "Day of Week",
-    "reset": "Reset",
-    "search": "Search",
-    "recordsTitle": "Shift Records",
-    "recordsDescription": "A list of all configured shifts in the system.",
+    "pageTitle": "Gestión de Turnos",
+    "pageDescription": "Definir y gestionar los turnos de trabajo de los oficiales.",
+    "addShift": "Añadir Turno",
+    "totalShifts": "Turnos Totales",
+    "totalShiftsDesc": "Todos los turnos configurados",
+    "activeShifts": "Turnos Activos",
+    "activeShiftsDesc": "Turnos actualmente operativos",
+    "inactiveShifts": "Turnos Inactivos",
+    "inactiveShiftsDesc": "Turnos actualmente inactivos",
+    "filterTitle": "Buscar y Filtrar Turnos",
+    "filterNamePlaceholder": "Nombre del Turno...",
+    "filterStatusPlaceholder": "Estado",
+    "filterAllStatuses": "Todos los Estados",
+    "filterDayPlaceholder": "Día de la Semana",
+    "reset": "Restablecer",
+    "search": "Buscar",
+    "recordsTitle": "Registros de Turnos",
+    "recordsDescription": "Una lista de todos los turnos configurados en el sistema.",
     "form": {
-      "addTitle": "Add New Shift",
-      "addDescription": "Define a new work shift for officers.",
-      "editTitle": "Edit Shift",
-      "editDescription": "Editing shift: {name}",
+      "addTitle": "Añadir Nuevo Turno",
+      "addDescription": "Definir un nuevo turno de trabajo para los oficiales.",
+      "editTitle": "Editar Turno",
+      "editDescription": "Editando el turno: {name}",
       "details": {
-        "title": "Shift Details",
-        "description": "Set the primary properties of the shift.",
-        "name": "Shift Name",
-        "namePlaceholder": "e.g., Main Terminal Morning Shift",
-        "startTime": "Start Time",
-        "endTime": "End Time",
-        "status": "Status",
-        "active": "Active",
-        "inactive": "Inactive"
+        "title": "Detalles del Turno",
+        "description": "Establecer las propiedades principales del turno.",
+        "name": "Nombre del Turno",
+        "namePlaceholder": "p. ej., Turno de Mañana Terminal Principal",
+        "startTime": "Hora de Inicio",
+        "endTime": "Hora de Finalización",
+        "status": "Estado",
+        "active": "Activo",
+        "inactive": "Inactivo"
       },
       "operatingDays": {
-        "title": "Operating Days",
-        "description": "Select the days of the week this shift is active."
+        "title": "Días de Operación",
+        "description": "Seleccione los días de la semana en que este turno está activo."
       },
       "common": {
-        "cancel": "Cancel",
-        "save": "Save Changes",
-        "add": "Add Shift"
+        "cancel": "Cancelar",
+        "save": "Guardar Cambios",
+        "add": "Añadir Turno"
       },
       "toast": {
-        "addSuccessTitle": "Shift Added",
-        "addSuccessDesc": "A new shift has been successfully added.",
-        "updateSuccessTitle": "Shift Updated",
-        "updateSuccessDesc": "The shift has been successfully updated.",
-        "errorTitle": "Save Failed",
-        "errorDesc": "There was an error saving the shift data."
+        "addSuccessTitle": "Turno Añadido",
+        "addSuccessDesc": "Se ha añadido un nuevo turno correctamente.",
+        "updateSuccessTitle": "Turno Actualizado",
+        "updateSuccessDesc": "El turno se ha actualizado correctamente.",
+        "errorTitle": "Error al Guardar",
+        "errorDesc": "Hubo un error al guardar los datos del turno."
       }
     }
   },
   "AssignOfficer": {
-    "title": "Assign Officer",
-    "description": "Assign officers to shifts and locations.",
-    "addAssignment": "Add Assignment",
+    "title": "Asignar Oficial",
+    "description": "Asignar oficiales a turnos y ubicaciones.",
+    "addAssignment": "Añadir Asignación",
     "stats": {
-      "total": "Total Assignments",
-      "totalDesc": "All scheduled assignments",
-      "confirmed": "Confirmed Assignments",
-      "confirmedDesc": "Active and confirmed shifts",
-      "pending": "Pending Assignments",
-      "pendingDesc": "Awaiting confirmation"
+      "total": "Asignaciones Totales",
+      "totalDesc": "Todas las asignaciones programadas",
+      "confirmed": "Asignaciones Confirmadas",
+      "confirmedDesc": "Turnos activos y confirmados",
+      "pending": "Asignaciones Pendientes",
+      "pendingDesc": "Pendientes de confirmación"
     },
     "filter": {
-      "title": "Search & Filter Assignments",
-      "officer": "Officer",
-      "port": "Port",
+      "title": "Buscar y Filtrar Asignaciones",
+      "officer": "Oficial",
+      "port": "Puerto",
       "terminal": "Terminal",
-      "zone": "Zone",
-      "shift": "Shift",
-      "assignmentDate": "Assignment Date",
-      "reset": "Reset",
-      "search": "Search"
+      "zone": "Zona",
+      "shift": "Turno",
+      "assignmentDate": "Fecha de Asignación",
+      "reset": "Restablecer",
+      "search": "Buscar"
     },
     "table": {
-      "title": "Officer Assignments",
-      "description": "A list of all officer assignments in the system.",
-      "officer": "Officer",
-      "date": "Date",
-      "shift": "Shift",
-      "port": "Port",
+      "title": "Asignaciones de Oficiales",
+      "description": "Una lista de todas las asignaciones de oficiales en el sistema.",
+      "officer": "Oficial",
+      "date": "Fecha",
+      "shift": "Turno",
+      "port": "Puerto",
       "terminal": "Terminal",
-      "zone": "Zone",
-      "status": "Status"
+      "zone": "Zona",
+      "status": "Estado"
     },
     "actions": {
-      "view": "View details",
-      "edit": "Edit assignment",
-      "delete": "Delete"
+      "view": "Ver detalles",
+      "edit": "Editar asignación",
+      "delete": "Eliminar"
     },
     "detailsSheet": {
-      "title": "Assignment Details",
-      "description": "Assignment for {officerName} on {date}",
-      "officer": "Officer",
-      "status": "Status",
-      "date": "Date",
-      "shift": "Shift",
-      "port": "Port",
+      "title": "Detalles de la Asignación",
+      "description": "Asignación para {officerName} el {date}",
+      "officer": "Oficial",
+      "status": "Estado",
+      "date": "Fecha",
+      "shift": "Turno",
+      "port": "Puerto",
       "terminal": "Terminal",
-      "zone": "Zone",
-      "close": "Close"
+      "zone": "Zona",
+      "close": "Cerrar"
     },
     "deleteDialog": {
-      "title": "Are you sure?",
-      "description": "This action cannot be undone. This will permanently delete the assignment for {officerName}.",
-      "cancel": "Cancel",
-      "confirm": "Yes, Delete"
+      "title": "¿Está seguro?",
+      "description": "Esta acción no se puede deshacer. Esto eliminará permanentemente la asignación para {officerName}.",
+      "cancel": "Cancelar",
+      "confirm": "Sí, Eliminar"
     },
     "toast": {
-      "loadErrorTitle": "Failed to Load Data",
-      "loadErrorDesc": "Could not fetch necessary page data. Please try again later.",
-      "deleteSuccessTitle": "Assignment Deleted",
-      "deleteSuccessDesc": "The officer assignment has been successfully deleted.",
-      "deleteErrorTitle": "Delete Failed",
-      "addSuccessTitle": "Assignment Added",
-      "addSuccessDesc": "New assignment has been successfully created.",
-      "updateSuccessTitle": "Assignment Updated",
-      "updateSuccessDesc": "The assignment has been successfully updated.",
-      "errorTitle": "Operation Failed",
-      "errorDesc": "An error occurred. Please try again."
+      "loadErrorTitle": "Error al Cargar Datos",
+      "loadErrorDesc": "No se pudieron obtener los datos necesarios para la página. Por favor, inténtelo de nuevo más tarde.",
+      "deleteSuccessTitle": "Asignación Eliminada",
+      "deleteSuccessDesc": "La asignación del oficial ha sido eliminada exitosamente.",
+      "deleteErrorTitle": "Error al Eliminar",
+      "addSuccessTitle": "Asignación Añadida",
+      "addSuccessDesc": "Se ha creado una nueva asignación exitosamente.",
+      "updateSuccessTitle": "Asignación Actualizada",
+      "updateSuccessDesc": "La asignación ha sido actualizada exitosamente.",
+      "errorTitle": "Operación Fallida",
+      "errorDesc": "Ocurrió un error. Por favor, inténtelo de nuevo."
     },
     "form": {
-        "addTitle": "Add New Assignment",
-        "addDescription": "Schedule an officer for a specific shift and location.",
-        "editTitle": "Edit Assignment",
-        "editDescription": "Update an existing officer assignment.",
+        "addTitle": "Añadir Nueva Asignación",
+        "addDescription": "Programar a un oficial para un turno y ubicación específicos.",
+        "editTitle": "Editar Asignación",
+        "editDescription": "Actualizar una asignación de oficial existente.",
         "common": {
-            "cancel": "Cancel",
-            "save": "Save Changes",
-            "add": "Add Assignment"
+            "cancel": "Cancelar",
+            "save": "Guardar Cambios",
+            "add": "Añadir Asignación"
         },
         "details": {
-            "title": "Assignment Details",
-            "description": "Select the officer, location, and shift.",
-            "officer": "Officer",
-            "selectOfficer": "Select an officer...",
-            "date": "Date",
-            "pickDate": "Pick a date",
-            "port": "Port",
-            "selectPort": "Select a port...",
+            "title": "Detalles de la Asignación",
+            "description": "Seleccione el oficial, la ubicación y el turno.",
+            "officer": "Oficial",
+            "selectOfficer": "Seleccione un oficial...",
+            "date": "Fecha",
+            "pickDate": "Seleccione una fecha",
+            "port": "Puerto",
+            "selectPort": "Seleccione un puerto...",
             "terminal": "Terminal",
-            "selectTerminal": "Select a terminal...",
-            "zone": "Zone",
-            "selectZone": "Select a zone...",
-            "shift": "Shift",
-            "selectShift": "Select a shift...",
-            "status": "Status",
-            "pending": "Pending",
-            "confirmed": "Confirmed",
-            "cancelled": "Cancelled",
-            "notes": "Notes",
-            "notesPlaceholder": "Add any relevant notes..."
+            "selectTerminal": "Seleccione una terminal...",
+            "zone": "Zona",
+            "selectZone": "Seleccione una zona...",
+            "shift": "Turno",
+            "selectShift": "Seleccione un turno...",
+            "status": "Estado",
+            "pending": "Pendiente",
+            "confirmed": "Confirmado",
+            "cancelled": "Cancelado",
+            "notes": "Notas",
+            "notesPlaceholder": "Añada cualquier nota relevante..."
         }
     }
   }

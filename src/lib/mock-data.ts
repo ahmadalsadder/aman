@@ -1,8 +1,9 @@
 
 
-import { Status, PortType, RiskLevel, PassengerStatus, Gender } from './enums';
+
+import { Status, PortType, RiskLevel, PassengerStatus, Gender, DayOfWeek } from './enums';
 import type { Passenger, Transaction, OfficerDesk, Gate, Media, WhitelistEntry, BlacklistEntry, OfficerAssignment, GateLogEntry } from "@/types/live-processing";
-import type { Shift, DayOfWeek } from "@/types/workload";
+import type { Shift } from "@/types/workload";
 import { Plane, Car, Ship } from "lucide-react";
 import type { Port, Terminal, Zone, Workflow, RiskProfile, User, CountryLanguageMapping, CountryPassportMapping, Machine, SystemMessage } from '@/types';
 
@@ -258,21 +259,11 @@ let mockBlacklist: BlacklistEntry[] = [
     { id: 'BL-002', name: 'Unknown Male', nationality: 'Syrian Arab Republic', reason: 'Attempted use of fraudulent document', category: 'Wanted', dateAdded: '2023-04-22', addedBy: 'Admin User', notes: 'Subject fled during secondary screening.', passportNumber: 'S12398765' },
 ];
 
-export const daysOfWeek: DayOfWeek[] = [
-    { id: 'monday', label: 'Monday' },
-    { id: 'tuesday', label: 'Tuesday' },
-    { id: 'wednesday', label: 'Wednesday' },
-    { id: 'thursday', label: 'Thursday' },
-    { id: 'friday', label: 'Friday' },
-    { id: 'saturday', label: 'Saturday' },
-    { id: 'sunday', label: 'Sunday' },
-];
-
 let mockShifts: Shift[] = [
-    { id: 'S001', name: 'Morning Shift', startTime: '08:00', endTime: '16:00', days: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'], status: 'Active', lastModified: '2023-05-20' },
-    { id: 'S002', name: 'Evening Shift', startTime: '16:00', endTime: '00:00', days: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'], status: 'Active', lastModified: '2023-05-20' },
-    { id: 'S003', name: 'Night Shift', startTime: '00:00', endTime: '08:00', days: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'], status: 'Inactive', lastModified: '2023-05-18' },
-    { id: 'S004', name: 'Weekend Day', startTime: '09:00', endTime: '21:00', days: ['saturday', 'sunday'], status: 'Active', lastModified: '2023-05-19' },
+    { id: 'S001', name: 'Morning Shift', startTime: '08:00', endTime: '16:00', days: [DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday], status: Status.Active, lastModified: '2023-05-20' },
+    { id: 'S002', name: 'Evening Shift', startTime: '16:00', endTime: '00:00', days: [DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday], status: Status.Active, lastModified: '2023-05-20' },
+    { id: 'S003', name: 'Night Shift', startTime: '00:00', endTime: '08:00', days: [DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday], status: Status.Inactive, lastModified: '2023-05-18' },
+    { id: 'S004', name: 'Weekend Day', startTime: '09:00', endTime: '21:00', days: [DayOfWeek.Saturday, DayOfWeek.Sunday], status: Status.Active, lastModified: '2023-05-19' },
 ];
 
 let mockOfficerAssignments: OfficerAssignment[] = [
@@ -410,3 +401,4 @@ export const setMockGateLogs = (newGateLogs: GateLogEntry[]) => {
 export const mockData = {
     // All specific data objects have been moved to mock-api.ts
 };
+

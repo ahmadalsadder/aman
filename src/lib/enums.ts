@@ -1,4 +1,5 @@
 
+
 export enum Status {
     Active = 'Active',
     Inactive = 'Inactive',
@@ -34,3 +35,14 @@ export enum VisaType {
     Work = 'Work',
     Residency = 'Residency',
 }
+
+export enum DayOfWeek {
+    Monday = 'monday',
+    Tuesday = 'tuesday',
+    Wednesday = 'wednesday',
+    Thursday = 'thursday',
+    Friday = 'friday',
+    Saturday = 'saturday',
+    Sunday = 'sunday',
+}
+

@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetFooter } from '@/components/ui/sheet';
@@ -7,7 +8,7 @@ import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import type { Shift } from '@/types';
 import { cn } from '@/lib/utils';
-import { daysOfWeek } from '@/lib/mock-data';
+import { useTranslations } from 'next-intl';
 
 const statusColors: { [key: string]: string } = {
   Active: 'bg-green-500/20 text-green-700 border-green-500/30',
@@ -29,6 +30,7 @@ interface ShiftDetailsSheetProps {
 }
 
 export function ShiftDetailsSheet({ shift, isOpen, onOpenChange }: ShiftDetailsSheetProps) {
+    const tEnum = useTranslations('Enums');
     if (!shift) return null;
 
     return (
@@ -40,7 +42,7 @@ export function ShiftDetailsSheet({ shift, isOpen, onOpenChange }: ShiftDetailsS
                 </SheetHeader>
                 <div className="py-4 space-y-2">
                     <Separator />
-                    <DetailItem label="Status"><Badge variant="outline" className={cn(statusColors[shift.status])}>{shift.status}</Badge></DetailItem>
+                    <DetailItem label="Status"><Badge variant="outline" className={cn(statusColors[shift.status])}>{tEnum(`Status.${shift.status}`)}</Badge></DetailItem>
                     <DetailItem label="Start Time" value={shift.startTime} />
                     <DetailItem label="End Time" value={shift.endTime} />
                     <Separator />
@@ -48,7 +50,7 @@ export function ShiftDetailsSheet({ shift, isOpen, onOpenChange }: ShiftDetailsS
                         <p className="text-sm text-muted-foreground">Operating Days</p>
                         <div className="flex flex-wrap gap-2">
                             {shift.days.map(dayId => {
-                                const dayLabel = daysOfWeek.find(d => d.id === dayId)?.label;
+                                const dayLabel = tEnum(`DayOfWeek.${dayId}`);
                                 return <Badge key={dayId} variant="secondary">{dayLabel}</Badge>
                             })}
                         </div>

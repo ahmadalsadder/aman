@@ -66,6 +66,7 @@ export const allPermissions: Permission[] = [
     'configuration:zones:view', 'configuration:zones:create', 'configuration:zones:edit', 'configuration:zones:delete',
     'configuration:machines:view', 'configuration:machines:create', 'configuration:machines:edit', 'configuration:machines:delete',
     'configuration:system-messages:view', 'configuration:system-messages:create', 'configuration:system-messages:edit', 'configuration:system-messages:delete',
+    'configuration:lookups:view', 'configuration:lookups:create', 'configuration:lookups:edit', 'configuration:lookups:delete',
     
     'airport:transactions:view', 'egate:transactions:view',
     'landport:transactions:view',

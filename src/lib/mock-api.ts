@@ -94,6 +94,7 @@ const users: User[] = [
         'configuration:zones:view', 'configuration:zones:create', 'configuration:zones:edit', 'configuration:zones:delete',
         'configuration:machines:view', 'configuration:machines:create', 'configuration:machines:edit', 'configuration:machines:delete',
         'configuration:system-messages:view', 'configuration:system-messages:create', 'configuration:system-messages:edit', 'configuration:system-messages:delete',
+        'configuration:lookups:view', 'configuration:lookups:create', 'configuration:lookups:edit', 'configuration:lookups:delete'
     ]
   },
   { 
@@ -1396,5 +1397,3 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
 
     return Result.failure([new ApiError('NOT_FOUND', `Mock endpoint ${method} ${endpoint} not found.`)]) as Result<T>;
 }
-
-

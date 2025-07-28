@@ -68,7 +68,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = async (email: string, password: string) => {
     const loggedInUser = await mockLogin(email, password);
     setUser(loggedInUser);
-    setCookie(AUTH_COOKIE_NAME, JSON.stringify(loggedInUser), 7);
+    setCookie(AUTH_COOKIE_NAME, encodeURIComponent(JSON.stringify(loggedInUser)), 7);
   };
 
   const logout = () => {

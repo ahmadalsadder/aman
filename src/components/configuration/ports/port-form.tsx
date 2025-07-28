@@ -10,12 +10,13 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Combobox } from '@/components/ui/combobox';
-import type { Port, PortType } from '@/types/configuration';
+import type { Port } from '@/types/configuration';
 import { useRouter } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { Textarea } from '@/components/ui/textarea';
 import { countries } from '@/lib/countries';
+import { Status, PortType } from '@/lib/enums';
 
 const formSchema = z.object({
   name: z.string().min(3, { message: "Port name must be at least 3 characters." }),
@@ -23,8 +24,8 @@ const formSchema = z.object({
   localizedName: z.string().optional(),
   city: z.string().min(2, { message: "City is required." }),
   country: z.string().min(1, "Country is required."),
-  type: z.enum(['Airport', 'Seaport', 'Landport']),
-  status: z.enum(['Active', 'Inactive']),
+  type: z.nativeEnum(PortType),
+  status: z.nativeEnum(Status),
   address: z.string().optional(),
   localizedAddress: z.string().optional(),
 });
@@ -40,6 +41,7 @@ interface PortFormProps {
 export function PortForm({ portToEdit, onSave, isLoading }: PortFormProps) {
   const router = useRouter();
   const t = useTranslations('Configuration.Ports.form');
+  const tEnum = useTranslations('Enums');
   
   const form = useForm<PortFormValues>({
     resolver: zodResolver(formSchema),
@@ -49,8 +51,8 @@ export function PortForm({ portToEdit, onSave, isLoading }: PortFormProps) {
       localizedName: '',
       city: '',
       country: '',
-      type: 'Airport',
-      status: 'Active',
+      type: PortType.Airport,
+      status: Status.Active,
       address: '',
       localizedAddress: '',
     },
@@ -76,8 +78,8 @@ export function PortForm({ portToEdit, onSave, isLoading }: PortFormProps) {
                     <FormField control={form.control} name="localizedAddress" render={({ field }) => ( <FormItem><FormLabel>{t('details.localizedAddress')}</FormLabel><FormControl><Textarea placeholder={t('details.localizedAddressPlaceholder')} {...field} /></FormControl><FormMessage /></FormItem> )} />
                 </div>
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <FormField control={form.control} name="type" render={({ field }) => ( <FormItem><FormLabel required>{t('details.type')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue /></SelectTrigger></FormControl><SelectContent><SelectItem value="Airport">Airport</SelectItem><SelectItem value="Seaport">Seaport</SelectItem><SelectItem value="Landport">Landport</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
-                    <FormField control={form.control} name="status" render={({ field }) => ( <FormItem><FormLabel required>{t('details.status')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue /></SelectTrigger></FormControl><SelectContent><SelectItem value="Active">Active</SelectItem><SelectItem value="Inactive">Inactive</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
+                    <FormField control={form.control} name="type" render={({ field }) => ( <FormItem><FormLabel required>{t('details.type')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue /></SelectTrigger></FormControl><SelectContent>{Object.values(PortType).map(type => <SelectItem key={type} value={type}>{tEnum(`PortType.${type}`)}</SelectItem>)}</SelectContent></Select><FormMessage /></FormItem> )} />
+                    <FormField control={form.control} name="status" render={({ field }) => ( <FormItem><FormLabel required>{t('details.status')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue /></SelectTrigger></FormControl><SelectContent>{Object.values(Status).map(s => <SelectItem key={s} value={s}>{tEnum(`Status.${s}`)}</SelectItem>)}</SelectContent></Select><FormMessage /></FormItem> )} />
                 </div>
             </CardContent>
         </Card>

@@ -53,7 +53,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         try {
             const storedUser = getCookie(AUTH_COOKIE_NAME);
             if (storedUser) {
-                setUser(JSON.parse(decodeURIComponent(storedUser)));
+                setUser(JSON.parse(storedUser));
             }
         } catch (error) {
             console.error('Failed to parse auth data from cookie', error);
@@ -68,7 +68,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = async (email: string, password: string) => {
     const loggedInUser = await mockLogin(email, password);
     setUser(loggedInUser);
-    setCookie(AUTH_COOKIE_NAME, encodeURIComponent(JSON.stringify(loggedInUser)), 7);
+    setCookie(AUTH_COOKIE_NAME, JSON.stringify(loggedInUser), 7);
   };
 
   const logout = () => {

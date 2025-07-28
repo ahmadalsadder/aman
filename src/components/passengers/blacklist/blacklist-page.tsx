@@ -28,6 +28,7 @@ import { useRouter } from 'next/navigation';
 import type { Module, Permission } from '@/types';
 import { useAuth } from '@/hooks/use-auth';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
+import { useTranslations } from 'next-intl';
 
 const categoryColors: { [key: string]: string } = {
   'No-Fly': 'bg-red-500/20 text-red-700 border-red-500/30',
@@ -52,6 +53,8 @@ interface BlacklistPageProps {
 export function BlacklistPage({ module, blacklist, loading, onDeleteEntry }: BlacklistPageProps) {
   const router = useRouter();
   const { hasPermission } = useAuth();
+  const t = useTranslations('BlacklistPage');
+  const tNav = useTranslations('Navigation');
   
   const canCreate = useMemo(() => hasPermission([`${module}:blacklist:create` as Permission]), [hasPermission, module]);
   const canEdit = useMemo(() => hasPermission([`${module}:blacklist:edit` as Permission]), [hasPermission, module]);
@@ -99,33 +102,33 @@ export function BlacklistPage({ module, blacklist, loading, onDeleteEntry }: Bla
   }, [blacklist]);
 
   const columns: ColumnDef<BlacklistEntry>[] = [
-    { accessorKey: 'id', header: 'ID' },
-    { accessorKey: 'name', header: 'Name' },
-    { accessorKey: 'nationality', header: 'Nationality' },
-    { accessorKey: 'dateAdded', header: 'Date Added' },
-    { accessorKey: 'category', header: 'Category', cell: ({ row }) => <Badge variant="outline" className={cn(categoryColors[row.original.category])}>{row.original.category}</Badge> },
+    { accessorKey: 'id', header: t('table.id') },
+    { accessorKey: 'name', header: t('table.name') },
+    { accessorKey: 'nationality', header: t('table.nationality') },
+    { accessorKey: 'dateAdded', header: t('table.dateAdded') },
+    { accessorKey: 'category', header: t('table.category'), cell: ({ row }) => <Badge variant="outline" className={cn(categoryColors[row.original.category])}>{row.original.category}</Badge> },
     { id: 'actions', cell: ({ row }) => (
         <DropdownMenu>
-          <DropdownMenuTrigger asChild><Button variant="ghost" className="h-8 w-8 p-0"><span className="sr-only">Open menu</span><MoreHorizontal className="h-4 w-4" /></Button></DropdownMenuTrigger>
+          <DropdownMenuTrigger asChild><Button variant="ghost" className="h-8 w-8 p-0"><span className="sr-only">{t('actions.openMenu')}</span><MoreHorizontal className="h-4 w-4" /></Button></DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => setEntryToView(row.original)}><Eye className="mr-2 h-4 w-4 text-primary" /><span>View details</span></DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setEntryToView(row.original)}><Eye className="mr-2 h-4 w-4 text-primary" /><span>{t('actions.viewDetails')}</span></DropdownMenuItem>
             {row.original.passengerId && (
                 <DropdownMenuItem asChild>
                     <Link href={`/${module}/passengers/edit/${row.original.passengerId}`}>
                         <User className="mr-2 h-4 w-4 text-primary" />
-                        <span>View Passenger</span>
+                        <span>{t('actions.viewPassenger')}</span>
                     </Link>
                 </DropdownMenuItem>
             )}
              {canEdit && (
                 <DropdownMenuItem onClick={() => router.push(`/${module}/blacklist/edit/${row.original.id}`)}>
                     <FilePenLine className="mr-2 h-4 w-4 text-yellow-500" />
-                    <span>Edit Entry</span>
+                    <span>{t('actions.editEntry')}</span>
                 </DropdownMenuItem>
              )}
             {canDelete && <>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="text-destructive focus:text-destructive" onClick={() => setEntryToDelete(row.original)}><Trash2 className="mr-2 h-4 w-4" /><span>Delete</span></DropdownMenuItem>
+                <DropdownMenuItem className="text-destructive focus:text-destructive" onClick={() => setEntryToDelete(row.original)}><Trash2 className="mr-2 h-4 w-4" /><span>{t('actions.delete')}</span></DropdownMenuItem>
             </>}
           </DropdownMenuContent>
         </DropdownMenu>
@@ -138,19 +141,19 @@ export function BlacklistPage({ module, blacklist, loading, onDeleteEntry }: Bla
       <Breadcrumb>
         <BreadcrumbList>
             <BreadcrumbItem>
-                <BreadcrumbLink href={`/${module}/dashboard`} icon={LayoutDashboard}>Dashboard</BreadcrumbLink>
+                <BreadcrumbLink href={`/${module}/dashboard`} icon={LayoutDashboard}>{tNav('dashboard')}</BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-                <BreadcrumbPage icon={ShieldOff}>Passenger Blacklist</BreadcrumbPage>
+                <BreadcrumbPage icon={ShieldOff}>{t('pageTitle')}</BreadcrumbPage>
             </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <GradientPageHeader title="Passenger Blacklist" description="Manage individuals flagged for security risks." icon={ShieldOff}>
+      <GradientPageHeader title={t('pageTitle')} description={t('pageDescription')} icon={ShieldOff}>
         {canCreate && (
             <Button asChild className="bg-white font-semibold text-primary hover:bg-white/90">
                 <Link href={`/${module}/blacklist/add`}>
-                    <PlusCircle className="mr-2 h-4 w-4" /> Add to Blacklist
+                    <PlusCircle className="mr-2 h-4 w-4" /> {t('addEntry')}
                 </Link>
             </Button>
         )}
@@ -160,32 +163,32 @@ export function BlacklistPage({ module, blacklist, loading, onDeleteEntry }: Bla
         <Collapsible>
           <CollapsibleTrigger asChild>
             <div className="flex w-full cursor-pointer items-center justify-between p-4">
-              <div className="flex items-center gap-3"><Filter className="h-5 w-5" /><h2 className="text-lg font-semibold">Search & Filter Blacklist</h2></div>
+              <div className="flex items-center gap-3"><Filter className="h-5 w-5" /><h2 className="text-lg font-semibold">{t('filters.title')}</h2></div>
               <ChevronDown className="h-5 w-5 transition-transform duration-300 [&[data-state=open]]:rotate-180" />
             </div>
           </CollapsibleTrigger>
           <CollapsibleContent>
             <div className="p-6 pt-0">
               <div className="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2 md:grid-cols-3">
-                <Input placeholder="Passenger Name..." value={filters.name} onChange={(e) => handleUpdateFilter('name', e.target.value)} />
+                <Input placeholder={t('filters.namePlaceholder')} value={filters.name} onChange={(e) => handleUpdateFilter('name', e.target.value)} />
                 <Select value={filters.nationality} onValueChange={(value) => handleUpdateFilter('nationality', value === 'all' ? '' : value)}>
-                  <SelectTrigger><SelectValue placeholder="Nationality" /></SelectTrigger>
+                  <SelectTrigger><SelectValue placeholder={t('filters.nationalityPlaceholder')} /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Nationalities</SelectItem>
+                    <SelectItem value="all">{t('filters.allNationalities')}</SelectItem>
                     {uniqueNationalities.map(n => <SelectItem key={n} value={n}>{n}</SelectItem>)}
                   </SelectContent>
                 </Select>
                 <Select value={filters.category} onValueChange={(value) => handleUpdateFilter('category', value === 'all' ? '' : value)}>
-                  <SelectTrigger><SelectValue placeholder="Category" /></SelectTrigger>
+                  <SelectTrigger><SelectValue placeholder={t('filters.categoryPlaceholder')} /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Categories</SelectItem>
+                    <SelectItem value="all">{t('filters.allCategories')}</SelectItem>
                     {uniqueCategories.map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}
                   </SelectContent>
                 </Select>
               </div>
               <div className="mt-6 flex justify-end gap-2">
-                <Button onClick={clearFilters} variant="outline"><X className="mr-2 h-4 w-4"/>Reset</Button>
-                <Button onClick={handleSearch}><Search className="mr-2 h-4 w-4"/>Search</Button>
+                <Button onClick={clearFilters} variant="outline"><X className="mr-2 h-4 w-4"/>{t('filters.reset')}</Button>
+                <Button onClick={handleSearch}><Search className="mr-2 h-4 w-4"/>{t('filters.search')}</Button>
               </div>
             </div>
           </CollapsibleContent>
@@ -193,7 +196,7 @@ export function BlacklistPage({ module, blacklist, loading, onDeleteEntry }: Bla
       </Card>
       
       <Card>
-        <CardHeader><CardTitle>Blacklist Records</CardTitle><CardDescription>A list of all blacklisted individuals in the system.</CardDescription></CardHeader>
+        <CardHeader><CardTitle>{t('recordsTitle')}</CardTitle><CardDescription>{t('recordsDescription')}</CardDescription></CardHeader>
         <CardContent>
             <DataTable columns={columns} data={filteredData} filterColumnId="name" hideDefaultFilter />
         </CardContent>

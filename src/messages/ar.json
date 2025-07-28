@@ -209,36 +209,37 @@
   },
   "ControlRoom": {
     "gateLog": {
-        "title": "Gate Event Log",
-        "description": "A real-time feed of all E-Gate events.",
+        "title": "سجل أحداث البوابة",
+        "description": "موجز في الوقت الفعلي لجميع أحداث البوابات الإلكترونية.",
         "nav": {
-            "dashboard": "Dashboard",
-            "gateLog": "Gate Log"
+            "dashboard": "لوحة التحكم",
+            "gateLog": "سجل البوابة"
         },
         "filters": {
-            "title": "Search & Filter Logs",
-            "gateNamePlaceholder": "Gate Name...",
-            "eventTypePlaceholder": "Event Type",
-            "fromDate": "From Date",
-            "toDate": "To Date",
-            "reset": "Reset",
-            "search": "Search"
+            "title": "بحث وتصفية السجلات",
+            "gateNamePlaceholder": "اسم البوابة...",
+            "eventTypePlaceholder": "نوع الحدث",
+            "allTypes": "جميع الأنواع",
+            "fromDate": "من تاريخ",
+            "toDate": "إلى تاريخ",
+            "reset": "إعادة تعيين",
+            "search": "بحث"
         },
         "records": {
-            "title": "Log Records",
-            "description": "Detailed list of all gate-related events."
+            "title": "سجلات الدخول",
+            "description": "قائمة مفصلة بجميع الأحداث المتعلقة بالبوابة."
         },
         "table": {
-            "timestamp": "Timestamp",
-            "gate": "Gate",
-            "eventType": "Event Type",
-            "status": "Status",
-            "description": "Description",
-            "actor": "Actor"
+            "timestamp": "طابع زمني",
+            "gate": "بوابة",
+            "eventType": "نوع الحدث",
+            "status": "الحالة",
+            "description": "الوصف",
+            "actor": "الجهة الفاعلة"
         },
         "accessDenied": {
-            "title": "Access Denied",
-            "description": "You do not have permission to view the gate log."
+            "title": "تم رفض الوصول",
+            "description": "ليس لديك إذن لعرض سجل البوابة."
         }
     }
   },
@@ -258,66 +259,66 @@
   },
   "Configuration": {
     "Dashboard": {
-      "title": "Dashboard",
-      "description": "Manage system-wide settings.",
+      "title": "لوحة التحكم",
+      "description": "إدارة إعدادات النظام على مستوى المنظومة.",
       "accessDenied": {
-        "title": "Access Denied",
-        "description": "You do not have permission to view the Configuration module."
+        "title": "تم رفض الوصول",
+        "description": "ليس لديك صلاحية لعرض وحدة التكوين."
       },
       "welcome": {
-        "title": "Welcome to the Configuration Module",
-        "description": "This is the central hub for managing all aspects of the Guardian Gate system.",
-        "content": "Use the navigation on the left to manage ports, terminals, machines, system messages, and more. These settings ensure that all modules operate smoothly according to your operational requirements."
+        "title": "مرحبًا بك في وحدة التكوين",
+        "description": "هذا هو المركز الرئيسي لإدارة جميع جوانب نظام بوابة الحماية.",
+        "content": "استخدم التنقل على اليسار لإدارة الموانئ، المحطات، الأجهزة، رسائل النظام، وأكثر من ذلك. تضمن هذه الإعدادات أن تعمل جميع الوحدات بسلاسة وفقًا لمتطلبات التشغيل الخاصة بك."
       }
     },
     "CountryLanguage": {
-      "pageTitle": "Country Language Mapping",
-      "pageDescription": "Assign a primary language for each country for localized content.",
-      "saveChanges": "Save Changes",
+      "pageTitle": "تعيين لغة البلد",
+      "pageDescription": "قم بتعيين لغة أساسية لكل بلد للمحتوى المترجم.",
+      "saveChanges": "حفظ التغييرات",
       "table": {
-        "title": "Language Assignments",
-        "description": "Select the default language to use for media and messages for each country.",
-        "country": "Country",
-        "assignedLanguage": "Assigned Language",
-        "selectLanguage": "Select language"
+        "title": "تعيينات اللغة",
+        "description": "حدد اللغة الافتراضية لاستخدامها في الوسائط والرسائل لكل بلد.",
+        "country": "البلد",
+        "assignedLanguage": "اللغة المعينة",
+        "selectLanguage": "اختر لغة"
       },
       "toast": {
-        "accessDeniedTitle": "Access Denied",
-        "accessDeniedDesc": "You do not have permission to save changes.",
-        "saveSuccessTitle": "Mappings Saved",
-        "saveSuccessDesc": "Country to language mappings have been successfully updated.",
-        "saveErrorTitle": "Save Failed",
-        "saveErrorDesc": "There was an error saving the mapping data."
+        "accessDeniedTitle": "تم رفض الوصول",
+        "accessDeniedDesc": "ليس لديك صلاحية لحفظ التغييرات.",
+        "saveSuccessTitle": "تم حفظ التعيينات",
+        "saveSuccessDesc": "تم تحديث تعيينات البلد إلى اللغة بنجاح.",
+        "saveErrorTitle": "فشل الحفظ",
+        "saveErrorDesc": "حدث خطأ أثناء حفظ بيانات التعيين."
       },
       "accessDenied": {
-        "title": "Access Denied",
-        "description": "You do not have permission to view this page."
+        "title": "تم رفض الوصول",
+        "description": "ليس لديك صلاحية لعرض هذه الصفحة."
       }
     },
     "CountryPassport": {
-      "pageTitle": "Country Passport Mapping",
-      "pageDescription": "Assign the passport type for each country to determine required checks.",
-      "saveChanges": "Save Changes",
-      "ePassport": "E-Passport",
-      "normal": "Normal",
+      "pageTitle": "تعيين جواز سفر البلد",
+      "pageDescription": "قم بتعيين نوع جواز السفر لكل بلد لتحديد الفحوصات المطلوبة.",
+      "saveChanges": "حفظ التغييرات",
+      "ePassport": "جواز سفر إلكتروني",
+      "normal": "عادي",
       "table": {
-        "title": "Passport Type Assignments",
-        "description": "Select the default passport type used by each country.",
-        "country": "Country",
-        "assignedType": "Assigned Passport Type",
-        "selectType": "Select type"
+        "title": "تعيينات نوع جواز السفر",
+        "description": "حدد نوع جواز السفر الافتراضي المستخدم من قبل كل بلد.",
+        "country": "البلد",
+        "assignedType": "نوع جواز السفر المعين",
+        "selectType": "اختر النوع"
       },
       "toast": {
-        "accessDeniedTitle": "Access Denied",
-        "accessDeniedDesc": "You do not have permission to save changes.",
-        "saveSuccessTitle": "Mappings Saved",
-        "saveSuccessDesc": "Country to passport type mappings have been successfully updated.",
-        "saveErrorTitle": "Save Failed",
-        "saveErrorDesc": "There was an error saving the mapping data."
+        "accessDeniedTitle": "تم رفض الوصول",
+        "accessDeniedDesc": "ليس لديك صلاحية لحفظ التغييرات.",
+        "saveSuccessTitle": "تم حفظ التعيينات",
+        "saveSuccessDesc": "تم تحديث تعيينات نوع جواز السفر حسب البلد بنجاح.",
+        "saveErrorTitle": "فشل الحفظ",
+        "saveErrorDesc": "حدث خطأ أثناء حفظ بيانات التعيين."
       },
       "accessDenied": {
-        "title": "Access Denied",
-        "description": "You do not have permission to view this page."
+        "title": "تم رفض الوصول",
+        "description": "ليس لديك صلاحية لعرض هذه الصفحة."
       }
     },
     "Ports": {
@@ -465,6 +466,19 @@
         "deactivate": "إلغاء التنشيط",
         "activate": "تنشيط",
         "delete": "حذف"
+      },
+      "toast": {
+        "deleteSuccessTitle": "تم حذف المحطة",
+        "deleteSuccessDesc": "تم حذف المحطة بنجاح.",
+        "deleteErrorTitle": "فشل الحذف",
+        "deleteErrorDesc": "لا يمكن حذف المحطة.",
+        "statusUpdateTitle": "تم تحديث الحالة",
+        "statusUpdateDesc": "تم تحديث حالة المحطة {name} إلى {status}.",
+        "statusUpdateErrorTitle": "فشل تحديث الحالة"
+      },
+      "accessDenied": {
+        "title": "تم رفض الوصول",
+        "description": "ليس لديك إذن لعرض هذه الصفحة."
       },
       "detailsSheet": {
         "description": "محطة في {portName}",
@@ -1540,6 +1554,45 @@
     }
   },
    "BlacklistPage": {
+    "pageTitle": "Lista Negra de Pasajeros",
+    "pageDescription": "Gestionar individuos marcados por riesgos de seguridad.",
+    "addEntry": "Añadir a la Lista Negra",
+    "accessDenied": {
+      "title": "Acceso Denegado",
+      "description": "No tiene permiso para ver la lista negra de este módulo."
+    },
+    "filters": {
+      "title": "Buscar y Filtrar Lista Negra",
+      "namePlaceholder": "Nombre del Pasajero...",
+      "nationalityPlaceholder": "Nacionalidad",
+      "allNationalities": "Todas las Nacionalidades",
+      "categoryPlaceholder": "Categoría",
+      "allCategories": "Todas las Categorías",
+      "reset": "Restablecer",
+      "search": "Buscar"
+    },
+    "recordsTitle": "Registros de la Lista Negra",
+    "recordsDescription": "Una lista de todos los individuos en la lista negra del sistema.",
+    "table": {
+      "id": "ID",
+      "name": "Nombre",
+      "nationality": "Nacionalidad",
+      "dateAdded": "Fecha de Adición",
+      "category": "Categoría"
+    },
+    "actions": {
+      "openMenu": "Abrir menú",
+      "viewDetails": "Ver detalles",
+      "viewPassenger": "Ver Pasajero",
+      "editEntry": "Editar Entrada",
+      "delete": "Eliminar"
+    },
+    "toast": {
+      "deleteSuccessTitle": "Entrada Eliminada",
+      "deleteSuccessDesc": "La entrada de la lista negra ha sido eliminada permanentemente.",
+      "deleteErrorTitle": "Error al Eliminar",
+      "deleteErrorDesc": "Hubo un error al eliminar la entrada de la lista negra."
+    },
     "form": {
         "addTitle": "Add to Blacklist",
         "addDescription": "Flag an individual for security risks.",
@@ -1756,5 +1809,3 @@
     }
   }
 }
-
-    

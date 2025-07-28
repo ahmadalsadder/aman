@@ -220,6 +220,7 @@
             "title": "Buscar y Filtrar Registros",
             "gateNamePlaceholder": "Nombre de la Puerta...",
             "eventTypePlaceholder": "Tipo de Evento",
+            "allTypes": "Todos los Tipos",
             "fromDate": "Desde Fecha",
             "toDate": "Hasta Fecha",
             "reset": "Restablecer",
@@ -1553,7 +1554,46 @@
         }
     }
   },
-   "BlacklistPage": {
+  "BlacklistPage": {
+    "pageTitle": "Passenger Blacklist",
+    "pageDescription": "Manage individuals flagged for security risks.",
+    "addEntry": "Add to Blacklist",
+    "accessDenied": {
+      "title": "Access Denied",
+      "description": "You do not have permission to view the blacklist for this module."
+    },
+    "filters": {
+      "title": "Search & Filter Blacklist",
+      "namePlaceholder": "Passenger Name...",
+      "nationalityPlaceholder": "Nationality",
+      "allNationalities": "All Nationalities",
+      "categoryPlaceholder": "Category",
+      "allCategories": "All Categories",
+      "reset": "Reset",
+      "search": "Search"
+    },
+    "recordsTitle": "Blacklist Records",
+    "recordsDescription": "A list of all blacklisted individuals in the system.",
+    "table": {
+      "id": "ID",
+      "name": "Name",
+      "nationality": "Nationality",
+      "dateAdded": "Date Added",
+      "category": "Category"
+    },
+    "actions": {
+      "openMenu": "Open menu",
+      "viewDetails": "View details",
+      "viewPassenger": "View Passenger",
+      "editEntry": "Edit Entry",
+      "delete": "Delete"
+    },
+    "toast": {
+      "deleteSuccessTitle": "Entry Deleted",
+      "deleteSuccessDesc": "Blacklist entry has been permanently deleted.",
+      "deleteErrorTitle": "Delete Failed",
+      "deleteErrorDesc": "There was an error deleting the blacklist entry."
+    },
     "form": {
         "addTitle": "Add to Blacklist",
         "addDescription": "Flag an individual for security risks.",
@@ -1770,5 +1810,3 @@
     }
   }
 }
-
-    

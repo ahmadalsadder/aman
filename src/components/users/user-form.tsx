@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useForm, useFieldArray, Controller } from 'react-hook-form';
@@ -67,12 +68,13 @@ export function UserForm({ userToEdit, onSave, isLoading }: UserFormProps) {
 
             <Card className="md:col-span-2">
                 <CardHeader>
-                    <CardTitle>Modules & Permissions</CardTitle>
+                    <CardTitle>Permissions</CardTitle>
                     <CardDescription>Select the modules and specific permissions this user can access.</CardDescription>
                 </CardHeader>
                 <CardContent className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                        <h4 className="font-semibold">Modules</h4>
+                        <h4 className="font-semibold">Port & Module Access</h4>
+                        <p className="text-sm text-muted-foreground">Select all ports and functional modules the user can access.</p>
                         <FormField
                             control={form.control} name="modules"
                             render={() => (
@@ -109,7 +111,8 @@ export function UserForm({ userToEdit, onSave, isLoading }: UserFormProps) {
                         />
                     </div>
                     <div className="space-y-2">
-                        <h4 className="font-semibold">Permissions</h4>
+                        <h4 className="font-semibold">Granular Permissions</h4>
+                        <p className="text-sm text-muted-foreground">Select all specific actions the user can perform.</p>
                         <FormField
                             control={form.control} name="permissions"
                             render={() => (

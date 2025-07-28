@@ -10,12 +10,15 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import type { User, Role, Module, Permission } from '@/types';
+import type { User, Role, Module, Permission, Port } from '@/types';
 import { useRouter } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { allModules, allPermissions } from '@/lib/permissions';
+import { allPermissions } from '@/lib/permissions';
+import { useState, useEffect } from 'react';
+import { api } from '@/lib/api';
+import { Skeleton } from '../ui/skeleton';
 
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters."),
@@ -39,6 +42,20 @@ interface UserFormProps {
 
 export function UserForm({ userToEdit, onSave, isLoading }: UserFormProps) {
   const router = useRouter();
+  const [availablePorts, setAvailablePorts] = useState<Port[]>([]);
+  const [loadingPorts, setLoadingPorts] = useState(true);
+
+  useEffect(() => {
+    const fetchPorts = async () => {
+        setLoadingPorts(true);
+        const result = await api.get<Port[]>('/data/ports/all');
+        if (result.isSuccess && result.data) {
+            setAvailablePorts(result.data);
+        }
+        setLoadingPorts(false);
+    };
+    fetchPorts();
+  }, []);
 
   const form = useForm<UserFormValues>({
     resolver: zodResolver(formSchema),
@@ -74,36 +91,45 @@ export function UserForm({ userToEdit, onSave, isLoading }: UserFormProps) {
                 <CardContent className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div className="space-y-2">
                         <h4 className="font-semibold">Port & Module Access</h4>
-                        <p className="text-sm text-muted-foreground">Select all ports and functional modules the user can access.</p>
+                        <p className="text-sm text-muted-foreground">Select all ports (modules) the user can be assigned to.</p>
                         <FormField
                             control={form.control} name="modules"
                             render={() => (
                             <FormItem>
                                 <ScrollArea className="h-64 rounded-md border p-4">
-                                    {allModules.map((item) => (
-                                    <FormField
-                                        key={item.id} control={form.control} name="modules"
-                                        render={({ field }) => {
-                                        return (
-                                            <FormItem key={item.id} className="flex flex-row items-start space-x-3 space-y-0 mb-4">
-                                            <FormControl>
-                                                <Checkbox
-                                                checked={field.value?.includes(item.id)}
-                                                onCheckedChange={(checked) => {
-                                                    return checked
-                                                    ? field.onChange([...field.value, item.id])
-                                                    : field.onChange(
-                                                        field.value?.filter((value) => value !== item.id)
-                                                    )
-                                                }}
-                                                />
-                                            </FormControl>
-                                            <FormLabel className="font-normal">{item.label}</FormLabel>
-                                            </FormItem>
-                                        )
-                                        }}
-                                    />
-                                    ))}
+                                    {loadingPorts ? (
+                                        <div className="space-y-2">
+                                            <Skeleton className="h-6 w-3/4" />
+                                            <Skeleton className="h-6 w-1/2" />
+                                            <Skeleton className="h-6 w-2/3" />
+                                        </div>
+                                    ) : (
+                                        availablePorts.map((item) => (
+                                        <FormField
+                                            key={item.id} control={form.control} name="modules"
+                                            render={({ field }) => {
+                                            return (
+                                                <FormItem key={item.id} className="flex flex-row items-start space-x-3 space-y-0 mb-4">
+                                                <FormControl>
+                                                    <Checkbox
+                                                    checked={field.value?.includes(item.type.toLowerCase())}
+                                                    onCheckedChange={(checked) => {
+                                                        const valueAsModule = item.type.toLowerCase() as Module;
+                                                        return checked
+                                                        ? field.onChange([...(field.value || []), valueAsModule])
+                                                        : field.onChange(
+                                                            field.value?.filter((value) => value !== valueAsModule)
+                                                        )
+                                                    }}
+                                                    />
+                                                </FormControl>
+                                                <FormLabel className="font-normal">{item.name} ({item.type})</FormLabel>
+                                                </FormItem>
+                                            )
+                                            }}
+                                        />
+                                        ))
+                                    )}
                                 </ScrollArea>
                                 <FormMessage />
                                 </FormItem>

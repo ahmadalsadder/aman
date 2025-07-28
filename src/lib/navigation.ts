@@ -1,6 +1,6 @@
 
 'use client';
-import { Shield, LayoutDashboard, BarChart3, Users, Settings, Activity, Ship, LandPlot, DoorOpen, PieChart, UserCog, RadioTower, Home, Plane, ArrowRightLeft, Monitor, ClipboardList, AlertTriangle, ShieldAlert, BrainCircuit, IdCard, Music, ListChecks, ShieldOff, UserPlus, FilePenLine, CalendarDays, Globe, Languages, Building, MessageSquare, HardDrive, ListOrdered } from 'lucide-react';
+import { Shield, LayoutDashboard, BarChart3, Users, Settings, Activity, Ship, LandPlot, DoorOpen, PieChart, UserCog, RadioTower, Home, Plane, ArrowRightLeft, Monitor, ClipboardList, AlertTriangle, ShieldAlert, BrainCircuit, IdCard, Music, ListChecks, ShieldOff, UserPlus, FilePenLine, CalendarDays, Globe, Languages, Building, MessageSquare, HardDrive, ListOrdered, Library } from 'lucide-react';
 import type { Role, Module, Permission } from '@/types';
 
 export interface NavItem {
@@ -54,6 +54,12 @@ const getModuleSubNav = (module: Module, t: any): NavItem[] => {
                 label: 'Machines',
                 icon: HardDrive,
                 permission: `configuration:machines:view` as Permission,
+            },
+             {
+                href: `${moduleBaseUrl}/lookups`,
+                label: 'Lookups',
+                icon: Library,
+                permission: `configuration:lookups:view` as Permission,
             },
              {
                 href: `${moduleBaseUrl}/country-passport`,

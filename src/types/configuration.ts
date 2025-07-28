@@ -1,6 +1,4 @@
 
-
-
 import { Status, PortType, MachineType, MachineStatus, MovementType, OfficerDeskStatus, SystemMessageCategory } from '@/lib/enums';
 
 export interface Port {
@@ -82,4 +80,26 @@ export interface CountryPassportMapping {
     countryCode: string;
     countryName: string;
     passportType: 'Normal' | 'E-Passport';
+}
+
+export interface LookupItemTranslation {
+    language: 'en' | 'es' | 'ar';
+    value: string;
+}
+
+export interface LookupItem {
+    id: string;
+    lookupId: string;
+    parentId?: string | null;
+    code: string;
+    isEnabled: boolean;
+    translations: LookupItemTranslation[];
+    displayOrder: number;
+}
+
+export interface Lookup {
+    id: string;
+    name: string;
+    description: string;
+    items: LookupItem[];
 }

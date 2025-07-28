@@ -1,17 +1,4 @@
-
 import type { Module, Permission, Role } from '@/types';
-
-export const allModules: { id: Module; label: string }[] = [
-    { id: 'airport', label: 'Airport' },
-    { id: 'landport', label: 'Landport' },
-    { id: 'seaport', label: 'Seaport' },
-    { id: 'egate', label: 'E-Gate' },
-    { id: 'analyst', label: 'Analyst' },
-    { id: 'control-room', label: 'Control Room' },
-    { id: 'configuration', label: 'Configuration' },
-    { id: 'duty-manager', label: 'Duty Manager' },
-    { id: 'shiftsupervisor', label: 'Shift Supervisor' },
-];
 
 export const allPermissions: Permission[] = [
     // Passenger permissions
@@ -115,4 +102,52 @@ export const allPermissions: Permission[] = [
     'airport:transactions:live',
     'landport:transactions:live',
     'seaport:transactions:live',
+];
+
+export const modulePermissions: { id: Module; label: string; permissions: Permission[] }[] = [
+    {
+        id: 'airport',
+        label: 'Airport',
+        permissions: allPermissions.filter(p => p.startsWith('airport:')),
+    },
+    {
+        id: 'landport',
+        label: 'Landport',
+        permissions: allPermissions.filter(p => p.startsWith('landport:')),
+    },
+    {
+        id: 'seaport',
+        label: 'Seaport',
+        permissions: allPermissions.filter(p => p.startsWith('seaport:')),
+    },
+    {
+        id: 'egate',
+        label: 'E-Gate',
+        permissions: allPermissions.filter(p => p.startsWith('egate:')),
+    },
+    {
+        id: 'analyst',
+        label: 'Analyst',
+        permissions: allPermissions.filter(p => p.startsWith('analyst:')),
+    },
+    {
+        id: 'control-room',
+        label: 'Control Room',
+        permissions: allPermissions.filter(p => p.startsWith('control-room:')),
+    },
+    {
+        id: 'configuration',
+        label: 'Configuration',
+        permissions: allPermissions.filter(p => p.startsWith('configuration:')),
+    },
+    {
+        id: 'users',
+        label: 'User Management',
+        permissions: ['users:manage'],
+    },
+    {
+        id: 'duty-manager',
+        label: 'Duty Manager',
+        permissions: ['duty-manager:view'],
+    }
 ];

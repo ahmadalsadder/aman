@@ -1,6 +1,7 @@
 
 
-import { Status, PortType } from '@/lib/enums';
+
+import { Status, PortType, MachineType, MachineStatus, MovementType, OfficerDeskStatus, SystemMessageCategory } from '@/lib/enums';
 
 export interface Port {
     id: string;
@@ -38,10 +39,10 @@ export interface Zone {
 export interface Machine {
     id: string;
     name: string;
-    type: 'Scanner' | 'Biometric' | 'Camera';
+    type: MachineType;
     ipAddress: string;
     macAddress: string;
-    status: 'Active' | 'Inactive' | 'Maintenance';
+    status: MachineStatus;
     portId: string;
     terminalId: string;
     zoneId: string;
@@ -55,8 +56,8 @@ export interface SystemMessage {
     description: string;
     localizedName?: string;
     localizedDescription?: string;
-    category: 'Passenger Issue' | 'Machine Issue' | 'General Alert' | 'System Info';
-    status: 'Active' | 'Inactive';
+    category: SystemMessageCategory;
+    status: Status;
     lastModified: string;
     createdBy: string;
 }

@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -15,11 +16,12 @@ import { useRouter } from 'next/navigation';
 import { useMemo } from 'react';
 import { Loader2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { Status } from '@/lib/enums';
 
 const formSchema = z.object({
   name: z.string().min(2, "Zone name must be at least 2 characters."),
   terminalId: z.string().min(1, "You must select a terminal."),
-  status: z.enum(['Active', 'Inactive']),
+  status: z.nativeEnum(Status),
 });
 
 export type ZoneFormValues = z.infer<typeof formSchema>;
@@ -40,7 +42,7 @@ export function ZoneForm({ zoneToEdit, onSave, isLoading, terminals }: ZoneFormP
     defaultValues: zoneToEdit || {
       name: '',
       terminalId: '',
-      status: 'Active',
+      status: Status.Active,
     },
   });
 

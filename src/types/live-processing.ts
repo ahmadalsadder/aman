@@ -1,8 +1,9 @@
 
 
+
 import type { Port, Terminal, Zone, Workflow, RiskProfile, Machine, SystemMessage } from './configuration';
 import type { OfficerAssignment } from './workload';
-import { PassengerStatus, RiskLevel, Gender, VisaType } from '@/lib/enums';
+import { PassengerStatus, RiskLevel, Gender, VisaType, TransactionType, EntranceType, TransactionStatus, Decision, CivilFileType, OfficerDeskStatus, MovementType, GateType, GateStatus, MediaType, ListStatus, BlacklistCategory, GateLogEventType, GateLogStatus, DocumentType } from '@/lib/enums';
 
 export interface Passenger {
     id: string;
@@ -41,7 +42,7 @@ export interface Passenger {
   }
   
   export type CivilRecord = Passenger & {
-    documentType: 'Citizen' | 'Resident' | 'Visitor';
+    documentType: DocumentType;
     documentNumber: string;
   };
 
@@ -94,21 +95,21 @@ export interface Passenger {
     passengerId: string;
     passengerName: string;
     passportNumber: string;
-    type: 'Entry' | 'Exit' | 'Transit';
+    type: TransactionType;
     gate: string;
-    entranceType: 'E-Gate' | 'Officer Desk';
+    entranceType: EntranceType;
     dateTime: string;
-    status: 'Completed' | 'Failed' | 'Pending' | 'In Progress';
+    status: TransactionStatus;
     duration: string;
     riskScore: number;
     officerName: string;
-    finalDecision: 'Approved' | 'Rejected' | 'Manual Review';
+    finalDecision: Decision;
     triggeredRules: { alert: string, acknowledged: boolean }[];
     notes?: string;
     workflow?: WorkflowStep[];
     tripInformation?: TripInformation;
     civilInformation?: {
-      fileType?: 'Citizen' | 'Visa' | 'Residency';
+      fileType?: CivilFileType;
       fileExpiryDate?: string;
       nationalId?: string;
       fileNumber?: string;
@@ -153,9 +154,9 @@ export interface OfficerDesk {
     zoneName?: string;
     ipAddress: string;
     macAddress: string;
-    status: 'Active' | 'Inactive' | 'Closed';
+    status: OfficerDeskStatus;
     lastUpdatedAt: string;
-    movementType: 'Entry' | 'Exit' | 'Bidirectional';
+    movementType: MovementType;
     workflowId: string;
     riskRuleId: string;
 }
@@ -169,8 +170,8 @@ export interface Gate {
     zoneId: string;
     terminalName: string;
     zoneName: string;
-    type: 'Entry' | 'Exit' | 'Bidirectional' | 'VIP' | 'Crew';
-    status: 'Active' | 'Maintenance' | 'Offline' | 'Limited';
+    type: GateType;
+    status: GateStatus;
     ipAddress: string;
     macAddress: string;
     lastMaintenance: string;
@@ -205,7 +206,7 @@ export interface Media {
   id: string;
   name: string;
   localizedName?: string;
-  type: 'Audio' | 'Image' | 'Video';
+  type: MediaType;
   status: 'Active' | 'Inactive';
   description: string;
   lastModified: string;
@@ -218,7 +219,7 @@ export interface WhitelistEntry {
   passengerId: string;
   name: string;
   nationality: string;
-  status: 'Active' | 'Expired' | 'Revoked';
+  status: ListStatus;
   dateAdded: string; // validFrom
   validUntil: string;
   addedBy: string;
@@ -235,9 +236,9 @@ export interface BlacklistEntry {
   passengerId?: string;
   name: string;
   nationality: string;
-  status: 'Active' | 'Expired' | 'Revoked';
+  status: ListStatus;
   reason: string;
-  category: 'No-Fly' | 'Wanted' | 'Financial' | 'Other';
+  category: BlacklistCategory;
   dateAdded: string;
   addedBy: string;
   notes?: string;
@@ -260,8 +261,8 @@ export interface GateLogEntry {
   timestamp: string;
   gateId: string;
   gateName: string;
-  eventType: 'StatusChange' | 'Transaction' | 'Error' | 'Maintenance';
-  status: 'Online' | 'Offline' | 'Error' | 'Success' | 'Failure';
+  eventType: GateLogEventType;
+  status: GateLogStatus;
   description: string;
   actor: string; // e.g., 'System', 'Officer John Doe'
 }

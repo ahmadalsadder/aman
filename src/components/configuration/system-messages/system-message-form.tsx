@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -14,14 +15,15 @@ import { useRouter } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { Textarea } from '@/components/ui/textarea';
+import { Status, SystemMessageCategory } from '@/lib/enums';
 
 const formSchema = z.object({
   name: z.string().min(3, { message: "Message name must be at least 3 characters." }),
   description: z.string().min(10, { message: "Description must be at least 10 characters." }),
   localizedName: z.string().optional(),
   localizedDescription: z.string().optional(),
-  category: z.enum(['Passenger Issue', 'Machine Issue', 'General Alert', 'System Info']),
-  status: z.enum(['Active', 'Inactive']),
+  category: z.nativeEnum(SystemMessageCategory),
+  status: z.nativeEnum(Status),
 });
 
 export type SystemMessageFormValues = z.infer<typeof formSchema>;
@@ -43,8 +45,8 @@ export function SystemMessageForm({ messageToEdit, onSave, isLoading }: SystemMe
       description: '',
       localizedName: '',
       localizedDescription: '',
-      category: 'General Alert',
-      status: 'Active',
+      category: SystemMessageCategory.GeneralAlert,
+      status: Status.Active,
     },
   });
 
@@ -61,8 +63,8 @@ export function SystemMessageForm({ messageToEdit, onSave, isLoading }: SystemMe
                  <FormField control={form.control} name="description" render={({ field }) => ( <FormItem><FormLabel required>{t('details.descriptionField')}</FormLabel><FormControl><Textarea placeholder={t('details.descriptionPlaceholder')} {...field} /></FormControl><FormMessage /></FormItem> )} />
                  <FormField control={form.control} name="localizedDescription" render={({ field }) => ( <FormItem><FormLabel>{t('details.localizedDescription')}</FormLabel><FormControl><Textarea placeholder={t('details.localizedDescriptionPlaceholder')} {...field} /></FormControl><FormMessage /></FormItem> )} />
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <FormField control={form.control} name="category" render={({ field }) => ( <FormItem><FormLabel required>{t('details.category')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue /></SelectTrigger></FormControl><SelectContent><SelectItem value="Passenger Issue">Passenger Issue</SelectItem><SelectItem value="Machine Issue">Machine Issue</SelectItem><SelectItem value="General Alert">General Alert</SelectItem><SelectItem value="System Info">System Info</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
-                    <FormField control={form.control} name="status" render={({ field }) => ( <FormItem><FormLabel required>{t('details.status')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue /></SelectTrigger></FormControl><SelectContent><SelectItem value="Active">Active</SelectItem><SelectItem value="Inactive">Inactive</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
+                    <FormField control={form.control} name="category" render={({ field }) => ( <FormItem><FormLabel required>{t('details.category')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue /></SelectTrigger></FormControl><SelectContent>{Object.values(SystemMessageCategory).map(cat => <SelectItem key={cat} value={cat}>{cat}</SelectItem>)}</SelectContent></Select><FormMessage /></FormItem> )} />
+                    <FormField control={form.control} name="status" render={({ field }) => ( <FormItem><FormLabel required>{t('details.status')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue /></SelectTrigger></FormControl><SelectContent>{Object.values(Status).map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent></Select><FormMessage /></FormItem> )} />
                 </div>
             </CardContent>
         </Card>

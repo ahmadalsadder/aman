@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -20,6 +21,7 @@ import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import CalendarIcon from '@/components/icons/calendar-icon';
 import { Textarea } from '@/components/ui/textarea';
+import { AssignmentStatus } from '@/lib/enums';
 
 const formSchema = z.object({
   officerId: z.string().min(1, "You must select an officer."),
@@ -28,7 +30,7 @@ const formSchema = z.object({
   terminalId: z.string().min(1, "You must select a terminal."),
   zoneId: z.string().min(1, "You must select a zone."),
   assignmentDate: z.date({ required_error: "An assignment date is required." }),
-  status: z.enum(['Confirmed', 'Pending', 'Cancelled']),
+  status: z.nativeEnum(AssignmentStatus),
   notes: z.string().optional(),
 });
 
@@ -67,7 +69,7 @@ export function AssignmentForm({
         terminalId: '',
         zoneId: '',
         assignmentDate: new Date(),
-        status: 'Pending',
+        status: AssignmentStatus.Pending,
         notes: '',
       },
   });
@@ -104,7 +106,7 @@ export function AssignmentForm({
                 <FormField control={form.control} name="terminalId" render={({ field }) => ( <FormItem><FormLabel required>{t('details.terminal')}</FormLabel><Combobox options={terminalOptions} {...field} placeholder={t('details.selectTerminal')} disabled={!portId} /><FormMessage /></FormItem> )} />
                 <FormField control={form.control} name="zoneId" render={({ field }) => ( <FormItem><FormLabel required>{t('details.zone')}</FormLabel><Combobox options={zoneOptions} {...field} placeholder={t('details.selectZone')} disabled={!terminalId} /><FormMessage /></FormItem> )} />
                 <FormField control={form.control} name="shiftId" render={({ field }) => ( <FormItem><FormLabel required>{t('details.shift')}</FormLabel><Combobox options={shiftOptions} {...field} placeholder={t('details.selectShift')} /><FormMessage /></FormItem> )} />
-                <FormField control={form.control} name="status" render={({ field }) => ( <FormItem><FormLabel required>{t('details.status')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue/></SelectTrigger></FormControl><SelectContent><SelectItem value="Pending">{t('details.pending')}</SelectItem><SelectItem value="Confirmed">{t('details.confirmed')}</SelectItem><SelectItem value="Cancelled">{t('details.cancelled')}</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
+                <FormField control={form.control} name="status" render={({ field }) => ( <FormItem><FormLabel required>{t('details.status')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue/></SelectTrigger></FormControl><SelectContent>{Object.values(AssignmentStatus).map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent></Select><FormMessage /></FormItem> )} />
                 <FormField control={form.control} name="notes" render={({ field }) => ( <FormItem className="md:col-span-2"><FormLabel>{t('details.notes')}</FormLabel><FormControl><Textarea placeholder={t('details.notesPlaceholder')} {...field} /></FormControl><FormMessage /></FormItem> )} />
             </CardContent>
         </Card>

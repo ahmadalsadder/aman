@@ -1,8 +1,9 @@
 
 
 
+
 import type { User } from '.';
-import { Status, DayOfWeek } from '@/lib/enums';
+import { Status, DayOfWeek, AssignmentStatus } from '@/lib/enums';
 
 export { DayOfWeek };
 
@@ -38,7 +39,7 @@ export interface OfficerAssignment {
     zoneId: string;
     zoneName: string;
     assignmentDate: string; // YYYY-MM-DD
-    status: 'Confirmed' | 'Pending' | 'Cancelled';
+    status: AssignmentStatus;
     module: string;
     createdBy?: string;
     lastModified?: string;

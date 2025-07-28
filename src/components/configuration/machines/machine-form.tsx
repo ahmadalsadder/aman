@@ -1,5 +1,6 @@
 
 
+
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -16,6 +17,7 @@ import { useRouter } from 'next/navigation';
 import { useMemo, useEffect } from 'react';
 import { Loader2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { MachineStatus, MachineType } from '@/lib/enums';
 
 const formSchema = z.object({
   name: z.string().min(3, { message: "Machine name must be at least 3 characters." }),
@@ -24,8 +26,8 @@ const formSchema = z.object({
   zoneId: z.string().min(1, "You must select a zone."),
   ipAddress: z.string().ip({ version: "v4", message: "Invalid IP address format." }),
   macAddress: z.string().regex(/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/, { message: "Invalid MAC address format." }),
-  type: z.enum(['Scanner', 'Biometric', 'Camera']),
-  status: z.enum(['Active', 'Inactive', 'Maintenance']),
+  type: z.nativeEnum(MachineType),
+  status: z.nativeEnum(MachineStatus),
 });
 
 export type MachineFormValues = z.infer<typeof formSchema>;
@@ -59,8 +61,8 @@ export function MachineForm({
       zoneId: '',
       ipAddress: '',
       macAddress: '',
-      type: 'Scanner',
-      status: 'Active',
+      type: MachineType.Scanner,
+      status: MachineStatus.Active,
     },
   });
 
@@ -102,8 +104,8 @@ export function MachineForm({
           </CardHeader>
           <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <FormField control={form.control} name="name" render={({ field }) => ( <FormItem><FormLabel required>{t('details.name')}</FormLabel><FormControl><Input placeholder={t('details.namePlaceholder')} {...field} /></FormControl><FormMessage /></FormItem> )} />
-            <FormField control={form.control} name="type" render={({ field }) => ( <FormItem><FormLabel required>{t('details.type')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue /></SelectTrigger></FormControl><SelectContent><SelectItem value="Scanner">Scanner</SelectItem><SelectItem value="Biometric">Biometric</SelectItem><SelectItem value="Camera">Camera</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
-            <FormField control={form.control} name="status" render={({ field }) => ( <FormItem><FormLabel required>{t('details.status')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue /></SelectTrigger></FormControl><SelectContent><SelectItem value="Active">Active</SelectItem><SelectItem value="Inactive">Inactive</SelectItem><SelectItem value="Maintenance">Maintenance</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
+            <FormField control={form.control} name="type" render={({ field }) => ( <FormItem><FormLabel required>{t('details.type')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue /></SelectTrigger></FormControl><SelectContent>{Object.values(MachineType).map(type => <SelectItem key={type} value={type}>{type}</SelectItem>)}</SelectContent></Select><FormMessage /></FormItem> )} />
+            <FormField control={form.control} name="status" render={({ field }) => ( <FormItem><FormLabel required>{t('details.status')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue /></SelectTrigger></FormControl><SelectContent>{Object.values(MachineStatus).map(status => <SelectItem key={status} value={status}>{status}</SelectItem>)}</SelectContent></Select><FormMessage /></FormItem> )} />
             <FormField control={form.control} name="ipAddress" render={({ field }) => ( <FormItem><FormLabel required>{t('details.ipAddress')}</FormLabel><FormControl><Input placeholder="192.168.1.1" {...field} /></FormControl><FormMessage /></FormItem> )} />
             <FormField control={form.control} name="macAddress" render={({ field }) => ( <FormItem><FormLabel required>{t('details.macAddress')}</FormLabel><FormControl><Input placeholder="00:1A:2B:3C:4D:5E" {...field} /></FormControl><FormMessage /></FormItem> )} />
             <div />

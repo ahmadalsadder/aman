@@ -1,7 +1,8 @@
 
 
 
-import { Status, PortType, RiskLevel, PassengerStatus, Gender, DayOfWeek } from './enums';
+
+import { Status, PortType, RiskLevel, PassengerStatus, Gender, DayOfWeek, TransactionType, TransactionStatus, Decision, EntranceType, CivilFileType, MachineStatus, MachineType, OfficerDeskStatus, MovementType, GateType, GateStatus, MediaType, ListStatus, BlacklistCategory, SystemMessageCategory, GateLogEventType, GateLogStatus, AssignmentStatus, DocumentType } from './enums';
 import type { Passenger, Transaction, OfficerDesk, Gate, Media, WhitelistEntry, BlacklistEntry, OfficerAssignment, GateLogEntry } from "@/types/live-processing";
 import type { Shift } from "@/types/workload";
 import { Plane, Car, Ship } from "lucide-react";
@@ -57,15 +58,15 @@ const getMockTransactions = (): Transaction[] => [
       passengerId: 'P001',
       passengerName: 'John Doe',
       passportNumber: 'A12345678',
-      type: 'Entry',
+      type: TransactionType.Entry,
       gate: 'E-Gate 05',
-      entranceType: 'E-Gate',
+      entranceType: EntranceType.EGate,
       dateTime: '2023-05-20 14:30',
-      status: 'Completed',
+      status: TransactionStatus.Completed,
       duration: '1m 15s',
       riskScore: 15,
       officerName: 'System',
-      finalDecision: 'Approved',
+      finalDecision: Decision.Approved,
       triggeredRules: [],
       notes: 'Standard entry, no issues.',
       workflow: [
@@ -88,7 +89,7 @@ const getMockTransactions = (): Transaction[] => [
         fingerprintMatch: 98,
       },
       civilInformation: {
-        fileType: 'Visa',
+        fileType: CivilFileType.Visa,
         nationalId: 'N/A',
         fileNumber: 'V-987654',
         fileExpiryDate: '2024-12-31'
@@ -100,15 +101,15 @@ const getMockTransactions = (): Transaction[] => [
       passengerId: 'P002',
       passengerName: 'Jane Smith',
       passportNumber: 'B87654321',
-      type: 'Exit',
+      type: TransactionType.Exit,
       gate: 'Desk 02',
-      entranceType: 'Officer Desk',
+      entranceType: EntranceType.OfficerDesk,
       dateTime: '2023-05-20 14:35',
-      status: 'Completed',
+      status: TransactionStatus.Completed,
       duration: '3m 45s',
       riskScore: 45,
       officerName: 'Emily White',
-      finalDecision: 'Approved',
+      finalDecision: Decision.Approved,
       triggeredRules: [{ alert: 'Baggage Anomaly', acknowledged: true }],
       notes: 'Passenger states the bag was a gift. Contents cleared after secondary screening.',
       tripInformation: { type: 'landport', vehiclePlateNumber: 'UK-JS-123', vehicleType: 'Car', laneNumber: '3', vehicleMake: 'Range Rover' },
@@ -119,15 +120,15 @@ const getMockTransactions = (): Transaction[] => [
       passengerId: 'P003',
       passengerName: 'Wei Chen',
       passportNumber: 'G55566677',
-      type: 'Transit',
+      type: TransactionType.Transit,
       gate: 'Desk 01',
-      entranceType: 'Officer Desk',
+      entranceType: EntranceType.OfficerDesk,
       dateTime: '2023-05-19 18:00',
-      status: 'Pending',
+      status: TransactionStatus.Pending,
       duration: '5m 10s',
       riskScore: 85,
       officerName: 'David Green',
-      finalDecision: 'Manual Review',
+      finalDecision: Decision.ManualReview,
       triggeredRules: [{ alert: 'Watchlist Match', acknowledged: false }],
       notes: 'Passenger matches a name on the internal watchlist. Escalated to supervisor for identity verification.',
       tripInformation: { type: 'seaport', vesselName: 'Oceanic Explorer', voyageNumber: 'OE-555', berth: 'C4', lastPortOfCall: 'SGP' },
@@ -140,11 +141,11 @@ let mockPassengers = [...mockPassengersData];
 let mockTransactions = getMockTransactions();
 
 let mockOfficerDesks: OfficerDesk[] = [
-    { id: 'DESK-A1', name: 'Officer Desk A1', terminalId: 'TERM-DXB-1', zoneId: 'ZONE-A', ipAddress: '192.168.1.10', macAddress: '00:1A:2B:3C:4D:5E', status: 'Active', lastUpdatedAt: '2023-05-20T10:00:00Z', movementType: 'Entry', workflowId: 'WF-Standard', riskRuleId: 'RR-Low' },
-    { id: 'DESK-A2', name: 'Officer Desk A2', terminalId: 'TERM-DXB-1', zoneId: 'ZONE-A', ipAddress: '192.168.1.11', macAddress: '00:1A:2B:3C:4D:5F', status: 'Inactive', lastUpdatedAt: '2023-05-19T11:30:00Z', movementType: 'Bidirectional', workflowId: 'WF-Standard', riskRuleId: 'RR-Low' },
-    { id: 'DESK-B1', name: 'Officer Desk B1', terminalId: 'TERM-DXB-2', zoneId: 'ZONE-B', ipAddress: '192.168.2.20', macAddress: '11:22:33:44:55:66', status: 'Active', lastUpdatedAt: '2023-05-20T09:00:00Z', movementType: 'Exit', workflowId: 'WF-FastTrack', riskRuleId: 'RR-Med' },
-    { id: 'DESK-S1', name: 'Officer Desk S1', terminalId: 'TERM-PC-1', zoneId: 'ZONE-SA', ipAddress: '10.0.1.5', macAddress: 'AA:BB:CC:DD:EE:FF', status: 'Active', lastUpdatedAt: '2023-05-20T12:00:00Z', movementType: 'Bidirectional', workflowId: 'WF-Standard', riskRuleId: 'RR-Low' },
-    { id: 'DESK-L1', name: 'Officer Desk L1', terminalId: 'TERM-HE-1', zoneId: 'ZONE-LA', ipAddress: '172.16.0.100', macAddress: 'BB:CC:DD:EE:FF:00', status: 'Closed', lastUpdatedAt: '2023-04-10T15:00:00Z', movementType: 'Bidirectional', workflowId: 'WF-Standard', riskRuleId: 'RR-High' },
+    { id: 'DESK-A1', name: 'Officer Desk A1', terminalId: 'TERM-DXB-1', zoneId: 'ZONE-A', ipAddress: '192.168.1.10', macAddress: '00:1A:2B:3C:4D:5E', status: OfficerDeskStatus.Active, lastUpdatedAt: '2023-05-20T10:00:00Z', movementType: MovementType.Entry, workflowId: 'WF-Standard', riskRuleId: 'RR-Low' },
+    { id: 'DESK-A2', name: 'Officer Desk A2', terminalId: 'TERM-DXB-1', zoneId: 'ZONE-A', ipAddress: '192.168.1.11', macAddress: '00:1A:2B:3C:4D:5F', status: OfficerDeskStatus.Inactive, lastUpdatedAt: '2023-05-19T11:30:00Z', movementType: MovementType.Bidirectional, workflowId: 'WF-Standard', riskRuleId: 'RR-Low' },
+    { id: 'DESK-B1', name: 'Officer Desk B1', terminalId: 'TERM-DXB-2', zoneId: 'ZONE-B', ipAddress: '192.168.2.20', macAddress: '11:22:33:44:55:66', status: OfficerDeskStatus.Active, lastUpdatedAt: '2023-05-20T09:00:00Z', movementType: MovementType.Exit, workflowId: 'WF-FastTrack', riskRuleId: 'RR-Med' },
+    { id: 'DESK-S1', name: 'Officer Desk S1', terminalId: 'TERM-PC-1', zoneId: 'ZONE-SA', ipAddress: '10.0.1.5', macAddress: 'AA:BB:CC:DD:EE:FF', status: OfficerDeskStatus.Active, lastUpdatedAt: '2023-05-20T12:00:00Z', movementType: MovementType.Bidirectional, workflowId: 'WF-Standard', riskRuleId: 'RR-Low' },
+    { id: 'DESK-L1', name: 'Officer Desk L1', terminalId: 'TERM-HE-1', zoneId: 'ZONE-LA', ipAddress: '172.16.0.100', macAddress: 'BB:CC:DD:EE:FF:00', status: OfficerDeskStatus.Closed, lastUpdatedAt: '2023-04-10T15:00:00Z', movementType: MovementType.Bidirectional, workflowId: 'WF-Standard', riskRuleId: 'RR-High' },
 ];
 
 let mockPorts: Port[] = [
@@ -170,10 +171,10 @@ let mockZones: Zone[] = [
 ];
 
 let mockMachines: Machine[] = [
-    { id: 'MACHINE-01', name: 'Passport Scanner A1-1', type: 'Scanner', ipAddress: '192.168.1.200', macAddress: '1A:2B:3C:4D:5E:6F', status: 'Active', portId: 'PORT-DXB', terminalId: 'TERM-DXB-1', zoneId: 'ZONE-A', lastModified: '2023-05-21', createdBy: 'Admin User' },
-    { id: 'MACHINE-02', name: 'Face Camera A1-1', type: 'Camera', ipAddress: '192.168.1.201', macAddress: '1A:2B:3C:4D:5E:70', status: 'Active', portId: 'PORT-DXB', terminalId: 'TERM-DXB-1', zoneId: 'ZONE-A', lastModified: '2023-05-21', createdBy: 'Admin User' },
-    { id: 'MACHINE-03', name: 'Biometric Reader B2-1', type: 'Biometric', ipAddress: '192.168.2.200', macAddress: '1A:2B:3C:4D:5E:71', status: 'Inactive', portId: 'PORT-DXB', terminalId: 'TERM-DXB-2', zoneId: 'ZONE-B', lastModified: '2023-05-20', createdBy: 'Admin User' },
-    { id: 'MACHINE-04', name: 'Seaport Scanner S1-1', type: 'Scanner', ipAddress: '10.0.1.50', macAddress: 'DE:AD:BE:EF:00:01', status: 'Maintenance', portId: 'PORT-PC', terminalId: 'TERM-PC-1', zoneId: 'ZONE-SA', lastModified: '2023-05-19', createdBy: 'Admin User' },
+    { id: 'MACHINE-01', name: 'Passport Scanner A1-1', type: MachineType.Scanner, ipAddress: '192.168.1.200', macAddress: '1A:2B:3C:4D:5E:6F', status: MachineStatus.Active, portId: 'PORT-DXB', terminalId: 'TERM-DXB-1', zoneId: 'ZONE-A', lastModified: '2023-05-21', createdBy: 'Admin User' },
+    { id: 'MACHINE-02', name: 'Face Camera A1-1', type: MachineType.Camera, ipAddress: '192.168.1.201', macAddress: '1A:2B:3C:4D:5E:70', status: MachineStatus.Active, portId: 'PORT-DXB', terminalId: 'TERM-DXB-1', zoneId: 'ZONE-A', lastModified: '2023-05-21', createdBy: 'Admin User' },
+    { id: 'MACHINE-03', name: 'Biometric Reader B2-1', type: MachineType.Biometric, ipAddress: '192.168.2.200', macAddress: '1A:2B:3C:4D:5E:71', status: MachineStatus.Inactive, portId: 'PORT-DXB', terminalId: 'TERM-DXB-2', zoneId: 'ZONE-B', lastModified: '2023-05-20', createdBy: 'Admin User' },
+    { id: 'MACHINE-04', name: 'Seaport Scanner S1-1', type: MachineType.Scanner, ipAddress: '10.0.1.50', macAddress: 'DE:AD:BE:EF:00:01', status: MachineStatus.Maintenance, portId: 'PORT-PC', terminalId: 'TERM-PC-1', zoneId: 'ZONE-SA', lastModified: '2023-05-19', createdBy: 'Admin User' },
 ];
 
 export const mockWorkflows: Workflow[] = [
@@ -198,10 +199,10 @@ export const mockVisaDatabase: { passportNumber: string, nationality: string, vi
 ];
 
 let mockGates: Gate[] = [
-    { id: 'EGATE-01', code: 'A-01', name: 'Main Entry Gate', terminalName: 'Terminal 1', type: 'Entry', status: 'Active', ipAddress: '192.168.1.50', macAddress: 'A1:B2:C3:D4:E5:F6', lastMaintenance: '2023-04-15', lastModified: '2023-05-20', currentLoad: 75, passengerCount: 15, avgProcessingTime: '45s', equipment: [{ name: 'Passport Reader', status: 'online' }, { name: 'Biometric Scanner', status: 'online' }], entryConfig: { workflowId: 'WF-Standard', riskProfileId: 'RR-Low', capacity: 20 } },
-    { id: 'EGATE-02', code: 'A-02', name: 'Main Entry Gate', terminalName: 'Terminal 1', type: 'Entry', status: 'Active', ipAddress: '192.168.1.51', macAddress: 'A1:B2:C3:D4:E5:F7', lastMaintenance: '2023-04-16', lastModified: '2023-05-21', currentLoad: 50, passengerCount: 10, avgProcessingTime: '42s', equipment: [{ name: 'Passport Reader', status: 'online' }, { name: 'Biometric Scanner', status: 'online' }], entryConfig: { workflowId: 'WF-Standard', riskProfileId: 'RR-Low', capacity: 20 } },
-    { id: 'EGATE-03', code: 'B-01', name: 'Business Class Gate', terminalName: 'Terminal 3', type: 'Bidirectional', status: 'Maintenance', ipAddress: '192.168.3.10', macAddress: 'A1:B2:C3:D4:E5:F8', lastMaintenance: '2023-05-18', lastModified: '2023-05-18', currentLoad: 0, passengerCount: 0, avgProcessingTime: 'N/A', equipment: [{ name: 'Passport Reader', status: 'offline' }, { name: 'Biometric Scanner', status: 'online' }], entryConfig: { workflowId: 'WF-FastTrack', riskProfileId: 'RR-Low', capacity: 15 }, exitConfig: { workflowId: 'WF-FastTrack', riskProfileId: 'RR-Low', capacity: 15 } },
-    { id: 'EGATE-04', code: 'C-05', name: 'Exit Gate', terminalName: 'Terminal 1', type: 'Exit', status: 'Offline', ipAddress: '192.168.1.55', macAddress: 'A1:B2:C3:D4:E5:F9', lastMaintenance: '2023-03-20', lastModified: '2023-05-10', currentLoad: 0, passengerCount: 0, avgProcessingTime: 'N/A', equipment: [{ name: 'Passport Reader', status: 'offline' }, { name: 'Biometric Scanner', status: 'offline' }], exitConfig: { workflowId: 'WF-Standard', riskProfileId: 'RR-Low', capacity: 25 } },
+    { id: 'EGATE-01', code: 'A-01', name: 'Main Entry Gate', terminalName: 'Terminal 1', type: GateType.Entry, status: GateStatus.Active, ipAddress: '192.168.1.50', macAddress: 'A1:B2:C3:D4:E5:F6', lastMaintenance: '2023-04-15', lastModified: '2023-05-20', currentLoad: 75, passengerCount: 15, avgProcessingTime: '45s', equipment: [{ name: 'Passport Reader', status: 'online' }, { name: 'Biometric Scanner', status: 'online' }], entryConfig: { workflowId: 'WF-Standard', riskProfileId: 'RR-Low', capacity: 20 }, portId: 'PORT-DXB', terminalId: 'TERM-DXB-1', zoneId: 'ZONE-A' },
+    { id: 'EGATE-02', code: 'A-02', name: 'Main Entry Gate', terminalName: 'Terminal 1', type: GateType.Entry, status: GateStatus.Active, ipAddress: '192.168.1.51', macAddress: 'A1:B2:C3:D4:E5:F7', lastMaintenance: '2023-04-16', lastModified: '2023-05-21', currentLoad: 50, passengerCount: 10, avgProcessingTime: '42s', equipment: [{ name: 'Passport Reader', status: 'online' }, { name: 'Biometric Scanner', status: 'online' }], entryConfig: { workflowId: 'WF-Standard', riskProfileId: 'RR-Low', capacity: 20 }, portId: 'PORT-DXB', terminalId: 'TERM-DXB-1', zoneId: 'ZONE-A' },
+    { id: 'EGATE-03', code: 'B-01', name: 'Business Class Gate', terminalName: 'Terminal 3', type: GateType.Bidirectional, status: GateStatus.Maintenance, ipAddress: '192.168.3.10', macAddress: 'A1:B2:C3:D4:E5:F8', lastMaintenance: '2023-05-18', lastModified: '2023-05-18', currentLoad: 0, passengerCount: 0, avgProcessingTime: 'N/A', equipment: [{ name: 'Passport Reader', status: 'offline' }, { name: 'Biometric Scanner', status: 'online' }], entryConfig: { workflowId: 'WF-FastTrack', riskProfileId: 'RR-Low', capacity: 15 }, exitConfig: { workflowId: 'WF-FastTrack', riskProfileId: 'RR-Low', capacity: 15 }, portId: 'PORT-DXB', terminalId: 'TERM-DXB-3', zoneId: 'ZONE-C' },
+    { id: 'EGATE-04', code: 'C-05', name: 'Exit Gate', terminalName: 'Terminal 1', type: GateType.Exit, status: GateStatus.Offline, ipAddress: '192.168.1.55', macAddress: 'A1:B2:C3:D4:E5:F9', lastMaintenance: '2023-03-20', lastModified: '2023-05-10', currentLoad: 0, passengerCount: 0, avgProcessingTime: 'N/A', equipment: [{ name: 'Passport Reader', status: 'offline' }, { name: 'Biometric Scanner', status: 'offline' }], exitConfig: { workflowId: 'WF-Standard', riskProfileId: 'RR-Low', capacity: 25 }, portId: 'PORT-DXB', terminalId: 'TERM-DXB-1', zoneId: 'ZONE-A' },
 ];
 
 let mockMedia: Media[] = [
@@ -209,7 +210,7 @@ let mockMedia: Media[] = [
         id: 'MEDIA-001',
         name: 'Entry Greeting',
         localizedName: 'تحية الدخول',
-        type: 'Audio',
+        type: MediaType.Audio,
         status: 'Active',
         description: 'Standard welcome audio for all entry points.',
         lastModified: '2023-05-15',
@@ -223,7 +224,7 @@ let mockMedia: Media[] = [
         id: 'MEDIA-002',
         name: 'Prohibited Items',
         localizedName: 'الأصناف الممنوعة',
-        type: 'Video',
+        type: MediaType.Video,
         status: 'Active',
         description: 'Security video displaying prohibited items.',
         lastModified: '2023-05-10',
@@ -236,7 +237,7 @@ let mockMedia: Media[] = [
         id: 'MEDIA-003',
         name: 'E-Gate Instructions',
         localizedName: 'تعليمات البوابة الإلكترونية',
-        type: 'Image',
+        type: MediaType.Image,
         status: 'Inactive',
         description: 'Visual guide for using the e-gates.',
         lastModified: '2023-04-20',
@@ -249,14 +250,14 @@ let mockMedia: Media[] = [
 ];
 
 let mockWhitelist: WhitelistEntry[] = [
-  { id: 'WL-001', passengerId: 'P001', name: 'John Doe', nationality: 'United States', status: 'Active', dateAdded: '2023-01-15', validUntil: '2025-01-14', addedBy: 'Admin User', reason: 'Diplomatic Staff' },
-  { id: 'WL-002', passengerId: 'P002', name: 'Jane Smith', nationality: 'United Kingdom', status: 'Active', dateAdded: '2022-11-20', validUntil: '2024-11-19', addedBy: 'Admin User', reason: 'Frequent Business Traveler' },
-  { id: 'WL-003', passengerId: 'P003', name: 'Wei Chen', nationality: 'China', status: 'Revoked', dateAdded: '2023-03-01', validUntil: '2024-03-01', addedBy: 'Admin User', reason: 'Temporary clearance for conference' },
+  { id: 'WL-001', passengerId: 'P001', name: 'John Doe', nationality: 'United States', status: ListStatus.Active, dateAdded: '2023-01-15', validUntil: '2025-01-14', addedBy: 'Admin User', reason: 'Diplomatic Staff' },
+  { id: 'WL-002', passengerId: 'P002', name: 'Jane Smith', nationality: 'United Kingdom', status: ListStatus.Active, dateAdded: '2022-11-20', validUntil: '2024-11-19', addedBy: 'Admin User', reason: 'Frequent Business Traveler' },
+  { id: 'WL-003', passengerId: 'P003', name: 'Wei Chen', nationality: 'China', status: ListStatus.Revoked, dateAdded: '2023-03-01', validUntil: '2024-03-01', addedBy: 'Admin User', reason: 'Temporary clearance for conference' },
 ];
 
 let mockBlacklist: BlacklistEntry[] = [
-    { id: 'BL-001', passengerId: 'P003', name: 'Wei Chen', nationality: 'China', reason: 'International No-Fly List Match', category: 'No-Fly', dateAdded: '2023-01-10', addedBy: 'Interpol Feed', passportNumber: 'G55566677' },
-    { id: 'BL-002', name: 'Unknown Male', nationality: 'Syrian Arab Republic', reason: 'Attempted use of fraudulent document', category: 'Wanted', dateAdded: '2023-04-22', addedBy: 'Admin User', notes: 'Subject fled during secondary screening.', passportNumber: 'S12398765' },
+    { id: 'BL-001', passengerId: 'P003', name: 'Wei Chen', nationality: 'China', reason: 'International No-Fly List Match', category: BlacklistCategory.NoFly, dateAdded: '2023-01-10', addedBy: 'Interpol Feed', passportNumber: 'G55566677', status: ListStatus.Active },
+    { id: 'BL-002', name: 'Unknown Male', nationality: 'Syrian Arab Republic', reason: 'Attempted use of fraudulent document', category: BlacklistCategory.Wanted, dateAdded: '2023-04-22', addedBy: 'Admin User', notes: 'Subject fled during secondary screening.', passportNumber: 'S12398765', status: ListStatus.Active },
 ];
 
 let mockShifts: Shift[] = [
@@ -267,9 +268,9 @@ let mockShifts: Shift[] = [
 ];
 
 let mockOfficerAssignments: OfficerAssignment[] = [
-  { id: 'ASSIGN-001', officerId: '3', officerName: 'Viewer User', shiftId: 'S001', portId: 'PORT-DXB', terminalId: 'TERM-DXB-1', zoneId: 'ZONE-A', assignmentDate: '2023-10-25', status: 'Confirmed', module: 'airport' },
-  { id: 'ASSIGN-002', officerId: '7', officerName: 'Landport Officer', shiftId: 'S002', portId: 'PORT-HE', terminalId: 'TERM-HE-1', zoneId: 'ZONE-LA', assignmentDate: '2023-10-25', status: 'Confirmed', module: 'landport' },
-  { id: 'ASSIGN-003', officerId: '3', officerName: 'Viewer User', shiftId: 'S004', portId: 'PORT-PC', terminalId: 'TERM-PC-1', zoneId: 'ZONE-SA', assignmentDate: '2023-10-28', status: 'Pending', module: 'seaport' },
+  { id: 'ASSIGN-001', officerId: '3', officerName: 'Viewer User', shiftId: 'S001', portId: 'PORT-DXB', terminalId: 'TERM-DXB-1', zoneId: 'ZONE-A', assignmentDate: '2023-10-25', status: AssignmentStatus.Confirmed, module: 'airport' },
+  { id: 'ASSIGN-002', officerId: '7', officerName: 'Landport Officer', shiftId: 'S002', portId: 'PORT-HE', terminalId: 'TERM-HE-1', zoneId: 'ZONE-LA', assignmentDate: '2023-10-25', status: AssignmentStatus.Confirmed, module: 'landport' },
+  { id: 'ASSIGN-003', officerId: '3', officerName: 'Viewer User', shiftId: 'S004', portId: 'PORT-PC', terminalId: 'TERM-PC-1', zoneId: 'ZONE-SA', assignmentDate: '2023-10-28', status: AssignmentStatus.Pending, module: 'seaport' },
 ];
 
 export const mockCountryLanguageMapping: CountryLanguageMapping[] = [
@@ -294,8 +295,8 @@ let mockSystemMessages: SystemMessage[] = [
         description: 'Welcome to Dubai International Airport. Please have your travel documents ready.',
         localizedName: 'رسالة الترحيب',
         localizedDescription: 'مرحباً بكم في مطار دبي الدولي. يرجى تجهيز وثائق السفر الخاصة بكم.',
-        category: 'General Alert',
-        status: 'Active',
+        category: SystemMessageCategory.GeneralAlert,
+        status: Status.Active,
         lastModified: '2023-05-20',
         createdBy: 'Admin User',
     },
@@ -305,8 +306,8 @@ let mockSystemMessages: SystemMessage[] = [
         description: 'E-Gates in Terminal 3 are temporarily out of service. Please proceed to the manual counters.',
         localizedName: 'تعطل البوابات الإلكترونية',
         localizedDescription: 'البوابات الإلكترونية في مبنى 3 خارج الخدمة مؤقتاً. يرجى التوجه إلى الكاونترات اليدوية.',
-        category: 'Machine Issue',
-        status: 'Active',
+        category: SystemMessageCategory.MachineIssue,
+        status: Status.Active,
         lastModified: '2023-10-28',
         createdBy: 'Admin User',
     },
@@ -316,18 +317,18 @@ let mockSystemMessages: SystemMessage[] = [
         description: 'Please ensure all liquids in your carry-on are under 100ml and in a clear bag.',
         localizedName: 'تنبيه السوائل',
         localizedDescription: 'يرجى التأكد من أن جميع السوائل في حقائبكم المحمولة أقل من 100 مل وفي كيس شفاف.',
-        category: 'General Alert',
-        status: 'Inactive',
+        category: SystemMessageCategory.GeneralAlert,
+        status: Status.Inactive,
         lastModified: '2023-01-15',
         createdBy: 'Admin User',
     },
 ];
 
 let mockGateLogs: GateLogEntry[] = [
-    { id: 'LOG-001', timestamp: '2023-10-29 14:30:05', gateId: 'EGATE-01', gateName: 'Main Entry Gate', eventType: 'Transaction', status: 'Success', description: 'Passenger P001 processed successfully.', actor: 'System' },
-    { id: 'LOG-002', timestamp: '2023-10-29 14:32:15', gateId: 'EGATE-02', gateName: 'Main Entry Gate 2', eventType: 'Error', status: 'Error', description: 'Biometric scanner failed to initialize. Error code: 503', actor: 'System' },
-    { id: 'LOG-003', timestamp: '2023-10-29 14:35:00', gateId: 'EGATE-03', gateName: 'Business Class Gate', eventType: 'StatusChange', status: 'Offline', description: 'Gate taken offline for scheduled maintenance.', actor: 'Control Room' },
-    { id: 'LOG-004', timestamp: '2023-10-29 14:40:22', gateId: 'EGATE-01', gateName: 'Main Entry Gate', eventType: 'Transaction', status: 'Failure', description: 'Passenger rejected due to biometric mismatch (78%).', actor: 'System' },
+    { id: 'LOG-001', timestamp: '2023-10-29 14:30:05', gateId: 'EGATE-01', gateName: 'Main Entry Gate', eventType: GateLogEventType.Transaction, status: GateLogStatus.Success, description: 'Passenger P001 processed successfully.', actor: 'System' },
+    { id: 'LOG-002', timestamp: '2023-10-29 14:32:15', gateId: 'EGATE-02', gateName: 'Main Entry Gate 2', eventType: GateLogEventType.Error, status: GateLogStatus.Error, description: 'Biometric scanner failed to initialize. Error code: 503', actor: 'System' },
+    { id: 'LOG-003', timestamp: '2023-10-29 14:35:00', gateId: 'EGATE-03', gateName: 'Business Class Gate', eventType: GateLogEventType.StatusChange, status: GateLogStatus.Offline, description: 'Gate taken offline for scheduled maintenance.', actor: 'Control Room' },
+    { id: 'LOG-004', timestamp: '2023-10-29 14:40:22', gateId: 'EGATE-01', gateName: 'Main Entry Gate', eventType: GateLogEventType.Transaction, status: GateLogStatus.Failure, description: 'Passenger rejected due to biometric mismatch (78%).', actor: 'System' },
 ];
 
 
@@ -401,4 +402,3 @@ export const setMockGateLogs = (newGateLogs: GateLogEntry[]) => {
 export const mockData = {
     // All specific data objects have been moved to mock-api.ts
 };
-

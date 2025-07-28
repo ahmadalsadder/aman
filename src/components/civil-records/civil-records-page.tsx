@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
@@ -26,8 +27,9 @@ import { useTranslations } from 'next-intl';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import CalendarIcon from '../icons/calendar-icon';
+import { DocumentType } from '@/lib/enums';
 
-const documentTypeColors = {
+const documentTypeColors: { [key: string]: string } = {
   Citizen: 'bg-green-500/20 text-green-700 border-green-500/30',
   Resident: 'bg-blue-500/20 text-blue-700 border-blue-500/30',
   Visitor: 'bg-yellow-500/20 text-yellow-700 border-yellow-500/30',
@@ -203,9 +205,9 @@ export function CivilRecordsPage({ module, records, isLoading }: CivilRecordsPag
                                 <SelectTrigger><SelectValue placeholder={t('filterPersonType')} /></SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="all">{t('allTypes')}</SelectItem>
-                                    <SelectItem value="Citizen">{t('citizen')}</SelectItem>
-                                    <SelectItem value="Resident">{t('resident')}</SelectItem>
-                                    <SelectItem value="Visitor">{t('visitor')}</SelectItem>
+                                    {Object.values(DocumentType).map(type => (
+                                        <SelectItem key={type} value={type}>{t(type.toLowerCase() as any)}</SelectItem>
+                                    ))}
                                 </SelectContent>
                             </Select>
 

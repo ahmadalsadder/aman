@@ -1,5 +1,16 @@
 
 {
+  "Enums": {
+    "Status": {
+      "Active": "نشط",
+      "Inactive": "غير نشط"
+    },
+    "PortType": {
+      "Airport": "مطار",
+      "Seaport": "ميناء بحري",
+      "Landport": "منفذ بري"
+    }
+  },
   "LoginPage": {
     "title": "مرحبًا بك في أمان",
     "titleAman": "أمان",
@@ -1553,45 +1564,45 @@
         }
     }
   },
-   "BlacklistPage": {
-    "pageTitle": "Lista Negra de Pasajeros",
-    "pageDescription": "Gestionar individuos marcados por riesgos de seguridad.",
-    "addEntry": "Añadir a la Lista Negra",
+  "BlacklistPage": {
+    "pageTitle": "Passenger Blacklist",
+    "pageDescription": "Manage individuals flagged for security risks.",
+    "addEntry": "Add to Blacklist",
     "accessDenied": {
-      "title": "Acceso Denegado",
-      "description": "No tiene permiso para ver la lista negra de este módulo."
+      "title": "Access Denied",
+      "description": "You do not have permission to view the blacklist for this module."
     },
     "filters": {
-      "title": "Buscar y Filtrar Lista Negra",
-      "namePlaceholder": "Nombre del Pasajero...",
-      "nationalityPlaceholder": "Nacionalidad",
-      "allNationalities": "Todas las Nacionalidades",
-      "categoryPlaceholder": "Categoría",
-      "allCategories": "Todas las Categorías",
-      "reset": "Restablecer",
-      "search": "Buscar"
+      "title": "Search & Filter Blacklist",
+      "namePlaceholder": "Passenger Name...",
+      "nationalityPlaceholder": "Nationality",
+      "allNationalities": "All Nationalities",
+      "categoryPlaceholder": "Category",
+      "allCategories": "All Categories",
+      "reset": "Reset",
+      "search": "Search"
     },
-    "recordsTitle": "Registros de la Lista Negra",
-    "recordsDescription": "Una lista de todos los individuos en la lista negra del sistema.",
+    "recordsTitle": "Blacklist Records",
+    "recordsDescription": "A list of all blacklisted individuals in the system.",
     "table": {
       "id": "ID",
-      "name": "Nombre",
-      "nationality": "Nacionalidad",
-      "dateAdded": "Fecha de Adición",
-      "category": "Categoría"
+      "name": "Name",
+      "nationality": "Nationality",
+      "dateAdded": "Date Added",
+      "category": "Category"
     },
     "actions": {
-      "openMenu": "Abrir menú",
-      "viewDetails": "Ver detalles",
-      "viewPassenger": "Ver Pasajero",
-      "editEntry": "Editar Entrada",
-      "delete": "Eliminar"
+      "openMenu": "Open menu",
+      "viewDetails": "View details",
+      "viewPassenger": "View Passenger",
+      "editEntry": "Edit Entry",
+      "delete": "Delete"
     },
     "toast": {
-      "deleteSuccessTitle": "Entrada Eliminada",
-      "deleteSuccessDesc": "La entrada de la lista negra ha sido eliminada permanentemente.",
-      "deleteErrorTitle": "Error al Eliminar",
-      "deleteErrorDesc": "Hubo un error al eliminar la entrada de la lista negra."
+      "deleteSuccessTitle": "Entry Deleted",
+      "deleteSuccessDesc": "Blacklist entry has been permanently deleted.",
+      "deleteErrorTitle": "Delete Failed",
+      "deleteErrorDesc": "There was an error deleting the blacklist entry."
     },
     "form": {
         "addTitle": "Add to Blacklist",

@@ -1,5 +1,16 @@
 
 {
+  "Enums": {
+    "Status": {
+      "Active": "Activo",
+      "Inactive": "Inactivo"
+    },
+    "PortType": {
+      "Airport": "Aeropuerto",
+      "Seaport": "Puerto Marítimo",
+      "Landport": "Puerto Terrestre"
+    }
+  },
   "LoginPage": {
     "title": "Bienvenido a Aman",
     "titleAman": "Aman",

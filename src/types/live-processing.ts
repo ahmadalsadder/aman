@@ -1,8 +1,8 @@
 
 
-
 import type { Port, Terminal, Zone, Workflow, RiskProfile, Machine, SystemMessage } from './configuration';
 import type { OfficerAssignment } from './workload';
+import { PassengerStatus, RiskLevel, Gender, VisaType } from '@/lib/enums';
 
 export interface Passenger {
     id: string;
@@ -12,9 +12,9 @@ export interface Passenger {
     passportNumber: string;
     nationality: string;
     dateOfBirth: string;
-    gender: 'Male' | 'Female' | 'Other';
-    status: 'Active' | 'Inactive' | 'Flagged' | 'Blocked';
-    riskLevel: 'Low' | 'Medium' | 'High';
+    gender: Gender;
+    status: PassengerStatus;
+    riskLevel: RiskLevel;
     lastEntry?: string;
     notes?: string;
   
@@ -34,7 +34,7 @@ export interface Passenger {
   
     // Optional additional info
     visaNumber?: string;
-    visaType?: 'Tourism' | 'Work' | 'Residency';
+    visaType?: VisaType;
     visaExpiryDate?: string;
     residencyFileNumber?: string;
     nationalId?: string;

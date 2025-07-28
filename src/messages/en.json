@@ -1,5 +1,16 @@
 
 {
+  "Enums": {
+    "Status": {
+      "Active": "Active",
+      "Inactive": "Inactive"
+    },
+    "PortType": {
+      "Airport": "Airport",
+      "Seaport": "Seaport",
+      "Landport": "Landport"
+    }
+  },
   "LoginPage": {
     "title": "Welcome to Aman",
     "titleAman": "Aman",
@@ -1163,210 +1174,210 @@
     }
   },
   "MediaManagement": {
-    "pageTitle": "Media Management",
-    "pageDescription": "Manage all multimedia content like audio and video files.",
-    "addMedia": "Add Media",
-    "recordsTitle": "Media Records",
-    "recordsDescription": "A list of all multimedia content in the system.",
+    "pageTitle": "Gestión de Medios",
+    "pageDescription": "Gestione todo el contenido multimedia como archivos de audio y video.",
+    "addMedia": "Añadir Medios",
+    "recordsTitle": "Registros de Medios",
+    "recordsDescription": "Una lista de todo el contenido multimedia en el sistema.",
     "accessDenied": {
-      "title": "Access Denied",
-      "description": "You do not have permission to view media content.",
-      "createDescription": "You do not have permission to create new media content."
+      "title": "Acceso Denegado",
+      "description": "No tiene permiso para ver el contenido multimedia.",
+      "createDescription": "No tiene permiso para crear nuevo contenido multimedia."
     },
     "filters": {
-      "title": "Search & Filter Media",
-      "namePlaceholder": "Media Name...",
-      "typePlaceholder": "Type",
-      "allTypes": "All Types",
-      "statusPlaceholder": "Status",
-      "allStatuses": "All Statuses",
-      "reset": "Reset",
-      "search": "Search"
+      "title": "Buscar y Filtrar Medios",
+      "namePlaceholder": "Nombre del Medio...",
+      "typePlaceholder": "Tipo",
+      "allTypes": "Todos los Tipos",
+      "statusPlaceholder": "Estado",
+      "allStatuses": "Todos los Estados",
+      "reset": "Restablecer",
+      "search": "Buscar"
     },
     "table": {
-      "name": "Name",
-      "type": "Type",
-      "status": "Status",
-      "lastModified": "Last Modified",
+      "name": "Nombre",
+      "type": "Tipo",
+      "status": "Estado",
+      "lastModified": "Última Modificación",
       "actions": {
-        "view": "View details",
-        "edit": "Edit",
-        "delete": "Delete"
+        "view": "Ver detalles",
+        "edit": "Editar",
+        "delete": "Eliminar"
       }
     },
     "deleteDialog": {
-      "title": "Are you sure?",
-      "description": "This action cannot be undone. This will permanently delete the media content '{name}'.",
-      "cancel": "Cancel",
-      "confirm": "Yes, Delete Media",
-      "successTitle": "Media Deleted",
-      "successDesc": "The media '{name}' has been deleted.",
-      "errorTitle": "Delete Error"
+      "title": "¿Está seguro?",
+      "description": "Esta acción no se puede deshacer. Esto eliminará permanentemente el contenido multimedia '{name}'.",
+      "cancel": "Cancelar",
+      "confirm": "Sí, Eliminar Medios",
+      "successTitle": "Medios Eliminados",
+      "successDesc": "El medio '{name}' ha sido eliminado.",
+      "errorTitle": "Error al Eliminar"
     },
     "detailsSheet": {
-      "title": "Media Details",
-      "close": "Close",
-      "name": "Name",
-      "localizedName": "Localized Name",
-      "type": "Type",
-      "status": "Status",
-      "url": "File URL",
-      "description": "Description",
-      "lastModified": "Last Modified",
-      "createdBy": "Created By"
+      "title": "Detalles de los Medios",
+      "close": "Cerrar",
+      "name": "Nombre",
+      "localizedName": "Nombre Localizado",
+      "type": "Tipo",
+      "status": "Estado",
+      "url": "URL del Archivo",
+      "description": "Descripción",
+      "lastModified": "Última Modificación",
+      "createdBy": "Creado por"
     },
     "form": {
-      "addTitle": "Add New Media",
-      "addDescription": "Define a new media content entry for the system.",
-      "editTitle": "Edit Media",
-      "editDescription": "Update the media content details for: {name}.",
+      "addTitle": "Añadir Nuevos Medios",
+      "addDescription": "Definir una nueva entrada de contenido multimedia para el sistema.",
+      "editTitle": "Editar Medios",
+      "editDescription": "Actualizar los detalles del contenido multimedia: {name}.",
       "toast": {
-        "loadError": "Could not load media data.",
-        "addSuccessTitle": "Media Added",
-        "addSuccessDesc": "New media '{name}' created.",
-        "updateSuccessTitle": "Media Updated",
-        "updateSuccessDesc": "Media '{name}' updated.",
-        "errorTitle": "Operation Failed",
-        "errorDesc": "An error occurred. Please try again."
+        "loadError": "No se pudieron cargar los datos de los medios.",
+        "addSuccessTitle": "Medios Añadidos",
+        "addSuccessDesc": "Nuevos medios '{name}' creados.",
+        "updateSuccessTitle": "Medios Actualizados",
+        "updateSuccessDesc": "Medios '{name}' actualizados.",
+        "errorTitle": "Operación Fallida",
+        "errorDesc": "Ocurrió un error. Por favor, inténtelo de nuevo."
       }
     }
   },
   "GatesPage": {
-    "pageTitle": "Gate Management",
-    "pageDescription": "Real-time status and performance of all border control gates.",
-    "addGate": "Add Gate",
-    "noResults": "No gates match the current filters.",
+    "pageTitle": "Gestión de Puertas",
+    "pageDescription": "Estado y rendimiento en tiempo real de todas las puertas de control de fronteras.",
+    "addGate": "Añadir Puerta",
+    "noResults": "No hay puertas que coincidan con los filtros actuales.",
     "accessDenied": {
-      "title": "Access Denied",
-      "description": "You do not have permission to view E-Gate records."
+      "title": "Acceso Denegado",
+      "description": "No tiene permiso para ver los registros de la Puerta Electrónica."
     },
     "stats": {
-      "total": "Total Gates",
-      "totalDesc": "All configured gates",
-      "active": "Active Gates",
-      "activeDesc": "Currently operational",
-      "maintenance": "In Maintenance",
-      "maintenanceDesc": "Undergoing maintenance",
-      "offline": "Offline Gates",
-      "offlineDesc": "Not operational"
+      "total": "Puertas Totales",
+      "totalDesc": "Todas las puertas configuradas",
+      "active": "Puertas Activas",
+      "activeDesc": "Actualmente operativas",
+      "maintenance": "En Mantenimiento",
+      "maintenanceDesc": "En mantenimiento",
+      "offline": "Puertas Desconectadas",
+      "offlineDesc": "No operativas"
     },
     "filters": {
-      "title": "Search & Filter Gates",
-      "namePlaceholder": "Gate Name or Terminal...",
+      "title": "Buscar y Filtrar Puertas",
+      "namePlaceholder": "Nombre de la Puerta o Terminal...",
       "terminalPlaceholder": "Terminal",
-      "allTerminals": "All Terminals",
-      "typePlaceholder": "Type",
-      "allTypes": "All Types",
-      "statusPlaceholder": "Status",
-      "allStatuses": "All Statuses",
-      "reset": "Reset",
-      "search": "Search"
+      "allTerminals": "Todas las Terminales",
+      "typePlaceholder": "Tipo",
+      "allTypes": "Todos los Tipos",
+      "statusPlaceholder": "Estado",
+      "allStatuses": "Todos los Estados",
+      "reset": "Restablecer",
+      "search": "Buscar"
     },
     "card": {
-      "openMenu": "Open menu",
-      "viewDetails": "View details",
-      "editGate": "Edit gate",
-      "deactivate": "Deactivate",
-      "activate": "Activate",
-      "delete": "Delete",
-      "load": "Load",
-      "queue": "Queue",
-      "avgTime": "Avg. Time",
-      "lastMaintenance": "Last Maintenance"
+      "openMenu": "Abrir menú",
+      "viewDetails": "Ver detalles",
+      "editGate": "Editar puerta",
+      "deactivate": "Desactivar",
+      "activate": "Activar",
+      "delete": "Eliminar",
+      "load": "Carga",
+      "queue": "Cola",
+      "avgTime": "Tiempo Promedio",
+      "lastMaintenance": "Último Mantenimiento"
     },
     "detailsSheet": {
-      "title": "Gate Details",
-      "status": "Status",
-      "type": "Type",
+      "title": "Detalles de la Puerta",
+      "status": "Estado",
+      "type": "Tipo",
       "terminal": "Terminal",
-      "ipAddress": "IP Address",
-      "macAddress": "MAC Address",
-      "lastModified": "Last Modified",
-      "lastMaintenance": "Last Maintenance",
-      "equipmentStatus": "Equipment Status",
-      "close": "Close"
+      "ipAddress": "Dirección IP",
+      "macAddress": "Dirección MAC",
+      "lastModified": "Última Modificación",
+      "lastMaintenance": "Último Mantenimiento",
+      "equipmentStatus": "Estado del Equipo",
+      "close": "Cerrar"
     },
     "deleteDialog": {
-      "title": "Are you sure?",
-      "description": "This action cannot be undone. This will permanently delete the gate '{name}'.",
-      "cancel": "Cancel",
-      "confirm": "Yes, Delete Gate"
+      "title": "¿Está seguro?",
+      "description": "Esta acción no se puede deshacer. Esto eliminará permanentemente la puerta '{name}'.",
+      "cancel": "Cancelar",
+      "confirm": "Sí, Eliminar Puerta"
     },
     "toast": {
       "statusUpdated": {
-        "title": "Gate {status, select, Active {Activated} other {Deactivated}}",
-        "description": "Gate \"{name}\" has been set to {status, select, Active {active} other {offline}}."
+        "title": "Puerta {status, select, Active {Activada} other {Desactivada}}",
+        "description": "La puerta \"{name}\" ha sido establecida a {status, select, Active {activa} other {desconectada}}."
       },
       "deleteSuccess": {
-        "title": "Gate Deleted",
-        "description": "The gate has been permanently deleted."
+        "title": "Puerta Eliminada",
+        "description": "La puerta ha sido eliminada permanentemente."
       },
       "error": {
-        "title": "Operation Failed",
-        "description": "An error occurred. Please try again."
+        "title": "Operación Fallida",
+        "description": "Ocurrió un error. Por favor, inténtelo de nuevo."
       }
     },
     "form": {
-        "addTitle": "Add New E-Gate",
-        "addDescription": "Configure a new automated gate for passenger processing.",
-        "editTitle": "Edit E-Gate",
-        "editDescription": "Update the configuration for gate {gateName}.",
+        "addTitle": "Añadir Nueva E-Gate",
+        "addDescription": "Configurar una nueva puerta automática para el procesamiento de pasajeros.",
+        "editTitle": "Editar E-Gate",
+        "editDescription": "Actualizar la configuración para la puerta {gateName}.",
         "common": {
-            "cancel": "Cancel",
-            "save": "Save Changes",
-            "add": "Add Gate"
+            "cancel": "Cancelar",
+            "save": "Guardar Cambios",
+            "add": "Añadir Puerta"
         },
         "basicInfo": {
-            "title": "Basic Information",
-            "description": "Core identification and location details for the gate.",
-            "name": "Gate Name",
-            "code": "Gate Code",
-            "port": "Port",
-            "selectPort": "Select a port...",
+            "title": "Información Básica",
+            "description": "Detalles de identificación y ubicación principales de la puerta.",
+            "name": "Nombre de la Puerta",
+            "code": "Código de la Puerta",
+            "port": "Puerto",
+            "selectPort": "Seleccione un puerto...",
             "terminal": "Terminal",
-            "selectTerminal": "Select a terminal...",
-            "zone": "Zone",
-            "selectZone": "Select a zone..."
+            "selectTerminal": "Seleccione una terminal...",
+            "zone": "Zona",
+            "selectZone": "Seleccione una zona..."
         },
         "technicalInfo": {
-            "title": "Technical Details",
-            "description": "Network identifiers and hardware information.",
-            "ipAddress": "IP Address",
-            "macAddress": "MAC Address"
+            "title": "Detalles Técnicos",
+            "description": "Identificadores de red e información de hardware.",
+            "ipAddress": "Dirección IP",
+            "macAddress": "Dirección MAC"
         },
         "config": {
-            "title": "Operational Configuration",
-            "description": "Define how the gate functions.",
-            "status": "Status",
-            "type": "Gate Type",
-            "warrantyStart": "Warranty Start Date",
-            "warrantyEnd": "Warranty End Date",
-            "pickDate": "Pick a date"
+            "title": "Configuración Operativa",
+            "description": "Defina cómo funciona la puerta.",
+            "status": "Estado",
+            "type": "Tipo de Puerta",
+            "warrantyStart": "Fecha de Inicio de la Garantía",
+            "warrantyEnd": "Fecha de Fin de la Garantía",
+            "pickDate": "Seleccione una fecha"
         },
         "entryConfig": {
-            "title": "Entry Configuration",
-            "workflow": "Entry Workflow",
-            "selectWorkflow": "Select a workflow...",
-            "riskProfile": "Entry Risk Profile",
-            "selectRiskProfile": "Select a risk profile...",
-            "capacity": "Queue Capacity"
+            "title": "Configuración de Entrada",
+            "workflow": "Flujo de Trabajo de Entrada",
+            "selectWorkflow": "Seleccione un flujo de trabajo...",
+            "riskProfile": "Perfil de Riesgo de Entrada",
+            "selectRiskProfile": "Seleccione un perfil de riesgo...",
+            "capacity": "Capacidad de la Cola"
         },
         "exitConfig": {
-            "title": "Exit Configuration",
-            "workflow": "Exit Workflow",
-            "selectWorkflow": "Select a workflow...",
-            "riskProfile": "Exit Risk Profile",
-            "selectRiskProfile": "Select a risk profile...",
-            "capacity": "Queue Capacity"
+            "title": "Configuración de Salida",
+            "workflow": "Flujo de Trabajo de Salida",
+            "selectWorkflow": "Seleccione un flujo de trabajo...",
+            "riskProfile": "Perfil de Riesgo de Salida",
+            "selectRiskProfile": "Seleccione un perfil de riesgo...",
+            "capacity": "Capacidad de la Cola"
         },
         "toast": {
-            "updateSuccessTitle": "Gate Updated",
-            "updateSuccessDesc": "Gate '{gateName}' has been successfully updated.",
-            "addSuccessTitle": "Gate Added",
-            "addSuccessDesc": "New gate '{gateName}' has been successfully created.",
-            "errorTitle": "Operation Failed",
-            "errorDesc": "An error occurred. Please try again.",
-            "loadError": "Failed to load gate data. Please try again later."
+            "updateSuccessTitle": "Puerta Actualizada",
+            "updateSuccessDesc": "La puerta '{gateName}' ha sido actualizada exitosamente.",
+            "addSuccessTitle": "Puerta Añadida",
+            "addSuccessDesc": "La nueva puerta '{gateName}' ha sido creada exitosamente.",
+            "errorTitle": "Operación Fallida",
+            "errorDesc": "Ocurrió un error. Por favor, inténtelo de nuevo.",
+            "loadError": "No se pudieron cargar los datos de la puerta. Por favor, inténtelo de nuevo más tarde."
         }
     }
   },
@@ -1554,7 +1565,7 @@
         }
     }
   },
-   "BlacklistPage": {
+  "BlacklistPage": {
     "pageTitle": "Passenger Blacklist",
     "pageDescription": "Manage individuals flagged for security risks.",
     "addEntry": "Add to Blacklist",

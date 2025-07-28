@@ -1,6 +1,6 @@
 
 
-export type PortType = 'Airport' | 'Seaport' | 'Landport';
+import { Status, PortType } from '@/lib/enums';
 
 export interface Port {
     id: string;
@@ -10,7 +10,7 @@ export interface Port {
     city: string;
     country: string;
     type: PortType;
-    status: 'Active' | 'Inactive';
+    status: Status;
     lastModified: string;
     createdBy: string;
     address?: string;
@@ -21,7 +21,7 @@ export interface Terminal {
     id: string;
     name: string;
     portId: string;
-    status: 'Active' | 'Inactive';
+    status: Status;
     lastModified: string;
     createdBy: string;
 }
@@ -30,7 +30,7 @@ export interface Zone {
     id: string;
     name: string;
     terminalId: string;
-    status: 'Active' | 'Inactive';
+    status: Status;
     lastModified: string;
     createdBy: string;
 }

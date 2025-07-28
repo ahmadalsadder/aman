@@ -1,6 +1,7 @@
 
 
 import type { User } from '.';
+import { Status } from '@/lib/enums';
 
 export interface DayOfWeek {
     id: 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
@@ -19,7 +20,7 @@ export interface Shift {
     startTime: string;
     endTime: string;
     days: DayOfWeek['id'][];
-    status: 'Active' | 'Inactive';
+    status: Status;
     assignedOfficers?: Officer[];
     lastModified: string;
     createdBy?: string;

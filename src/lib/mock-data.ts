@@ -1,6 +1,6 @@
 
 
-
+import { Status, PortType, RiskLevel, PassengerStatus, Gender } from './enums';
 import type { Passenger, Transaction, OfficerDesk, Gate, Media, WhitelistEntry, BlacklistEntry, OfficerAssignment, GateLogEntry } from "@/types/live-processing";
 import type { Shift, DayOfWeek } from "@/types/workload";
 import { Plane, Car, Ship } from "lucide-react";
@@ -16,9 +16,9 @@ const mockPassengersData: Passenger[] = [
       passportNumber: "A12345678",
       nationality: "United States",
       dateOfBirth: "1985-05-20",
-      gender: "Male",
-      status: "Active",
-      riskLevel: "Low",
+      gender: Gender.Male,
+      status: PassengerStatus.Active,
+      riskLevel: RiskLevel.Low,
       lastEntry: "2023-10-15",
       profilePicture: "https://placehold.co/400x400.png"
     },
@@ -29,9 +29,9 @@ const mockPassengersData: Passenger[] = [
       passportNumber: "B87654321",
       nationality: "United Kingdom",
       dateOfBirth: "1992-11-30",
-      gender: "Female",
-      status: "Active",
-      riskLevel: "Medium",
+      gender: Gender.Female,
+      status: PassengerStatus.Active,
+      riskLevel: RiskLevel.Medium,
       lastEntry: "2023-11-01",
       notes: "Previous baggage inspection triggered a minor alert.",
       profilePicture: "https://placehold.co/400x400.png"
@@ -43,9 +43,9 @@ const mockPassengersData: Passenger[] = [
       passportNumber: "G55566677",
       nationality: "China",
       dateOfBirth: "1988-08-08",
-      gender: "Male",
-      status: "Watchlisted",
-      riskLevel: "High",
+      gender: Gender.Male,
+      status: PassengerStatus.Flagged,
+      riskLevel: RiskLevel.High,
       profilePicture: "https://placehold.co/400x400.png"
     }
 ];
@@ -147,25 +147,25 @@ let mockOfficerDesks: OfficerDesk[] = [
 ];
 
 let mockPorts: Port[] = [
-    { id: 'PORT-DXB', name: 'Dubai International Airport', city: 'Dubai', country: 'United Arab Emirates', type: 'Airport', status: 'Active', lastModified: '2023-05-20T10:00:00Z', createdBy: 'Admin User' },
-    { id: 'PORT-PC', name: 'Port Rashid', city: 'Dubai', country: 'United Arab Emirates', type: 'Seaport', status: 'Active', lastModified: '2023-05-20T10:00:00Z', createdBy: 'Admin User' },
-    { id: 'PORT-HE', name: 'Hatta Land Port', city: 'Hatta', country: 'United Arab Emirates', type: 'Landport', status: 'Inactive', lastModified: '2023-05-20T10:00:00Z', createdBy: 'Admin User' },
+    { id: 'PORT-DXB', name: 'Dubai International Airport', city: 'Dubai', country: 'United Arab Emirates', type: PortType.Airport, status: Status.Active, lastModified: '2023-05-20T10:00:00Z', createdBy: 'Admin User' },
+    { id: 'PORT-PC', name: 'Port Rashid', city: 'Dubai', country: 'United Arab Emirates', type: PortType.Seaport, status: Status.Active, lastModified: '2023-05-20T10:00:00Z', createdBy: 'Admin User' },
+    { id: 'PORT-HE', name: 'Hatta Land Port', city: 'Hatta', country: 'United Arab Emirates', type: PortType.Landport, status: Status.Inactive, lastModified: '2023-05-20T10:00:00Z', createdBy: 'Admin User' },
 ];
 
 let mockTerminals: Terminal[] = [
-    { id: 'TERM-DXB-1', name: 'Terminal 1', portId: 'PORT-DXB', status: 'Active', lastModified: '2023-05-20T10:00:00Z', createdBy: 'Admin User' },
-    { id: 'TERM-DXB-2', name: 'Terminal 2', portId: 'PORT-DXB', status: 'Active', lastModified: '2023-05-20T10:00:00Z', createdBy: 'Admin User' },
-    { id: 'TERM-DXB-3', name: 'Terminal 3', portId: 'PORT-DXB', status: 'Active', lastModified: '2023-05-20T10:00:00Z', createdBy: 'Admin User' },
-    { id: 'TERM-PC-1', name: 'Cruise Terminal 1', portId: 'PORT-PC', status: 'Active', lastModified: '2023-05-20T10:00:00Z', createdBy: 'Admin User' },
-    { id: 'TERM-PC-2', name: 'Cruise Terminal 2', portId: 'PORT-PC', status: 'Inactive', lastModified: '2023-05-20T10:00:00Z', createdBy: 'Admin User' },
-    { id: 'TERM-HE-1', name: 'Main Terminal', portId: 'PORT-HE', status: 'Active', lastModified: '2023-05-20T10:00:00Z', createdBy: 'Admin User' },
+    { id: 'TERM-DXB-1', name: 'Terminal 1', portId: 'PORT-DXB', status: Status.Active, lastModified: '2023-05-20T10:00:00Z', createdBy: 'Admin User' },
+    { id: 'TERM-DXB-2', name: 'Terminal 2', portId: 'PORT-DXB', status: Status.Active, lastModified: '2023-05-20T10:00:00Z', createdBy: 'Admin User' },
+    { id: 'TERM-DXB-3', name: 'Terminal 3', portId: 'PORT-DXB', status: Status.Active, lastModified: '2023-05-20T10:00:00Z', createdBy: 'Admin User' },
+    { id: 'TERM-PC-1', name: 'Cruise Terminal 1', portId: 'PORT-PC', status: Status.Active, lastModified: '2023-05-20T10:00:00Z', createdBy: 'Admin User' },
+    { id: 'TERM-PC-2', name: 'Cruise Terminal 2', portId: 'PORT-PC', status: Status.Inactive, lastModified: '2023-05-20T10:00:00Z', createdBy: 'Admin User' },
+    { id: 'TERM-HE-1', name: 'Main Terminal', portId: 'PORT-HE', status: Status.Active, lastModified: '2023-05-20T10:00:00Z', createdBy: 'Admin User' },
 ];
 
 let mockZones: Zone[] = [
-    { id: 'ZONE-A', name: 'Zone A', terminalId: 'TERM-DXB-1', status: 'Active', lastModified: '2023-05-20T10:00:00Z', createdBy: 'Admin User' },
-    { id: 'ZONE-B', name: 'Zone B', terminalId: 'TERM-DXB-2', status: 'Active', lastModified: '2023-05-20T10:00:00Z', createdBy: 'Admin User' },
-    { id: 'ZONE-SA', name: 'Arrivals', terminalId: 'TERM-PC-1', status: 'Active', lastModified: '2023-05-20T10:00:00Z', createdBy: 'Admin User' },
-    { id: 'ZONE-LA', name: 'Commercial Lanes', terminalId: 'TERM-HE-1', status: 'Active', lastModified: '2023-05-20T10:00:00Z', createdBy: 'Admin User' },
+    { id: 'ZONE-A', name: 'Zone A', terminalId: 'TERM-DXB-1', status: Status.Active, lastModified: '2023-05-20T10:00:00Z', createdBy: 'Admin User' },
+    { id: 'ZONE-B', name: 'Zone B', terminalId: 'TERM-DXB-2', status: Status.Active, lastModified: '2023-05-20T10:00:00Z', createdBy: 'Admin User' },
+    { id: 'ZONE-SA', name: 'Arrivals', terminalId: 'TERM-PC-1', status: Status.Active, lastModified: '2023-05-20T10:00:00Z', createdBy: 'Admin User' },
+    { id: 'ZONE-LA', name: 'Commercial Lanes', terminalId: 'TERM-HE-1', status: Status.Active, lastModified: '2023-05-20T10:00:00Z', createdBy: 'Admin User' },
 ];
 
 let mockMachines: Machine[] = [

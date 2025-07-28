@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useMemo } from 'react';
@@ -62,7 +63,7 @@ export function UsersPage({ users, loading, onDeleteUser }: UsersPageProps) {
     { accessorKey: 'name', header: 'Name' },
     { accessorKey: 'email', header: 'Email' },
     { accessorKey: 'role', header: 'Role', cell: ({ row }) => <Badge variant="secondary">{row.original.role}</Badge> },
-    { accessorKey: 'modules', header: 'Modules', cell: ({ row }) => <div className="flex flex-wrap gap-1">{row.original.modules.map(m => <Badge key={m} variant="outline">{m}</Badge>)}</div> },
+    { accessorKey: 'modules', header: 'Port & Module Access', cell: ({ row }) => <div className="flex flex-wrap gap-1">{row.original.modules.map(m => <Badge key={m} variant="outline">{m}</Badge>)}</div> },
     { id: 'actions', cell: ({ row }) => {
         return (
           <DropdownMenu>

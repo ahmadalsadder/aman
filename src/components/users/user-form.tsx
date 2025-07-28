@@ -15,11 +15,12 @@ import { useRouter } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { allPermissions, modulePermissions } from '@/lib/permissions';
+import { modulePermissions } from '@/lib/permissions';
 import { useState, useEffect } from 'react';
 import { api } from '@/lib/api';
 import { Skeleton } from '../ui/skeleton';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../ui/accordion';
+import { MultiSelect } from '../ui/multi-select-combobox';
 
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters."),
@@ -43,6 +44,9 @@ interface UserFormProps {
 
 export function UserForm({ userToEdit, onSave, isLoading }: UserFormProps) {
   const router = useRouter();
+  const [ports, setPorts] = useState<Port[]>([]);
+  const [loadingPorts, setLoadingPorts] = useState(true);
+
   const form = useForm<UserFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: userToEdit || {
@@ -53,6 +57,24 @@ export function UserForm({ userToEdit, onSave, isLoading }: UserFormProps) {
       permissions: [],
     },
   });
+
+  useEffect(() => {
+    const fetchPorts = async () => {
+      setLoadingPorts(true);
+      const result = await api.get<Port[]>('/data/ports/all');
+      if (result.isSuccess && result.data) {
+        setPorts(result.data);
+      }
+      setLoadingPorts(false);
+    };
+    fetchPorts();
+  }, []);
+  
+  const portOptions = ports.map(port => ({
+      value: port.type.toLowerCase(),
+      label: port.name
+  }));
+
 
   return (
     <Form {...form}>
@@ -66,6 +88,24 @@ export function UserForm({ userToEdit, onSave, isLoading }: UserFormProps) {
                     <FormField control={form.control} name="name" render={({ field }) => ( <FormItem><FormLabel>Full Name</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem> )} />
                     <FormField control={form.control} name="email" render={({ field }) => ( <FormItem><FormLabel>Email Address</FormLabel><FormControl><Input type="email" {...field} /></FormControl><FormMessage /></FormItem> )} />
                     <FormField control={form.control} name="role" render={({ field }) => ( <FormItem><FormLabel>Role</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue/></SelectTrigger></FormControl><SelectContent><SelectItem value="admin">Admin</SelectItem><SelectItem value="auditor">Auditor</SelectItem><SelectItem value="viewer">Viewer</SelectItem><SelectItem value="shiftsupervisor">Shift Supervisor</SelectItem><SelectItem value="control-room">Control Room</SelectItem><SelectItem value="analyst">Analyst</SelectItem><SelectItem value="officer">Officer</SelectItem></SelectContent></Select><FormMessage /></FormItem> )} />
+                     <FormField
+                        control={form.control}
+                        name="modules"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Port & Module Access</FormLabel>
+                                <FormControl>
+                                    <MultiSelect
+                                        options={portOptions}
+                                        value={field.value}
+                                        onChange={field.onChange}
+                                        placeholder="Select ports..."
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
                 </CardContent>
             </Card>
 
@@ -75,41 +115,43 @@ export function UserForm({ userToEdit, onSave, isLoading }: UserFormProps) {
                     <CardDescription>Select the modules and specific permissions this user can access.</CardDescription>
                 </CardHeader>
                 <CardContent className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                     <div className="space-y-2">
+                    <div className="space-y-2">
                         <h4 className="font-semibold">Module Access</h4>
-                        <p className="text-sm text-muted-foreground">Select all modules the user can see in their sidebar.</p>
-                        <FormField
-                            control={form.control} name="modules"
-                            render={() => (
-                            <FormItem>
-                                <ScrollArea className="h-64 rounded-md border p-4">
-                                    {modulePermissions.map((mod) => (
-                                        <FormField
-                                            key={mod.id} control={form.control} name="modules"
-                                            render={({ field }) => {
-                                            return (
-                                                <FormItem key={mod.id} className="flex flex-row items-start space-x-3 space-y-0 mb-4">
-                                                <FormControl>
-                                                    <Checkbox
-                                                        checked={field.value?.includes(mod.id)}
-                                                        onCheckedChange={(checked) => {
-                                                            return checked
-                                                                ? field.onChange([...(field.value || []), mod.id])
-                                                                : field.onChange(field.value?.filter((value) => value !== mod.id))
-                                                        }}
-                                                    />
-                                                </FormControl>
-                                                <FormLabel className="font-normal">{mod.label}</FormLabel>
-                                                </FormItem>
-                                            )
-                                            }}
-                                        />
-                                    ))}
-                                </ScrollArea>
-                                <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                        <p className="text-sm text-muted-foreground">Select all modules the user can see in their sidebar. This does not grant permissions.</p>
+                        {loadingPorts ? <Skeleton className="h-64 w-full" /> : (
+                            <FormField
+                                control={form.control} name="modules"
+                                render={() => (
+                                <FormItem>
+                                    <ScrollArea className="h-64 rounded-md border p-4">
+                                        {modulePermissions.map((mod) => (
+                                            <FormField
+                                                key={mod.id} control={form.control} name="modules"
+                                                render={({ field }) => {
+                                                return (
+                                                    <FormItem key={mod.id} className="flex flex-row items-start space-x-3 space-y-0 mb-4">
+                                                    <FormControl>
+                                                        <Checkbox
+                                                            checked={field.value?.includes(mod.id)}
+                                                            onCheckedChange={(checked) => {
+                                                                return checked
+                                                                    ? field.onChange([...(field.value || []), mod.id])
+                                                                    : field.onChange(field.value?.filter((value) => value !== mod.id))
+                                                            }}
+                                                        />
+                                                    </FormControl>
+                                                    <FormLabel className="font-normal">{mod.label}</FormLabel>
+                                                    </FormItem>
+                                                )
+                                                }}
+                                            />
+                                        ))}
+                                    </ScrollArea>
+                                    <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        )}
                     </div>
                     <div className="space-y-2">
                         <h4 className="font-semibold">Granular Permissions</h4>

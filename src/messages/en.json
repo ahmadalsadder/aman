@@ -1,5 +1,6 @@
 
 
+
 {
   "Enums": {
     "Status": {
@@ -83,7 +84,8 @@
     "assignOfficer": "Assign Officer",
     "ports": "Ports",
     "terminals": "Terminals",
-    "gateLog": "Gate Log"
+    "gateLog": "Gate Log",
+    "lookups": "Lookups"
   },
   "ModulePage": {
     "verifyingAccess": "Verifying access...",
@@ -280,6 +282,19 @@
     "notYourPortals": "Don't see the portal you're looking for? Contact your administrator."
   },
   "Configuration": {
+    "Lookups": {
+      "pageTitle": "Lookup Management",
+      "pageDescription": "Manage system-wide lookup values like countries, statuses, etc.",
+      "table": {
+        "title": "Lookup Tables",
+        "description": "Select a lookup table to manage its items.",
+        "name": "Lookup Name",
+        "description": "Description"
+      },
+      "actions": {
+        "manageItems": "Manage Items"
+      }
+    },
     "Dashboard": {
       "title": "Dashboard",
       "description": "Manage system-wide settings.",

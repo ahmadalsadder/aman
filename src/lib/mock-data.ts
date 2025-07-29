@@ -2,11 +2,12 @@
 
 
 
+
 import { Status, PortType, RiskLevel, PassengerStatus, Gender, DayOfWeek, TransactionType, TransactionStatus, Decision, EntranceType, CivilFileType, MachineStatus, MachineType, OfficerDeskStatus, MovementType, GateType, GateStatus, MediaType, ListStatus, BlacklistCategory, SystemMessageCategory, GateLogEventType, GateLogStatus, AssignmentStatus, DocumentType } from './enums';
 import type { Passenger, Transaction, OfficerDesk, Gate, Media, WhitelistEntry, BlacklistEntry, OfficerAssignment, GateLogEntry } from "@/types/live-processing";
 import type { Shift } from "@/types/workload";
 import { Plane, Car, Ship } from "lucide-react";
-import type { Port, Terminal, Zone, Workflow, RiskProfile, User, CountryLanguageMapping, CountryPassportMapping, Machine, SystemMessage } from '@/types';
+import type { Port, Terminal, Zone, Workflow, RiskProfile, User, CountryLanguageMapping, CountryPassportMapping, Machine, SystemMessage, Lookup, LookupItem } from '@/types';
 
 // This is the correct order for initialization.
 // Define data first, then functions that use it.
@@ -331,6 +332,16 @@ let mockGateLogs: GateLogEntry[] = [
     { id: 'LOG-004', timestamp: '2023-10-29 14:40:22', gateId: 'EGATE-01', gateName: 'Main Entry Gate', eventType: GateLogEventType.Transaction, status: GateLogStatus.Failure, description: 'Passenger rejected due to biometric mismatch (78%).', actor: 'System' },
 ];
 
+let mockLookups: Lookup[] = [
+    { id: 'countries', name: 'Countries', description: 'List of all countries for dropdowns.', items: [] },
+    { id: 'gender', name: 'Gender', description: 'Gender options.', items: [] }
+];
+
+let mockLookupItems: LookupItem[] = [
+    { id: '1', lookupId: 'gender', code: 'Male', isEnabled: true, translations: [{ language: 'en', value: 'Male' }, { language: 'ar', value: 'ذكر' }], displayOrder: 1 },
+    { id: '2', lookupId: 'gender', code: 'Female', isEnabled: true, translations: [{ language: 'en', value: 'Female' }, { language: 'ar', value: 'أنثى' }], displayOrder: 2 },
+];
+
 
 // Getters
 export const getMockPassengers = () => mockPassengers;
@@ -348,6 +359,8 @@ export const getMockOfficerAssignments = () => mockOfficerAssignments;
 export const getMockMachines = () => mockMachines;
 export const getMockSystemMessages = () => mockSystemMessages;
 export const getMockGateLogs = () => mockGateLogs;
+export const getMockLookups = () => mockLookups;
+export const getMockLookupItems = () => mockLookupItems;
 
 
 // Setters
@@ -395,6 +408,12 @@ export const setMockSystemMessages = (newSystemMessages: SystemMessage[]) => {
 };
 export const setMockGateLogs = (newGateLogs: GateLogEntry[]) => {
     mockGateLogs = newGateLogs;
+};
+export const setMockLookups = (newLookups: Lookup[]) => {
+    mockLookups = newLookups;
+};
+export const setMockLookupItems = (newLookupItems: LookupItem[]) => {
+    mockLookupItems = newLookupItems;
 };
 
 

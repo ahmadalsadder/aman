@@ -4,7 +4,7 @@
 
 import type { User } from '@/types';
 import { Result, ApiError } from '@/types/api/result';
-import { mockVisaDatabase, getMockPorts, setMockPorts, getMockTerminals, setMockTerminals, getMockZones, setMockZones, mockWorkflows, mockRiskProfiles, setMockOfficerDesks, setMockGates, setMockMedia, setMockWhitelist, setMockBlacklist, setMockPassengers, setMockShifts, getMockPassengers, getMockTransactions, getMockOfficerDesks, getMockGates, getMockMedia, getMockWhitelist, getMockBlacklist, getMockShifts, setMockOfficerAssignments, getMockOfficerAssignments, mockCountryLanguageMapping, availableLanguages, mockCountryPassportMapping, getMockMachines, setMockMachines, getMockSystemMessages, setMockSystemMessages, getMockGateLogs } from './mock-data';
+import { mockVisaDatabase, getMockPorts, setMockPorts, getMockTerminals, setMockTerminals, getMockZones, setMockZones, mockWorkflows, mockRiskProfiles, setMockOfficerDesks, setMockGates, setMockMedia, setMockWhitelist, setMockBlacklist, setMockPassengers, setMockShifts, getMockPassengers, getMockTransactions, getMockOfficerDesks, getMockGates, getMockMedia, getMockWhitelist, getMockBlacklist, getMockShifts, setMockOfficerAssignments, getMockOfficerAssignments, mockCountryLanguageMapping, availableLanguages, mockCountryPassportMapping, getMockMachines, setMockMachines, getMockSystemMessages, setMockSystemMessages, getMockGateLogs, getMockLookups, getMockLookupItems } from './mock-data';
 import { assessPassengerRisk } from '@/ai/flows/assess-risk-flow';
 import { countries } from './countries';
 import { Fingerprint, ScanLine, UserCheck, ShieldAlert, User as UserIcon } from 'lucide-react';
@@ -1314,6 +1314,23 @@ export async function mockApi<T>(endpoint: string, options: RequestInit = {}): P
             return Result.success(machine) as Result<T>;
         }
         return Result.failure([new ApiError('NOT_FOUND', `Machine with id ${id} not found.`)]) as Result<T>;
+    }
+
+    // Lookups
+    if (method === 'GET' && url.pathname.startsWith('/data/lookups/')) {
+        const id = pathParts[pathParts.length - 1];
+        const lookup = getMockLookups().find(l => l.id === id);
+        
+        if (lookup) {
+            lookup.items = getMockLookupItems().filter(i => i.lookupId === id);
+            return Result.success({ lookup }) as Result<T>;
+        }
+
+        return Result.failure([new ApiError('NOT_FOUND', `Lookup with id ${id} not found.`)]) as Result<T>;
+    }
+
+    if (method === 'GET' && url.pathname === '/data/lookups') {
+        return Result.success(getMockLookups()) as Result<T>;
     }
 
 

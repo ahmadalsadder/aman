@@ -1,11 +1,16 @@
 
 
-
-
 import type { User } from '.';
 import { Status, DayOfWeek, AssignmentStatus } from '@/lib/enums';
 
 export { DayOfWeek };
+
+export interface Break {
+    id: string;
+    name: string;
+    startTime: string;
+    duration: number; // in minutes
+}
 
 export interface Officer {
     id: string;
@@ -24,6 +29,7 @@ export interface Shift {
     lastModified: string;
     createdBy?: string;
     module?: string;
+    breaks?: Break[];
 }
 
 export interface OfficerAssignment {

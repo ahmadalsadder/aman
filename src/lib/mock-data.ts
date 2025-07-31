@@ -3,6 +3,7 @@
 
 
 
+
 import { Status, PortType, RiskLevel, PassengerStatus, Gender, DayOfWeek, TransactionType, TransactionStatus, Decision, EntranceType, CivilFileType, MachineStatus, MachineType, OfficerDeskStatus, MovementType, GateType, GateStatus, MediaType, ListStatus, BlacklistCategory, SystemMessageCategory, GateLogEventType, GateLogStatus, AssignmentStatus, DocumentType } from './enums';
 import type { Passenger, Transaction, OfficerDesk, Gate, Media, WhitelistEntry, BlacklistEntry, OfficerAssignment, GateLogEntry } from "@/types/live-processing";
 import type { Shift } from "@/types/workload";
@@ -262,10 +263,20 @@ let mockBlacklist: BlacklistEntry[] = [
 ];
 
 let mockShifts: Shift[] = [
-    { id: 'S001', name: 'Morning Shift', startTime: '08:00', endTime: '16:00', days: [DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday], status: Status.Active, lastModified: '2023-05-20' },
+    { id: 'S001', name: 'Morning Shift', startTime: '08:00', endTime: '16:00', days: [DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday], status: Status.Active, lastModified: '2023-05-20',
+      breaks: [
+          { id: 'B001', name: 'Coffee Break', startTime: '10:00', duration: 15 },
+          { id: 'B002', name: 'Lunch Break', startTime: '12:30', duration: 45 },
+      ] 
+    },
     { id: 'S002', name: 'Evening Shift', startTime: '16:00', endTime: '00:00', days: [DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday], status: Status.Active, lastModified: '2023-05-20' },
     { id: 'S003', name: 'Night Shift', startTime: '00:00', endTime: '08:00', days: [DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday], status: Status.Inactive, lastModified: '2023-05-18' },
-    { id: 'S004', name: 'Weekend Day', startTime: '09:00', endTime: '21:00', days: [DayOfWeek.Saturday, DayOfWeek.Sunday], status: Status.Active, lastModified: '2023-05-19' },
+    { id: 'S004', name: 'Weekend Day', startTime: '09:00', endTime: '21:00', days: [DayOfWeek.Saturday, DayOfWeek.Sunday], status: Status.Active, lastModified: '2023-05-19',
+      breaks: [
+          { id: 'B003', name: 'Lunch', startTime: '13:00', duration: 60 },
+          { id: 'B004', name: 'Afternoon Break', startTime: '17:00', duration: 20 },
+      ]
+    },
 ];
 
 let mockOfficerAssignments: OfficerAssignment[] = [

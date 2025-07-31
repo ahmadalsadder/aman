@@ -6,7 +6,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetFo
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
-import type { Shift } from '@/types';
+import type { Shift, Break } from '@/types';
 import { cn } from '@/lib/utils';
 import { useTranslations } from 'next-intl';
 
@@ -56,6 +56,19 @@ export function ShiftDetailsSheet({ shift, isOpen, onOpenChange }: ShiftDetailsS
                         </div>
                     </div>
                     <Separator />
+                    <div className="py-2 space-y-2">
+                        <p className="text-sm font-semibold">Breaks</p>
+                        {shift.breaks && shift.breaks.length > 0 ? (
+                            <ul className="list-disc list-inside text-sm text-muted-foreground pl-2">
+                                {shift.breaks.map(b => (
+                                    <li key={b.id}>{b.name} @ {b.startTime} ({b.duration} mins)</li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p className="text-sm text-muted-foreground italic">No breaks scheduled.</p>
+                        )}
+                    </div>
+                     <Separator />
                      <div className="py-2 space-y-2">
                         <p className="text-sm text-muted-foreground">Assigned Officers</p>
                         <p className="text-sm font-medium italic">

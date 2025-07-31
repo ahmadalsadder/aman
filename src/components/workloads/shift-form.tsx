@@ -1,9 +1,8 @@
 
 
-
 'use client';
 
-import { useForm } from 'react-hook-form';
+import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Button } from '@/components/ui/button';
@@ -11,12 +10,20 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import type { Shift } from '@/types';
+import type { Shift, Break } from '@/types';
 import { useRouter } from 'next/navigation';
-import { Loader2 } from 'lucide-react';
+import { Loader2, PlusCircle, Trash2 } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useTranslations } from 'next-intl';
 import { DayOfWeek, Status } from '@/lib/enums';
+import { nanoid } from 'nanoid';
+
+const breakSchema = z.object({
+  id: z.string(),
+  name: z.string().min(1, "Break name is required."),
+  startTime: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, "Invalid time format (HH:MM)"),
+  duration: z.coerce.number().min(1, "Duration must be at least 1 minute."),
+});
 
 const formSchema = z.object({
   name: z.string().min(2, "Shift name must be at least 2 characters."),
@@ -26,6 +33,7 @@ const formSchema = z.object({
     message: "You have to select at least one day.",
   }),
   status: z.nativeEnum(Status),
+  breaks: z.array(breakSchema).optional(),
 });
 
 export type ShiftFormValues = z.infer<typeof formSchema>;
@@ -49,7 +57,13 @@ export function ShiftForm({ shiftToEdit, onSave, isLoading }: ShiftFormProps) {
       endTime: '16:00',
       days: [DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday],
       status: Status.Active,
+      breaks: [],
     },
+  });
+
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: 'breaks',
   });
 
   return (
@@ -119,6 +133,47 @@ export function ShiftForm({ shiftToEdit, onSave, isLoading }: ShiftFormProps) {
                         </FormItem>
                     )}
                  />
+            </CardContent>
+        </Card>
+        <Card>
+            <CardHeader>
+                <CardTitle>Breaks</CardTitle>
+                <CardDescription>Define breaks within this shift.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+                {fields.map((field, index) => (
+                    <div key={field.id} className="flex items-end gap-2 p-4 border rounded-md">
+                        <FormField
+                            control={form.control}
+                            name={`breaks.${index}.name`}
+                            render={({ field }) => (
+                                <FormItem className="flex-grow"><FormLabel>Break Name</FormLabel><FormControl><Input {...field} placeholder="e.g., Lunch" /></FormControl><FormMessage /></FormItem>
+                            )}
+                        />
+                         <FormField
+                            control={form.control}
+                            name={`breaks.${index}.startTime`}
+                            render={({ field }) => (
+                                <FormItem><FormLabel>Start Time</FormLabel><FormControl><Input type="time" {...field} /></FormControl><FormMessage /></FormItem>
+                            )}
+                        />
+                         <FormField
+                            control={form.control}
+                            name={`breaks.${index}.duration`}
+                            render={({ field }) => (
+                                <FormItem><FormLabel>Duration (min)</FormLabel><FormControl><Input type="number" {...field} /></FormControl><FormMessage /></FormItem>
+                            )}
+                        />
+                        <Button type="button" variant="destructive" size="icon" onClick={() => remove(index)}><Trash2 className="h-4 w-4" /></Button>
+                    </div>
+                ))}
+                <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => append({ id: nanoid(), name: '', startTime: '12:00', duration: 30 })}
+                >
+                    <PlusCircle className="mr-2 h-4 w-4" /> Add Break
+                </Button>
             </CardContent>
         </Card>
         <div className="flex justify-end gap-2">

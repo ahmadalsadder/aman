@@ -1,5 +1,4 @@
 
-
 {
   "Enums": {
     "Status": {
@@ -1252,141 +1251,141 @@
     }
   },
   "GatesPage": {
-    "pageTitle": "Gestión de Puertas",
-    "pageDescription": "Estado y rendimiento en tiempo real de todas las puertas de control de fronteras.",
-    "addGate": "Añadir Puerta",
-    "noResults": "No hay puertas que coincidan con los filtros actuales.",
+    "pageTitle": "إدارة البوابات",
+    "pageDescription": "الحالة والأداء في الوقت الفعلي لجميع بوابات مراقبة الحدود.",
+    "addGate": "إضافة بوابة",
+    "noResults": "لا توجد بوابات تطابق المرشحات الحالية.",
     "accessDenied": {
-      "title": "Acceso Denegado",
-      "description": "No tiene permiso para ver los registros de la Puerta Electrónica."
+      "title": "تم رفض الوصول",
+      "description": "ليس لديك إذن لعرض سجلات البوابة الإلكترونية."
     },
     "stats": {
-      "total": "Puertas Totales",
-      "totalDesc": "Todas las puertas configuradas",
-      "active": "Puertas Activas",
-      "activeDesc": "Actualmente operativas",
-      "maintenance": "En Mantenimiento",
-      "maintenanceDesc": "En mantenimiento",
-      "offline": "Puertas Desconectadas",
-      "offlineDesc": "No operativas"
+      "total": "إجمالي البوابات",
+      "totalDesc": "جميع البوابات المكونة",
+      "active": "البوابات النشطة",
+      "activeDesc": "تعمل حاليًا",
+      "maintenance": "في الصيانة",
+      "maintenanceDesc": "تحت الصيانة",
+      "offline": "البوابات غير المتصلة",
+      "offlineDesc": "لا تعمل"
     },
     "filters": {
-      "title": "Buscar y Filtrar Puertas",
-      "namePlaceholder": "Nombre de la Puerta o Terminal...",
-      "terminalPlaceholder": "Terminal",
-      "allTerminals": "Todas las Terminales",
-      "typePlaceholder": "Tipo",
-      "allTypes": "Todos los Tipos",
-      "statusPlaceholder": "Estado",
-      "allStatuses": "Todos los Estados",
-      "reset": "Restablecer",
-      "search": "Buscar"
+      "title": "بحث وتصفية البوابات",
+      "namePlaceholder": "اسم البوابة أو المحطة...",
+      "terminalPlaceholder": "المحطة",
+      "allTerminals": "جميع المحطات",
+      "typePlaceholder": "النوع",
+      "allTypes": "جميع الأنواع",
+      "statusPlaceholder": "الحالة",
+      "allStatuses": "جميع الحالات",
+      "reset": "إعادة تعيين",
+      "search": "بحث"
     },
     "card": {
-      "openMenu": "Abrir menú",
-      "viewDetails": "Ver detalles",
-      "editGate": "Editar puerta",
-      "deactivate": "Desactivar",
-      "activate": "Activar",
-      "delete": "Eliminar",
-      "load": "Carga",
-      "queue": "Cola",
-      "avgTime": "Tiempo Promedio",
-      "lastMaintenance": "Último Mantenimiento"
+      "openMenu": "فتح القائمة",
+      "viewDetails": "عرض التفاصيل",
+      "editGate": "تعديل البوابة",
+      "deactivate": "إلغاء التنشيط",
+      "activate": "تنشيط",
+      "delete": "حذف",
+      "load": "الحمل",
+      "queue": "الطابور",
+      "avgTime": "متوسط الوقت",
+      "lastMaintenance": "آخر صيانة"
     },
     "detailsSheet": {
-      "title": "Detalles de la Puerta",
-      "status": "Estado",
-      "type": "Tipo",
-      "terminal": "Terminal",
-      "ipAddress": "Dirección IP",
-      "macAddress": "Dirección MAC",
-      "lastModified": "Última Modificación",
-      "lastMaintenance": "Último Mantenimiento",
-      "equipmentStatus": "Estado del Equipo",
-      "close": "Cerrar"
+      "title": "تفاصيل البوابة",
+      "status": "الحالة",
+      "type": "النوع",
+      "terminal": "المحطة",
+      "ipAddress": "عنوان IP",
+      "macAddress": "عنوان MAC",
+      "lastModified": "آخر تعديل",
+      "lastMaintenance": "آخر صيانة",
+      "equipmentStatus": "حالة المعدات",
+      "close": "إغلاق"
     },
     "deleteDialog": {
-      "title": "¿Está seguro?",
-      "description": "Esta acción no se puede deshacer. Esto eliminará permanentemente la puerta '{name}'.",
-      "cancel": "Cancelar",
-      "confirm": "Sí, Eliminar Puerta"
+      "title": "هل أنت متأكد؟",
+      "description": "هذا الإجراء لا يمكن التراجع عنه. سيؤدي هذا إلى حذف البوابة '{name}' بشكل دائم.",
+      "cancel": "إلغاء",
+      "confirm": "نعم، حذف البوابة"
     },
     "toast": {
       "statusUpdated": {
-        "title": "Puerta {status, select, Active {Activada} other {Desactivada}}",
-        "description": "La puerta \"{name}\" ha sido establecida a {status, select, Active {activa} other {desconectada}}."
+        "title": "البوابة {status, select, Active {تم تفعيلها} other {تم إلغاء تفعيلها}}",
+        "description": "تم تعيين البوابة \"{name}\" إلى {status, select, Active {نشطة} other {غير متصلة}}."
       },
       "deleteSuccess": {
-        "title": "Puerta Eliminada",
-        "description": "La puerta ha sido eliminada permanentemente."
+        "title": "تم حذف البوابة",
+        "description": "تم حذف البوابة بشكل دائم."
       },
       "error": {
-        "title": "Operación Fallida",
-        "description": "Ocurrió un error. Por favor, inténtelo de nuevo."
+        "title": "فشلت العملية",
+        "description": "حدث خطأ. يرجى المحاولة مرة أخرى."
       }
     },
     "form": {
-        "addTitle": "Añadir Nueva E-Gate",
-        "addDescription": "Configurar una nueva puerta automática para el procesamiento de pasajeros.",
-        "editTitle": "Editar E-Gate",
-        "editDescription": "Actualizar la configuración para la puerta {gateName}.",
+        "addTitle": "إضافة بوابة إلكترونية جديدة",
+        "addDescription": "تكوين بوابة آلية جديدة لمعالجة الركاب.",
+        "editTitle": "تعديل البوابة الإلكترونية",
+        "editDescription": "تحديث التكوين للبوابة {gateName}.",
         "common": {
-            "cancel": "Cancelar",
-            "save": "Guardar Cambios",
-            "add": "Añadir Puerta"
+            "cancel": "إلغاء",
+            "save": "حفظ التغييرات",
+            "add": "إضافة بوابة"
         },
         "basicInfo": {
-            "title": "Información Básica",
-            "description": "Detalles de identificación y ubicación principales de la puerta.",
-            "name": "Nombre de la Puerta",
-            "code": "Código de la Puerta",
-            "port": "Puerto",
-            "selectPort": "Seleccione un puerto...",
-            "terminal": "Terminal",
-            "selectTerminal": "Seleccione una terminal...",
-            "zone": "Zona",
-            "selectZone": "Seleccione una zona..."
+            "title": "المعلومات الأساسية",
+            "description": "تفاصيل التعريف والموقع الأساسية للبوابة.",
+            "name": "اسم البوابة",
+            "code": "رمز البوابة",
+            "port": "المنفذ",
+            "selectPort": "حدد منفذًا...",
+            "terminal": "المحطة",
+            "selectTerminal": "حدد محطة...",
+            "zone": "المنطقة",
+            "selectZone": "حدد منطقة..."
         },
         "technicalInfo": {
-            "title": "Detalles Técnicos",
-            "description": "Identificadores de red e información de hardware.",
-            "ipAddress": "Dirección IP",
-            "macAddress": "Dirección MAC"
+            "title": "التفاصيل الفنية",
+            "description": "معرفات الشبكة ومعلومات الأجهزة.",
+            "ipAddress": "عنوان IP",
+            "macAddress": "عنوان MAC"
         },
         "config": {
-            "title": "Configuración Operativa",
-            "description": "Defina cómo funciona la puerta.",
-            "status": "Estado",
-            "type": "Tipo de Puerta",
-            "warrantyStart": "Fecha de Inicio de la Garantía",
-            "warrantyEnd": "Fecha de Fin de la Garantía",
-            "pickDate": "Seleccione una fecha"
+            "title": "التكوين التشغيلي",
+            "description": "حدد كيفية عمل البوابة.",
+            "status": "الحالة",
+            "type": "نوع البوابة",
+            "warrantyStart": "تاريخ بدء الضمان",
+            "warrantyEnd": "تاريخ انتهاء الضمان",
+            "pickDate": "اختر تاريخًا"
         },
         "entryConfig": {
-            "title": "Configuración de Entrada",
-            "workflow": "Flujo de Trabajo de Entrada",
-            "selectWorkflow": "Seleccione un flujo de trabajo...",
-            "riskProfile": "Perfil de Riesgo de Entrada",
-            "selectRiskProfile": "Seleccione un perfil de riesgo...",
-            "capacity": "Capacidad de la Cola"
+            "title": "تكوين الدخول",
+            "workflow": "سير عمل الدخول",
+            "selectWorkflow": "حدد سير عمل...",
+            "riskProfile": "ملف تعريف مخاطر الدخول",
+            "selectRiskProfile": "حدد ملف تعريف مخاطر...",
+            "capacity": "سعة الطابور"
         },
         "exitConfig": {
-            "title": "Configuración de Salida",
-            "workflow": "Flujo de Trabajo de Salida",
-            "selectWorkflow": "Seleccione un flujo de trabajo...",
-            "riskProfile": "Perfil de Riesgo de Salida",
-            "selectRiskProfile": "Seleccione un perfil de riesgo...",
-            "capacity": "Capacidad de la Cola"
+            "title": "تكوين الخروج",
+            "workflow": "سير عمل الخروج",
+            "selectWorkflow": "حدد سير عمل...",
+            "riskProfile": "ملف تعريف مخاطر الخروج",
+            "selectRiskProfile": "حدد ملف تعريف مخاطر...",
+            "capacity": "سعة الطابور"
         },
         "toast": {
-            "updateSuccessTitle": "Puerta Actualizada",
-            "updateSuccessDesc": "La puerta '{gateName}' ha sido actualizada exitosamente.",
-            "addSuccessTitle": "Puerta Añadida",
-            "addSuccessDesc": "La nueva puerta '{gateName}' ha sido creada exitosamente.",
-            "errorTitle": "Operación Fallida",
-            "errorDesc": "Ocurrió un error. Por favor, inténtelo de nuevo.",
-            "loadError": "No se pudieron cargar los datos de la puerta. Por favor, inténtelo de nuevo más tarde."
+            "updateSuccessTitle": "تم تحديث البوابة",
+            "updateSuccessDesc": "تم تحديث البوابة '{gateName}' بنجاح.",
+            "addSuccessTitle": "تمت إضافة البوابة",
+            "addSuccessDesc": "تم إنشاء البوابة الجديدة '{gateName}' بنجاح.",
+            "errorTitle": "فشلت العملية",
+            "errorDesc": "حدث خطأ. يرجى المحاولة مرة أخرى.",
+            "loadError": "تعذر تحميل بيانات البوابة. يرجى المحاولة مرة أخرى لاحقًا."
         }
     }
   },

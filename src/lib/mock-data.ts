@@ -1,9 +1,5 @@
 
 
-
-
-
-
 import { Status, PortType, RiskLevel, PassengerStatus, Gender, DayOfWeek, TransactionType, TransactionStatus, Decision, EntranceType, CivilFileType, MachineStatus, MachineType, OfficerDeskStatus, MovementType, GateType, GateStatus, MediaType, ListStatus, BlacklistCategory, SystemMessageCategory, GateLogEventType, GateLogStatus, AssignmentStatus, DocumentType } from './enums';
 import type { Passenger, Transaction, OfficerDesk, Gate, Media, WhitelistEntry, BlacklistEntry, OfficerAssignment, GateLogEntry } from "@/types/live-processing";
 import type { Shift } from "@/types/workload";
@@ -52,6 +48,16 @@ const mockPassengersData: Passenger[] = [
       riskLevel: RiskLevel.High,
       profilePicture: "https://placehold.co/400x400.png"
     }
+];
+
+export const daysOfWeek = [
+    { id: 'monday', label: 'Monday' },
+    { id: 'tuesday', label: 'Tuesday' },
+    { id: 'wednesday', label: 'Wednesday' },
+    { id: 'thursday', label: 'Thursday' },
+    { id: 'friday', label: 'Friday' },
+    { id: 'saturday', label: 'Saturday' },
+    { id: 'sunday', label: 'Sunday' },
 ];
 
 const getMockTransactions = (): Transaction[] => [
@@ -432,3 +438,4 @@ export const setMockLookupItems = (newLookupItems: LookupItem[]) => {
 export const mockData = {
     // All specific data objects have been moved to mock-api.ts
 };
+

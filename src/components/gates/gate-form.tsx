@@ -1,7 +1,8 @@
 
+
 'use client';
 
-import { useForm, useWatch } from 'react-hook-form';
+import { useForm, useFieldArray, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Button } from '@/components/ui/button';
@@ -13,13 +14,16 @@ import { Combobox } from '@/components/ui/combobox';
 import type { Gate, Port, Terminal, Zone, Workflow, RiskProfile } from '@/types/live-processing';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState, useEffect } from 'react';
-import { Loader2 } from 'lucide-react';
+import { Loader2, PlusCircle, Trash2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { cn } from '@/lib/utils';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { CalendarIcon } from 'lucide-react';
 import { Calendar } from '@/components/ui/calendar';
 import { format } from 'date-fns';
+import { MachineType } from '@/lib/enums';
+import { AttachmentUploader } from '@/components/shared/attachment-uploader';
+import { nanoid } from 'nanoid';
 
 const gateFormSchema = z.object({
   name: z.string().min(3, { message: "Gate name must be at least 3 characters." }),
@@ -33,15 +37,21 @@ const gateFormSchema = z.object({
   status: z.enum(['Active', 'Maintenance', 'Offline', 'Limited']),
   warrantyStartDate: z.date().optional(),
   warrantyEndDate: z.date().optional(),
+  connectedMachines: z.array(z.object({
+    type: z.nativeEnum(MachineType),
+    name: z.string().min(1, 'Machine name is required.'),
+  })).optional(),
   entryConfig: z.object({
     workflowId: z.string().min(1, "Required"),
     riskProfileId: z.string().min(1, "Required"),
     capacity: z.coerce.number().min(0, "Must be non-negative"),
+    configurationFile: z.string().optional(),
   }).optional(),
   exitConfig: z.object({
     workflowId: z.string().min(1, "Required"),
     riskProfileId: z.string().min(1, "Required"),
     capacity: z.coerce.number().min(0, "Must be non-negative"),
+    configurationFile: z.string().optional(),
   }).optional(),
 }).refine(data => {
     if (data.type === 'Entry' || data.type === 'Bidirectional') {
@@ -54,7 +64,17 @@ const gateFormSchema = z.object({
         return !!data.exitConfig;
     }
     return true;
-}, { message: "Exit configuration is required for this gate type.", path: ["exitConfig"] });
+}, { message: "Exit configuration is required for this gate type.", path: ["exitConfig"] })
+.refine(data => {
+    if(data.connectedMachines) {
+        const types = data.connectedMachines.map(m => m.type);
+        return new Set(types).size === types.length;
+    }
+    return true;
+}, {
+    message: "Machine types must be unique.",
+    path: ["connectedMachines"],
+});
 
 export type GateFormValues = z.infer<typeof gateFormSchema>;
 
@@ -84,7 +104,10 @@ export function GateForm({
   
   const form = useForm<GateFormValues>({
     resolver: zodResolver(gateFormSchema),
-    defaultValues: gateToEdit ? gateToEdit : {
+    defaultValues: gateToEdit ? {
+        ...gateToEdit,
+        connectedMachines: gateToEdit.connectedMachines || []
+    } : {
       name: '',
       code: '',
       portId: '',
@@ -94,17 +117,23 @@ export function GateForm({
       macAddress: '',
       type: 'Bidirectional',
       status: 'Active',
-      entryConfig: { workflowId: '', riskProfileId: '', capacity: 20 },
-      exitConfig: { workflowId: '', riskProfileId: '', capacity: 20 },
+      connectedMachines: [],
+      entryConfig: { workflowId: '', riskProfileId: '', capacity: 20, configurationFile: '' },
+      exitConfig: { workflowId: '', riskProfileId: '', capacity: 20, configurationFile: '' },
     },
   });
 
-  const { control, watch, resetField } = form;
+  const { control, watch, resetField, setValue } = form;
   const gateType = watch('type');
   const portId = watch('portId');
   const terminalId = watch('terminalId');
   const warrantyStart = watch('warrantyStartDate');
   const warrantyEnd = watch('warrantyEndDate');
+
+  const { fields: machineFields, append: appendMachine, remove: removeMachine } = useFieldArray({
+    control,
+    name: "connectedMachines",
+  });
 
   useEffect(() => { if (portId) resetField('terminalId', { defaultValue: '' }); }, [portId, resetField]);
   useEffect(() => { if (terminalId) resetField('zoneId', { defaultValue: '' }); }, [terminalId, resetField]);
@@ -117,6 +146,23 @@ export function GateForm({
 
   const showEntryConfig = gateType === 'Entry' || gateType === 'Bidirectional';
   const showExitConfig = gateType === 'Exit' || gateType === 'Bidirectional';
+
+  const entryAttachmentConfig = useMemo(() => ([{
+    name: 'entryConfig.configurationFile',
+    label: 'Configuration File',
+    allowedMimeTypes: ['application/json', 'application/xml'],
+    maxSize: 3 * 1024 * 1024
+  }]), []);
+
+  const exitAttachmentConfig = useMemo(() => ([{
+    name: 'exitConfig.configurationFile',
+    label: 'Configuration File',
+    allowedMimeTypes: ['application/json', 'application/xml'],
+    maxSize: 3 * 1024 * 1024
+  }]), []);
+
+  const handleEntryFileChange = (files: Record<string, any>) => setValue('entryConfig.configurationFile', files['entryConfig.configurationFile']?.content || '');
+  const handleExitFileChange = (files: Record<string, any>) => setValue('exitConfig.configurationFile', files['exitConfig.configurationFile']?.content || '');
 
   return (
     <Form {...form}>
@@ -155,18 +201,36 @@ export function GateForm({
                 </div>
               </CardContent>
             </Card>
-            
+            <Card>
+                <CardHeader><CardTitle>{t('machines.title')}</CardTitle><CardDescription>{t('machines.description')}</CardDescription></CardHeader>
+                <CardContent className="space-y-4">
+                    {machineFields.map((field, index) => (
+                        <div key={field.id} className="flex items-end gap-2 p-4 border rounded-md">
+                             <FormField control={control} name={`connectedMachines.${index}.type`} render={({ field }) => ( <FormItem className="flex-grow"><FormLabel required>{t('machines.type')}</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue /></SelectTrigger></FormControl><SelectContent>{Object.values(MachineType).map(type => <SelectItem key={type} value={type}>{type}</SelectItem>)}</SelectContent></Select><FormMessage /></FormItem> )} />
+                             <FormField control={control} name={`connectedMachines.${index}.name`} render={({ field }) => ( <FormItem className="flex-grow"><FormLabel required>{t('machines.name')}</FormLabel><FormControl><Input {...field} placeholder={t('machines.namePlaceholder')} /></FormControl><FormMessage /></FormItem> )} />
+                            <Button type="button" variant="destructive" size="icon" onClick={() => removeMachine(index)}><Trash2 className="h-4 w-4" /></Button>
+                        </div>
+                    ))}
+                    <Button type="button" variant="outline" onClick={() => appendMachine({ type: MachineType.Scanner, name: '' })}>
+                        <PlusCircle className="mr-2 h-4 w-4" /> {t('machines.add')}
+                    </Button>
+                    <FormField control={form.control} name="connectedMachines" render={() => (<FormMessage/>)} />
+                </CardContent>
+            </Card>
+
             <div className="grid grid-cols-1 gap-6" style={{ gridTemplateColumns: showEntryConfig && showExitConfig ? '1fr 1fr' : '1fr' }}>
                 {showEntryConfig && <Card><CardHeader><CardTitle>{t('entryConfig.title')}</CardTitle></CardHeader><CardContent className="space-y-4">
                     <FormField control={control} name="entryConfig.workflowId" render={({ field }) => ( <FormItem><FormLabel required>{t('entryConfig.workflow')}</FormLabel><Combobox options={workflowOptions} {...field} placeholder={t('entryConfig.selectWorkflow')} /><FormMessage /></FormItem> )} />
                     <FormField control={control} name="entryConfig.riskProfileId" render={({ field }) => ( <FormItem><FormLabel required>{t('entryConfig.riskProfile')}</FormLabel><Combobox options={riskProfileOptions} {...field} placeholder={t('entryConfig.selectRiskProfile')} /><FormMessage /></FormItem> )} />
                     <FormField control={control} name="entryConfig.capacity" render={({ field }) => ( <FormItem><FormLabel required>{t('entryConfig.capacity')}</FormLabel><FormControl><Input type="number" {...field} /></FormControl><FormMessage /></FormItem> )} />
+                    <FormField control={control} name="entryConfig.configurationFile" render={() => ( <FormItem><FormLabel>{t('entryConfig.configFile')}</FormLabel><AttachmentUploader configs={entryAttachmentConfig} onFilesChange={handleEntryFileChange} outputType="base64" initialFiles={{'entryConfig.configurationFile': gateToEdit?.entryConfig?.configurationFile || null}} /><FormMessage /></FormItem> )} />
                 </CardContent></Card>}
 
                 {showExitConfig && <Card><CardHeader><CardTitle>{t('exitConfig.title')}</CardTitle></CardHeader><CardContent className="space-y-4">
                     <FormField control={control} name="exitConfig.workflowId" render={({ field }) => ( <FormItem><FormLabel required>{t('exitConfig.workflow')}</FormLabel><Combobox options={workflowOptions} {...field} placeholder={t('exitConfig.selectWorkflow')} /><FormMessage /></FormItem> )} />
                     <FormField control={control} name="exitConfig.riskProfileId" render={({ field }) => ( <FormItem><FormLabel required>{t('exitConfig.riskProfile')}</FormLabel><Combobox options={riskProfileOptions} {...field} placeholder={t('exitConfig.selectRiskProfile')} /><FormMessage /></FormItem> )} />
                     <FormField control={control} name="exitConfig.capacity" render={({ field }) => ( <FormItem><FormLabel required>{t('exitConfig.capacity')}</FormLabel><FormControl><Input type="number" {...field} /></FormControl><FormMessage /></FormItem> )} />
+                     <FormField control={control} name="exitConfig.configurationFile" render={() => ( <FormItem><FormLabel>{t('exitConfig.configFile')}</FormLabel><AttachmentUploader configs={exitAttachmentConfig} onFilesChange={handleExitFileChange} outputType="base64" initialFiles={{'exitConfig.configurationFile': gateToEdit?.exitConfig?.configurationFile || null}} /><FormMessage /></FormItem> )} />
                 </CardContent></Card>}
             </div>
           </div>

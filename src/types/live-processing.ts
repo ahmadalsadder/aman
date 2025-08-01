@@ -1,9 +1,7 @@
 
-
-
 import type { Port, Terminal, Zone, Workflow, RiskProfile, Machine, SystemMessage } from './configuration';
 import type { OfficerAssignment } from './workload';
-import { PassengerStatus, RiskLevel, Gender, VisaType, TransactionType, EntranceType, TransactionStatus, Decision, CivilFileType, OfficerDeskStatus, MovementType, GateType, GateStatus, MediaType, ListStatus, BlacklistCategory, GateLogEventType, GateLogStatus, DocumentType } from '@/lib/enums';
+import { PassengerStatus, RiskLevel, Gender, VisaType, TransactionType, EntranceType, TransactionStatus, Decision, CivilFileType, OfficerDeskStatus, MovementType, GateType, GateStatus, MediaType, ListStatus, BlacklistCategory, GateLogEventType, GateLogStatus, DocumentType, MachineType } from '@/lib/enums';
 
 export interface Passenger {
     id: string;
@@ -182,15 +180,18 @@ export interface Gate {
     passengerCount?: number;
     avgProcessingTime?: string;
     equipment?: { name: string; status: 'online' | 'offline' }[];
+    connectedMachines?: { type: MachineType, name: string }[];
     entryConfig?: {
       workflowId: string;
       riskProfileId: string;
       capacity: number;
+      configurationFile?: string;
     };
     exitConfig?: {
       workflowId: string;
       riskProfileId: string;
       capacity: number;
+      configurationFile?: string;
     };
   }
 export interface MediaFile {

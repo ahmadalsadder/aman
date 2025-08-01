@@ -1,4 +1,5 @@
 
+
 {
   "Enums": {
     "Status": {
@@ -1377,13 +1378,22 @@
             "warrantyEnd": "Warranty End Date",
             "pickDate": "Pick a date"
         },
+        "machines": {
+          "title": "Connected Machines",
+          "description": "Link the physical hardware devices used by this gate.",
+          "type": "Machine Type",
+          "name": "Machine Name",
+          "namePlaceholder": "e.g., Main Passport Reader",
+          "add": "Add Machine"
+        },
         "entryConfig": {
             "title": "Entry Configuration",
             "workflow": "Entry Workflow",
             "selectWorkflow": "Select a workflow...",
             "riskProfile": "Entry Risk Profile",
             "selectRiskProfile": "Select a risk profile...",
-            "capacity": "Queue Capacity"
+            "capacity": "Queue Capacity",
+            "configFile": "Configuration File"
         },
         "exitConfig": {
             "title": "Exit Configuration",
@@ -1391,7 +1401,8 @@
             "selectWorkflow": "Select a workflow...",
             "riskProfile": "Exit Risk Profile",
             "selectRiskProfile": "Select a risk profile...",
-            "capacity": "Queue Capacity"
+            "capacity": "Queue Capacity",
+            "configFile": "Configuration File"
         },
         "toast": {
             "updateSuccessTitle": "Gate Updated",
